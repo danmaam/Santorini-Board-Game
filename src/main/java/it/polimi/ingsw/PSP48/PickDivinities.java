@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * class that implements that status of the game where a player is choosing the divinities that will later be distributed
  * @author Rebecca Marelli
  */
-public class PickDivinities
+public class PickDivinities implements Status
 {
     /**
      * method that handles all the activities linked to the state represented by the class, it's the one that will be called by state action

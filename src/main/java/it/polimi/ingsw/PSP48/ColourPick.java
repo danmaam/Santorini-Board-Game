@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * class that implements the Status interface, handling the state where players get their workers assigned
  * @author Rebecca Marelli
  */
-public class ColourPick
+public class ColourPick implements Status
 {
     /**
      * method that implements the choice of divinities, it is not used by this class

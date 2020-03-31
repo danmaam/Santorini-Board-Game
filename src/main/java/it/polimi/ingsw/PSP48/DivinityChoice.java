@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * class that handles the state where players take turns to choose their respective divinity: it will be assigned to their workers
  * @author Rebecca Marelli
  */
-public class DivinityChoice
+public class DivinityChoice implements Status
 {
     /**
      * method that implements the choice of divinities, it is not used by this class
