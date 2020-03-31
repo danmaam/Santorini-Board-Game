@@ -23,6 +23,15 @@ public class Divinity {
     }
 
     /**
+     *
+     * @return if the divinity supports the three player gaming
+     */
+    public Boolean getThreePlayerSupported() {
+        return threePlayerSupported;
+    }
+
+
+    /**
      * @param workerColumn the column where the worker is
      * @param workerRow    the row where the worker is
      * @param gameCells    the actual state of the board
