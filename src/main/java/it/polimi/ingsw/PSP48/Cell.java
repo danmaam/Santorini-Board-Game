@@ -44,7 +44,8 @@ public class Cell {
      * Method that increases by one the level of the building on the cell
      * @return true if the level has been built
      */
-    public boolean addLevel(){
+    public boolean addLevel() throws MaximumLevelReachedException {
+        if (this.getLevel() == 3) throw new MaximumLevelReachedException("Maximum Level Reached");
         this.actualLevel=actualLevel+1;
         return true;
     }

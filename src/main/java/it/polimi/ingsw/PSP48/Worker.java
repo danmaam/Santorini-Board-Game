@@ -1,4 +1,6 @@
 package it.polimi.ingsw.PSP48;
+import it.polimi.ingsw.PSP48.divinities.Divinity;
+
 import java.util.ArrayList;
 
 public abstract class Worker {

@@ -1,7 +1,9 @@
-package it.polimi.ingsw.PSP48;
+package it.polimi.ingsw.PSP48.divinities;
+
+import it.polimi.ingsw.PSP48.Cell;
+import it.polimi.ingsw.PSP48.MovePosition;
 
 import java.util.ArrayList;
-import java.util.function.Predicate;
 
 public class Athena extends Divinity {
     private final String name = "Athena";

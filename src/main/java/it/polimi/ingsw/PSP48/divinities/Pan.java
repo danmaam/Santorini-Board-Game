@@ -1,4 +1,6 @@
-package it.polimi.ingsw.PSP48;
+package it.polimi.ingsw.PSP48.divinities;
+
+import it.polimi.ingsw.PSP48.Worker;
 
 import java.util.ArrayList;
 
@@ -11,6 +13,7 @@ public class Pan extends Divinity {
     private int newLevel;
 
     /**
+     * @author Daniele Mammone
      * @param playerWorkers the workers of the actual player
      * @return true if the actual player considererd has won, false if the game must go on
      */
