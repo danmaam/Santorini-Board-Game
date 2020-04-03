@@ -17,21 +17,21 @@ public class Demeter extends Divinity {
      * Reset the coordinate of first building
      */
     @Override
-    public void turnBegin() {
+    public void turnBegin(GameData gd) {
         oldRowBuild = -1;
         oldColumnBuild = -1;
     }
 
     /**
-     * @param WorkerColumn     the column where the worker is
-     * @param WorkerRow        the row where the worker is
-     * @param gameCells        the actual board state
-     * @param divinitiesInGame the divinities in the game
+     * @param WorkerColumn          the column where the worker is
+     * @param WorkerRow             the row where the worker is
+     * @param gameCells             the actual board state
+     * @param otherDivinitiesInGame the divinities in the game
      * @return a list of cell valid for the building of the worker
      */
     @Override
-    public ArrayList<Cell> getValidCellForBuilding(int WorkerColumn, int WorkerRow, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
-        return super.getValidCellForBuilding(WorkerColumn, WorkerRow, gameCells, divinitiesInGame).stream()
+    public ArrayList<Cell> getValidCellForBuilding(int WorkerColumn, int WorkerRow, ArrayList<Divinity> otherDivinitiesInGame, Cell[][] gameCells) {
+        return super.getValidCellForBuilding(WorkerColumn, WorkerRow, otherDivinitiesInGame, gameCells).stream()
                 .filter(cell -> cell.getColumn() != oldColumnBuild && cell.getRow() != oldRowBuild)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
@@ -53,12 +53,12 @@ public class Demeter extends Divinity {
 
     /**
      * Redefined since we have to check that the player is not trying to build on the same cell
-     * @param workerRow        the row where the worker is
-     * @param workerColumn     the column where the worker is
-     * @param buildRow         the row where the player wants to add a level
-     * @param buildColumn      the column where the player wants to add a level
-     * @param gameCells        the actual state of the game board
-     * @param divinitiesInGame the divinities in game
+     *
+     * @param workerRow    the row where the worker is
+     * @param workerColumn the column where the worker is
+     * @param buildRow     the row where the player wants to add a level
+     * @param buildColumn  the column where the player wants to add a level
+     * @param gd           the game status
      * @throws NotAdiacentCellException     if the cell where the player wants to build is not adiacent to the worker's one
      * @throws OccupiedCellException        if the destination cell is occupied by another worker
      * @throws DomedCellException           is the cell is already domed
@@ -67,23 +67,23 @@ public class Demeter extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public void build(int workerRow, int workerColumn, int buildRow, int buildColumn, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) throws DivinityPowerException {
+    public void build(int workerRow, int workerColumn, int buildRow, int buildColumn, GameData gd) throws DivinityPowerException {
         int oldRowBuildRollback, oldColumnBuildRollback;
         if (oldRowBuild == -1 && oldColumnBuild == -1) {
             oldRowBuild = buildRow;
             oldColumnBuild = buildColumn;
             oldRowBuildRollback = -1;
             oldColumnBuildRollback = -1;
-        }
-        else {
-            if (buildRow == oldRowBuild && buildColumn == oldColumnBuild) throw new DivinityPowerException("Trying to build on the previous cell");
+        } else {
+            if (buildRow == oldRowBuild && buildColumn == oldColumnBuild)
+                throw new DivinityPowerException("Trying to build on the previous cell");
             else {
                 oldRowBuildRollback = oldRowBuild;
                 oldColumnBuildRollback = oldColumnBuild;
             }
         }
         try {
-            super.build(workerRow, workerColumn, buildRow, buildColumn, gameCells, divinitiesInGame);
+            super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
         } catch (Exception e) {
             e.printStackTrace();
             oldRowBuild = oldRowBuildRollback;

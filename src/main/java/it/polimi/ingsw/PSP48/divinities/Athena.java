@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP48.divinities;
 
-import it.polimi.ingsw.PSP48.Cell;
-import it.polimi.ingsw.PSP48.MovePosition;
+import it.polimi.ingsw.PSP48.*;
 
 import java.util.ArrayList;
 
@@ -18,23 +17,14 @@ public class Athena extends Divinity {
      * Resets the flag if the player went level up on the last turn
      */
     @Override
-    public void turnBegin() {
+    public void turnBegin(GameData gd) {
         lastTurnLevelUp = false;
     }
 
-    public ArrayList<Cell> move(int WorkerColumn, int WorkerRow, int moveColumn, int moveRow, Cell[][] gameCells) {
-        lastWorkerMoveID = gameCells[WorkerRow][WorkerColumn].getWorker().getId();
-        oldLevel = gameCells[WorkerRow][WorkerColumn].getLevel();
-        newLevel = gameCells[moveRow][moveColumn].getLevel();
-        if (newLevel > oldLevel) lastTurnLevelUp = true;
-        Cell cellWhereToMove = gameCells[moveRow][moveColumn];
-        cellWhereToMove.setWorker(gameCells[WorkerRow][WorkerColumn].getWorker());
-        gameCells[WorkerRow][WorkerColumn].setWorker(null);
-        ArrayList<Cell> modifiedCells = new ArrayList<>();
-        modifiedCells.add(cellWhereToMove);
-        modifiedCells.add(gameCells[WorkerRow][WorkerColumn]);
-
-        return modifiedCells;
+    public void move(int workerColumn, int workerRow, int moveRow, int moveColumn, GameData gd) throws NotEmptyCellException, DivinityPowerException, IncorrectLevelException, OccupiedCellException, NotAdiacentCellException, DomedCellException {
+        super.move(workerColumn, workerRow, moveRow, moveColumn, gd);
+        if (gd.getCell(moveRow, moveColumn).getLevel() > gd.getCell(workerColumn, workerColumn).getLevel())
+            lastTurnLevelUp = true;
     }
 
 

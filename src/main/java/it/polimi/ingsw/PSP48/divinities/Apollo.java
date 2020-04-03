@@ -36,8 +36,6 @@ public class Apollo extends Divinity {
             }
         }
 
-        //we have to remove the current divinity from the others, to check if their power can invalid the move
-        divinitiesInGame.remove(gameCells[WorkerRow][WorkerColumn].getWorker().getDivinity());
 
         validCells = validCells.stream()
                 //delets from the valid the cell which are too high or too low to be reached
@@ -64,12 +62,12 @@ public class Apollo extends Divinity {
 
     /**
      * Redefined since Apollo allows to move on an occupied Cell, swapping the two workers
-     * @param WorkerColumn     the column of the cell where the worker is
-     * @param WorkerRow        the row of the cell where the worker is
-     * @param moveColumn       the column of the board where the worker wants to move
-     * @param moveRow          the row of the board where the worker wants to move
-     * @param gameCells        the game board
-     * @param divinitiesInGame the divinities in game
+     *
+     * @param WorkerColumn the column of the cell where the worker is
+     * @param WorkerRow    the row of the cell where the worker is
+     * @param moveColumn   the column of the board where the worker wants to move
+     * @param moveRow      the row of the board where the worker wants to move
+     * @param gd           the Game status
      * @throws NotAdiacentCellException if the destination cell is not adiacent to the worker
      * @throws IncorrectLevelException  if the destination cell is too high to be reached
      * @throws OccupiedCellException    if the destination cell has another worker on it
@@ -77,29 +75,35 @@ public class Apollo extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public void move(int WorkerColumn, int WorkerRow, int moveColumn, int moveRow, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) throws NotAdiacentCellException, IncorrectLevelException, DomedCellException, DivinityPowerException {
+    public void move(int WorkerColumn, int WorkerRow, int moveColumn, int moveRow, GameData gd) throws NotAdiacentCellException, IncorrectLevelException, DomedCellException, DivinityPowerException, NotEmptyCellException {
         //first check: the two cells must be adiacent
-        if (!(adiacentCellVerifier(WorkerRow, WorkerColumn, moveRow, moveColumn))) throw new NotAdiacentCellException("Celle non adiacenti");
+        if (!(adiacentCellVerifier(WorkerRow, WorkerColumn, moveRow, moveColumn)))
+            throw new NotAdiacentCellException("Celle non adiacenti");
         //second check: the two levels must be compatible
-        int workerLevel = gameCells[WorkerRow][WorkerColumn].getLevel();
-        int moveLevel = gameCells[moveRow][moveColumn].getLevel();
-        if (!(moveLevel-workerLevel <= 1)) throw new IncorrectLevelException("Stai cerando di salire a un livello troppo alto");
-        //third check: the cell must not be domed
-        if (gameCells[moveRow][moveColumn].isDomed()) throw new DomedCellException("Stai cercando di salire su una cella con cupola");
-        //fourth check: if another different divinity doesn't invalid this move
-        divinitiesInGame.remove(gameCells[WorkerRow][WorkerColumn].getWorker().getDivinity());
+        int workerLevel = gd.getCell(WorkerRow, WorkerColumn).getLevel();
+        int moveLevel = gd.getCell(moveRow, moveColumn).getLevel();
+        if (!(moveLevel - workerLevel <= 1))
+            throw new IncorrectLevelException("Stai cerando di salire a un livello troppo alto");
+        //fourth check: the cell must not be domed
+        if (gd.getCell(moveRow, moveColumn).isDomed())
+            throw new DomedCellException("Stai cercando di salire su una cella con cupola");
+        //fifth check: if another different divinity doesn't invalid this move
+        //Apollo can exchange position with other players, but not with its workers
+        if (gd.getCell(moveRow, moveColumn).getPlayer().equals(gd.getCurrentPlayer().getName()))
+            throw new NotEmptyCellException("trying to switch with another your worker");
 
-        for(Divinity d : divinitiesInGame) {
-            if (!d.othersMove(new MovePosition(WorkerRow, WorkerColumn, moveRow, moveColumn, moveLevel - moveColumn))) throw new DivinityPowerException("Fail due to other divinity");
+        for (Player p : gd.getPlayersInGame()) {
+            if (p != gd.getCurrentPlayer() && !p.getDivinity().othersMove(new MovePosition(WorkerRow, WorkerColumn, moveRow, moveColumn, moveLevel - moveColumn)))
+                throw new DivinityPowerException("Fail due to other divinity");
         }
 
         //at this point, the move is valid and we must change the state of the game board
 
         oldLevel = workerLevel;
         newLevel = moveLevel;
-        Worker tempWorker = gameCells[moveRow][moveColumn].getWorker();
-        gameCells[moveRow][moveColumn].setWorker(gameCells[WorkerRow][WorkerColumn].getWorker());
-        gameCells[WorkerRow][WorkerColumn].setWorker(tempWorker);
+        String tempWorker = gd.getCell(moveRow, moveColumn).getPlayer();
+        gd.getCell(moveRow, moveColumn).setPlayer(gd.getCell(WorkerRow, WorkerColumn).getPlayer());
+        gd.getCell(WorkerRow, WorkerColumn).setPlayer(tempWorker);
 
         //now, the game board has been modified
     }

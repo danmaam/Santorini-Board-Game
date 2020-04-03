@@ -1,5 +1,7 @@
 package it.polimi.ingsw.PSP48;
 
+import it.polimi.ingsw.PSP48.divinities.Divinity;
+
 import java.util.ArrayList;
 
 /**
@@ -10,8 +12,8 @@ import java.util.ArrayList;
  */
 public class GameData
 {
-    private ArrayList<PlayerWorkerConnection> playersInGame= new ArrayList<PlayerWorkerConnection>(); //i giocatori sono in ordine fisso secondo l'ordine di gioco
-    private ArrayList<Colour> availableColours= new ArrayList<Colour>();
+    private ArrayList<Player> playersInGame = new ArrayList<Player>(); //i giocatori sono in ordine fisso secondo l'ordine di gioco
+    private ArrayList<Colour> availableColours = new ArrayList<Colour>();
     private ArrayList<Divinity> availableDivinities= new ArrayList<Divinity>();
     private ArrayList<Divinity> chosenDivinities= new ArrayList<Divinity>();
     private int currentPlayer; //se siamo in un momento per cui il current player non deve avere un valore possiamo settarlo a -1
@@ -35,94 +37,43 @@ public class GameData
         return(totalPlayers);
     }
 
-    /**
-     * method used to get a certain player that is participating in the game, using the arrayList playersInGame where each player is also associated to his/her workers
-     * @param playerNumber is used to look for a player in the arrayList called playersInGame, where each player is stored at a certain index that never changes during the game
-     * @return a reference to the needed player
-     */
-    public Player getPlayer(int playerNumber) //potrebbe lanciare una eccezione se per esempio si chiede un giocatore che abbia un indice maggiore di due (fuori dall'arraylist) oppure se giocatore è null (?)
-    {
-        Player neededPlayer;
-
-        neededPlayer=this.playersInGame.get(playerNumber).getPlayer(); //NB è il metodo get player della classe playerworkerconnection perchè l'ho chiamato su un oggetto di quel tipo
-
-        return(neededPlayer);
-    }
-
-    /**
-     * method used to retrieve a player from gameData and to have direct access to his/her workers
-     * @param playerIndex is used to get the correct player from the arrayList playersInGame
-     * @return a reference to the object containing a player and the list of the workers
-     */
-    public PlayerWorkerConnection getPlayersAndWorkers(int playerIndex) //eccezione se riceve un indice al di fuori dei limiti dell'arrayList (o null(?))
-    {
-        PlayerWorkerConnection neededConnection;
-
-        neededConnection=this.playersInGame.get(playerIndex);
-
-        return(neededConnection);
-    }
-
-    /**
-     * method that updates an element of the playersInGame list
-     * @param newConnection is the new element that we substitutes one in the list
-     * @param position is the position where we put the new element
-     */
-    public void setConnection(PlayerWorkerConnection newConnection, int position)
-    {
-        this.playersInGame.set(position, newConnection);
-    }
 
     /**
      * method that retrieves all the players of the game, together with the list of their workers
+     *
      * @return the list of PlayerWorkerConnection elements
      */
-    public ArrayList<PlayerWorkerConnection> getPlayersInGame()
-    {
-        ArrayList<PlayerWorkerConnection> neededList;
-
-        neededList=this.playersInGame;
-
-        return(neededList);
+    public ArrayList<Player> getPlayersInGame() {
+        return playersInGame;
     }
 
-    /**
-     * method used to set the value containing all of the players of the game and their workers
-     * @param newPlayersInGame contains the arrayList of PlayerWorkerConnection variables that has to be assigned
-     */
-    public void setPlayersInGame(ArrayList<PlayerWorkerConnection> newPlayersInGame)
-    {
-        this.playersInGame=newPlayersInGame;
+    public void addPlayer(Player p) {
+        playersInGame.add(p);
     }
 
     /**
      * method used during the state where players are still choosing their workers and they need to know what colours are still available
+     *
      * @return an arrayList of the colours that can still be chosen, which is part of this class
      */
-    public ArrayList<Colour> getAvailableColours()
-    {
+    public ArrayList<Colour> getAvailableColours() {
         ArrayList<Colour> coloursToPick;
 
-        coloursToPick=this.availableColours;
+        coloursToPick = this.availableColours;
 
-        return(coloursToPick);
+        return (coloursToPick);
     }
 
-    /**
-     * method used to change the list of available colours while players are making their choice
-     * @param newAvailableColours is the new list of available colours
-     */
-    public void setAvailableColours(ArrayList<Colour> newAvailableColours)
-    {
-        this.availableColours=newAvailableColours;
+    public void removeColour(Colour c) {
+        availableColours.remove(c);
     }
 
     /**
      * method used to retrieve the divinities still available to be picked by a player
+     *
      * @return an arrayList containing said divinities
      */
-    public ArrayList<Divinity> getAvailableDivinities()
-    {
+    public ArrayList<Divinity> getAvailableDivinities() {
         ArrayList<Divinity> divinitiesToPick;
 
         divinitiesToPick=this.availableDivinities;
@@ -169,7 +120,7 @@ public class GameData
     {
         Player neededCurrentPlayer;
 
-        neededCurrentPlayer=this.getPlayer(currentPlayer); //ho usato un metodo della classe stessa per restituire il giocatore corrente
+        neededCurrentPlayer = this.playersInGame.get(currentPlayer); //ho usato un metodo della classe stessa per restituire il giocatore corrente
 
         return(neededCurrentPlayer);
     }
@@ -221,9 +172,8 @@ public class GameData
     /**
      * method used to do the actions associated to a certain state, by calling the correct handler method
      */
-    public void stateAction()
-    {
-        this.gameState.handleRequest();
+    public void stateAction() {
+        //this.gameState.handleRequest();
     }
 
     /**
@@ -236,15 +186,45 @@ public class GameData
 
         neededState=this.gameState;
 
-        return(neededState);
+        return (neededState);
     }
 
     /**
      * method that updates the state of the game with the correct one
+     *
      * @param newState is the updated state that has to be assigned to GameData
      */
-    public void setStatus(Status newState)
-    {
-        this.gameState=newState;
+    public void setStatus(Status newState) {
+        this.gameState = newState;
     }
+
+    /**
+     * @param playerName the name of the player
+     * @return the cells' cordinates of player
+     */
+    public ArrayList<Position> getPlayerPositionsInMap(String playerName) {
+        ArrayList<Position> returnArray = new ArrayList<Position>();
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (boardCell[i][j].getPlayer().equals(playerName)) returnArray.add(new Position(i, j));
+            }
+        }
+        return returnArray;
+    }
+
+    public Divinity getPlayerDivinity(String playerName) {
+        for (Player p : playersInGame) {
+            if (p.getName() == playerName) return p.getDivinity();
+        }
+        return null;
+    }
+
+    public Player getPlayer(String playerName) {
+        for (Player p : playersInGame) {
+            if (p.getName().equals(playerName)) return p;
+        }
+        return null;
+    }
+
+
 }

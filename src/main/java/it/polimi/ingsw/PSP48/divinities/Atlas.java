@@ -32,7 +32,7 @@ public class Atlas extends Divinity {
         }
 
         validCells = validCells.stream()
-                .filter(cell -> cell.getWorker() == null)
+                .filter(cell -> cell.getPlayer() == null)
                 .filter(cell -> !cell.isDomed())
                 .collect(Collectors.toCollection(ArrayList::new));
 
@@ -50,12 +50,12 @@ public class Atlas extends Divinity {
 
     /**
      * Overriden since Atlas can add a dome on each level
-     * @param workerRow        the row where the worker is
-     * @param workerColumn     the column where the worker is
-     * @param domeRow          the row where the player wants to add the dome
-     * @param domeColumn       the column where the player wants to add the dome
-     * @param gameCells        the actual state of the game board
-     * @param divinitiesInGame the divinities in game
+     *
+     * @param workerRow    the row where the worker is
+     * @param workerColumn the column where the worker is
+     * @param domeRow      the row where the player wants to add the dome
+     * @param domeColumn   the column where the player wants to add the dome
+     * @param gd           the game status
      * @throws NotAdiacentCellException        if the cell where the player wants to add the dome is not adiacent to the worker's one
      * @throws OccupiedCellException           if the destination cell is occupied by another worker
      * @throws DomedCellException              is the cell is already domed
@@ -64,22 +64,26 @@ public class Atlas extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public void dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) throws NotAdiacentCellException, OccupiedCellException, DomedCellException, DivinityPowerException {
+    public void dome(int workerRow, int workerColumn, int domeRow, int domeColumn, GameData gd) throws NotAdiacentCellException, OccupiedCellException, DomedCellException, DivinityPowerException {
         //first check: the two cells must be adiacent
-        if (!(adiacentCellVerifier(workerRow, workerColumn, domeRow, domeColumn))) throw new NotAdiacentCellException("Celle non adiacenti");
+        if (!(adiacentCellVerifier(workerRow, workerColumn, domeRow, domeColumn)))
+            throw new NotAdiacentCellException("Celle non adiacenti");
         //second check: the cell must be empty of workers
-        if (!(gameCells[domeRow][domeColumn].getWorker() == null)) throw new OccupiedCellException("Cella occupata");
+        if (!(gd.getCell(domeRow, domeColumn).getPlayer() == null)) throw new OccupiedCellException("Cella occupata");
         //third check: the cell must not be already domed
-        if (gameCells[domeRow][domeColumn].isDomed()) throw new DomedCellException("Stai cercando di costruire su una cella con cupola");
-        //fourth check: if another different divinity doesn't invalid this move
-        divinitiesInGame.remove(gameCells[workerRow][workerColumn].getWorker().getDivinity());
+        if (gd.getCell(domeRow, domeColumn).isDomed())
+            throw new DomedCellException("Stai cercando di costruire su una cella con cupola");
+        //fifth check: if another different divinity doesn't invalid this move
 
-        for(Divinity d : divinitiesInGame) {
-            if (!d.othersDome(new DomePosition(workerRow, workerColumn, domeRow, domeColumn, gameCells[domeRow][domeColumn].getLevel()))) throw new DivinityPowerException("Fail due to other divinity");
+
+        for (Player p : gd.getPlayersInGame()) {
+            if (p != gd.getCurrentPlayer() && !p.getDivinity().othersBuilding(new BuildPosition(workerRow, workerColumn, domeRow, domeColumn, gd.getCell(domeRow, domeColumn).getLevel())))
+                throw new DivinityPowerException("Fail due to other divinity");
         }
 
         //at this point, the move is valid and we must change the state of the game board
 
-        gameCells[domeRow][domeColumn].addDome();
+        gd.getCell(domeRow, domeColumn).addDome();
+        //now, the game has been modified
     }
 }

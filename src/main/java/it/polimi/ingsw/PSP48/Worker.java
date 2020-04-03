@@ -6,8 +6,6 @@ import java.util.ArrayList;
 public abstract class Worker {
     int id;
     private final Colour colour;
-    private Divinity divinity = null;
-    private Divinity tempDivinity = null;
 
     /**
      * Class constructor
