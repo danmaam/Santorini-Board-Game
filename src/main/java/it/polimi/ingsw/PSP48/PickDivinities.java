@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP48;
 
 import java.util.ArrayList;
+import it.polimi.ingsw.PSP48.divinities.Divinity;
 
 /**
  * class that implements that status of the game where a player is choosing the divinities that will later be distributed
@@ -17,18 +18,13 @@ public class PickDivinities implements Status
      */
     public Status handleRequest(Divinity pickedDivinity, GameData gamedata, ColourPick colourPick)
     {
-        ArrayList<Divinity> updatedChosenDivinities, updatedAvailableDivinities;
         Status nextState;
 
-        updatedChosenDivinities=gamedata.getChosenDivinities(); //parte del codice in cui aggiungo la divinità scelta e aggiorno la lista
-        updatedChosenDivinities.add(updatedChosenDivinities.size(), new Divinity());
-        gamedata.setChosenDivinities(updatedChosenDivinities);
+        gamedata.getChosenDivinities().add(gamedata.getChosenDivinities().size(), new Divinity()); //vado a modificare direttamente l-arrayList presente in gameData aggiungendo un nuovo elemento
 
-        updatedAvailableDivinities=gamedata.getAvailableDivinities(); //eliminiamo divinità scelta da quelle disponibili
-        updatedAvailableDivinities.remove(pickedDivinity);
-        gamedata.setAvailableDivinities(updatedAvailableDivinities);
+        gamedata.getAvailableDivinities().remove(pickedDivinity); //eliminiamo divinità scelta da quelle disponibili
 
-        if(updatedChosenDivinities.size()<gamedata.getNumberOfPlayers())
+        if(gamedata.getChosenDivinities().size()<gamedata.getNumberOfPlayers()) //controlliamo che non ci siano altre divinit' da scegliere, in tal caso rimaniamo in questo stato
         {
             nextState=this;
             return(nextState);
@@ -39,19 +35,19 @@ public class PickDivinities implements Status
     }
 
     /**
-     * method used to handle the actions associated to state where players choose their workers (by selecting a colour)
+     * method used to handle the actions associated to state where players choose their colour
      * @return null because it must not be used by this class, it will be implemented and explained in the corresponding class
      */
-    public Status handleRequest (Colour colour, int turnNumber, PlayerWorkerConnection connection, GameData gamedata, DivinityChoice choiceOfDivinities)
+    public Status handleRequest (Colour colour, int turnNumber, GameData gamedata, DivinityChoice choiceOfDivinities)
     {
         return(null);
     }
 
     /**
-     *method that handles the actions related to the assignment of divinities to the workers
+     *method that handles the actions related to the assignment of divinities to the players who have chosen them
      * @return null because it is not used by this class, so it does nothing
      */
-    public Status handleRequest(Divinity divinity, ArrayList<Worker> workers, int turnOfPlayer, PlayerWorkerConnection connection, GameData gameData, GameBegin beginState)
+    public Status handleRequest(Divinity divinity, int turnOfPlayer, GameData gameData, GameBegin beginState)
     {
         return(null);
     }

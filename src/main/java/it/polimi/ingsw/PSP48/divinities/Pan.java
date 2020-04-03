@@ -1,7 +1,5 @@
 package it.polimi.ingsw.PSP48.divinities;
 
-import it.polimi.ingsw.PSP48.Worker;
-
 import java.util.ArrayList;
 
 public class Pan extends Divinity {
