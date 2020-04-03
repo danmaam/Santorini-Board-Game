@@ -1,4 +1,5 @@
 package it.polimi.ingsw.PSP48;
+import it.polimi.ingsw.PSP48.divinities.Divinity;
 
 import java.util.Calendar;
 
@@ -8,6 +9,9 @@ import java.util.Calendar;
 public class Player {
     private final Calendar birthday;
     private final String name;
+    private Colour colour;
+    private Divinity divinity;
+    private Divinity tempDivinity;
 
 
     /**
@@ -16,13 +20,14 @@ public class Player {
      * @param birthday The player's birthday.
      * @throws IllegalArgumentException if name or birthday are null.
      */
-    public Player(String name, Calendar birthday){
+    public Player(String name, Calendar birthday, Colour colour){
         if (name==null || birthday==null){
             throw new IllegalArgumentException("Name and birthday must not be null.");
         }
         else {
             this.name = name;
             this.birthday = birthday;
+            this.colour=colour;
         }
     }
 
@@ -34,7 +39,6 @@ public class Player {
         return name;
     }
 
-
     /**
      * Getter of birthday
      * @return the player's birthday
@@ -43,5 +47,45 @@ public class Player {
         return (Calendar)birthday.clone();
     }
 
+    /**
+     * Getter of colour
+     * @return player colour
+     */
+    public Colour getColour() {
+        return colour;
+    }
+
+    /**
+     * Getter of divinity
+     * @return divinity associated to the worker
+     */
+    public Divinity getDivinity() {
+        return divinity;
+    }
+
+    /**
+     * Setter of divinity
+     * @param newDivinity the divinity to set
+     */
+    public void setDivinity(Divinity newDivinity) {
+        this.divinity = newDivinity;
+    }
+
+    /**
+     * Setter of tempDivinity
+     * @param newDivinity the tempDivinity to set
+     */
+    public void setTempDivinity(Divinity newDivinity) {
+        this.tempDivinity = newDivinity;
+    }
+
+    /**
+     * Method used to restore the original divinity
+     */
+    public void restoreTempDivinity() {
+        this.tempDivinity = null;
+    }
 }
+
+
 

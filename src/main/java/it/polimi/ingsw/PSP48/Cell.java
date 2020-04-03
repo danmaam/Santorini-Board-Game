@@ -7,10 +7,10 @@ package it.polimi.ingsw.PSP48;
  * Also, a bulding can have a dome over the third floor; isDomed checks if there is a dome on the cell.
  * worker contains the reference to the worker placed on the cell of the board game; it can be set using setWorker.
  */
-public class Cell {
+public class Cell implements Cloneable{
     private int column;
     private int row;
-    private Worker actualWorker=null;
+    private String player=null;
     private int actualLevel=0;
     private boolean domed=false;
 
@@ -52,11 +52,9 @@ public class Cell {
 
     /**
      * Method used to build a dome on the building
-     * @return true if the dome has been built
      */
-    public boolean addDome() {
+    public void addDome() {
         this.domed=true;
-        return domed;
     }
 
     /**
@@ -68,11 +66,11 @@ public class Cell {
     }
 
     /**
-     * This method gets the worker on the cell
-     * @return the reference to the worker placed on the cell
+     * This method gets the player on the cell
+     * @return the reference to the player placed on the cell
      */
-    public Worker getWorker() {
-        return actualWorker;            //da clonare
+    public String getPlayer() {
+        return player;
     }
 
     /**
@@ -84,12 +82,18 @@ public class Cell {
     }
 
     /**
-     *method that can change the worker that is placed on the cell of the board game
-     * @param worker the worker you want to place on the cell
+     *method that can change the player that is placed on the cell of the board game
+     * @param newPlayer the player you want to place on the cell
      */
-    public void setWorker (Worker worker)
+    public void setPlayer (String newPlayer)
     {
-        this.actualWorker=worker;
+        this.player=newPlayer;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }
+
 
