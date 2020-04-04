@@ -19,22 +19,23 @@ public class Hephaestus extends Divinity {
      * @return a list of cell valid for the building of the worker
      */
     @Override
-    public ArrayList<Cell> getValidCellForBuilding(int WorkerColumn, int WorkerRow, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
-        ArrayList<Cell> validCells = super.getValidCellForBuilding(WorkerColumn, WorkerRow, gameCells, divinitiesInGame);
+    public ArrayList<Cell> getValidCellForBuilding(int WorkerColumn, int WorkerRow, ArrayList<Divinity> divinitiesInGame, Cell[][] gameCells) {
+        ArrayList<Cell> validCells = super.getValidCellForBuilding(WorkerColumn, WorkerRow, divinitiesInGame, gameCells);
         if (prevBuildRow != -1 && prevBuildColumn != -1) validCells = validCells.stream()
                 .filter(cell -> cell.getRow() == prevBuildRow && cell.getColumn() == prevBuildColumn)
                 .collect(Collectors.toCollection(ArrayList::new));
-        return validCells;    }
+        return validCells;
+    }
 
 
     /**
      * Redefined since it has to check if we are trying to perform the second build on cells different from the first
-     * @param workerRow        the row where the worker is
-     * @param workerColumn     the column where the worker is
-     * @param buildRow         the row where the player wants to add a level
-     * @param buildColumn      the column where the player wants to add a level
-     * @param gameCells        the actual state of the game board
-     * @param divinitiesInGame the divinities in game
+     *
+     * @param workerRow    the row where the worker is
+     * @param workerColumn the column where the worker is
+     * @param buildRow     the row where the player wants to add a level
+     * @param buildColumn  the column where the player wants to add a level
+     * @param gd           the game status
      * @throws NotAdiacentCellException     if the cell where the player wants to build is not adiacent to the worker's one
      * @throws OccupiedCellException        if the destination cell is occupied by another worker
      * @throws DomedCellException           is the cell is already domed
@@ -43,19 +44,19 @@ public class Hephaestus extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public void build(int workerRow, int workerColumn, int buildRow, int buildColumn, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) throws DivinityPowerException {
+    public void build(int workerRow, int workerColumn, int buildRow, int buildColumn, GameData gd) throws DivinityPowerException {
         int rowRollback = -1, columnRollback = -1;
         if (prevBuildColumn == -1 && prevBuildRow == -1) {
             prevBuildColumn = buildColumn;
             prevBuildRow = buildRow;
-        }
-        else {
-            if (!(buildColumn == prevBuildColumn && buildRow == prevBuildRow)) throw new DivinityPowerException("Trying to build on a different cell");
+        } else {
+            if (!(buildColumn == prevBuildColumn && buildRow == prevBuildRow))
+                throw new DivinityPowerException("Trying to build on a different cell");
             rowRollback = prevBuildRow;
             columnRollback = prevBuildColumn;
         }
         try {
-            super.build(workerRow, workerColumn, buildRow, buildColumn, gameCells, divinitiesInGame);
+            super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
         } catch (Exception e) {
             e.printStackTrace();
             prevBuildRow = rowRollback;
@@ -80,12 +81,11 @@ public class Hephaestus extends Divinity {
     }
 
     /**
-     * @param workerRow        the row where the worker is
-     * @param workerColumn     the column where the worker is
-     * @param domeRow          the row where the player wants to add the dome
-     * @param domeColumn       the column where the player wants to add the dome
-     * @param gameCells        the actual state of the game board
-     * @param divinitiesInGame the divinities in game
+     * @param workerRow    the row where the worker is
+     * @param workerColumn the column where the worker is
+     * @param domeRow      the row where the player wants to add the dome
+     * @param domeColumn   the column where the player wants to add the dome
+     * @param gd           the game status
      * @throws NotAdiacentCellException        if the cell where the player wants to add the dome is not adiacent to the worker's one
      * @throws OccupiedCellException           if the destination cell is occupied by another worker
      * @throws DomedCellException              is the cell is already domed
@@ -94,19 +94,19 @@ public class Hephaestus extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public void dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) throws  DivinityPowerException {
+    public void dome(int workerRow, int workerColumn, int domeRow, int domeColumn, GameData gd) throws DivinityPowerException {
         int rowRollback = -1, columnRollback = -1;
         if (prevBuildColumn == -1 && prevBuildRow == -1) {
             prevBuildColumn = domeColumn;
             prevBuildRow = domeRow;
-        }
-        else {
-            if (domeColumn == prevBuildColumn && domeRow == prevBuildRow) throw new DivinityPowerException("Trying to dome the cell");
+        } else {
+            if (domeColumn == prevBuildColumn && domeRow == prevBuildRow)
+                throw new DivinityPowerException("Trying to dome the cell");
             rowRollback = prevBuildRow;
             columnRollback = prevBuildColumn;
         }
         try {
-            super.dome(workerRow, workerColumn, domeRow, domeColumn, gameCells, divinitiesInGame);
+            super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
         } catch (Exception e) {
             prevBuildRow = rowRollback;
             prevBuildColumn = columnRollback;
