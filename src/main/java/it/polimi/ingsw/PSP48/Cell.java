@@ -82,17 +82,31 @@ public class Cell implements Cloneable{
     }
 
     /**
-     *method that can change the player that is placed on the cell of the board game
+     * method that can change the player that is placed on the cell of the board game
+     *
      * @param newPlayer the player you want to place on the cell
      */
-    public void setPlayer (String newPlayer)
-    {
-        this.player=newPlayer;
+    public void setPlayer(String newPlayer) {
+        this.player = newPlayer;
     }
 
     @Override
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }
+
+    @Override
+    public boolean equals(Object c) {
+        return true;
+    }
+
+    public boolean equals(Cell c) {
+        if (c.column != this.column) return false;
+        if (c.row != this.row) return false;
+        if (!(this.player.equals(c.getPlayer()))) return false;
+        if (this.isDomed() != c.isDomed()) return false;
+        if (this.getLevel() != c.getLevel()) return false;
+        return true;
     }
 }
 
