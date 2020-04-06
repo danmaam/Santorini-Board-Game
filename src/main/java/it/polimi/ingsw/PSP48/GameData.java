@@ -37,26 +37,36 @@ public class GameData
         return(totalPlayers);
     }
 
-
     /**
-     * method that retrieves all the players of the game, together with the list of their workers
-     *
-     * @return the list of PlayerWorkerConnection elements
+     * method that retrieves all the players of the game
+     * @return the list of Player elements
      */
-    public ArrayList<Player> getPlayersInGame() {
+    public ArrayList<Player> getPlayersInGame()
+    {
         return playersInGame;
     }
 
-    public void addPlayer(Player p) {
+    /**
+     * method that adds a player in the list in the correct position
+     * @param p is the player to add
+     * @param position is the position where the player needs to be added
+     */
+    public void addPlayer(Player p, int position)
+    {
+        playersInGame.add(position, p);
+    }
+
+    public void addPlayer(Player p)
+    {
         playersInGame.add(p);
     }
 
     /**
      * method used during the state where players are still choosing their workers and they need to know what colours are still available
-     *
      * @return an arrayList of the colours that can still be chosen, which is part of this class
      */
-    public ArrayList<Colour> getAvailableColours() {
+    public ArrayList<Colour> getAvailableColours()
+    {
         ArrayList<Colour> coloursToPick;
 
         coloursToPick = this.availableColours;
@@ -64,30 +74,17 @@ public class GameData
         return (coloursToPick);
     }
 
-    public void removeColour(Colour c) {
-        availableColours.remove(c);
-    }
-
     /**
      * method used to retrieve the divinities still available to be picked by a player
-     *
-     * @return an arrayList containing said divinities
+     *@return an arrayList containing said divinities
      */
-    public ArrayList<Divinity> getAvailableDivinities() {
+    public ArrayList<Divinity> getAvailableDivinities()
+    {
         ArrayList<Divinity> divinitiesToPick;
 
         divinitiesToPick=this.availableDivinities;
 
         return(divinitiesToPick);
-    }
-
-    /**
-     * method used to change the list of available divinities that players can still pick
-     * @param newAvailableDivinities is the updated list
-     */
-    public void setAvailableDivinities(ArrayList<Divinity> newAvailableDivinities)
-    {
-        this.availableDivinities=newAvailableDivinities;
     }
 
     /**
@@ -101,15 +98,6 @@ public class GameData
         neededDivinities=this.chosenDivinities;
 
         return(neededDivinities);
-    }
-
-    /**
-     * methos that updates the list of divinities that still need to be distributed among players
-     * @param newChosenDivinities represents the updated list
-     */
-    public void setChosenDivinities(ArrayList<Divinity> newChosenDivinities)
-    {
-        this.chosenDivinities=newChosenDivinities;
     }
 
     /**
@@ -155,24 +143,19 @@ public class GameData
     }
 
     /**
-     * method used to assign divinities to their respective workers after players make their choice
-     * @param playerChoice represents the divinity chosen by the player (it is communicated by the view to the controller and then added to change the state of the model)
-     * @param listOfWorkers is used to know to which worker the divinity must be assigned
+     * method that returns the board of the game
+     * @return a reference to the matrix
      */
-    public void addSelectedDivinity(Divinity playerChoice, ArrayList<Worker> listOfWorkers) //eccezione se divinità non è fra quelle chosen o se indice del giocatore è sbagliato
+    public Cell[][] getGameBoard()
     {
-        int j; //indice usato per scorrere la lista di lavoratori dove inserire la divinità
-
-        for(j=0; j<listOfWorkers.size(); j++)
-        {
-            listOfWorkers.get(j).setDivinity(playerChoice);
-        }
+        return(boardCell);
     }
 
     /**
      * method used to do the actions associated to a certain state, by calling the correct handler method
      */
-    public void stateAction() {
+    public void stateAction()
+    {
         //this.gameState.handleRequest();
     }
 
@@ -191,40 +174,57 @@ public class GameData
 
     /**
      * method that updates the state of the game with the correct one
-     *
      * @param newState is the updated state that has to be assigned to GameData
      */
-    public void setStatus(Status newState) {
+    public void setStatus(Status newState)
+    {
         this.gameState = newState;
     }
 
     /**
-     * @param playerName the name of the player
-     * @return the cells' cordinates of player
+     * method that returns the positions occupied by the player on the board
+     * @param playerName is the name of the player
+     * @return the cells' coordinates of player
      */
-    public ArrayList<Position> getPlayerPositionsInMap(String playerName) {
-        ArrayList<Position> returnArray = new ArrayList<Position>();
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
+    public ArrayList<Position> getPlayerPositionsInMap(String playerName)
+    {
+        ArrayList<Position> returnArray=new ArrayList<Position>();
+        for (int i=0; i<5; i++)
+        {
+            for (int j=0; j<5; j++)
+            {
                 if (boardCell[i][j].getPlayer().equals(playerName)) returnArray.add(new Position(i, j));
             }
         }
         return returnArray;
     }
 
-    public Divinity getPlayerDivinity(String playerName) {
-        for (Player p : playersInGame) {
-            if (p.getName() == playerName) return p.getDivinity();
+    /**
+     * method that allows us to get the divinity associated to a certain player
+     * @param playerName is the player that contains the needed divinity
+     * @return a reference to the divinity owned by the player
+     */
+    public Divinity getPlayerDivinity(String playerName)
+    {
+        for (Player p : playersInGame)
+        {
+            if (p.getName()==playerName) return p.getDivinity();
         }
         return null;
     }
 
-    public Player getPlayer(String playerName) {
-        for (Player p : playersInGame) {
+    /**
+     * method that retrieves a player from the list contained in this class
+     * @param playerName is the player we are looking for
+     * @return a reference to said player
+     */
+    public Player getPlayer(String playerName)
+    {
+        for (Player p : playersInGame)
+        {
             if (p.getName().equals(playerName)) return p;
         }
         return null;
     }
-
 
 }
