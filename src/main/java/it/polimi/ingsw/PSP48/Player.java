@@ -7,7 +7,7 @@ import java.util.Calendar;
  * Class used to contain a player's data, such as name and birthday.
  */
 public class Player {
-    private final Calendar birthday;
+    private final Birthday birthday;
     private final String name;
     private Colour colour;
     private Divinity divinity;
@@ -16,15 +16,15 @@ public class Player {
 
     /**
      * Class constructor
-     * @param name String that contains the player's name.
+     *
+     * @param name     String that contains the player's name.
      * @param birthday The player's birthday.
      * @throws IllegalArgumentException if name or birthday are null.
      */
-    public Player(String name, Calendar birthday){
-        if (name==null || birthday==null){
+    public Player(String name, Birthday birthday) {
+        if (name == null || birthday == null) {
             throw new IllegalArgumentException("Name and birthday must not be null.");
-        }
-        else {
+        } else {
             this.name = name;
             this.birthday = birthday;
         }
@@ -40,10 +40,11 @@ public class Player {
 
     /**
      * Getter of birthday
+     *
      * @return the player's birthday
      */
-    public Calendar getBirthday() {
-        return (Calendar)birthday.clone();
+    public Birthday getBirthday() {
+        return birthday;
     }
 
     /**

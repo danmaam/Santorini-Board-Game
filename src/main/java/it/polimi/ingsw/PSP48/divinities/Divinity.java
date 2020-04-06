@@ -49,31 +49,35 @@ public class Divinity {
         //with the for loop, i'm adding to the arrayList the cell adiacent to the worker
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                if (i != WorkerRow && j != WorkerColumn && 0 <= WorkerRow + i && WorkerRow + i <= 4 && 0 <= WorkerColumn + j && WorkerColumn + j <= 4) {
-                    validCells.add(gameCells[i][j]);
+                if (!(i == WorkerRow && j == WorkerColumn) && 0 <= WorkerRow + i && WorkerRow + i <= 4 && 0 <= WorkerColumn + j && WorkerColumn + j <= 4) {
+                    validCells.add(gameCells[WorkerRow + i][WorkerColumn + j]);
                 }
             }
         }
 
 
         validCells = validCells.stream()
-                .filter(cell -> cell.getPlayer() != null) // deletes from the valid cells ones where there's a worker on
-                //delets from the valid the cell which are too high or too low to be reached
-                .filter(cell -> -3 <= cell.getLevel() - actualWorkerCell.getLevel() && cell.getLevel() - actualWorkerCell.getLevel() <= 1)
+                .filter(cell -> cell.getPlayer() == null) // deletes from the valid cells ones where there's a worker on
+                //deletes from the valid the cell which are too high or too low to be reached
+                .filter(cell -> cell.getLevel() - actualWorkerCell.getLevel() <= 1)
                 //deletes the domed cells
                 .filter(cell -> !cell.isDomed())
                 .collect(Collectors.toCollection(ArrayList::new));
 
         //now we have to remove cells where the move is impossible due to other divinity powers
 
+        ArrayList<Cell> cellsToBeRemoved = new ArrayList<>();
+
         for (Cell c : validCells) {
             for (Divinity d : otherDivinitiesInGame) {
                 if (!d.othersMove(new MovePosition(WorkerRow, WorkerColumn, c.getRow(), c.getColumn(), 0))) {
-                    validCells.remove(c);
+                    cellsToBeRemoved.add(c);
                     break;
                 }
             }
         }
+
+        for (Cell c : cellsToBeRemoved) validCells.remove(c);
 
         //now in valid cells there is the list with compatible moves cells
 
@@ -103,7 +107,7 @@ public class Divinity {
         if (!(moveLevel - workerLevel <= 1))
             throw new IncorrectLevelException("Stai cerando di salire a un livello troppo alto");
         //third check: the cell must not be occupied
-        if (!(gd.getCell(moveRow, moveColumn).getPlayer() == null)) throw new OccupiedCellException("Cella occupata");
+        if ((gd.getCell(moveRow, moveColumn).getPlayer() != null)) throw new OccupiedCellException("Cella occupata");
         //fourth check: the cell must not be domed
         if (gd.getCell(moveRow, moveColumn).isDomed())
             throw new DomedCellException("Stai cercando di salire su una cella con cupola");
@@ -144,7 +148,7 @@ public class Divinity {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (i != WorkerRow && j != WorkerColumn && 0 <= WorkerRow + i && WorkerRow + i <= 4 && 0 <= WorkerColumn + j && WorkerColumn + j <= 4) {
-                    validCells.add(gameCell[i][j]);
+                    validCells.add(gameCell[WorkerRow + i][WorkerColumn + j]);
                 }
             }
         }
@@ -160,13 +164,19 @@ public class Divinity {
         //now we have to remove cells due to other divinites powers
         //we have to remove the current divinity from the others, to check if their power can invalid the move
 
+        ArrayList<Cell> notValid = new ArrayList<>();
+
         for (Cell c : validCells) {
             for (Divinity d : otherDivinitiesInGame) {
                 if (d.othersBuilding(new BuildPosition(WorkerRow, WorkerColumn, c.getRow(), c.getColumn(), c.getLevel()))) {
-                    validCells.remove(c);
+                    notValid.add(c);
                     break;
                 }
             }
+        }
+
+        for (Cell c : notValid) {
+            validCells.remove(c);
         }
 
         return validCells;
@@ -233,7 +243,7 @@ public class Divinity {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (i != workerRow && j != workerColumn && 0 <= workerRow + i && workerRow + i <= 4 && 0 <= workerColumn + j && workerColumn + j <= 4) {
-                    validCells.add(gameCells[i][j]);
+                    validCells.add(gameCells[workerRow + i][workerRow + j]);
                 }
             }
         }
@@ -244,14 +254,18 @@ public class Divinity {
                 .filter(cell -> !cell.isDomed())
                 .collect(Collectors.toCollection(ArrayList::new));
 
+        ArrayList<Cell> notValid = new ArrayList<>();
+
         for (Cell c : validCells) {
             for (Divinity d : divinitiesInGame) {
                 if (!d.othersDome(new DomePosition(workerRow, workerColumn, c.getRow(), c.getColumn(), c.getLevel()))) {
-                    validCells.remove(c);
+                    notValid.add(c);
                     break;
                 }
             }
         }
+
+        for (Cell c : notValid) validCells.remove(c);
 
         return validCells;
     }
@@ -286,7 +300,7 @@ public class Divinity {
 
 
         for (Player p : gd.getPlayersInGame()) {
-            if (p != gd.getCurrentPlayer() && !p.getDivinity().othersBuilding(new BuildPosition(workerRow, workerColumn, domeRow, domeColumn, gd.getCell(domeRow, domeColumn).getLevel())))
+            if (p != gd.getCurrentPlayer() && !p.getDivinity().othersDome(new DomePosition(workerRow, workerColumn, domeRow, domeColumn, gd.getCell(domeRow, domeColumn).getLevel())))
                 throw new DivinityPowerException("Fail due to other divinity");
         }
 

@@ -39,7 +39,7 @@ public class DivinityChoice implements Status
     {
         Status nextStatus;
 
-        gameData.getPlayer((turnOfPlayer-1)).setDivinity(chosenDivinity);
+        gameData.getCurrentPlayer().setDivinity(chosenDivinity);
         gameData.getChosenDivinities().remove(chosenDivinity);
 
         if (gameData.getChosenDivinities().size()==0) nextStatus=gameBeginState;

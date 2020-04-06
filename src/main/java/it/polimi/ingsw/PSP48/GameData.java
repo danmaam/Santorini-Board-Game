@@ -6,35 +6,42 @@ import java.util.ArrayList;
 
 /**
  * class used to contain all the data of a certain game, like the players and their workers, the current player and the status of the game
- *there is a list of chosen divinities because players first choose a number of divinities according to how many are playing and then each of them chooses his/her divinity from the smaller group they have selected
- *the list of available divinities is used when players are still selecting the smaller group of divinities and they need to know what they can still choose
- *  @author Rebecca Marelli
+ * there is a list of chosen divinities because players first choose a number of divinities according to how many are playing and then each of them chooses his/her divinity from the smaller group they have selected
+ * the list of available divinities is used when players are still selecting the smaller group of divinities and they need to know what they can still choose
+ *
+ * @author Rebecca Marelli
  */
-public class GameData
-{
+public class GameData {
     private ArrayList<Player> playersInGame = new ArrayList<Player>(); //i giocatori sono in ordine fisso secondo l'ordine di gioco
     private ArrayList<Colour> availableColours = new ArrayList<Colour>();
-    private ArrayList<Divinity> availableDivinities= new ArrayList<Divinity>();
-    private ArrayList<Divinity> chosenDivinities= new ArrayList<Divinity>();
+    private ArrayList<Divinity> availableDivinities = new ArrayList<Divinity>();
+    private ArrayList<Divinity> chosenDivinities = new ArrayList<Divinity>();
     private int currentPlayer; //se siamo in un momento per cui il current player non deve avere un valore possiamo settarlo a -1
-    private final Cell[][] boardCell=new Cell[5][5]; //tramite il costruttore di Cell devo inizializzare le celle, qui sono tutte a null (RIVEDERE)
+    private final Cell[][] boardCell = new Cell[5][5]; //tramite il costruttore di Cell devo inizializzare le celle, qui sono tutte a null (RIVEDERE)
     private Status gameState;
+
+    public GameData() {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                boardCell[i][j] = new Cell(i, j);
+            }
+        }
+    }
 
     /**
      * method used to obtain how many players are in a certain game (they can be 2 or 3)
+     *
      * @return an int that is the total number of players in the game
      */
-    public int getNumberOfPlayers()
-    {
+    public int getNumberOfPlayers() {
         int index;
         int totalPlayers;
 
-        totalPlayers=0;
-        for(index=0; index<this.playersInGame.size(); index++)
-        {
+        totalPlayers = 0;
+        for (index = 0; index < this.playersInGame.size(); index++) {
             totalPlayers++;
         }
-        return(totalPlayers);
+        return (totalPlayers);
     }
 
 
@@ -224,6 +231,10 @@ public class GameData
             if (p.getName().equals(playerName)) return p;
         }
         return null;
+    }
+
+    public Cell[][] getGameBoard() {
+        return boardCell;
     }
 
 

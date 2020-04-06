@@ -1,0 +1,328 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: Minotaur</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">it.polimi.ingsw.PSP48.divinities</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: Minotaur (it.polimi.ingsw.PSP48.divinities)</h1>
+
+    <table class="coverageStats">
+
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">Minotaur</td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 8)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 76)
+  </span>
+            </td>
+        </tr>
+        <tr>
+            <td class="name">Minotaur$1</td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 1)
+  </span>
+            </td>
+        </tr>
+        <tr>
+            <td class="name">Minotaur$direction</td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 2)
+  </span>
+            </td>
+        </tr>
+        <tr>
+            <td class="name"><strong>total</strong></td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 10)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 79)
+  </span>
+            </td>
+        </tr>
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.divinities;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import it.polimi.ingsw.PSP48.*;
+        <i>4</i>&nbsp;
+        <i>5</i>&nbsp;import java.util.ArrayList;
+        <i>6</i>&nbsp;import java.util.stream.Collectors;
+        <i>7</i>&nbsp;
+        <b class="nc"><i>8</i>&nbsp;public class Minotaur extends Divinity {</b>
+        <b class="nc"><i>9</i>&nbsp; private final String name = &quot;Basic&quot;;</b>
+        <b class="nc"><i>10</i>&nbsp; private final Boolean threePlayerSupported = true;</b>
+        <i>11</i>&nbsp;
+        <b class="nc"><i>12</i>&nbsp; private enum direction {</b>
+        <b class="nc"><i>13</i>&nbsp; up, right, left, down, upright, upleft, downright, downleft;</b>
+        <i>14</i>&nbsp; }
+        <i>15</i>&nbsp;
+        <i>16</i>&nbsp; private int oldLevel;
+        <i>17</i>&nbsp; private int newLevel;
+        <i>18</i>&nbsp;
+        <i>19</i>&nbsp; /**
+        <i>20</i>&nbsp; * we need also to return cells occupied
+        <i>21</i>&nbsp; *
+        <i>22</i>&nbsp; * @param WorkerColumn the column where the worker is
+        <i>23</i>&nbsp; * @param WorkerRow the row where the worker is
+        <i>24</i>&nbsp; * @param gameCells the actual board state
+        <i>25</i>&nbsp; * @param otherDivinitiesInGame the other divinities in game
+        <i>26</i>&nbsp; * @return a list of cells valid for the move of the worker
+        <i>27</i>&nbsp; * @author Daniele Mammone
+        <i>28</i>&nbsp; */
+        <i>29</i>&nbsp; @Override
+        <i>30</i>&nbsp; public ArrayList&lt;Cell&gt; getValidCellForMove(int WorkerColumn, int WorkerRow, Cell[][]
+        gameCells, ArrayList&lt;Divinity&gt; otherDivinitiesInGame) {
+        <b class="nc"><i>31</i>&nbsp; Cell actualWorkerCell = gameCells[WorkerRow][WorkerColumn];</b>
+        <b class="nc"><i>32</i>&nbsp; ArrayList&lt;Cell&gt; validCells = new ArrayList&lt;&gt;();</b>
+        <i>33</i>&nbsp;
+        <i>34</i>&nbsp; //with the for loop, i&#39;m adding to the arrayList the cell adiacent to the worker
+        <b class="nc"><i>35</i>&nbsp; for (int i = -1; i &lt;= 1; i++) {</b>
+        <b class="nc"><i>36</i>&nbsp; for (int j = -1; j &lt;= 1; j++) {</b>
+        <b class="nc"><i>37</i>&nbsp; if (i != WorkerRow &amp;&amp; j != WorkerColumn &amp;&amp; 0 &lt;= WorkerRow + i
+            &amp;&amp; WorkerRow + i &lt;= 4 &amp;&amp; 0 &lt;= WorkerColumn + j &amp;&amp; WorkerColumn + j &lt;= 4) {</b>
+        <b class="nc"><i>38</i>&nbsp; validCells.add(gameCells[i][j]);</b>
+        <i>39</i>&nbsp; }
+        <i>40</i>&nbsp; }
+        <i>41</i>&nbsp; }
+        <i>42</i>&nbsp;
+        <i>43</i>&nbsp;
+        <b class="nc"><i>44</i>&nbsp; validCells = validCells.stream()</b>
+        <b class="nc"><i>45</i>&nbsp; .filter(cell -&gt; cell.getPlayer() != null) // deletes from the valid cells ones
+            where there&#39;s a worker on</b>
+        <i>46</i>&nbsp; //deletes from the valid the cell which are too high or too low to be reached
+        <b class="nc"><i>47</i>&nbsp; .filter(cell -&gt; -3 &lt;= cell.getLevel() - actualWorkerCell.getLevel() &amp;&amp;
+            cell.getLevel() - actualWorkerCell.getLevel() &lt;= 1)</b>
+        <i>48</i>&nbsp; //deletes the domed cells
+        <b class="nc"><i>49</i>&nbsp; .filter(cell -&gt; !cell.isDomed())</b>
+        <b class="nc"><i>50</i>&nbsp; .collect(Collectors.toCollection(ArrayList::new));</b>
+        <i>51</i>&nbsp;
+        <i>52</i>&nbsp; //noe we have to remove occupied cells that can&#39;t push away the other worker
+        <b class="nc"><i>53</i>&nbsp; for (Cell c : validCells) {</b>
+        <b class="nc"><i>54</i>&nbsp; direction nextDir = getDirection(c.getRow(), c.getColumn(), WorkerRow,
+            WorkerColumn);</b>
+        <b class="nc"><i>55</i>&nbsp; Position pushingPosition = getNextPosition(c.getRow(), c.getColumn(),
+            nextDir);</b>
+        <b class="nc"><i>56</i>&nbsp; if (!(0 &lt;= pushingPosition.getRow() &amp;&amp; pushingPosition.getRow() &lt;=
+            4) ||</b>
+        <b class="nc"><i>57</i>&nbsp; !(0 &lt;= pushingPosition.getColumn() &amp;&amp; pushingPosition.getColumn() &lt;=
+            4) ||</b>
+        <b class="nc"><i>58</i>&nbsp; gameCells[pushingPosition.getRow()][pushingPosition.getColumn()].getPlayer() !=
+            null ||</b>
+        <b class="nc"><i>59</i>&nbsp; gameCells[pushingPosition.getRow()][pushingPosition.getColumn()].isDomed())
+            validCells.remove(c);</b>
+        <b class="nc"><i>60</i>&nbsp; }</b>
+        <i>61</i>&nbsp;
+        <i>62</i>&nbsp; //now we have to remove cells where the move is impossible due to other divinity powers
+        <i>63</i>&nbsp;
+        <b class="nc"><i>64</i>&nbsp; for (Cell c : validCells) {</b>
+        <b class="nc"><i>65</i>&nbsp; for (Divinity d : otherDivinitiesInGame) {</b>
+        <b class="nc"><i>66</i>&nbsp; if (!d.othersMove(new MovePosition(WorkerRow, WorkerColumn, c.getRow(),
+            c.getColumn(), 0))) {</b>
+        <b class="nc"><i>67</i>&nbsp; validCells.remove(c);</b>
+        <b class="nc"><i>68</i>&nbsp; break;</b>
+        <i>69</i>&nbsp; }
+        <b class="nc"><i>70</i>&nbsp; }</b>
+        <b class="nc"><i>71</i>&nbsp; }</b>
+        <i>72</i>&nbsp;
+        <i>73</i>&nbsp; //now in valid cells there is the list with compatible moves cells
+        <i>74</i>&nbsp;
+        <b class="nc"><i>75</i>&nbsp; return validCells;</b>
+        <i>76</i>&nbsp; }
+        <i>77</i>&nbsp;
+        <i>78</i>&nbsp; private direction getDirection(int moveRow, int moveCol, int workRow, int workCol) {
+        <i>79</i>&nbsp; //case 1: line moving
+        <b class="nc"><i>80</i>&nbsp; if (moveRow == workRow) {</b>
+        <b class="nc"><i>81</i>&nbsp; if (moveCol &gt; workCol) return direction.right;</b>
+        <b class="nc"><i>82</i>&nbsp; else return direction.left;</b>
+        <i>83</i>&nbsp; }
+        <i>84</i>&nbsp;
+        <i>85</i>&nbsp; //case 2: column moving
+        <b class="nc"><i>86</i>&nbsp; else if (moveCol == workCol) {</b>
+        <b class="nc"><i>87</i>&nbsp; if (moveRow &gt; workRow) return direction.down;</b>
+        <b class="nc"><i>88</i>&nbsp; else return direction.up;</b>
+        <i>89</i>&nbsp; }
+        <i>90</i>&nbsp;
+        <i>91</i>&nbsp; //case 3: diagonal moving
+        <i>92</i>&nbsp; else {
+        <b class="nc"><i>93</i>&nbsp; if (moveRow &gt; workRow &amp;&amp; moveCol &gt; workCol) return
+            direction.downright;</b>
+        <b class="nc"><i>94</i>&nbsp; else if (moveRow &gt; workRow &amp;&amp; moveCol &lt; workCol) return
+            direction.downleft;</b>
+        <b class="nc"><i>95</i>&nbsp; else if (moveRow &lt; workRow &amp;&amp; moveCol &gt; workCol) return
+            direction.upright;</b>
+        <b class="nc"><i>96</i>&nbsp; else return direction.upleft;</b>
+        <i>97</i>&nbsp; }
+        <i>98</i>&nbsp; }
+        <i>99</i>&nbsp;
+        <i>100</i>&nbsp; private Position getNextPosition(int wR, int wC, direction dir) {
+        <b class="nc"><i>101</i>&nbsp; switch (dir) {</b>
+        <i>102</i>&nbsp; case right:
+        <b class="nc"><i>103</i>&nbsp; return new Position(wR, wC + 1);</b>
+        <i>104</i>&nbsp; case left:
+        <b class="nc"><i>105</i>&nbsp; return new Position(wR, wC - 1);</b>
+        <i>106</i>&nbsp; case up:
+        <b class="nc"><i>107</i>&nbsp; return new Position(wR - 1, wC);</b>
+        <i>108</i>&nbsp; case down:
+        <b class="nc"><i>109</i>&nbsp; return new Position(wR + 1, wC);</b>
+        <i>110</i>&nbsp; case downleft:
+        <b class="nc"><i>111</i>&nbsp; return new Position(wR + 1, wC - 1);</b>
+        <i>112</i>&nbsp; case downright:
+        <b class="nc"><i>113</i>&nbsp; return new Position(wR + 1, wC + 1);</b>
+        <i>114</i>&nbsp; case upright:
+        <b class="nc"><i>115</i>&nbsp; return new Position(wR - 1, wC + 1);</b>
+        <i>116</i>&nbsp; case upleft:
+        <b class="nc"><i>117</i>&nbsp; return new Position(wR - 1, wC - 1);</b>
+        <i>118</i>&nbsp; }
+        <b class="nc"><i>119</i>&nbsp; return null;</b>
+        <i>120</i>&nbsp; }
+        <i>121</i>&nbsp;
+        <i>122</i>&nbsp; /**
+        <i>123</i>&nbsp; * @param WorkerColumn the column of the cell where the worker is
+        <i>124</i>&nbsp; * @param WorkerRow the row of the cell where the worker is
+        <i>125</i>&nbsp; * @param moveColumn the column of the board where the worker wants to move
+        <i>126</i>&nbsp; * @param moveRow the row of the board where the worker wants to move
+        <i>127</i>&nbsp; * @param gd the actual game state
+        <i>128</i>&nbsp; * @throws NotAdiacentCellException if the destination cell is not adiacent to the worker
+        <i>129</i>&nbsp; * @throws IncorrectLevelException if the destination cell is too high to be reached
+        <i>130</i>&nbsp; * @throws OccupiedCellException if the destination cell has another worker on it
+        <i>131</i>&nbsp; * @throws DomedCellException if the destination cell has a dome on it
+        <i>132</i>&nbsp; * @author Daniele Mammone
+        <i>133</i>&nbsp; */
+        <i>134</i>&nbsp; public void move(int WorkerColumn, int WorkerRow, int moveColumn, int moveRow, GameData gd)
+        throws
+        <i>135</i>&nbsp; NotAdiacentCellException, IncorrectLevelException, OccupiedCellException, DomedCellException,
+        DivinityPowerException, NotEmptyCellException {
+        <i>136</i>&nbsp; //first check: the two cells must be adiacent
+        <b class="nc"><i>137</i>&nbsp; if (!(adiacentCellVerifier(WorkerRow, WorkerColumn, moveRow, moveColumn)))</b>
+        <b class="nc"><i>138</i>&nbsp; throw new NotAdiacentCellException(&quot;Celle non adiacenti&quot;);</b>
+        <i>139</i>&nbsp; //second check: the two levels must be compatible
+        <b class="nc"><i>140</i>&nbsp; int workerLevel = gd.getCell(WorkerRow, WorkerColumn).getLevel();</b>
+        <b class="nc"><i>141</i>&nbsp; int moveLevel = gd.getCell(moveRow, moveColumn).getLevel();</b>
+        <b class="nc"><i>142</i>&nbsp; if (!(moveLevel - workerLevel &lt;= 1))</b>
+        <b class="nc"><i>143</i>&nbsp; throw new IncorrectLevelException(&quot;Stai cerando di salire a un livello
+            troppo alto&quot;);</b>
+        <i>144</i>&nbsp; //third check: the cell must not be occupied
+        <b class="nc"><i>145</i>&nbsp; direction nextDir = getDirection(moveRow, moveColumn, WorkerRow,
+            WorkerColumn);</b>
+        <b class="nc"><i>146</i>&nbsp; Position pushingPosition = getNextPosition(moveRow, moveColumn, nextDir);</b>
+        <b class="nc"><i>147</i>&nbsp; if (!(gd.getCell(moveRow, moveColumn).getPlayer() == null)) {</b>
+        <i>148</i>&nbsp;
+        <b class="nc"><i>149</i>&nbsp; if (!(0 &lt;= pushingPosition.getRow() &amp;&amp; pushingPosition.getRow() &lt;=
+            4) ||</b>
+        <b class="nc"><i>150</i>&nbsp; !(0 &lt;= pushingPosition.getColumn() &amp;&amp; pushingPosition.getColumn() &lt;=
+            4) ||</b>
+        <b class="nc"><i>151</i>&nbsp; gd.getCell(pushingPosition.getRow(), pushingPosition.getColumn()).getPlayer() !=
+            null ||</b>
+        <b class="nc"><i>152</i>&nbsp; gd.getCell(pushingPosition.getRow(), pushingPosition.getColumn()).isDomed())</b>
+        <b class="nc"><i>153</i>&nbsp; throw new OccupiedCellException(&quot;Cella occupata e impossibile usare potere
+            del minotauro&quot;);</b>
+        <i>154</i>&nbsp; }
+        <i>155</i>&nbsp; //fourth check: the cell must not be domed
+        <b class="nc"><i>156</i>&nbsp; if (gd.getCell(moveRow, moveColumn).isDomed())</b>
+        <b class="nc"><i>157</i>&nbsp; throw new DomedCellException(&quot;Stai cercando di salire su una cella con
+            cupola&quot;);</b>
+        <i>158</i>&nbsp; //fifth check: if another different divinity doesn&#39;t invalid this move
+        <i>159</i>&nbsp;
+        <b class="nc"><i>160</i>&nbsp; for (Player p : gd.getPlayersInGame()) {</b>
+        <b class="nc"><i>161</i>&nbsp; if (p != gd.getCurrentPlayer() &amp;&amp; !p.getDivinity().othersMove(new
+            MovePosition(WorkerRow, WorkerColumn, moveRow, moveColumn, moveLevel - moveColumn)))</b>
+        <b class="nc"><i>162</i>&nbsp; throw new DivinityPowerException(&quot;Fail due to other divinity&quot;);</b>
+        <b class="nc"><i>163</i>&nbsp; }</b>
+        <i>164</i>&nbsp;
+        <i>165</i>&nbsp; //at this point, the move is valid and we must change the state of the game board
+        <i>166</i>&nbsp;
+        <b class="nc"><i>167</i>&nbsp; oldLevel = workerLevel;</b>
+        <b class="nc"><i>168</i>&nbsp; newLevel = moveLevel;</b>
+        <b class="nc"><i>169</i>&nbsp; String tempPlayer = gd.getCell(moveRow, moveColumn).getPlayer();</b>
+        <b class="nc"><i>170</i>&nbsp; gd.getCell(WorkerRow, WorkerColumn).setPlayer(null);</b>
+        <b class="nc"><i>171</i>&nbsp; gd.getCell(moveRow, moveColumn).setPlayer(gd.getCurrentPlayer().getName());</b>
+        <b class="nc"><i>172</i>&nbsp; gd.getCell(pushingPosition.getRow(),
+            pushingPosition.getColumn()).setPlayer(tempPlayer);</b>
+        <i>173</i>&nbsp;
+        <i>174</i>&nbsp; //now, the game board has been modified
+        <i>175</i>&nbsp; }
+        <i>176</i>&nbsp;
+        <i>177</i>&nbsp;
+        <i>178</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2020-04-06 01:59</div>
+</div>
+</body>
+</html>

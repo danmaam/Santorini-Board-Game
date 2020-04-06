@@ -30,7 +30,7 @@ public class ColourPick implements Status
     {
         Status followingState;
 
-        gameData.getPlayer((playerTurn-1)).setColour(pickedColour); //settiamo il colore scelto all'interno del player che lo ha selezionato
+        gameData.getCurrentPlayer().setColour(pickedColour); //settiamo il colore scelto all'interno del player che lo ha selezionato
         gameData.getAvailableColours().remove(pickedColour); //rimuoviamo il colore scelto dalla lista di quelli disponibili
 
         if (gameData.getAvailableColours().size()==0) followingState=divinityChoice;
