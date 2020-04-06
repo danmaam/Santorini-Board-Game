@@ -93,17 +93,17 @@ public class OptionalBuilding implements Status
      */
     public Status handleRequest (String playerName, Player p, GameData data, int startingRow, int startingColumn)
     {
-        ArrayList<Cell> cellsToBuild= new ArrayList<Cell>();
-        ArrayList<Cell> cellsToPutDome= new ArrayList<Cell>();
-        ArrayList<Divinity> otherDivinities= new ArrayList<Divinity>();
+        ArrayList<Cell> cellsToBuild= new ArrayList<>();
+        ArrayList<Cell> cellsToPutDome= new ArrayList<>();
+        ArrayList<Divinity> otherDivinities= new ArrayList<>();
 
         for (Player pl: data.getPlayersInGame()) //array delle altre divinità in gioco da passare alla funzione che trova le celle valide per costruire
         {
             if (!pl.getName().equals(playerName)) otherDivinities.add(pl.getDivinity());
         }
 
-        cellsToBuild=p.getDivinity().getValidCellForBuilding(startingColumn, startingRow, otherDivinities, data.getGameBoard());
-        cellsToPutDome=p.getDivinity().getValidCellsToPutDome(startingColumn, startingRow, data.getGameBoard(), otherDivinities);
+        //cellsToBuild=p.getDivinity().getValidCellForBuilding(startingColumn, startingRow, otherDivinities, data.getGameBoard());
+        //cellsToPutDome=p.getDivinity().getValidCellsToPutDome(startingColumn, startingRow, data.getGameBoard(), otherDivinities);
 
         //mi sono presa tutte le celle valide per costruire
         //se sono vuote passo al nuovo stato, tanto è una operazione opzionale
@@ -112,12 +112,14 @@ public class OptionalBuilding implements Status
 
         for (Player pl: data.getPlayersInGame()) //win condition della divinità crono, da calcolare solo se ho scelto di costruire
         {
-            if (pl.getDivinity().getName() == "Chronus")
+            if (pl.getDivinity().getName().equals("Chronus"))
             {
                 pl.getDivinity().winCondition(data);
                 break;
             }
         }
+
+        return(null);
     }
 
     /**

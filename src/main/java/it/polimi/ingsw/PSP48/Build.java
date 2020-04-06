@@ -84,17 +84,17 @@ public class Build implements Status
      */
     public Status handleRequest (GameData gameData, int oldRow, int oldColumn, Player playerInTurn, String name)
     {
-        ArrayList<Cell> cellsToBuild= new ArrayList<Cell>();
-        ArrayList<Cell> cellsToPutDome= new ArrayList<Cell>();
-        ArrayList<Divinity> otherDivinities= new ArrayList<Divinity>();
+        ArrayList<Cell> cellsToBuild= new ArrayList<>();
+        ArrayList<Cell> cellsToPutDome= new ArrayList<>();
+        ArrayList<Divinity> otherDivinities= new ArrayList<>();
 
         for (Player pl: gameData.getPlayersInGame()) //array delle altre divinità in gioco da passare alla funzione che trova le celle valide per costruire
         {
             if (!pl.getName().equals(name)) otherDivinities.add(pl.getDivinity());
         }
 
-        cellsToBuild=playerInTurn.getDivinity().getValidCellForBuilding(oldColumn, oldRow, otherDivinities, gameData.getGameBoard());
-        cellsToPutDome=playerInTurn.getDivinity().getValidCellsToPutDome(oldColumn, oldRow, gameData.getGameBoard(), otherDivinities);
+        //cellsToBuild=playerInTurn.getDivinity().getValidCellForBuilding(oldColumn, oldRow, otherDivinities, gameData.getGameBoard());
+        //cellsToPutDome=playerInTurn.getDivinity().getValidCellsToPutDome(oldColumn, oldRow, gameData.getGameBoard(), otherDivinities);
 
         //si mostrano le celle e si chiede al giocatore cosa vuole fare
         //in base alla scelta del giocatore si chiama o il metodo build della divinità oppure il metodo dome, dove costruire ci viene passato in base alla scelta
@@ -103,7 +103,7 @@ public class Build implements Status
 
         for (Player p: gameData.getPlayersInGame())
         {
-            if (p.getDivinity().getName() == "Chronus")
+            if (p.getDivinity().getName().equals("Chronus"))
             {
                 p.getDivinity().winCondition(gameData);
                 break;
@@ -111,6 +111,8 @@ public class Build implements Status
         }
 
         //finito di costruire vado nel prossimo stato che può essere o la fine del turno o una costruzione opzionale, dipende dalla divinità
+
+        return(null);
     }
 
     /**

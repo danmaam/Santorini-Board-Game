@@ -78,6 +78,8 @@ public class Move implements Status
         playerToMove.getDivinity().winCondition(gd);
 
         //manca la parte in cui decido lo stato nuovo a seconda della divinità->è questa che me lo deve restituire
+
+        return(null);
     }
 
     /**
@@ -115,6 +117,5 @@ public class Move implements Status
     {
         return(null);
     }
-
 
 }

@@ -55,15 +55,15 @@ public class TurnBegin  implements Status
      */
     public Status handleRequest(String playerName, Player playerInTurn, GameData gameData)
     {
-        ArrayList<Position> playerPositions= new ArrayList<Position>();
+        ArrayList<Position> playerPositions;
         Position position1, position2;
-        ArrayList<Divinity> otherDivinities= new ArrayList<Divinity>();
-        ArrayList<Cell> cellsForMove1= new ArrayList<Cell>();
-        ArrayList<Cell> cellsForMove2= new ArrayList<Cell>();
-        ArrayList<Cell> cellsForBuild1= new ArrayList<Cell>();
-        ArrayList<Cell> cellsForBuild2= new ArrayList<Cell>();
-        ArrayList<Cell> cellsForDome1= new ArrayList<Cell>();
-        ArrayList<Cell> cellsForDome2= new ArrayList<Cell>();
+        ArrayList<Divinity> otherDivinities= new ArrayList<>();
+        ArrayList<Cell> cellsForMove1;
+        ArrayList<Cell> cellsForMove2;
+        ArrayList<Cell> cellsForBuild1;
+        ArrayList<Cell> cellsForBuild2;
+        ArrayList<Cell> cellsForDome1;
+        ArrayList<Cell> cellsForDome2;
         boolean position1Move=false;
         boolean position2Move=false;
 
@@ -86,7 +86,7 @@ public class TurnBegin  implements Status
             {
                 cellsForBuild1=playerInTurn.getDivinity().getValidCellForBuilding(c.getRow(), c.getColumn(), otherDivinities, gameData.getGameBoard());
                 cellsForDome1=playerInTurn.getDivinity().getValidCellsToPutDome(c.getRow(), c.getColumn(), gameData.getGameBoard(), otherDivinities);
-                if (cellsForBuild1!=null || cellsForDome1!=null) position1Move=true;
+                //if (cellsForBuild1!=null || cellsForDome1!=null) position1Move=true;
             }
         }
 
@@ -96,11 +96,14 @@ public class TurnBegin  implements Status
             {
                 cellsForBuild2=playerInTurn.getDivinity().getValidCellForBuilding(c.getRow(), c.getColumn(), otherDivinities, gameData.getGameBoard());
                 cellsForDome2=playerInTurn.getDivinity().getValidCellsToPutDome(c.getRow(), c.getColumn(), gameData.getGameBoard(), otherDivinities);
-                if (cellsForBuild2!=null || cellsForDome2!=null) position2Move=true;
+                //if (cellsForBuild2!=null || cellsForDome2!=null) position2Move=true;
             }
         }
 
-        //se da nessuna delle due position si può muovere e poi costruire il giocatore ha perso, altrimenti devo far selezionaren da dove vuole muovere
+        //se da nessuna delle due position si può muovere e poi costruire il giocatore ha perso, altrimenti devo far selezionare da dove vuole muovere
+
+
+        return(null); //va sistemato con il next state corretto che viene restituito dalla divinità del giocatore
     }
 
     /**

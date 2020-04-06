@@ -99,5 +99,7 @@ public class TurnEnd implements Status
         playerInTurn.getDivinity().turnEnd(); //chiamo il metodo per le operazioni di fine turno
 
         //il prossimo stato sarà l'inizio del turno, che però dipende dalla divinità del prossimo giocatore
+
+        return(null);
     }
 }

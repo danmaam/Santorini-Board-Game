@@ -161,20 +161,6 @@ public class GameData {
         return(neededCell);
     }
 
-    /**
-     * method used to assign divinities to their respective workers after players make their choice
-     * @param playerChoice represents the divinity chosen by the player (it is communicated by the view to the controller and then added to change the state of the model)
-     * @param listOfWorkers is used to know to which worker the divinity must be assigned
-     */
-    public void addSelectedDivinity(Divinity playerChoice, ArrayList<Worker> listOfWorkers) //eccezione se divinità non è fra quelle chosen o se indice del giocatore è sbagliato
-    {
-        int j; //indice usato per scorrere la lista di lavoratori dove inserire la divinità
-
-        for(j=0; j<listOfWorkers.size(); j++)
-        {
-            listOfWorkers.get(j).setDivinity(playerChoice);
-        }
-    }
 
     /**
      * method used to do the actions associated to a certain state, by calling the correct handler method
