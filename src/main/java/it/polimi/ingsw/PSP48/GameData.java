@@ -16,8 +16,8 @@ public class GameData {
     private ArrayList<Colour> availableColours = new ArrayList<Colour>();
     private ArrayList<Divinity> availableDivinities = new ArrayList<Divinity>();
     private ArrayList<Divinity> chosenDivinities = new ArrayList<Divinity>();
-    private int currentPlayer; //se siamo in un momento per cui il current player non deve avere un valore possiamo settarlo a -1
-    private final Cell[][] boardCell = new Cell[5][5]; //tramite il costruttore di Cell devo inizializzare le celle, qui sono tutte a null (RIVEDERE)
+    private int currentPlayer=-1; //se siamo in un momento per cui il current player non deve avere un valore possiamo settarlo a -1
+    private final Cell[][] boardCell = new Cell[5][5]; //tramite il costruttore di Cell devo inizializzare le celle, qui sono tutte a null
     private Status gameState;
 
     public GameData() {
