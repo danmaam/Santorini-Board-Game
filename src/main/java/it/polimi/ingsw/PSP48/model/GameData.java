@@ -1,6 +1,6 @@
-package it.polimi.ingsw.PSP48;
+package it.polimi.ingsw.PSP48.model;
 
-import it.polimi.ingsw.PSP48.divinities.Divinity;
+import it.polimi.ingsw.PSP48.model.divinities.Divinity;
 
 import java.util.ArrayList;
 
@@ -221,6 +221,11 @@ public class GameData {
 
     public Cell[][] getGameBoard() {
         return boardCell;
+    }
+
+    //per motivi di test
+    public void setCurrentPlayer(int i) {
+        currentPlayer = i;
     }
 
 
