@@ -11,8 +11,6 @@ public class Prometheus extends Divinity {
     private final String name = "Prometheus";
     private final Boolean threePlayerSupported = true;
 
-    private int oldLevel;
-    private int newLevel;
 
     boolean previousBuild = false;
 
@@ -97,5 +95,10 @@ public class Prometheus extends Divinity {
     public void dome(int workerRow, int workerColumn, int domeRow, int domeColumn, GameData gd) throws NotAdiacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
         super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
         previousBuild = true;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 }

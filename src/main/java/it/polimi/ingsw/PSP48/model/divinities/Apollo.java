@@ -13,7 +13,10 @@ public class Apollo extends Divinity {
     private final String name = "Apollo";
     private final Boolean threePlayerSupported = true;
 
-    private int lastWorkerMoveID = 0;
+    @Override
+    public String getName() {
+        return name;
+    }
 
     /**
      * reimplements getValidCellForMove since also occupied Cells are valid
@@ -59,7 +62,6 @@ public class Apollo extends Divinity {
                 }
             }
         }
-
         for (Cell c : nV) validCells.remove(c);
 
         //now in valid cells there is the list with compatible moves cells
@@ -103,12 +105,13 @@ public class Apollo extends Divinity {
             if (p != gd.getCurrentPlayer() && !p.getDivinity().othersMove(new MovePosition(WorkerRow, WorkerColumn, moveRow, moveColumn, moveLevel - moveColumn)))
                 throw new DivinityPowerException("Fail due to other divinity");
         }
-
         //at this point, the move is valid and we must change the state of the game board
 
         String tempWorker = gd.getCell(moveRow, moveColumn).getPlayer();
         gd.getCell(moveRow, moveColumn).setPlayer(gd.getCell(WorkerRow, WorkerColumn).getPlayer());
         gd.getCell(WorkerRow, WorkerColumn).setPlayer(tempWorker);
+        gd.getCurrentPlayer().setOldLevel(workerLevel);
+        gd.getCurrentPlayer().setNewLevel(moveLevel);
 
         //now, the game board has been modified
     }

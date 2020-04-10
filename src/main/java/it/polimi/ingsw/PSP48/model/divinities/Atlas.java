@@ -97,4 +97,8 @@ public class Atlas extends Divinity {
     }
 
 
+    @Override
+    public String getName() {
+        return name;
+    }
 }

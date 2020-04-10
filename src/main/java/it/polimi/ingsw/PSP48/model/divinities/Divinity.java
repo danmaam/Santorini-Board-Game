@@ -10,8 +10,6 @@ public class Divinity {
     private final String name = "Basic";
     private final Boolean threePlayerSupported = true;
 
-    private int oldLevel;
-    private int newLevel;
 
     //Methods
 
@@ -121,8 +119,8 @@ public class Divinity {
 
         //at this point, the move is valid and we must change the state of the game board
 
-        oldLevel = workerLevel;
-        newLevel = moveLevel;
+        gd.getCurrentPlayer().setOldLevel(workerLevel);
+        gd.getCurrentPlayer().setNewLevel(moveLevel);
         gd.getCell(moveRow, moveColumn).setPlayer(gd.getCell(WorkerRow, WorkerColumn).getPlayer());
         gd.getCell(WorkerRow, WorkerColumn).setPlayer(null);
 
@@ -148,7 +146,7 @@ public class Divinity {
         ArrayList<Cell> validCells = new ArrayList<>();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                if (!(i == WorkerRow && j == WorkerColumn) && 0 <= WorkerRow + i && WorkerRow + i <= 4 && 0 <= WorkerColumn + j && WorkerColumn + j <= 4) {
+                if (!(i == 0 && j == 0) && 0 <= WorkerRow + i && WorkerRow + i <= 4 && 0 <= WorkerColumn + j && WorkerColumn + j <= 4) {
                     validCells.add(gameCell[WorkerRow + i][WorkerColumn + j]);
                 }
             }
@@ -383,7 +381,7 @@ public class Divinity {
      * @return true if the actual player considererd has won, false if the game must go on
      */
     public boolean winCondition(GameData gd) {
-        return (oldLevel != newLevel && newLevel == 3);
+        return (gd.getCurrentPlayer().getOldLevel() != gd.getCurrentPlayer().getNewLevel() && gd.getCurrentPlayer().getNewLevel() == 3);
     }
 
 

@@ -1,50 +1,54 @@
-package it.polimi.ingsw.PSP48.model;
+package it.polimi.ingsw.PSP48.model.states;
 
+import it.polimi.ingsw.PSP48.model.*;
 import it.polimi.ingsw.PSP48.model.divinities.Divinity;
 import it.polimi.ingsw.PSP48.model.exceptions.*;
 
 /**
- * class that implements that status of the game where a player is choosing the divinities that will later be distributed
+ * class that implements the Status interface, handling the state where players get their workers assigned
  * @author Rebecca Marelli
  */
-public class PickDivinities implements Status
+public class ColourPick implements Status
 {
     /**
-     * method that handles all the activities linked to the state represented by the class, it's the one that will be called by state action
-     * @param pickedDivinity represents the divinity picked by a player
-     * @param gamedata is the object that contains all the data of the game, where we put the updated lists
-     * @param colourPick is the status that follows PickDivinities
-     * @return the status following the current one, only if we have completed the activities associated to it
+     * method that implements the choice of divinities, it is not used by this class
+     * @return null because this class does not handle this state
      */
-    public Status handleRequest(Divinity pickedDivinity, GameData gamedata, ColourPick colourPick)
-    {
-        Status nextState;
-
-        gamedata.getChosenDivinities().add(gamedata.getChosenDivinities().size(), pickedDivinity); //vado a modificare direttamente l-arrayList presente in gameData aggiungendo un nuovo elemento
-
-        gamedata.getAvailableDivinities().remove(pickedDivinity); //eliminiamo divinità scelta da quelle disponibili
-
-        if(gamedata.getChosenDivinities().size()<gamedata.getNumberOfPlayers()) //controlliamo che non ci siano altre divinit' da scegliere, in tal caso rimaniamo in questo stato
-        {
-            nextState=this;
-            return(nextState);
-        }
-        else nextState=colourPick;
-
-        return(nextState);
-    }
-
-    /**
-     * method used to handle the actions associated to state where players choose their colour
-     * @return null because it must not be used by this class, it will be implemented and explained in the corresponding class
-     */
-    public Status handleRequest (Colour colour, String name, GameData gamedata, DivinityChoice choiceOfDivinities)
+    public Status handleRequest(Divinity divinity, GameData data, ColourPick colourState)
     {
         return(null);
     }
 
     /**
-     *method that handles the actions related to the assignment of divinities to the players who have chosen them
+     * method that assigns the chosen colour to its player
+     * @param pickedColour represents the colour picked by the player
+     * @param name is the name of the player
+     * @param gameData contains all the data of the game, it needs to be updated after every choice
+     * @param divinityChoice is the next state
+     * @return the status that will follow the current one
+     */
+    public Status handleRequest(Colour pickedColour, String name, GameData gameData, DivinityChoice divinityChoice)
+    {
+        Status followingState=null;
+
+        gameData.getCurrentPlayer().setColour(pickedColour); //settiamo il colore scelto all'interno del player che lo ha selezionato
+        gameData.getAvailableColours().remove(pickedColour); //rimuoviamo il colore scelto dalla lista di quelli disponibili
+
+        for(Player p: gameData.getPlayersInGame())
+        {
+            if(p.getColour()==null) //se c'è un giocatore senza colore devo proseguire con la scelta e rimanere in questo stato
+            {
+                followingState=this;
+                return (followingState);
+            }
+            else followingState=divinityChoice; //se trovo un colore nel giocatore setto temporaneamente lo stato al prossimo valore, ma proseguo il controllo
+        }
+
+        return(followingState);
+    }
+
+    /**
+     *method that handles the actions related to the assignment of divinities to the players
      * @return null because it is not used by this class, so it does nothing
      */
     public Status handleRequest(Divinity divinity, String name, GameData gameData, GameBegin beginState)
@@ -80,7 +84,7 @@ public class PickDivinities implements Status
     }
 
     /**
-     * method that checks if a player a certain divinity can use its power and make a second move and then build
+     * method that checks if a player with a certain divinity can use its power and make a second move and then build
      * @return null because it's not called in this class
      */
     public Status handleRequest(int row, int column, String name, Player player, GameData data)
@@ -114,4 +118,5 @@ public class PickDivinities implements Status
     {
         return(null);
     }
+
 }

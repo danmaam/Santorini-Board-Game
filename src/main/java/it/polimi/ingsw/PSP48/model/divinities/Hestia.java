@@ -11,9 +11,6 @@ public class Hestia extends Divinity {
     private final String name = "Hestia";
     private final Boolean threePlayerSupported = true;
 
-    private int oldLevel;
-    private int newLevel;
-
     private Boolean alreadyBuilt = false;
 
     /**
@@ -37,7 +34,7 @@ public class Hestia extends Divinity {
     @Override
     public ArrayList<Cell> getValidCellForBuilding(int WorkerColumn, int WorkerRow, ArrayList<Divinity> otherDivinitiesInGame, Cell[][] gameCell) {
         return super.getValidCellForBuilding(WorkerColumn, WorkerRow, otherDivinitiesInGame, gameCell).stream()
-                .filter(cell -> alreadyBuilt ? cell.getColumn() != 0 && cell.getColumn() != 4 && cell.getRow() != 0 && cell.getRow() != 4 : true)
+                .filter(cell -> !alreadyBuilt || cell.getColumn() != 0 && cell.getColumn() != 4 && cell.getRow() != 0 && cell.getRow() != 4)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -52,7 +49,7 @@ public class Hestia extends Divinity {
     @Override
     public ArrayList<Cell> getValidCellsToPutDome(int workerColumn, int workerRow, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
         return super.getValidCellsToPutDome(workerColumn, workerRow, gameCells, divinitiesInGame).stream()
-                .filter(cell -> alreadyBuilt ? cell.getColumn() != 0 && cell.getColumn() != 4 && cell.getRow() != 0 && cell.getRow() != 4 : true)
+                .filter(cell -> !alreadyBuilt || cell.getColumn() != 0 && cell.getColumn() != 4 && cell.getRow() != 0 && cell.getRow() != 4)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -96,5 +93,10 @@ public class Hestia extends Divinity {
             throw new DivinityPowerException("trying to perform the second build on a perimetral cell");
         super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
         if (!alreadyBuilt) alreadyBuilt = true;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 }

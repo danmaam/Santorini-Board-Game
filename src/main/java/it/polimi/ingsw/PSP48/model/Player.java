@@ -13,6 +13,24 @@ public class Player {
     private Colour colour;
     private Divinity divinity;
     private Divinity tempDivinity;
+    private int oldLevel;
+    private int newLevel;
+
+    public int getOldLevel() {
+        return oldLevel;
+    }
+
+    public int getNewLevel() {
+        return newLevel;
+    }
+
+    public void setOldLevel(int oldLevel) {
+        this.oldLevel = oldLevel;
+    }
+
+    public void setNewLevel(int newLevel) {
+        this.newLevel = newLevel;
+    }
 
     /**
      * Class constructor
@@ -82,17 +100,23 @@ public class Player {
 
     /**
      * Setter of tempDivinity
+     *
      * @param newDivinity the tempDivinity to set
      */
     public void setTempDivinity(Divinity newDivinity) {
         this.tempDivinity = newDivinity;
     }
 
+    public Divinity getTempDivinity() {
+        return tempDivinity;
+    }
+
     /**
      * Method used to restore the original divinity
      */
     public void restoreTempDivinity() {
-        this.tempDivinity = null;
+        divinity = tempDivinity;
+        tempDivinity = null;
     }
 }
 

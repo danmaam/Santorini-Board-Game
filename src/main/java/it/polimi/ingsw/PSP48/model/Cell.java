@@ -2,6 +2,8 @@ package it.polimi.ingsw.PSP48.model;
 
 import it.polimi.ingsw.PSP48.model.exceptions.MaximumLevelReachedException;
 
+import java.util.Objects;
+
 /**
  * Class used to represent a cell in the board game; each cell is identified by a column and a row.
  * The actualLevel attribute represents the level (first, second or third floor) of the building on the cell.
@@ -108,18 +110,17 @@ public class Cell implements Cloneable {
     }
 
     @Override
-    public boolean equals(Object c) {
-        return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cell cell = (Cell) o;
+        return column == cell.column &&
+                row == cell.row &&
+                actualLevel == cell.actualLevel &&
+                domed == cell.domed &&
+                Objects.equals(player, cell.player);
     }
 
-    public boolean equals(Cell c) {
-        if (c.column != this.column) return false;
-        if (c.row != this.row) return false;
-        if (!(this.player.equals(c.getPlayer()))) return false;
-        if (this.isDomed() != c.isDomed()) return false;
-        if (this.getLevel() != c.getLevel()) return false;
-        return true;
-    }
 
     public void setActualLevel(int l) {
         actualLevel = l;

@@ -1,35 +1,52 @@
-package it.polimi.ingsw.PSP48.model;
+package it.polimi.ingsw.PSP48.model.states;
 
+import it.polimi.ingsw.PSP48.model.*;
 import it.polimi.ingsw.PSP48.model.divinities.Divinity;
 import it.polimi.ingsw.PSP48.model.exceptions.*;
 
 /**
- * class that implements the end-of-turn operations
+ * class that implements that status of the game where a player is choosing the divinities that will later be distributed
  * @author Rebecca Marelli
  */
-public class TurnEnd implements Status
+public class PickDivinities implements Status
 {
     /**
-     * method that handles the first status of the game, the choice of the list of divinities, which is not handled by this class
-     * @return null because the method mustn't be called in this class, so it does nothing
+     * method that handles all the activities linked to the state represented by the class, it's the one that will be called by state action
+     * @param pickedDivinity represents the divinity picked by a player
+     * @param gamedata is the object that contains all the data of the game, where we put the updated lists
+     * @param colourPick is the status that follows PickDivinities
+     * @return the status following the current one, only if we have completed the activities associated to it
      */
-    public Status handleRequest(Divinity divinity, GameData data, ColourPick colourPickState)
+    public Status handleRequest(Divinity pickedDivinity, GameData gamedata, ColourPick colourPick)
+    {
+        Status nextState;
+
+        gamedata.getChosenDivinities().add(gamedata.getChosenDivinities().size(), pickedDivinity); //vado a modificare direttamente l-arrayList presente in gameData aggiungendo un nuovo elemento
+
+        gamedata.getAvailableDivinities().remove(pickedDivinity); //eliminiamo divinità scelta da quelle disponibili
+
+        if(gamedata.getChosenDivinities().size()<gamedata.getNumberOfPlayers()) //controlliamo che non ci siano altre divinit' da scegliere, in tal caso rimaniamo in questo stato
+        {
+            nextState=this;
+            return(nextState);
+        }
+        else nextState=colourPick;
+
+        return(nextState);
+    }
+
+    /**
+     * method used to handle the actions associated to state where players choose their colour
+     * @return null because it must not be used by this class, it will be implemented and explained in the corresponding class
+     */
+    public Status handleRequest (Colour colour, String name, GameData gamedata, DivinityChoice choiceOfDivinities)
     {
         return(null);
     }
 
     /**
-     *method handling the second state of the game, the choice of colours by the players
-     * @return null because it is not necessary to call this method, it must do nothing
-     */
-    public Status handleRequest(Colour colour, String name, GameData data, DivinityChoice divinityChoiceState)
-    {
-        return(null);
-    }
-
-    /**
-     * method handling the assignment of specific divinities to the respective players
-     * @return null because it must do nothing, it's not the one called to handle the state implemented by this class
+     *method that handles the actions related to the assignment of divinities to the players who have chosen them
+     * @return null because it is not used by this class, so it does nothing
      */
     public Status handleRequest(Divinity divinity, String name, GameData gameData, GameBegin beginState)
     {
@@ -64,7 +81,7 @@ public class TurnEnd implements Status
     }
 
     /**
-     * method that checks if a player with a certain divinity can use its power and make a second move and then build
+     * method that checks if a player a certain divinity can use its power and make a second move and then build
      * @return null because it's not called in this class
      */
     public Status handleRequest(int row, int column, String name, Player player, GameData data)
@@ -91,16 +108,11 @@ public class TurnEnd implements Status
     }
 
     /**
-     * method that handles the activities related to the end of the turn
-     * @param playerInTurn is the player of the current turn
-     * @return the beginning of the new turn, which is related to the divinity of the next player
+     * method handling the end of a turn and setting the right parameters
+     * @return null because it is not handled by this class
      */
-    public Status handleRequest(Player playerInTurn)
+    public Status handleRequest(Player player)
     {
-        playerInTurn.getDivinity().turnEnd(); //chiamo il metodo per le operazioni di fine turno
-
-        //il prossimo stato sarà l'inizio del turno, che però dipende dalla divinità del prossimo giocatore
-
         return(null);
     }
 }

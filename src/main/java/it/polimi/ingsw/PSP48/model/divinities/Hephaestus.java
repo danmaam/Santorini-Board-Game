@@ -90,4 +90,9 @@ public class Hephaestus extends Divinity {
         prevBuildRow = domeRow;
         prevBuildColumn = domeColumn;
     }
+
+    @Override
+    public String getName() {
+        return name;
+    }
 }

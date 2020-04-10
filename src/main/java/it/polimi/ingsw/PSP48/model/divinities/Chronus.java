@@ -22,4 +22,9 @@ public class Chronus extends Divinity {
         }
         return super.winCondition(gd) || numbersOfCompleteTowers >= 5;
     }
+
+    @Override
+    public String getName() {
+        return name;
+    }
 }

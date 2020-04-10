@@ -19,6 +19,8 @@ public class DivinityWinConditionTest {
     public void testSetUp() {
         player1.setDivinity(baseDivinity);
         player2.setDivinity(baseDivinity);
+        game_database.addPlayer(player1);
+        game_database.addPlayer(player2);
         game_database.getCell(0, 1).setPlayer(player1.getName());
         game_database.getCell(3, 0).setPlayer(player1.getName());
         game_database.getCell(4, 4).setPlayer(player2.getName());
@@ -26,6 +28,7 @@ public class DivinityWinConditionTest {
         game_database.getCell(1, 3).setActualLevel(1);
         game_database.getCell(2, 3).setActualLevel(2);
         game_database.getCell(3, 4).setActualLevel(3);
+        game_database.setCurrentPlayer(1);
     }
 
     @org.junit.Test

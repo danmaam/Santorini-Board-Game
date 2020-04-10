@@ -10,12 +10,11 @@ public class Minotaur extends Divinity {
     private final String name = "Basic";
     private final Boolean threePlayerSupported = true;
 
-    private enum direction {
-        up, right, left, down, upright, upleft, downright, downleft;
-    }
 
-    private int oldLevel;
-    private int newLevel;
+    @Override
+    public String getName() {
+        return name;
+    }
 
     /**
      * we need also to return cells occupied
@@ -36,40 +35,49 @@ public class Minotaur extends Divinity {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (!(i == 0 && j == 0) && 0 <= WorkerRow + i && WorkerRow + i <= 4 && 0 <= WorkerColumn + j && WorkerColumn + j <= 4) {
-                    validCells.add(gameCells[i][j]);
+                    validCells.add(gameCells[WorkerRow + i][WorkerColumn + j]);
                 }
             }
         }
 
 
         validCells = validCells.stream()
-                .filter(cell -> cell.getPlayer() != null) // deletes from the valid cells ones where there's a worker on
                 //deletes from the valid the cell which are too high or too low to be reached
-                .filter(cell -> -3 <= cell.getLevel() - actualWorkerCell.getLevel() && cell.getLevel() - actualWorkerCell.getLevel() <= 1)
+                .filter(cell -> cell.getLevel() - actualWorkerCell.getLevel() <= 1)
                 //deletes the domed cells
                 .filter(cell -> !cell.isDomed())
+                .filter(cell -> cell.getPlayer() == null || !(cell.getPlayer().equals(gameCells[WorkerRow][WorkerColumn].getPlayer())))
                 .collect(Collectors.toCollection(ArrayList::new));
 
+        ArrayList<Cell> nV = new ArrayList<>();
         //noe we have to remove occupied cells that can't push away the other worker
+
         for (Cell c : validCells) {
             direction nextDir = getDirection(c.getRow(), c.getColumn(), WorkerRow, WorkerColumn);
             Position pushingPosition = getNextPosition(c.getRow(), c.getColumn(), nextDir);
             if (!(0 <= pushingPosition.getRow() && pushingPosition.getRow() <= 4) ||
                     !(0 <= pushingPosition.getColumn() && pushingPosition.getColumn() <= 4) ||
                     gameCells[pushingPosition.getRow()][pushingPosition.getColumn()].getPlayer() != null ||
-                    gameCells[pushingPosition.getRow()][pushingPosition.getColumn()].isDomed()) validCells.remove(c);
+                    gameCells[pushingPosition.getRow()][pushingPosition.getColumn()].isDomed()) nV.add(c);
         }
 
+        for (Cell c : nV) validCells.remove(c);
+
+
         //now we have to remove cells where the move is impossible due to other divinity powers
+
+        nV = new ArrayList<>();
 
         for (Cell c : validCells) {
             for (Divinity d : otherDivinitiesInGame) {
                 if (!d.othersMove(new MovePosition(WorkerRow, WorkerColumn, c.getRow(), c.getColumn(), 0))) {
-                    validCells.remove(c);
+                    nV.add(c);
                     break;
                 }
             }
         }
+
+        for (Cell c : nV) validCells.remove(c);
 
         //now in valid cells there is the list with compatible moves cells
 
@@ -91,10 +99,14 @@ public class Minotaur extends Divinity {
 
         //case 3: diagonal moving
         else {
-            if (moveRow > workRow && moveCol > workCol) return direction.downright;
-            else if (moveRow > workRow && moveCol < workCol) return direction.downleft;
-            else if (moveRow < workRow && moveCol > workCol) return direction.upright;
-            else return direction.upleft;
+            if (moveRow > workRow) {
+                if (moveCol > workCol) return direction.downright;
+                else return direction.downleft;
+            } else {
+                if (moveCol < workCol) return direction.upleft;
+                else return direction.upright;
+
+            }
         }
     }
 
@@ -146,12 +158,15 @@ public class Minotaur extends Divinity {
         direction nextDir = getDirection(moveRow, moveColumn, WorkerRow, WorkerColumn);
         Position pushingPosition = getNextPosition(moveRow, moveColumn, nextDir);
         if (!(gd.getCell(moveRow, moveColumn).getPlayer() == null)) {
-
+            if (gd.getCell(moveRow, moveColumn).getPlayer().equals(gd.getCurrentPlayer().getName()))
+                throw new OccupiedCellException("Cella occupata da un tuo stesso worker");
             if (!(0 <= pushingPosition.getRow() && pushingPosition.getRow() <= 4) ||
-                    !(0 <= pushingPosition.getColumn() && pushingPosition.getColumn() <= 4) ||
-                    gd.getCell(pushingPosition.getRow(), pushingPosition.getColumn()).getPlayer() != null ||
+                    !(0 <= pushingPosition.getColumn() && pushingPosition.getColumn() <= 4))
+                throw new DivinityPowerException("Cella di push fuori tabellone");
+            if (gd.getCell(pushingPosition.getRow(), pushingPosition.getColumn()).getPlayer() != null ||
                     gd.getCell(pushingPosition.getRow(), pushingPosition.getColumn()).isDomed())
-                throw new OccupiedCellException("Cella occupata e impossibile usare potere del minotauro");
+                throw new OccupiedCellException("Cella non vuota oppure fuori tabellone. Impossibile usare potere del minotauro");
+
         }
         //fourth check: the cell must not be domed
         if (gd.getCell(moveRow, moveColumn).isDomed())
@@ -165,8 +180,8 @@ public class Minotaur extends Divinity {
 
         //at this point, the move is valid and we must change the state of the game board
 
-        oldLevel = workerLevel;
-        newLevel = moveLevel;
+        gd.getCurrentPlayer().setOldLevel(workerLevel);
+        gd.getCurrentPlayer().setNewLevel(moveLevel);
         String tempPlayer = gd.getCell(moveRow, moveColumn).getPlayer();
         gd.getCell(WorkerRow, WorkerColumn).setPlayer(null);
         gd.getCell(moveRow, moveColumn).setPlayer(gd.getCurrentPlayer().getName());

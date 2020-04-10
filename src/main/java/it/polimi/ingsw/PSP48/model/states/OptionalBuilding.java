@@ -1,13 +1,16 @@
-package it.polimi.ingsw.PSP48.model;
+package it.polimi.ingsw.PSP48.model.states;
 
+import it.polimi.ingsw.PSP48.model.*;
 import it.polimi.ingsw.PSP48.model.divinities.Divinity;
 import it.polimi.ingsw.PSP48.model.exceptions.*;
 
+import java.util.ArrayList;
+
 /**
- * class that implements the move operation by a player
+ * class that implements a second optional building operation
  * @author Rebecca Marelli
  */
-public class Move implements Status
+public class OptionalBuilding implements Status
 {
     /**
      * method that handles the first status of the game, the choice of the list of divinities, which is not handled by this class
@@ -55,31 +58,11 @@ public class Move implements Status
     }
 
     /**
-     * method that handles the moves of players during their turn and checks if they have won
-     * @param oldRow is the row of the starting position
-     * @param oldColumn is the column of the starting position
-     * @param newRow is the row where the player needs to be put
-     * @param newColumn is the column where the player needs to be put
-     * @param playerToMove is the player we are moving
-     * @param gd is an object of the class GameData, which contains the board
-     * @return the state following the moving of the player, it depends on the divinity we are using in the turn
-     * @throws NotAdiacentCellException if we are trying to move the player in a cell that is not adiacent to him
-     * @throws IncorrectLevelException if we are trying to go up more than a level
-     * @throws OccupiedCellException if the cell we are moving the player to isa already occupied
-     * @throws DivinityPowerException if we don't follow the power of the divinity
-     * @throws DomedCellException if the cell we are moving the player to has a dome on it
-     * @throws NotEmptyCellException  if the cell is not empty
+     *method that handles the moves of players during their turn and checks if they have won
+     * @return null because it is not handled by this class, thus it does nothing
      */
-    public Status handleRequest (int oldRow, int oldColumn, int newRow, int newColumn, Player playerToMove, GameData gd) throws NotAdiacentCellException, IncorrectLevelException, OccupiedCellException, DivinityPowerException, DomedCellException, NotEmptyCellException
+    public Status handleRequest (int oldRow, int oldColumn, int newRow, int newColumn, Player player, GameData gd) throws NotAdiacentCellException, IncorrectLevelException, OccupiedCellException, DivinityPowerException, DomedCellException, NotEmptyCellException
     {
-        //quando è fatta la view cercare di capire se la parte che illumina le casella va dentro quella oppure qui
-
-        playerToMove.getDivinity().move(oldColumn, oldRow, newColumn, newRow, gd);
-
-        playerToMove.getDivinity().winCondition(gd);
-
-        //manca la parte in cui decido lo stato nuovo a seconda della divinità->è questa che me lo deve restituire
-
         return(null);
     }
 
@@ -102,11 +85,42 @@ public class Move implements Status
     }
 
     /**
-     * method handling a second optional building by the player
-     * @return null because it is not handled by this class
+     * method handling a second optional construction by the player, it lists the possible cells then the player can decide what to do
+     * @param playerName is the name of the player of the current turn
+     * @param p is a reference to the object player, containing the divinity that we use to build
+     * @param data contains the board
+     * @param startingRow is the starting position
+     * @param startingColumn is the starting position
+     * @return next state, which can be the end of the game or of the turn
      */
     public Status handleRequest (String playerName, Player p, GameData data, int startingRow, int startingColumn)
     {
+        ArrayList<Cell> cellsToBuild= new ArrayList<>();
+        ArrayList<Cell> cellsToPutDome= new ArrayList<>();
+        ArrayList<Divinity> otherDivinities= new ArrayList<>();
+
+        for (Player pl: data.getPlayersInGame()) //array delle altre divinità in gioco da passare alla funzione che trova le celle valide per costruire
+        {
+            if (!pl.getName().equals(playerName)) otherDivinities.add(pl.getDivinity());
+        }
+
+        //cellsToBuild=p.getDivinity().getValidCellForBuilding(startingColumn, startingRow, otherDivinities, data.getGameBoard());
+        //cellsToPutDome=p.getDivinity().getValidCellsToPutDome(startingColumn, startingRow, data.getGameBoard(), otherDivinities);
+
+        //mi sono presa tutte le celle valide per costruire
+        //se sono vuote passo al nuovo stato, tanto è una operazione opzionale
+        //se non sono vuote chiedo al giocatore se vuole costruire o se vuole saltare questa operazione
+        //se sceglie di costruire chiedo quale delle due operazioni di costruzione vuole fare e chiamo la funzione apposita contenuta nella divinità
+
+        for (Player pl: data.getPlayersInGame()) //win condition della divinità crono, da calcolare solo se ho scelto di costruire
+        {
+            if (pl.getDivinity().getName().equals("Chronus"))
+            {
+                pl.getDivinity().winCondition(data);
+                break;
+            }
+        }
+
         return(null);
     }
 
@@ -118,5 +132,4 @@ public class Move implements Status
     {
         return(null);
     }
-
 }

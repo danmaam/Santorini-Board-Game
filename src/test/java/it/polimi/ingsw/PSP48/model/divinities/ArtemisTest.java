@@ -45,8 +45,8 @@ public class ArtemisTest {
     public void validCellsTest() throws DomedCellException, OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdiacentCellException, NotEmptyCellException {
         player1.getDivinity().turnBegin(game_database);
         ArrayList<Cell> valid = new ArrayList<>();
-        valid.add(game_database.getCell(1, 2));
         valid.add(game_database.getCell(0, 2));
+        valid.add(game_database.getCell(1, 2));
         assertEquals(valid, player1.getDivinity().getValidCellForMove(1, 1, game_database.getGameBoard(), new ArrayList<Divinity>()));
         player1.getDivinity().move(1, 1, 2, 1, game_database);
         valid = new ArrayList<>();
@@ -55,7 +55,8 @@ public class ArtemisTest {
         valid.add(game_database.getCell(1, 3));
         valid.add(game_database.getCell(0, 3));
 
-        assertEquals(valid, player1.getDivinity().getValidCellForMove(2, 1, game_database.getGameBoard(), new ArrayList<Divinity>()));
+        assertTrue(valid.containsAll(player1.getDivinity().getValidCellForMove(2, 1, game_database.getGameBoard(), new ArrayList<>())));
+        assertTrue(valid.size() == player1.getDivinity().getValidCellForMove(2, 1, game_database.getGameBoard(), new ArrayList<>()).size());
 
         player1.getDivinity().move(2, 1, 1, 1, game_database);
     }

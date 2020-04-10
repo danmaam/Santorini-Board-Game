@@ -70,4 +70,9 @@ public class Zeus extends Divinity {
 
         //now, the game board has been modified
     }
+
+    @Override
+    public String getName() {
+        return name;
+    }
 }

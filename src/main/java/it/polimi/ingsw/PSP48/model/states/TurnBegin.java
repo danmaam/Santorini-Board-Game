@@ -1,5 +1,6 @@
-package it.polimi.ingsw.PSP48.model;
+package it.polimi.ingsw.PSP48.model.states;
 
+import it.polimi.ingsw.PSP48.model.*;
 import it.polimi.ingsw.PSP48.model.divinities.Divinity;
 import it.polimi.ingsw.PSP48.model.exceptions.*;
 

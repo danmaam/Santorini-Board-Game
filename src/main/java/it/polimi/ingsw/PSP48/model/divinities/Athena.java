@@ -34,4 +34,8 @@ public class Athena extends Divinity {
     }
 
 
+    @Override
+    public String getName() {
+        return name;
+    }
 }

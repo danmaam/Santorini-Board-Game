@@ -1,15 +1,14 @@
-package it.polimi.ingsw.PSP48.model;
+package it.polimi.ingsw.PSP48.model.states;
 
+import it.polimi.ingsw.PSP48.model.*;
 import it.polimi.ingsw.PSP48.model.divinities.Divinity;
 import it.polimi.ingsw.PSP48.model.exceptions.*;
 
-import java.util.ArrayList;
-
 /**
- * class that implements the building operation
+ * class that implements the end-of-turn operations
  * @author Rebecca Marelli
  */
-public class Build implements Status
+public class TurnEnd implements Status
 {
     /**
      * method that handles the first status of the game, the choice of the list of divinities, which is not handled by this class
@@ -75,44 +74,11 @@ public class Build implements Status
     }
 
     /**
-     * method that handles the state of the match where a player chooses what to build and then builds
-     * @param gameData contains all of the parameters of the match and is used to modify them
-     * @param oldRow is the row from where we start building
-     * @param oldColumn is the column from where we start building
-     * @param playerInTurn is the player that has to complete the turn
-     * @param name is the name of said player
-     * @return the state following the building, it can be an optional building or the end of the turn
+     * method handling the two building operations: normal build and dome
+     * @return null because it must do nothing in this class
      */
-    public Status handleRequest (GameData gameData, int oldRow, int oldColumn, Player playerInTurn, String name)
+    public Status handleRequest (GameData gd, int oldRow, int oldColumn, Player pl, String name)
     {
-        ArrayList<Cell> cellsToBuild= new ArrayList<>();
-        ArrayList<Cell> cellsToPutDome= new ArrayList<>();
-        ArrayList<Divinity> otherDivinities= new ArrayList<>();
-
-        for (Player pl: gameData.getPlayersInGame()) //array delle altre divinità in gioco da passare alla funzione che trova le celle valide per costruire
-        {
-            if (!pl.getName().equals(name)) otherDivinities.add(pl.getDivinity());
-        }
-
-        //cellsToBuild=playerInTurn.getDivinity().getValidCellForBuilding(oldColumn, oldRow, otherDivinities, gameData.getGameBoard());
-        //cellsToPutDome=playerInTurn.getDivinity().getValidCellsToPutDome(oldColumn, oldRow, gameData.getGameBoard(), otherDivinities);
-
-        //si mostrano le celle e si chiede al giocatore cosa vuole fare
-        //in base alla scelta del giocatore si chiama o il metodo build della divinità oppure il metodo dome, dove costruire ci viene passato in base alla scelta
-        //se un giocatore ha la divinità crono può vincere anche se ci sono 5 torri complete, quindi dopo ogni build devo calcolare la sua win condition
-
-
-        for (Player p: gameData.getPlayersInGame())
-        {
-            if (p.getDivinity().getName().equals("Chronus"))
-            {
-                p.getDivinity().winCondition(gameData);
-                break;
-            }
-        }
-
-        //finito di costruire vado nel prossimo stato che può essere o la fine del turno o una costruzione opzionale, dipende dalla divinità
-
         return(null);
     }
 
@@ -126,11 +92,16 @@ public class Build implements Status
     }
 
     /**
-     * method handling the end of a turn and setting the right parameters
-     * @return null because it is not handled by this class
+     * method that handles the activities related to the end of the turn
+     * @param playerInTurn is the player of the current turn
+     * @return the beginning of the new turn, which is related to the divinity of the next player
      */
-    public Status handleRequest(Player player)
+    public Status handleRequest(Player playerInTurn)
     {
+        playerInTurn.getDivinity().turnEnd(); //chiamo il metodo per le operazioni di fine turno
+
+        //il prossimo stato sarà l'inizio del turno, che però dipende dalla divinità del prossimo giocatore
+
         return(null);
     }
 }

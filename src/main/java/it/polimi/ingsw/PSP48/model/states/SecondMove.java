@@ -1,15 +1,16 @@
-package it.polimi.ingsw.PSP48.model;
+package it.polimi.ingsw.PSP48.model.states;
 
+import it.polimi.ingsw.PSP48.model.*;
 import it.polimi.ingsw.PSP48.model.divinities.Divinity;
 import it.polimi.ingsw.PSP48.model.exceptions.*;
 
 import java.util.ArrayList;
 
 /**
- * class that implements a second optional building operation
+ * class that implements an optional move by the player
  * @author Rebecca Marelli
  */
-public class OptionalBuilding implements Status
+public class SecondMove implements Status
 {
     /**
      * method that handles the first status of the game, the choice of the list of divinities, which is not handled by this class
@@ -66,11 +67,43 @@ public class OptionalBuilding implements Status
     }
 
     /**
-     * method that checks if a player with a certain divinity can use its power and make a second move and then build
-     * @return null because it's not called in this class
+     * method that checks if a player with a certain  divinity can use its power and make a second move and then build
+     * @param row is the row where the player is situated
+     * @param column is the column where the player is situated
+     * @param name is the name of the player
+     * @param player is the object containing all the data of the player, including his divinity and its methods
+     * @param data contains the board
+     * @return new state
      */
     public Status handleRequest(int row, int column, String name, Player player, GameData data)
     {
+        ArrayList<Cell> cellsToMove;
+        ArrayList<Cell> cellsToBuild;
+        ArrayList<Cell> cellsWithDome;
+        ArrayList<Divinity> others= new ArrayList<>();
+        boolean completeTurn=false;
+
+        for (Player pl: data.getPlayersInGame()) //inizializzo array contenente le divinità diverse da quelle del mio player, da passare alle funzioni che restituiscono le celle valide
+        {
+            if (!pl.getName().equals(name)) others.add(pl.getDivinity());
+        }
+
+        cellsToMove=player.getDivinity().getValidCellForMove(column, row, data.getGameBoard(), others);
+
+        if (cellsToMove!=null)
+        {
+            for (Cell cell: cellsToMove)
+            {
+                cellsToBuild=player.getDivinity().getValidCellForBuilding(column, row, others, data.getGameBoard());
+                cellsWithDome=player.getDivinity().getValidCellsToPutDome(column, row, data.getGameBoard(), others);
+                //if ((cellsToBuild!=null)||(cellsWithDome!=null)) completeTurn=true;
+            }
+        }
+
+        //se non posso completare il turno allora non faccio fare la seconda mossa, altrimenti chiedo al giocatore se vuole farla e fa la move (gli illumino le caselle)
+
+        //se giocatore sceglie di muovere lo sposto e calcolo nuovamente la win condition come per la move normale
+
         return(null);
     }
 
@@ -84,42 +117,11 @@ public class OptionalBuilding implements Status
     }
 
     /**
-     * method handling a second optional construction by the player, it lists the possible cells then the player can decide what to do
-     * @param playerName is the name of the player of the current turn
-     * @param p is a reference to the object player, containing the divinity that we use to build
-     * @param data contains the board
-     * @param startingRow is the starting position
-     * @param startingColumn is the starting position
-     * @return next state, which can be the end of the game or of the turn
+     * method handling a second optional building by the player
+     * @return null because it is not handled by this class
      */
     public Status handleRequest (String playerName, Player p, GameData data, int startingRow, int startingColumn)
     {
-        ArrayList<Cell> cellsToBuild= new ArrayList<>();
-        ArrayList<Cell> cellsToPutDome= new ArrayList<>();
-        ArrayList<Divinity> otherDivinities= new ArrayList<>();
-
-        for (Player pl: data.getPlayersInGame()) //array delle altre divinità in gioco da passare alla funzione che trova le celle valide per costruire
-        {
-            if (!pl.getName().equals(playerName)) otherDivinities.add(pl.getDivinity());
-        }
-
-        //cellsToBuild=p.getDivinity().getValidCellForBuilding(startingColumn, startingRow, otherDivinities, data.getGameBoard());
-        //cellsToPutDome=p.getDivinity().getValidCellsToPutDome(startingColumn, startingRow, data.getGameBoard(), otherDivinities);
-
-        //mi sono presa tutte le celle valide per costruire
-        //se sono vuote passo al nuovo stato, tanto è una operazione opzionale
-        //se non sono vuote chiedo al giocatore se vuole costruire o se vuole saltare questa operazione
-        //se sceglie di costruire chiedo quale delle due operazioni di costruzione vuole fare e chiamo la funzione apposita contenuta nella divinità
-
-        for (Player pl: data.getPlayersInGame()) //win condition della divinità crono, da calcolare solo se ho scelto di costruire
-        {
-            if (pl.getDivinity().getName().equals("Chronus"))
-            {
-                pl.getDivinity().winCondition(data);
-                break;
-            }
-        }
-
         return(null);
     }
 

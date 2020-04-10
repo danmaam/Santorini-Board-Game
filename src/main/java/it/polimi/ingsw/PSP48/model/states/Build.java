@@ -1,15 +1,16 @@
-package it.polimi.ingsw.PSP48.model;
+package it.polimi.ingsw.PSP48.model.states;
 
+import it.polimi.ingsw.PSP48.model.*;
 import it.polimi.ingsw.PSP48.model.divinities.Divinity;
 import it.polimi.ingsw.PSP48.model.exceptions.*;
-import it.polimi.ingsw.PSP48.model.states.ColourPick;
-import it.polimi.ingsw.PSP48.model.states.DivinityChoice;
+
+import java.util.ArrayList;
 
 /**
- * class that implements the positioning of players on the board
+ * class that implements the building operation
  * @author Rebecca Marelli
  */
-public class GameBegin implements Status
+public class Build implements Status
 {
     /**
      * method that handles the first status of the game, the choice of the list of divinities, which is not handled by this class
@@ -39,29 +40,11 @@ public class GameBegin implements Status
     }
 
     /**
-     * method handling the setting of players on the board
-     * @param row is the row of the cell where we put the player
-     * @param column is the column where we put the player
-     * @param name is the name of the player
-     * @param player is the object containg all the parameters of the players
-     * @param gamedata contains all the parameters of the game
-     * @param playersToPosition is the number of players we still need to position
-     * @return new state, it can still be the setting of players or the beginning of someone's turn
-     * @throws NotEmptyCellException if the cell we chose is already occupied
-     * @throws DivinityPowerException if we don't respect the power of the divinity and we position the player in the wrong way
+     * method handling the status where players have decided their position on the board and have to be put there
+     * @return null because the state is not handled by this class
      */
     public Status handleRequest(int row, int column, String name, Player player, GameData gamedata, int playersToPosition) throws NotEmptyCellException, DivinityPowerException
     {
-        Status nextState=null;
-
-        //al massimo va aggiunto il pezzo in cui si chiede all'utente dove vuole mettersi, illuminando il tabellone
-
-        player.getDivinity().gameSetUp(row, column, gamedata.getGameBoard(), name);
-
-        //if (playersToPosition>0) nextState=this;
-
-        //else verrà chiamata la funzione della divinità che restituisce lo stato giusto
-
         return(null);
     }
 
@@ -93,11 +76,44 @@ public class GameBegin implements Status
     }
 
     /**
-     * method handling the two building operations: normal build and dome
-     * @return null because it must do nothing in this class
+     * method that handles the state of the match where a player chooses what to build and then builds
+     * @param gameData contains all of the parameters of the match and is used to modify them
+     * @param oldRow is the row from where we start building
+     * @param oldColumn is the column from where we start building
+     * @param playerInTurn is the player that has to complete the turn
+     * @param name is the name of said player
+     * @return the state following the building, it can be an optional building or the end of the turn
      */
-    public Status handleRequest (GameData gd, int oldRow, int oldColumn, Player pl, String name)
+    public Status handleRequest (GameData gameData, int oldRow, int oldColumn, Player playerInTurn, String name)
     {
+        ArrayList<Cell> cellsToBuild= new ArrayList<>();
+        ArrayList<Cell> cellsToPutDome= new ArrayList<>();
+        ArrayList<Divinity> otherDivinities= new ArrayList<>();
+
+        for (Player pl: gameData.getPlayersInGame()) //array delle altre divinità in gioco da passare alla funzione che trova le celle valide per costruire
+        {
+            if (!pl.getName().equals(name)) otherDivinities.add(pl.getDivinity());
+        }
+
+        //cellsToBuild=playerInTurn.getDivinity().getValidCellForBuilding(oldColumn, oldRow, otherDivinities, gameData.getGameBoard());
+        //cellsToPutDome=playerInTurn.getDivinity().getValidCellsToPutDome(oldColumn, oldRow, gameData.getGameBoard(), otherDivinities);
+
+        //si mostrano le celle e si chiede al giocatore cosa vuole fare
+        //in base alla scelta del giocatore si chiama o il metodo build della divinità oppure il metodo dome, dove costruire ci viene passato in base alla scelta
+        //se un giocatore ha la divinità crono può vincere anche se ci sono 5 torri complete, quindi dopo ogni build devo calcolare la sua win condition
+
+
+        for (Player p: gameData.getPlayersInGame())
+        {
+            if (p.getDivinity().getName().equals("Chronus"))
+            {
+                p.getDivinity().winCondition(gameData);
+                break;
+            }
+        }
+
+        //finito di costruire vado nel prossimo stato che può essere o la fine del turno o una costruzione opzionale, dipende dalla divinità
+
         return(null);
     }
 

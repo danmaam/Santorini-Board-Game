@@ -1,15 +1,14 @@
-package it.polimi.ingsw.PSP48.model;
+package it.polimi.ingsw.PSP48.model.states;
 
+import it.polimi.ingsw.PSP48.model.*;
 import it.polimi.ingsw.PSP48.model.divinities.Divinity;
 import it.polimi.ingsw.PSP48.model.exceptions.*;
 
-import java.util.ArrayList;
-
 /**
- * class that implements an optional move by the player
+ * class that implements the move operation by a player
  * @author Rebecca Marelli
  */
-public class SecondMove implements Status
+public class Move implements Status
 {
     /**
      * method that handles the first status of the game, the choice of the list of divinities, which is not handled by this class
@@ -57,52 +56,40 @@ public class SecondMove implements Status
     }
 
     /**
-     *method that handles the moves of players during their turn and checks if they have won
-     * @return null because it is not handled by this class, thus it does nothing
+     * method that handles the moves of players during their turn and checks if they have won
+     * @param oldRow is the row of the starting position
+     * @param oldColumn is the column of the starting position
+     * @param newRow is the row where the player needs to be put
+     * @param newColumn is the column where the player needs to be put
+     * @param playerToMove is the player we are moving
+     * @param gd is an object of the class GameData, which contains the board
+     * @return the state following the moving of the player, it depends on the divinity we are using in the turn
+     * @throws NotAdiacentCellException if we are trying to move the player in a cell that is not adiacent to him
+     * @throws IncorrectLevelException if we are trying to go up more than a level
+     * @throws OccupiedCellException if the cell we are moving the player to isa already occupied
+     * @throws DivinityPowerException if we don't follow the power of the divinity
+     * @throws DomedCellException if the cell we are moving the player to has a dome on it
+     * @throws NotEmptyCellException  if the cell is not empty
      */
-    public Status handleRequest (int oldRow, int oldColumn, int newRow, int newColumn, Player player, GameData gd) throws NotAdiacentCellException, IncorrectLevelException, OccupiedCellException, DivinityPowerException, DomedCellException, NotEmptyCellException
+    public Status handleRequest (int oldRow, int oldColumn, int newRow, int newColumn, Player playerToMove, GameData gd) throws NotAdiacentCellException, IncorrectLevelException, OccupiedCellException, DivinityPowerException, DomedCellException, NotEmptyCellException
     {
+        //quando è fatta la view cercare di capire se la parte che illumina le casella va dentro quella oppure qui
+
+        playerToMove.getDivinity().move(oldColumn, oldRow, newColumn, newRow, gd);
+
+        playerToMove.getDivinity().winCondition(gd);
+
+        //manca la parte in cui decido lo stato nuovo a seconda della divinità->è questa che me lo deve restituire
+
         return(null);
     }
 
     /**
-     * method that checks if a player with a certain  divinity can use its power and make a second move and then build
-     * @param row is the row where the player is situated
-     * @param column is the column where the player is situated
-     * @param name is the name of the player
-     * @param player is the object containing all the data of the player, including his divinity and its methods
-     * @param data contains the board
-     * @return new state
+     * method that checks if a player with a certain divinity can use its power and make a second move and then build
+     * @return null because it's not called in this class
      */
     public Status handleRequest(int row, int column, String name, Player player, GameData data)
     {
-        ArrayList<Cell> cellsToMove;
-        ArrayList<Cell> cellsToBuild;
-        ArrayList<Cell> cellsWithDome;
-        ArrayList<Divinity> others= new ArrayList<>();
-        boolean completeTurn=false;
-
-        for (Player pl: data.getPlayersInGame()) //inizializzo array contenente le divinità diverse da quelle del mio player, da passare alle funzioni che restituiscono le celle valide
-        {
-            if (!pl.getName().equals(name)) others.add(pl.getDivinity());
-        }
-
-        cellsToMove=player.getDivinity().getValidCellForMove(column, row, data.getGameBoard(), others);
-
-        if (cellsToMove!=null)
-        {
-            for (Cell cell: cellsToMove)
-            {
-                cellsToBuild=player.getDivinity().getValidCellForBuilding(column, row, others, data.getGameBoard());
-                cellsWithDome=player.getDivinity().getValidCellsToPutDome(column, row, data.getGameBoard(), others);
-                //if ((cellsToBuild!=null)||(cellsWithDome!=null)) completeTurn=true;
-            }
-        }
-
-        //se non posso completare il turno allora non faccio fare la seconda mossa, altrimenti chiedo al giocatore se vuole farla e fa la move (gli illumino le caselle)
-
-        //se giocatore sceglie di muovere lo sposto e calcolo nuovamente la win condition come per la move normale
-
         return(null);
     }
 
@@ -132,4 +119,5 @@ public class SecondMove implements Status
     {
         return(null);
     }
+
 }

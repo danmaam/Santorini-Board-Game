@@ -28,6 +28,7 @@ public class DivinityMovementsTest {
         player2.setTempDivinity(null);
         game_database.addPlayer(player1);
         game_database.addPlayer(player2);
+        game_database.setCurrentPlayer(0);
         game_database.getCell(2, 2).setPlayer(player1.getName());
         game_database.getCell(1, 3).setPlayer(player1.getName());
         game_database.getCell(1, 1).setPlayer(player2.getName());
@@ -60,11 +61,6 @@ public class DivinityMovementsTest {
             e.printStackTrace();
         }
         game_database.getCell(0, 0).setPlayer(player2.getName());
-        try {
-            newCell.addLevel();
-        } catch (MaximumLevelReachedException e) {
-            e.printStackTrace();
-        }
     }
 
     @org.junit.Test
@@ -80,14 +76,11 @@ public class DivinityMovementsTest {
     }
 
     @org.junit.Test
-    public void validMoveTest() {
+    public void validMoveTest() throws DomedCellException, OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdiacentCellException, NotEmptyCellException {
         oldCell.setPlayer(null);
         newCell.setPlayer(player1.getName());
-        try {
-            player1.getDivinity().move(2, 2, 2, 1, game_database);
-        } catch (Exception e) {
-
-        }
+        player2.setDivinity(baseDivinity);
+        player1.getDivinity().move(2, 2, 2, 1, game_database);
         assertEquals(newCell, game_database.getCell(1, 2));
         assertEquals(oldCell, game_database.getCell(2, 2));
     }

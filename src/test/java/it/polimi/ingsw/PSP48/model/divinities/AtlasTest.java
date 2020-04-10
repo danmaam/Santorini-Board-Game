@@ -56,7 +56,10 @@ public class AtlasTest {
 
         ArrayList<Divinity> div = new ArrayList<>();
         div.add(player2.getDivinity());
-        assertEquals(validCells, player1.getDivinity().getValidCellsToPutDome(2, 2, game_database.getGameBoard(), div));
+        assertTrue(validCells.containsAll(player1.getDivinity().getValidCellsToPutDome(2, 2, game_database.getGameBoard(), div)));
+        assertTrue(validCells.size() == player1.getDivinity().getValidCellsToPutDome(2, 2, game_database.getGameBoard(), div).size());
+
+
     }
 
     @Test(expected = DomedCellException.class)

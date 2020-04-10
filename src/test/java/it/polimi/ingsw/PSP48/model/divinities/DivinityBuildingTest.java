@@ -27,6 +27,7 @@ public class DivinityBuildingTest {
         player2.setTempDivinity(null);
         game_database.addPlayer(player1);
         game_database.addPlayer(player2);
+        game_database.setCurrentPlayer(0);
         game_database.getCell(2, 2).setPlayer(player1.getName());
         game_database.getCell(1, 3).setPlayer(player1.getName());
         game_database.getCell(1, 1).setPlayer(player2.getName());

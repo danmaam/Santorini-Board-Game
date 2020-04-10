@@ -14,8 +14,6 @@ public class Artemis extends Divinity {
     private int oldRowMove = -1;
     private int oldColumnMove = -1;
 
-    private int lastWorkerMoveID = 0;
-
 
     /**
      * reset the last move coordinate
@@ -68,4 +66,8 @@ public class Artemis extends Divinity {
 
     }
 
+    @Override
+    public String getName() {
+        return name;
+    }
 }

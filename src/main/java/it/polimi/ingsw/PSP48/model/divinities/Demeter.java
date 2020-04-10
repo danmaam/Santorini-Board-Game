@@ -79,6 +79,11 @@ public class Demeter extends Divinity {
         oldRowBuild = buildRow;
     }
 
+    @Override
+    public String getName() {
+        return name;
+    }
+
     /**
      * @param workerRow    the row where the worker is
      * @param workerColumn the column where the worker is

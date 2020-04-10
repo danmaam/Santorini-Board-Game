@@ -53,8 +53,12 @@ public class HephaestusTest {
         vD.add(game_database.getCell(0, 4));
 
 
-        assertEquals(vB, player1.getDivinity().getValidCellForBuilding(3, 1, new ArrayList<>(), game_database.getGameBoard()));
-        assertEquals(vD, player1.getDivinity().getValidCellsToPutDome(3, 1, game_database.getGameBoard(), new ArrayList<>()));
+        assertTrue(vB.size() == player1.getDivinity().getValidCellForBuilding(3, 1, new ArrayList<>(), game_database.getGameBoard()).size());
+        assertTrue(vB.containsAll(player1.getDivinity().getValidCellForBuilding(3, 1, new ArrayList<>(), game_database.getGameBoard())));
+
+
+        assertTrue(vD.size() == player1.getDivinity().getValidCellsToPutDome(3, 1, game_database.getGameBoard(), new ArrayList<>()).size());
+        assertTrue(vD.containsAll(player1.getDivinity().getValidCellsToPutDome(3, 1, game_database.getGameBoard(), new ArrayList<>())));
 
         player1.getDivinity().build(1, 3, 1, 4, game_database);
 
@@ -84,8 +88,12 @@ public class HephaestusTest {
         vD.add(game_database.getCell(0, 4));
 
 
-        assertEquals(vB, player1.getDivinity().getValidCellForBuilding(3, 1, new ArrayList<>(), game_database.getGameBoard()));
-        assertEquals(vD, player1.getDivinity().getValidCellsToPutDome(3, 1, game_database.getGameBoard(), new ArrayList<>()));
+        assertTrue(vB.size() == player1.getDivinity().getValidCellForBuilding(3, 1, new ArrayList<>(), game_database.getGameBoard()).size());
+        assertTrue(vB.containsAll(player1.getDivinity().getValidCellForBuilding(3, 1, new ArrayList<>(), game_database.getGameBoard())));
+
+
+        assertTrue(vD.size() == player1.getDivinity().getValidCellsToPutDome(3, 1, game_database.getGameBoard(), new ArrayList<>()).size());
+        assertTrue(vD.containsAll(player1.getDivinity().getValidCellsToPutDome(3, 1, game_database.getGameBoard(), new ArrayList<>())));
 
         player1.getDivinity().build(1, 3, 0, 3, game_database);
 
@@ -114,8 +122,12 @@ public class HephaestusTest {
         vD.add(game_database.getCell(0, 4));
 
 
-        assertEquals(vB, player1.getDivinity().getValidCellForBuilding(3, 1, new ArrayList<>(), game_database.getGameBoard()));
-        assertEquals(vD, player1.getDivinity().getValidCellsToPutDome(3, 1, game_database.getGameBoard(), new ArrayList<>()));
+        assertTrue(vB.containsAll(player1.getDivinity().getValidCellForBuilding(3, 1, new ArrayList<>(), game_database.getGameBoard())));
+        assertTrue(vB.size() == player1.getDivinity().getValidCellForBuilding(3, 1, new ArrayList<>(), game_database.getGameBoard()).size());
+
+
+        assertTrue(vD.containsAll(player1.getDivinity().getValidCellsToPutDome(3, 1, game_database.getGameBoard(), new ArrayList<>())));
+        assertTrue(vD.size() == player1.getDivinity().getValidCellsToPutDome(3, 1, game_database.getGameBoard(), new ArrayList<>()).size());
 
         player1.getDivinity().dome(1, 3, 0, 4, game_database);
 

@@ -2,6 +2,8 @@ package it.polimi.ingsw.PSP48.model;
 
 import it.polimi.ingsw.PSP48.model.divinities.Divinity;
 import it.polimi.ingsw.PSP48.model.exceptions.*;
+import it.polimi.ingsw.PSP48.model.states.ColourPick;
+import it.polimi.ingsw.PSP48.model.states.DivinityChoice;
 
 /**
  * interface used to handle all the different actions associated to each state of the game, using the method handleRequest
