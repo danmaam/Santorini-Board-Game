@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: Move</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">it.polimi.ingsw.PSP48.model</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: Move (it.polimi.ingsw.PSP48.model)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">Move</td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 11)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 13)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.model;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import it.polimi.ingsw.PSP48.model.divinities.Divinity;
+        <i>4</i>&nbsp;import it.polimi.ingsw.PSP48.model.exceptions.*;
+        <i>5</i>&nbsp;
+        <i>6</i>&nbsp;/**
+        <i>7</i>&nbsp; * class that implements the move operation by a player
+        <i>8</i>&nbsp; * @author Rebecca Marelli
+        <i>9</i>&nbsp; */
+        <b class="nc"><i>10</i>&nbsp;public class Move implements Status</b>
+        <i>11</i>&nbsp;{
+        <i>12</i>&nbsp; /**
+        <i>13</i>&nbsp; * method that handles the first status of the game, the choice of the list of divinities, which
+        is not handled by this class
+        <i>14</i>&nbsp; * @return null because the method mustn&#39;t be called in this class, so it does nothing
+        <i>15</i>&nbsp; */
+        <i>16</i>&nbsp; public Status handleRequest(Divinity divinity, GameData data, ColourPick colourPickState)
+        <i>17</i>&nbsp; {
+        <b class="nc"><i>18</i>&nbsp; return(null);</b>
+        <i>19</i>&nbsp; }
+        <i>20</i>&nbsp;
+        <i>21</i>&nbsp; /**
+        <i>22</i>&nbsp; *method handling the second state of the game, the choice of colours by the players
+        <i>23</i>&nbsp; * @return null because it is not necessary to call this method, it must do nothing
+        <i>24</i>&nbsp; */
+        <i>25</i>&nbsp; public Status handleRequest(Colour colour, String name, GameData data, DivinityChoice
+        divinityChoiceState)
+        <i>26</i>&nbsp; {
+        <b class="nc"><i>27</i>&nbsp; return(null);</b>
+        <i>28</i>&nbsp; }
+        <i>29</i>&nbsp;
+        <i>30</i>&nbsp; /**
+        <i>31</i>&nbsp; * method handling the assignment of specific divinities to the respective players
+        <i>32</i>&nbsp; * @return null because it must do nothing, it&#39;s not the one called to handle the state
+        implemented by this class
+        <i>33</i>&nbsp; */
+        <i>34</i>&nbsp; public Status handleRequest(Divinity divinity, String name, GameData gameData, GameBegin
+        beginState)
+        <i>35</i>&nbsp; {
+        <b class="nc"><i>36</i>&nbsp; return(null);</b>
+        <i>37</i>&nbsp; }
+        <i>38</i>&nbsp;
+        <i>39</i>&nbsp; /**
+        <i>40</i>&nbsp; * method handling the status where players have decided their position on the board and have to
+        be put there
+        <i>41</i>&nbsp; * @return null because the state is not handled by this class
+        <i>42</i>&nbsp; */
+        <i>43</i>&nbsp; public Status handleRequest(int row, int column, String name, Player player, GameData gamedata,
+        int playersToPosition) throws NotEmptyCellException, DivinityPowerException
+        <i>44</i>&nbsp; {
+        <b class="nc"><i>45</i>&nbsp; return(null);</b>
+        <i>46</i>&nbsp; }
+        <i>47</i>&nbsp;
+        <i>48</i>&nbsp; /**
+        <i>49</i>&nbsp; * method that checks if a player can complete a turn by moving and then building
+        <i>50</i>&nbsp; * @return null because the state is not handled by this class
+        <i>51</i>&nbsp; */
+        <i>52</i>&nbsp; public Status handleRequest(String name, Player player, GameData data)
+        <i>53</i>&nbsp; {
+        <b class="nc"><i>54</i>&nbsp; return(null);</b>
+        <i>55</i>&nbsp; }
+        <i>56</i>&nbsp;
+        <i>57</i>&nbsp; /**
+        <i>58</i>&nbsp; * method that handles the moves of players during their turn and checks if they have won
+        <i>59</i>&nbsp; * @param oldRow is the row of the starting position
+        <i>60</i>&nbsp; * @param oldColumn is the column of the starting position
+        <i>61</i>&nbsp; * @param newRow is the row where the player needs to be put
+        <i>62</i>&nbsp; * @param newColumn is the column where the player needs to be put
+        <i>63</i>&nbsp; * @param playerToMove is the player we are moving
+        <i>64</i>&nbsp; * @param gd is an object of the class GameData, which contains the board
+        <i>65</i>&nbsp; * @return the state following the moving of the player, it depends on the divinity we are using
+        in the turn
+        <i>66</i>&nbsp; * @throws NotAdiacentCellException if we are trying to move the player in a cell that is not
+        adiacent to him
+        <i>67</i>&nbsp; * @throws IncorrectLevelException if we are trying to go up more than a level
+        <i>68</i>&nbsp; * @throws OccupiedCellException if the cell we are moving the player to isa already occupied
+        <i>69</i>&nbsp; * @throws DivinityPowerException if we don&#39;t follow the power of the divinity
+        <i>70</i>&nbsp; * @throws DomedCellException if the cell we are moving the player to has a dome on it
+        <i>71</i>&nbsp; * @throws NotEmptyCellException if the cell is not empty
+        <i>72</i>&nbsp; */
+        <i>73</i>&nbsp; public Status handleRequest (int oldRow, int oldColumn, int newRow, int newColumn, Player
+        playerToMove, GameData gd) throws NotAdiacentCellException, IncorrectLevelException, OccupiedCellException,
+        DivinityPowerException, DomedCellException, NotEmptyCellException
+        <i>74</i>&nbsp; {
+        <i>75</i>&nbsp; //quando è fatta la view cercare di capire se la parte che illumina le casella va dentro quella
+        oppure qui
+        <i>76</i>&nbsp;
+        <b class="nc"><i>77</i>&nbsp; playerToMove.getDivinity().move(oldColumn, oldRow, newColumn, newRow, gd);</b>
+        <i>78</i>&nbsp;
+        <b class="nc"><i>79</i>&nbsp; playerToMove.getDivinity().winCondition(gd);</b>
+        <i>80</i>&nbsp;
+        <i>81</i>&nbsp; //manca la parte in cui decido lo stato nuovo a seconda della divinità-&gt;è questa che me lo
+        deve restituire
+        <i>82</i>&nbsp;
+        <b class="nc"><i>83</i>&nbsp; return(null);</b>
+        <i>84</i>&nbsp; }
+        <i>85</i>&nbsp;
+        <i>86</i>&nbsp; /**
+        <i>87</i>&nbsp; * method that checks if a player with a certain divinity can use its power and make a second
+        move and then build
+        <i>88</i>&nbsp; * @return null because it&#39;s not called in this class
+        <i>89</i>&nbsp; */
+        <i>90</i>&nbsp; public Status handleRequest(int row, int column, String name, Player player, GameData data)
+        <i>91</i>&nbsp; {
+        <b class="nc"><i>92</i>&nbsp; return(null);</b>
+        <i>93</i>&nbsp; }
+        <i>94</i>&nbsp;
+        <i>95</i>&nbsp; /**
+        <i>96</i>&nbsp; * method handling the two building operations: normal build and dome
+        <i>97</i>&nbsp; * @return null because it must do nothing in this class
+        <i>98</i>&nbsp; */
+        <i>99</i>&nbsp; public Status handleRequest (GameData gd, int oldRow, int oldColumn, Player pl, String name)
+        <i>100</i>&nbsp; {
+        <b class="nc"><i>101</i>&nbsp; return(null);</b>
+        <i>102</i>&nbsp; }
+        <i>103</i>&nbsp;
+        <i>104</i>&nbsp; /**
+        <i>105</i>&nbsp; * method handling a second optional building by the player
+        <i>106</i>&nbsp; * @return null because it is not handled by this class
+        <i>107</i>&nbsp; */
+        <i>108</i>&nbsp; public Status handleRequest (String playerName, Player p, GameData data, int startingRow, int
+        startingColumn)
+        <i>109</i>&nbsp; {
+        <b class="nc"><i>110</i>&nbsp; return(null);</b>
+        <i>111</i>&nbsp; }
+        <i>112</i>&nbsp;
+        <i>113</i>&nbsp; /**
+        <i>114</i>&nbsp; * method handling the end of a turn and setting the right parameters
+        <i>115</i>&nbsp; * @return null because it is not handled by this class
+        <i>116</i>&nbsp; */
+        <i>117</i>&nbsp; public Status handleRequest(Player player)
+        <i>118</i>&nbsp; {
+        <b class="nc"><i>119</i>&nbsp; return(null);</b>
+        <i>120</i>&nbsp; }
+        <i>121</i>&nbsp;
+        <i>122</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2020-04-10 17:03</div>
+</div>
+</body>
+</html>

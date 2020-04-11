@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: Demeter</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">it.polimi.ingsw.PSP48.model.divinities</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: Demeter (it.polimi.ingsw.PSP48.model.divinities)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">Demeter</td>
+            <td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+                <span class="absValue">
+    (1/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    85,7%
+  </span>
+                <span class="absValue">
+    (6/ 7)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    96,4%
+  </span>
+                <span class="absValue">
+    (27/ 28)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.model.divinities;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import it.polimi.ingsw.PSP48.model.Cell;
+        <i>4</i>&nbsp;import it.polimi.ingsw.PSP48.model.GameData;
+        <i>5</i>&nbsp;import it.polimi.ingsw.PSP48.model.exceptions.*;
+        <i>6</i>&nbsp;
+        <i>7</i>&nbsp;import java.util.ArrayList;
+        <i>8</i>&nbsp;import java.util.stream.Collectors;
+        <i>9</i>&nbsp;
+        <b class="fc"><i>10</i>&nbsp;public class Demeter extends Divinity {</b>
+        <b class="fc"><i>11</i>&nbsp; private final String name = &quot;Basic&quot;;</b>
+        <b class="fc"><i>12</i>&nbsp; private final Boolean threePlayerSupported = true;</b>
+        <i>13</i>&nbsp;
+        <b class="fc"><i>14</i>&nbsp; private int oldRowBuild = -1;</b>
+        <b class="fc"><i>15</i>&nbsp; private int oldColumnBuild = -1;</b>
+        <i>16</i>&nbsp;
+        <i>17</i>&nbsp;
+        <i>18</i>&nbsp;
+        <i>19</i>&nbsp; /**
+        <i>20</i>&nbsp; * Reset the coordinate of first building
+        <i>21</i>&nbsp; */
+        <i>22</i>&nbsp; @Override
+        <i>23</i>&nbsp; public void turnBegin(GameData gd) {
+        <b class="fc"><i>24</i>&nbsp; oldRowBuild = -1;</b>
+        <b class="fc"><i>25</i>&nbsp; oldColumnBuild = -1;</b>
+        <b class="fc"><i>26</i>&nbsp; }</b>
+        <i>27</i>&nbsp;
+        <i>28</i>&nbsp; /**
+        <i>29</i>&nbsp; * @param WorkerColumn the column where the worker is
+        <i>30</i>&nbsp; * @param WorkerRow the row where the worker is
+        <i>31</i>&nbsp; * @param gameCells the actual board state
+        <i>32</i>&nbsp; * @param otherDivinitiesInGame the divinities in the game
+        <i>33</i>&nbsp; * @return a list of cell valid for the building of the worker
+        <i>34</i>&nbsp; */
+        <i>35</i>&nbsp; @Override
+        <i>36</i>&nbsp; public ArrayList&lt;Cell&gt; getValidCellForBuilding(int WorkerColumn, int WorkerRow, ArrayList&lt;Divinity&gt;
+        otherDivinitiesInGame, Cell[][] gameCells) {
+        <b class="fc"><i>37</i>&nbsp; return super.getValidCellForBuilding(WorkerColumn, WorkerRow,
+            otherDivinitiesInGame, gameCells)</b>
+        <b class="fc"><i>38</i>&nbsp; .stream()</b>
+        <b class="fc"><i>39</i>&nbsp; .filter(cell -&gt; !(cell.getColumn() == oldColumnBuild &amp;&amp; cell.getRow()
+            == oldRowBuild))</b>
+        <b class="fc"><i>40</i>&nbsp; .collect(Collectors.toCollection(ArrayList::new));</b>
+        <i>41</i>&nbsp; }
+        <i>42</i>&nbsp;
+        <i>43</i>&nbsp; /**
+        <i>44</i>&nbsp; * @param workerColumn the column where the worker is
+        <i>45</i>&nbsp; * @param workerRow the row where the worker is
+        <i>46</i>&nbsp; * @param gameCells the actual state of the board
+        <i>47</i>&nbsp; * @param divinitiesInGame the divinities in game
+        <i>48</i>&nbsp; * @return true if it&#39;s possible to add the dome
+        <i>49</i>&nbsp; * @author Daniele Mammone
+        <i>50</i>&nbsp; */
+        <i>51</i>&nbsp; @Override
+        <i>52</i>&nbsp; public ArrayList&lt;Cell&gt; getValidCellsToPutDome(int workerColumn, int workerRow, Cell[][]
+        gameCells, ArrayList&lt;Divinity&gt; divinitiesInGame) {
+        <b class="fc"><i>53</i>&nbsp; return super.getValidCellsToPutDome(workerColumn, workerRow, gameCells,
+            divinitiesInGame).stream()</b>
+        <b class="fc"><i>54</i>&nbsp; .filter(cell -&gt; !(cell.getColumn() == oldColumnBuild &amp;&amp; cell.getRow()
+            == oldRowBuild))</b>
+        <b class="fc"><i>55</i>&nbsp; .collect(Collectors.toCollection(ArrayList::new));</b>
+        <i>56</i>&nbsp; }
+        <i>57</i>&nbsp;
+        <i>58</i>&nbsp; /**
+        <i>59</i>&nbsp; * Redefined since we have to check that the player is not trying to build on the same cell
+        <i>60</i>&nbsp; *
+        <i>61</i>&nbsp; * @param workerRow the row where the worker is
+        <i>62</i>&nbsp; * @param workerColumn the column where the worker is
+        <i>63</i>&nbsp; * @param buildRow the row where the player wants to add a level
+        <i>64</i>&nbsp; * @param buildColumn the column where the player wants to add a level
+        <i>65</i>&nbsp; * @param gd the game status
+        <i>66</i>&nbsp; * @throws NotAdiacentCellException if the cell where the player wants to build is not adiacent
+        to the worker&#39;s one
+        <i>67</i>&nbsp; * @throws OccupiedCellException if the destination cell is occupied by another worker
+        <i>68</i>&nbsp; * @throws DomedCellException is the cell is already domed
+        <i>69</i>&nbsp; * @throws MaximumLevelReachedException if the cell contains a level 3 building
+        <i>70</i>&nbsp; * @throws DivinityPowerException if another divinity blocks the increment of the level
+        <i>71</i>&nbsp; * @author Daniele Mammone
+        <i>72</i>&nbsp; */
+        <i>73</i>&nbsp; @Override
+        <i>74</i>&nbsp; public void build(int workerRow, int workerColumn, int buildRow, int buildColumn, GameData gd)
+        throws DivinityPowerException, MaximumLevelReachedException, OccupiedCellException, NotAdiacentCellException,
+        DomedCellException {
+        <b class="fc"><i>75</i>&nbsp; if (oldRowBuild != -1 &amp;&amp; oldColumnBuild != -1 &amp;&amp; oldRowBuild ==
+            buildRow &amp;&amp; oldColumnBuild == buildColumn)</b>
+        <b class="fc"><i>76</i>&nbsp; throw new DivinityPowerException(&quot;feffe&quot;);</b>
+        <b class="fc"><i>77</i>&nbsp; super.build(workerRow, workerColumn, buildRow, buildColumn, gd);</b>
+        <b class="fc"><i>78</i>&nbsp; oldColumnBuild = buildColumn;</b>
+        <b class="fc"><i>79</i>&nbsp; oldRowBuild = buildRow;</b>
+        <b class="fc"><i>80</i>&nbsp; }</b>
+        <i>81</i>&nbsp;
+        <i>82</i>&nbsp; @Override
+        <i>83</i>&nbsp; public String getName() {
+        <b class="nc"><i>84</i>&nbsp; return name;</b>
+        <i>85</i>&nbsp; }
+        <i>86</i>&nbsp;
+        <i>87</i>&nbsp; /**
+        <i>88</i>&nbsp; * @param workerRow the row where the worker is
+        <i>89</i>&nbsp; * @param workerColumn the column where the worker is
+        <i>90</i>&nbsp; * @param domeRow the row where the player wants to add the dome
+        <i>91</i>&nbsp; * @param domeColumn the column where the player wants to add the dome
+        <i>92</i>&nbsp; * @param gd the current game board state
+        <i>93</i>&nbsp; * @throws NotAdiacentCellException if the cell where the player wants to add the dome is not
+        adiacent to the worker&#39;s one
+        <i>94</i>&nbsp; * @throws OccupiedCellException if the destination cell is occupied by another worker
+        <i>95</i>&nbsp; * @throws DomedCellException is the cell is already domed
+        <i>96</i>&nbsp; * @throws MaximumLevelNotReachedException if the cell doesn&#39;t contain a level 3 building
+        <i>97</i>&nbsp; * @throws DivinityPowerException if another divinity blocks the adding of the dome
+        <i>98</i>&nbsp; * @author Daniele Mammone
+        <i>99</i>&nbsp; */
+        <i>100</i>&nbsp; @Override
+        <i>101</i>&nbsp; public void dome(int workerRow, int workerColumn, int domeRow, int domeColumn, GameData gd)
+        throws NotAdiacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException,
+        DivinityPowerException {
+        <b class="fc"><i>102</i>&nbsp; if (oldRowBuild != -1 &amp;&amp; oldColumnBuild != -1 &amp;&amp; oldRowBuild ==
+            domeRow &amp;&amp; oldColumnBuild == domeColumn)</b>
+        <b class="fc"><i>103</i>&nbsp; throw new DivinityPowerException(&quot;feffe&quot;);</b>
+        <b class="fc"><i>104</i>&nbsp; super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);</b>
+        <b class="fc"><i>105</i>&nbsp; oldRowBuild = domeRow;</b>
+        <b class="fc"><i>106</i>&nbsp; oldColumnBuild = domeColumn;</b>
+        <b class="fc"><i>107</i>&nbsp; }</b>
+        <i>108</i>&nbsp;
+        <i>109</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2020-04-10 17:03</div>
+</div>
+</body>
+</html>

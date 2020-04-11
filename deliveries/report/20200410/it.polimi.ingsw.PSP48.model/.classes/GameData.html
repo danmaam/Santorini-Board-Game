@@ -1,0 +1,326 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: GameData</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">it.polimi.ingsw.PSP48.model</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: GameData (it.polimi.ingsw.PSP48.model)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">GameData</td>
+            <td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+                <span class="absValue">
+    (1/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    52,4%
+  </span>
+                <span class="absValue">
+    (11/ 21)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    61%
+  </span>
+                <span class="absValue">
+    (36/ 59)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.model;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import it.polimi.ingsw.PSP48.model.divinities.Divinity;
+        <i>4</i>&nbsp;
+        <i>5</i>&nbsp;import java.util.ArrayList;
+        <i>6</i>&nbsp;
+        <i>7</i>&nbsp;/**
+        <i>8</i>&nbsp; * class used to contain all the data of a certain game, like the players and their workers, the
+        current player and the status of the game
+        <i>9</i>&nbsp; * there is a list of chosen divinities because players first choose a number of divinities
+        according to how many are playing and then each of them chooses his/her divinity from the smaller group they
+        have selected
+        <i>10</i>&nbsp; * the list of available divinities is used when players are still selecting the smaller group of
+        divinities and they need to know what they can still choose
+        <i>11</i>&nbsp; *
+        <i>12</i>&nbsp; * @author Rebecca Marelli
+        <i>13</i>&nbsp; */
+        <i>14</i>&nbsp;public class GameData {
+        <b class="fc"><i>15</i>&nbsp; private ArrayList&lt;Player&gt; playersInGame = new ArrayList&lt;Player&gt;(); //i
+            giocatori sono in ordine fisso secondo l&#39;ordine di gioco</b>
+        <b class="fc"><i>16</i>&nbsp; private ArrayList&lt;Colour&gt; availableColours = new ArrayList&lt;Colour&gt;();</b>
+        <b class="fc"><i>17</i>&nbsp; private ArrayList&lt;Divinity&gt; availableDivinities = new ArrayList&lt;Divinity&gt;();</b>
+        <b class="fc"><i>18</i>&nbsp; private ArrayList&lt;Divinity&gt; chosenDivinities = new ArrayList&lt;Divinity&gt;();</b>
+        <b class="fc"><i>19</i>&nbsp; private int currentPlayer=-1; //se siamo in un momento per cui il current player
+            non deve avere un valore possiamo settarlo a -1</b>
+        <b class="fc"><i>20</i>&nbsp; private final Cell[][] boardCell = new Cell[5][5]; //tramite il costruttore di
+            Cell devo inizializzare le celle, qui sono tutte a null</b>
+        <i>21</i>&nbsp; private Status gameState;
+        <i>22</i>&nbsp;
+        <b class="fc"><i>23</i>&nbsp; public GameData() {</b>
+        <b class="fc"><i>24</i>&nbsp; for (int i = 0; i &lt; 5; i++) {</b>
+        <b class="fc"><i>25</i>&nbsp; for (int j = 0; j &lt; 5; j++) {</b>
+        <b class="fc"><i>26</i>&nbsp; boardCell[i][j] = new Cell(i, j);</b>
+        <i>27</i>&nbsp; }
+        <i>28</i>&nbsp; }
+        <b class="fc"><i>29</i>&nbsp; }</b>
+        <i>30</i>&nbsp;
+        <i>31</i>&nbsp; /**
+        <i>32</i>&nbsp; * method used to obtain how many players are in a certain game (they can be 2 or 3)
+        <i>33</i>&nbsp; *
+        <i>34</i>&nbsp; * @return an int that is the total number of players in the game
+        <i>35</i>&nbsp; */
+        <i>36</i>&nbsp; public int getNumberOfPlayers() {
+        <i>37</i>&nbsp; int index;
+        <i>38</i>&nbsp; int totalPlayers;
+        <i>39</i>&nbsp;
+        <b class="fc"><i>40</i>&nbsp; totalPlayers = 0;</b>
+        <b class="fc"><i>41</i>&nbsp; for (index = 0; index &lt; this.playersInGame.size(); index++) {</b>
+        <b class="fc"><i>42</i>&nbsp; totalPlayers++;</b>
+        <i>43</i>&nbsp; }
+        <b class="fc"><i>44</i>&nbsp; return (totalPlayers);</b>
+        <i>45</i>&nbsp; }
+        <i>46</i>&nbsp;
+        <i>47</i>&nbsp;
+        <i>48</i>&nbsp; /**
+        <i>49</i>&nbsp; * method that retrieves all the players of the game, together with the list of their workers
+        <i>50</i>&nbsp; *
+        <i>51</i>&nbsp; * @return the list of PlayerWorkerConnection elements
+        <i>52</i>&nbsp; */
+        <i>53</i>&nbsp; public ArrayList&lt;Player&gt; getPlayersInGame() {
+        <b class="fc"><i>54</i>&nbsp; return playersInGame;</b>
+        <i>55</i>&nbsp; }
+        <i>56</i>&nbsp;
+        <i>57</i>&nbsp; public void addPlayer(Player p) {
+        <b class="fc"><i>58</i>&nbsp; playersInGame.add(p);</b>
+        <b class="fc"><i>59</i>&nbsp; }</b>
+        <i>60</i>&nbsp;
+        <i>61</i>&nbsp; /**
+        <i>62</i>&nbsp; * method used during the state where players are still choosing their workers and they need to
+        know what colours are still available
+        <i>63</i>&nbsp; *
+        <i>64</i>&nbsp; * @return an arrayList of the colours that can still be chosen, which is part of this class
+        <i>65</i>&nbsp; */
+        <i>66</i>&nbsp; public ArrayList&lt;Colour&gt; getAvailableColours() {
+        <i>67</i>&nbsp; ArrayList&lt;Colour&gt; coloursToPick;
+        <i>68</i>&nbsp;
+        <b class="nc"><i>69</i>&nbsp; coloursToPick = this.availableColours;</b>
+        <i>70</i>&nbsp;
+        <b class="nc"><i>71</i>&nbsp; return (coloursToPick);</b>
+        <i>72</i>&nbsp; }
+        <i>73</i>&nbsp;
+        <i>74</i>&nbsp; public void removeColour(Colour c) {
+        <b class="nc"><i>75</i>&nbsp; availableColours.remove(c);</b>
+        <b class="nc"><i>76</i>&nbsp; }</b>
+        <i>77</i>&nbsp;
+        <i>78</i>&nbsp; /**
+        <i>79</i>&nbsp; * method used to retrieve the divinities still available to be picked by a player
+        <i>80</i>&nbsp; *
+        <i>81</i>&nbsp; * @return an arrayList containing said divinities
+        <i>82</i>&nbsp; */
+        <i>83</i>&nbsp; public ArrayList&lt;Divinity&gt; getAvailableDivinities() {
+        <i>84</i>&nbsp; ArrayList&lt;Divinity&gt; divinitiesToPick;
+        <i>85</i>&nbsp;
+        <b class="nc"><i>86</i>&nbsp; divinitiesToPick=this.availableDivinities;</b>
+        <i>87</i>&nbsp;
+        <b class="nc"><i>88</i>&nbsp; return(divinitiesToPick);</b>
+        <i>89</i>&nbsp; }
+        <i>90</i>&nbsp;
+        <i>91</i>&nbsp; /**
+        <i>92</i>&nbsp; * method used to change the list of available divinities that players can still pick
+        <i>93</i>&nbsp; * @param newAvailableDivinities is the updated list
+        <i>94</i>&nbsp; */
+        <i>95</i>&nbsp; public void setAvailableDivinities(ArrayList&lt;Divinity&gt; newAvailableDivinities)
+        <i>96</i>&nbsp; {
+        <b class="nc"><i>97</i>&nbsp; this.availableDivinities=newAvailableDivinities;</b>
+        <b class="nc"><i>98</i>&nbsp; }</b>
+        <i>99</i>&nbsp;
+        <i>100</i>&nbsp; /**
+        <i>101</i>&nbsp; * method used to retrieve the list of divinities chosen to be distributed among the players
+        <i>102</i>&nbsp; * @return said list of divinities using an arrayList
+        <i>103</i>&nbsp; */
+        <i>104</i>&nbsp; public ArrayList&lt;Divinity&gt; getChosenDivinities()
+        <i>105</i>&nbsp; {
+        <i>106</i>&nbsp; ArrayList&lt;Divinity&gt; neededDivinities;
+        <i>107</i>&nbsp;
+        <b class="nc"><i>108</i>&nbsp; neededDivinities=this.chosenDivinities;</b>
+        <i>109</i>&nbsp;
+        <b class="nc"><i>110</i>&nbsp; return(neededDivinities);</b>
+        <i>111</i>&nbsp; }
+        <i>112</i>&nbsp;
+        <i>113</i>&nbsp; /**
+        <i>114</i>&nbsp; * methos that updates the list of divinities that still need to be distributed among players
+        <i>115</i>&nbsp; * @param newChosenDivinities represents the updated list
+        <i>116</i>&nbsp; */
+        <i>117</i>&nbsp; public void setChosenDivinities(ArrayList&lt;Divinity&gt; newChosenDivinities)
+        <i>118</i>&nbsp; {
+        <b class="nc"><i>119</i>&nbsp; this.chosenDivinities=newChosenDivinities;</b>
+        <b class="nc"><i>120</i>&nbsp; }</b>
+        <i>121</i>&nbsp;
+        <i>122</i>&nbsp; /**
+        <i>123</i>&nbsp; * method used to retrieve the player of the current turn
+        <i>124</i>&nbsp; * @return a reference to the current player
+        <i>125</i>&nbsp; */
+        <i>126</i>&nbsp; public Player getCurrentPlayer() //eccezione se il player è null (?)
+        <i>127</i>&nbsp; {
+        <i>128</i>&nbsp; Player neededCurrentPlayer;
+        <i>129</i>&nbsp;
+        <b class="fc"><i>130</i>&nbsp; neededCurrentPlayer = this.playersInGame.get(currentPlayer); //ho usato un metodo
+            della classe stessa per restituire il giocatore corrente</b>
+        <i>131</i>&nbsp;
+        <b class="fc"><i>132</i>&nbsp; return(neededCurrentPlayer);</b>
+        <i>133</i>&nbsp; }
+        <i>134</i>&nbsp;
+        <i>135</i>&nbsp; /**
+        <i>136</i>&nbsp; * method used to change the current player at the end of a certain turn
+        <i>137</i>&nbsp; * since players are stored in playersInGame according to their turns, we just need to increase
+        by one the int parameter currentPlayer
+        <i>138</i>&nbsp; */
+        <i>139</i>&nbsp; public void setCurrentPlayer()
+        <i>140</i>&nbsp; {
+        <b class="nc"><i>141</i>&nbsp; if (this.currentPlayer==-1 || this.currentPlayer==(getNumberOfPlayers()-1))</b>
+        <i>142</i>&nbsp; {
+        <b class="nc"><i>143</i>&nbsp; this.currentPlayer=0;</b>
+        <i>144</i>&nbsp; }
+        <b class="nc"><i>145</i>&nbsp; else this.currentPlayer++;</b>
+        <i>146</i>&nbsp;
+        <b class="nc"><i>147</i>&nbsp; }</b>
+        <i>148</i>&nbsp;
+        <i>149</i>&nbsp; /**
+        <i>150</i>&nbsp; * method used to retrieve a certain cell from the board, to then get its state (for example if
+        it is occupied by a worker)
+        <i>151</i>&nbsp; * @param row gives the row of the cell in the board
+        <i>152</i>&nbsp; * @param column gives the column of the cell in the board
+        <i>153</i>&nbsp; * @return a reference to the needed cell
+        <i>154</i>&nbsp; */
+        <i>155</i>&nbsp; public Cell getCell(int row, int column) //eccezione se riceve indici al di fuori della
+        dimensione della matrice
+        <i>156</i>&nbsp; {
+        <i>157</i>&nbsp; Cell neededCell;
+        <i>158</i>&nbsp;
+        <b class="fc"><i>159</i>&nbsp; neededCell=this.boardCell[row][column];</b>
+        <i>160</i>&nbsp;
+        <b class="fc"><i>161</i>&nbsp; return(neededCell);</b>
+        <i>162</i>&nbsp; }
+        <i>163</i>&nbsp;
+        <i>164</i>&nbsp;
+        <i>165</i>&nbsp; /**
+        <i>166</i>&nbsp; * method used to do the actions associated to a certain state, by calling the correct handler
+        method
+        <i>167</i>&nbsp; */
+        <i>168</i>&nbsp; public void stateAction() {
+        <i>169</i>&nbsp; //this.gameState.handleRequest();
+        <b class="nc"><i>170</i>&nbsp; }</b>
+        <i>171</i>&nbsp;
+        <i>172</i>&nbsp; /**
+        <i>173</i>&nbsp; * method used to know the status of a certain game
+        <i>174</i>&nbsp; * @return the state of the game
+        <i>175</i>&nbsp; */
+        <i>176</i>&nbsp; public Status getGameState()
+        <i>177</i>&nbsp; {
+        <i>178</i>&nbsp; Status neededState;
+        <i>179</i>&nbsp;
+        <b class="nc"><i>180</i>&nbsp; neededState=this.gameState;</b>
+        <i>181</i>&nbsp;
+        <b class="nc"><i>182</i>&nbsp; return (neededState);</b>
+        <i>183</i>&nbsp; }
+        <i>184</i>&nbsp;
+        <i>185</i>&nbsp; /**
+        <i>186</i>&nbsp; * method that updates the state of the game with the correct one
+        <i>187</i>&nbsp; *
+        <i>188</i>&nbsp; * @param newState is the updated state that has to be assigned to GameData
+        <i>189</i>&nbsp; */
+        <i>190</i>&nbsp; public void setStatus(Status newState) {
+        <b class="nc"><i>191</i>&nbsp; this.gameState = newState;</b>
+        <b class="nc"><i>192</i>&nbsp; }</b>
+        <i>193</i>&nbsp;
+        <i>194</i>&nbsp; /**
+        <i>195</i>&nbsp; * @param playerName the name of the player
+        <i>196</i>&nbsp; * @return the cells&#39; cordinates of player
+        <i>197</i>&nbsp; */
+        <i>198</i>&nbsp; public ArrayList&lt;Position&gt; getPlayerPositionsInMap(String playerName) {
+        <b class="fc"><i>199</i>&nbsp; ArrayList&lt;Position&gt; returnArray = new ArrayList&lt;Position&gt;();</b>
+        <b class="fc"><i>200</i>&nbsp; for (int i = 0; i &lt; 5; i++) {</b>
+        <b class="fc"><i>201</i>&nbsp; for (int j = 0; j &lt; 5; j++) {</b>
+        <b class="fc"><i>202</i>&nbsp; if (boardCell[i][j].getPlayer() != null &amp;&amp;
+            boardCell[i][j].getPlayer().equals(playerName)) returnArray.add(new Position(i, j));</b>
+        <i>203</i>&nbsp; }
+        <i>204</i>&nbsp; }
+        <b class="fc"><i>205</i>&nbsp; return returnArray;</b>
+        <i>206</i>&nbsp; }
+        <i>207</i>&nbsp;
+        <i>208</i>&nbsp; public Divinity getPlayerDivinity(String playerName) {
+        <b class="fc"><i>209</i>&nbsp; for (Player p : playersInGame) {</b>
+        <b class="fc"><i>210</i>&nbsp; if (p.getName() == playerName) return p.getDivinity();</b>
+        <b class="fc"><i>211</i>&nbsp; }</b>
+        <b class="nc"><i>212</i>&nbsp; return null;</b>
+        <i>213</i>&nbsp; }
+        <i>214</i>&nbsp;
+        <i>215</i>&nbsp; public Player getPlayer(String playerName) {
+        <b class="fc"><i>216</i>&nbsp; for (Player p : playersInGame) {</b>
+        <b class="fc"><i>217</i>&nbsp; if (p.getName().equals(playerName)) return p;</b>
+        <b class="fc"><i>218</i>&nbsp; }</b>
+        <b class="nc"><i>219</i>&nbsp; return null;</b>
+        <i>220</i>&nbsp; }
+        <i>221</i>&nbsp;
+        <i>222</i>&nbsp; public Cell[][] getGameBoard() {
+        <b class="fc"><i>223</i>&nbsp; return boardCell;</b>
+        <i>224</i>&nbsp; }
+        <i>225</i>&nbsp;
+        <i>226</i>&nbsp; //per motivi di test
+        <i>227</i>&nbsp; public void setCurrentPlayer(int i) {
+        <b class="fc"><i>228</i>&nbsp; currentPlayer = i;</b>
+        <b class="fc"><i>229</i>&nbsp; }</b>
+        <i>230</i>&nbsp;
+        <i>231</i>&nbsp;
+        <i>232</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2020-04-10 17:03</div>
+</div>
+</body>
+</html>
