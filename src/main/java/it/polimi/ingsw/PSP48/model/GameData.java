@@ -206,13 +206,6 @@ public class GameData {
         return returnArray;
     }
 
-    public Divinity getPlayerDivinity(String playerName) {
-        for (Player p : playersInGame) {
-            if (p.getName() == playerName) return p.getDivinity();
-        }
-        return null;
-    }
-
     public Player getPlayer(String playerName) {
         for (Player p : playersInGame) {
             if (p.getName().equals(playerName)) return p;

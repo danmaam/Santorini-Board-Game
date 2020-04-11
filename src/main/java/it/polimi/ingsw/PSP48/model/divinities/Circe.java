@@ -43,7 +43,7 @@ public class Circe extends Divinity {
             if (!adiacentCellVerifier(workersPosition.get(0).getRow(), workersPosition.get(0).getColumn(), workersPosition.get(1).getRow(), workersPosition.get(1).getColumn())) {
                 //the workers are not adjacent, so the player stoles the divinity to the other player
                 gd.getCurrentPlayer().setTempDivinity(gd.getCurrentPlayer().getDivinity());
-                gd.getCurrentPlayer().setDivinity(gd.getPlayerDivinity(otherPlayer));
+                gd.getCurrentPlayer().setDivinity(gd.getPlayer(otherPlayer).getDivinity());
                 gd.getPlayer(otherPlayer).setTempDivinity(gd.getPlayer(otherPlayer).getDivinity());
                 gd.getPlayer(otherPlayer).setDivinity(new Divinity());
             }
