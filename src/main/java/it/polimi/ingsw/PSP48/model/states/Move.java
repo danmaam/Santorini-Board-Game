@@ -4,6 +4,8 @@ import it.polimi.ingsw.PSP48.model.*;
 import it.polimi.ingsw.PSP48.model.divinities.Divinity;
 import it.polimi.ingsw.PSP48.model.exceptions.*;
 
+import java.util.ArrayList;
+
 /**
  * class that implements the move operation by a player
  * @author Rebecca Marelli
@@ -11,46 +13,10 @@ import it.polimi.ingsw.PSP48.model.exceptions.*;
 public class Move implements Status
 {
     /**
-     * method that handles the first status of the game, the choice of the list of divinities, which is not handled by this class
-     * @return null because the method mustn't be called in this class, so it does nothing
-     */
-    public Status handleRequest(Divinity divinity, GameData data, ColourPick colourPickState)
-    {
-        return(null);
-    }
-
-    /**
-     *method handling the second state of the game, the choice of colours by the players
-     * @return null because it is not necessary to call this method, it must do nothing
-     */
-    public Status handleRequest(Colour colour, String name, GameData data, DivinityChoice divinityChoiceState)
-    {
-        return(null);
-    }
-
-    /**
-     * method handling the assignment of specific divinities to the respective players
-     * @return null because it must do nothing, it's not the one called to handle the state implemented by this class
-     */
-    public Status handleRequest(Divinity divinity, String name, GameData gameData, GameBegin beginState)
-    {
-        return(null);
-    }
-
-    /**
-     * method handling the status where players have decided their position on the board and have to be put there
+     * method handling the setup states of the game and the beginning of a turn, together with the end of a turn
      * @return null because the state is not handled by this class
      */
-    public Status handleRequest(int row, int column, String name, Player player, GameData gamedata, int playersToPosition) throws NotEmptyCellException, DivinityPowerException
-    {
-        return(null);
-    }
-
-    /**
-     * method that checks if a player can complete a turn by moving and then building
-     * @return null because the state is not handled by this class
-     */
-    public Status handleRequest(String name, Player player, GameData data)
+    public Status handleRequest(GameData gamedata) throws NotEmptyCellException, DivinityPowerException
     {
         return(null);
     }
@@ -59,9 +25,6 @@ public class Move implements Status
      * method that handles the moves of players during their turn and checks if they have won
      * @param oldRow is the row of the starting position
      * @param oldColumn is the column of the starting position
-     * @param newRow is the row where the player needs to be put
-     * @param newColumn is the column where the player needs to be put
-     * @param playerToMove is the player we are moving
      * @param gd is an object of the class GameData, which contains the board
      * @return the state following the moving of the player, it depends on the divinity we are using in the turn
      * @throws NotAdiacentCellException if we are trying to move the player in a cell that is not adiacent to him
@@ -71,53 +34,26 @@ public class Move implements Status
      * @throws DomedCellException if the cell we are moving the player to has a dome on it
      * @throws NotEmptyCellException  if the cell is not empty
      */
-    public Status handleRequest (int oldRow, int oldColumn, int newRow, int newColumn, Player playerToMove, GameData gd) throws NotAdiacentCellException, IncorrectLevelException, OccupiedCellException, DivinityPowerException, DomedCellException, NotEmptyCellException
+    public Status handleRequest (int oldRow, int oldColumn, GameData gd) throws NotAdiacentCellException, IncorrectLevelException, OccupiedCellException, DivinityPowerException, DomedCellException, NotEmptyCellException
     {
-        //quando è fatta la view cercare di capire se la parte che illumina le casella va dentro quella oppure qui
+        int newRow, newColumn; //ci mettiamo le nuove posizioni quando chiediamo al giocatore dove si vuole spostare
+        ArrayList<Cell> cellsForMoving= new ArrayList<>();
+        ArrayList<Divinity> otherDivinities= new ArrayList<>();
 
-        playerToMove.getDivinity().move(oldColumn, oldRow, newColumn, newRow, gd);
+        for (Player pl: gd.getPlayersInGame()) //array di altre divinità in gioco, da passare alla funzione che mi fa vedere quali sono le celle valide per la mossa
+        {
+            if (!pl.getName().equals(gd.getCurrentPlayer().getName())) otherDivinities.add(pl.getDivinity());
+        }
+        cellsForMoving=gd.getCurrentPlayer().getDivinity().getValidCellForMove(oldColumn, oldRow, gd.getGameBoard(), otherDivinities);
+        //abbiamo preso le celle valide per muoversi, ora chiediamo al giocatore corrente in quale si vuole spostare
 
-        playerToMove.getDivinity().winCondition(gd);
+        //gd.getCurrentPlayer().getDivinity().move(oldColumn, oldRow, newColumn, newRow, gd);
+        //quando sappiamo dove si vuole spostare chiamiamo la funzione move
+
+        gd.getCurrentPlayer().getDivinity().winCondition(gd); //alla fine dello spostamento dobbiamo controllare se ha vinto salendo di livello
 
         //manca la parte in cui decido lo stato nuovo a seconda della divinità->è questa che me lo deve restituire
 
         return(null);
     }
-
-    /**
-     * method that checks if a player with a certain divinity can use its power and make a second move and then build
-     * @return null because it's not called in this class
-     */
-    public Status handleRequest(int row, int column, String name, Player player, GameData data)
-    {
-        return(null);
-    }
-
-    /**
-     * method handling the two building operations: normal build and dome
-     * @return null because it must do nothing in this class
-     */
-    public Status handleRequest (GameData gd, int oldRow, int oldColumn, Player pl, String name)
-    {
-        return(null);
-    }
-
-    /**
-     * method handling a second optional building by the player
-     * @return null because it is not handled by this class
-     */
-    public Status handleRequest (String playerName, Player p, GameData data, int startingRow, int startingColumn)
-    {
-        return(null);
-    }
-
-    /**
-     * method handling the end of a turn and setting the right parameters
-     * @return null because it is not handled by this class
-     */
-    public Status handleRequest(Player player)
-    {
-        return(null);
-    }
-
 }

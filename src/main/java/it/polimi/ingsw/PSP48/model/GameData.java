@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP48.model;
 
 import it.polimi.ingsw.PSP48.model.divinities.Divinity;
+import it.polimi.ingsw.PSP48.model.states.Status;
 
 import java.util.ArrayList;
 
@@ -33,15 +34,9 @@ public class GameData {
      *
      * @return an int that is the total number of players in the game
      */
-    public int getNumberOfPlayers() {
-        int index;
-        int totalPlayers;
-
-        totalPlayers = 0;
-        for (index = 0; index < this.playersInGame.size(); index++) {
-            totalPlayers++;
-        }
-        return (totalPlayers);
+    public int getNumberOfPlayers()
+    {
+        return(this.playersInGame.size());
     }
 
 
