@@ -1,6 +1,9 @@
 package it.polimi.ingsw.PSP48.model.divinities;
 
-import it.polimi.ingsw.PSP48.model.*;
+import it.polimi.ingsw.PSP48.server.model.*;
+import it.polimi.ingsw.PSP48.server.model.divinities.Apollo;
+import it.polimi.ingsw.PSP48.server.model.divinities.Circe;
+import it.polimi.ingsw.PSP48.server.model.divinities.Divinity;
 import org.junit.Before;
 import org.junit.Test;
 

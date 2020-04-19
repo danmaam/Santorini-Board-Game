@@ -1,7 +1,9 @@
 package it.polimi.ingsw.PSP48.model.divinities;
 
-import it.polimi.ingsw.PSP48.model.*;
-import it.polimi.ingsw.PSP48.model.exceptions.*;
+import it.polimi.ingsw.PSP48.server.model.*;
+import it.polimi.ingsw.PSP48.server.model.divinities.Divinity;
+import it.polimi.ingsw.PSP48.server.model.divinities.Eros;
+import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import org.junit.Before;
 import org.junit.Test;
 

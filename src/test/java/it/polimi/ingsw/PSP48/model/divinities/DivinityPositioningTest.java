@@ -1,11 +1,12 @@
 package it.polimi.ingsw.PSP48.model.divinities;
 
-import it.polimi.ingsw.PSP48.model.Birthday;
-import it.polimi.ingsw.PSP48.model.Cell;
-import it.polimi.ingsw.PSP48.model.GameData;
-import it.polimi.ingsw.PSP48.model.Player;
-import it.polimi.ingsw.PSP48.model.exceptions.DivinityPowerException;
-import it.polimi.ingsw.PSP48.model.exceptions.NotEmptyCellException;
+import it.polimi.ingsw.PSP48.server.model.Birthday;
+import it.polimi.ingsw.PSP48.server.model.Cell;
+import it.polimi.ingsw.PSP48.server.model.GameData;
+import it.polimi.ingsw.PSP48.server.model.Player;
+import it.polimi.ingsw.PSP48.server.model.divinities.Divinity;
+import it.polimi.ingsw.PSP48.server.model.exceptions.DivinityPowerException;
+import it.polimi.ingsw.PSP48.server.model.exceptions.NotEmptyCellException;
 import org.junit.Before;
 
 import java.util.ArrayList;

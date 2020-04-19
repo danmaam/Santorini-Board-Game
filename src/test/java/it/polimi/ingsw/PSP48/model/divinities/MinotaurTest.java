@@ -1,13 +1,14 @@
 package it.polimi.ingsw.PSP48.model.divinities;
 
-import it.polimi.ingsw.PSP48.model.*;
-import it.polimi.ingsw.PSP48.model.divinities.testingDivinities.DivFalse;
-import it.polimi.ingsw.PSP48.model.divinities.testingDivinities.DivinityFalsePower;
-import it.polimi.ingsw.PSP48.model.exceptions.*;
+import it.polimi.ingsw.PSP48.server.model.*;
+import it.polimi.ingsw.PSP48.server.model.divinities.Divinity;
+import it.polimi.ingsw.PSP48.server.model.divinities.Minotaur;
+import it.polimi.ingsw.PSP48.server.model.divinities.testingDivinities.DivFalse;
+import it.polimi.ingsw.PSP48.server.model.divinities.testingDivinities.DivinityFalsePower;
+import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
