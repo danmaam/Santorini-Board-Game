@@ -2,17 +2,36 @@ package it.polimi.ingsw.PSP48.server.model;
 
 import it.polimi.ingsw.PSP48.server.model.divinities.Divinity;
 
+import java.util.Calendar;
+
 /**
  * Class used to contain a player's data, such as name and birthday.
  */
 public class Player {
-    private final Birthday birthday;
+    private final Calendar birthday;
     private final String name;
     private Colour colour;
     private Divinity divinity;
     private Divinity tempDivinity;
     private int oldLevel;
+    private int workersOnTable = 0;
+
+    public void addWorker() {
+        this.workersOnTable++;
+    }
+
+    public void removeWorker() throws IllegalStateException {
+        if (workersOnTable == 0) throw new IllegalStateException("trying to remove a worker that doesn't exists");
+        else this.workersOnTable--;
+    }
+
+    public int getWorkersOnTable() {
+        return workersOnTable;
+    }
+
     private int newLevel;
+
+    private Position lastWorkerMoved = new Position(-1, -1);
 
     public int getOldLevel() {
         return oldLevel;
@@ -37,7 +56,7 @@ public class Player {
      * @param birthday The player's birthday.
      * @throws IllegalArgumentException if name or birthday are null.
      */
-    public Player(String name, Birthday birthday) {
+    public Player(String name, Calendar birthday, Colour colour) {
         if (name == null || birthday == null) {
             throw new IllegalArgumentException("Name and birthday must not be null.");
         } else {
@@ -59,7 +78,7 @@ public class Player {
      *
      * @return the player's birthday
      */
-    public Birthday getBirthday() {
+    public Calendar getBirthday() {
         return birthday;
     }
 
@@ -105,6 +124,10 @@ public class Player {
         this.tempDivinity = newDivinity;
     }
 
+    public Position getLastWorkerMoved() {
+        return lastWorkerMoved;
+    }
+
     public Divinity getTempDivinity() {
         return tempDivinity;
     }
@@ -115,6 +138,14 @@ public class Player {
     public void restoreTempDivinity() {
         divinity = tempDivinity;
         tempDivinity = null;
+    }
+
+    public void resetLastWorkerUsed() {
+        lastWorkerMoved = new Position(-1, 1);
+    }
+
+    public void setLastWorkerUsed(int row, int column) {
+        lastWorkerMoved = new Position(row, column);
     }
 }
 

@@ -1,11 +1,13 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
+import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.Cell;
-import it.polimi.ingsw.PSP48.server.model.GameData;
-import it.polimi.ingsw.PSP48.server.model.exceptions.*;
+import it.polimi.ingsw.PSP48.server.model.Model;
+import it.polimi.ingsw.PSP48.server.model.Position;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Demeter extends Divinity {
@@ -16,14 +18,16 @@ public class Demeter extends Divinity {
     private int oldColumnBuild = -1;
 
 
-
     /**
      * Reset the coordinate of first building
+     *
+     * @return the next method that the game controller have to invoke
      */
     @Override
-    public void turnBegin(GameData gd) {
+    public Consumer<GameController> turnBegin(Model gd) {
         oldRowBuild = -1;
         oldColumnBuild = -1;
+        return GameController::requestMove;
     }
 
     /**
@@ -34,7 +38,7 @@ public class Demeter extends Divinity {
      * @return a list of cell valid for the building of the worker
      */
     @Override
-    public ArrayList<Cell> getValidCellForBuilding(int WorkerColumn, int WorkerRow, ArrayList<Divinity> otherDivinitiesInGame, Cell[][] gameCells) {
+    public ArrayList<Position> getValidCellForBuilding(int WorkerColumn, int WorkerRow, ArrayList<Divinity> otherDivinitiesInGame, Cell[][] gameCells) {
         return super.getValidCellForBuilding(WorkerColumn, WorkerRow, otherDivinitiesInGame, gameCells)
                 .stream()
                 .filter(cell -> !(cell.getColumn() == oldColumnBuild && cell.getRow() == oldRowBuild))
@@ -50,7 +54,7 @@ public class Demeter extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public ArrayList<Cell> getValidCellsToPutDome(int workerColumn, int workerRow, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
+    public ArrayList<Position> getValidCellsToPutDome(int workerColumn, int workerRow, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
         return super.getValidCellsToPutDome(workerColumn, workerRow, gameCells, divinitiesInGame).stream()
                 .filter(cell -> !(cell.getColumn() == oldColumnBuild && cell.getRow() == oldRowBuild))
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -64,7 +68,7 @@ public class Demeter extends Divinity {
      * @param buildRow     the row where the player wants to add a level
      * @param buildColumn  the column where the player wants to add a level
      * @param gd           the game status
-     * @throws NotAdiacentCellException     if the cell where the player wants to build is not adiacent to the worker's one
+     * @throws NotAdjacentCellException     if the cell where the player wants to build is not adiacent to the worker's one
      * @throws OccupiedCellException        if the destination cell is occupied by another worker
      * @throws DomedCellException           is the cell is already domed
      * @throws MaximumLevelReachedException if the cell contains a level 3 building
@@ -72,12 +76,21 @@ public class Demeter extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public void build(int workerRow, int workerColumn, int buildRow, int buildColumn, GameData gd) throws DivinityPowerException, MaximumLevelReachedException, OccupiedCellException, NotAdiacentCellException, DomedCellException {
+    public Consumer<GameController> build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws DivinityPowerException, MaximumLevelReachedException, OccupiedCellException, NotAdjacentCellException, DomedCellException {
+        Consumer<GameController> nextAction;
         if (oldRowBuild != -1 && oldColumnBuild != -1 && oldRowBuild == buildRow && oldColumnBuild == buildColumn)
             throw new DivinityPowerException("feffe");
+        if (oldRowBuild == -1 && oldColumnBuild == -1) nextAction = GameController::requestOptionalBuilding;
+        else {
+            nextAction = GameController::turnChange;
+            if (buildRow == -1 && buildColumn == -1) {
+                return nextAction;
+            }
+        }
         super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
         oldColumnBuild = buildColumn;
         oldRowBuild = buildRow;
+        return nextAction;
     }
 
     @Override
@@ -91,7 +104,7 @@ public class Demeter extends Divinity {
      * @param domeRow      the row where the player wants to add the dome
      * @param domeColumn   the column where the player wants to add the dome
      * @param gd           the current game board state
-     * @throws NotAdiacentCellException        if the cell where the player wants to add the dome is not adiacent to the worker's one
+     * @throws NotAdjacentCellException        if the cell where the player wants to add the dome is not adiacent to the worker's one
      * @throws OccupiedCellException           if the destination cell is occupied by another worker
      * @throws DomedCellException              is the cell is already domed
      * @throws MaximumLevelNotReachedException if the cell doesn't contain a level 3 building
@@ -99,12 +112,16 @@ public class Demeter extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public void dome(int workerRow, int workerColumn, int domeRow, int domeColumn, GameData gd) throws NotAdiacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
+    public Consumer<GameController> dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
+        Consumer<GameController> nextAction;
         if (oldRowBuild != -1 && oldColumnBuild != -1 && oldRowBuild == domeRow && oldColumnBuild == domeColumn)
             throw new DivinityPowerException("feffe");
+        if (oldRowBuild == -1 && oldColumnBuild == -1) nextAction = GameController::requestOptionalBuilding;
+        else nextAction = GameController::turnChange;
         super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
         oldRowBuild = domeRow;
         oldColumnBuild = domeColumn;
+        return nextAction;
     }
 
 }

@@ -128,14 +128,14 @@
         <i>51</i>&nbsp; public Status handleRequest(int row, int column, String name, Player player, GameData gamedata,
         int playersToPosition) throws NotEmptyCellException, DivinityPowerException
         <i>52</i>&nbsp; {
-        <b class="nc"><i>53</i>&nbsp; Status nextState=null;</b>
+        <b class="nc"><i>53</i>&nbsp; Status nextControllerState=null;</b>
         <i>54</i>&nbsp;
         <i>55</i>&nbsp; //al massimo va aggiunto il pezzo in cui si chiede all&#39;utente dove vuole mettersi,
         illuminando il tabellone
         <i>56</i>&nbsp;
         <b class="nc"><i>57</i>&nbsp; player.getDivinity().gameSetUp(row, column, gamedata.getGameBoard(), name);</b>
         <i>58</i>&nbsp;
-        <i>59</i>&nbsp; //if (playersToPosition&gt;0) nextState=this;
+        <i>59</i>&nbsp; //if (playersToPosition&gt;0) nextControllerState=this;
         <i>60</i>&nbsp;
         <i>61</i>&nbsp; //else verrà chiamata la funzione della divinità che restituisce lo stato giusto
         <i>62</i>&nbsp;

@@ -1,18 +1,17 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
-import it.polimi.ingsw.PSP48.server.model.GameData;
+import it.polimi.ingsw.PSP48.server.model.Model;
 
 
 public class Chronus extends Divinity {
-    private final String name = "Basic";
     private final Boolean threePlayerSupported = false;
 
     /**
      * @param gd the state of the game
-     * @return true if the actual player considererd has won, false if the game must go on
+     * @return true if the actual player considered has won, false if the game must go on
      */
     @Override
-    public boolean winCondition(GameData gd) {
+    public boolean winCondition(Model gd) {
         int numbersOfCompleteTowers = 0;
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -25,6 +24,6 @@ public class Chronus extends Divinity {
 
     @Override
     public String getName() {
-        return name;
+        return "Chronus";
     }
 }

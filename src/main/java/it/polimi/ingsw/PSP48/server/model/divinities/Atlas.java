@@ -1,21 +1,19 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
-import it.polimi.ingsw.PSP48.server.model.Cell;
-import it.polimi.ingsw.PSP48.server.model.DomePosition;
-import it.polimi.ingsw.PSP48.server.model.GameData;
-import it.polimi.ingsw.PSP48.server.model.Player;
-import it.polimi.ingsw.PSP48.server.model.exceptions.*;
+import it.polimi.ingsw.PSP48.server.controller.GameController;
+import it.polimi.ingsw.PSP48.server.model.*;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Atlas extends Divinity {
-    private final String name = "Atlas";
     private final Boolean threePlayerSupported = true;
 
     /**
      * Redefined method since Atlas can add a dome on each level
+     *
      * @param workerColumn     the column where the worker is
      * @param workerRow        the row where the worker is
      * @param gameCells        the actual state of the board
@@ -24,7 +22,7 @@ public class Atlas extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public ArrayList<Cell> getValidCellsToPutDome(int workerColumn, int workerRow, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
+    public ArrayList<Position> getValidCellsToPutDome(int workerColumn, int workerRow, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
         ArrayList<Cell> newCells = new ArrayList<>();
         //with the for loop, i'm adding to the arrayList the cell adiacent to the worker
         ArrayList<Cell> validCells = new ArrayList<>();
@@ -55,7 +53,10 @@ public class Atlas extends Divinity {
 
         for (Cell c : nV) validCells.remove(c);
 
-        return validCells;
+        ArrayList<Position> validPositions = new ArrayList<>();
+        validCells.forEach((Cell c) -> validPositions.add(new Position(c.getRow(), c.getColumn())));
+
+        return validPositions;
     }
 
     /**
@@ -66,18 +67,18 @@ public class Atlas extends Divinity {
      * @param domeRow      the row where the player wants to add the dome
      * @param domeColumn   the column where the player wants to add the dome
      * @param gd           the game status
-     * @throws NotAdiacentCellException        if the cell where the player wants to add the dome is not adiacent to the worker's one
-     * @throws OccupiedCellException           if the destination cell is occupied by another worker
-     * @throws DomedCellException              is the cell is already domed
-     * @throws MaximumLevelNotReachedException if the cell doesn't contain a level 3 building
-     * @throws DivinityPowerException          if another divinity blocks the adding of the dome
+     * @return the next method that the Game Controller must call
+     * @throws NotAdjacentCellException if the cell where the player wants to add the dome is not adiacent to the worker's one
+     * @throws OccupiedCellException    if the destination cell is occupied by another worker
+     * @throws DomedCellException       is the cell is already domed
+     * @throws DivinityPowerException   if another divinity blocks the adding of the dome
      * @author Daniele Mammone
      */
     @Override
-    public void dome(int workerRow, int workerColumn, int domeRow, int domeColumn, GameData gd) throws NotAdiacentCellException, OccupiedCellException, DomedCellException, DivinityPowerException {
-        //first check: the two cells must be adiacent
+    public Consumer<GameController> dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, DivinityPowerException {
+        //first check: the two cells must be adjacent
         if (!(adiacentCellVerifier(workerRow, workerColumn, domeRow, domeColumn)))
-            throw new NotAdiacentCellException("Celle non adiacenti");
+            throw new NotAdjacentCellException("Celle non adiacenti");
         //second check: the cell must be empty of workers
         if (!(gd.getCell(domeRow, domeColumn).getPlayer() == null)) throw new OccupiedCellException("Cella occupata");
         //third check: the cell must not be already domed
@@ -95,11 +96,17 @@ public class Atlas extends Divinity {
 
         gd.getCell(domeRow, domeColumn).addDome();
         //now, the game has been modified
+
+        ArrayList<Cell> changedCell = new ArrayList<>();
+        changedCell.add((Cell) gd.getCell(domeRow, domeColumn).clone());
+        gd.notifyObservers(x -> x.changedBoard(changedCell));
+
+        return GameController::postBuild;
     }
 
 
     @Override
     public String getName() {
-        return name;
+        return "Atlas";
     }
 }

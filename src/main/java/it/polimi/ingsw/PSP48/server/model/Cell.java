@@ -105,7 +105,7 @@ public class Cell implements Cloneable {
     }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    public Object clone() {
         return new Cell(row, column, actualLevel, player, domed);
     }
 

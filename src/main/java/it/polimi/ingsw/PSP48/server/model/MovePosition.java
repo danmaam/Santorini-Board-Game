@@ -7,13 +7,15 @@ public class MovePosition {
     private int moveColumn;
     private int difference;
 
+
     public MovePosition(int workerRow, int workerColumn, int moveRow, int moveColumn, int difference) {
-        this.moveColumn = moveColumn;
-        this.moveRow = moveRow;
-        this.workerColumn = workerColumn;
         this.workerRow = workerRow;
+        this.workerColumn = workerColumn;
+        this.moveRow = moveRow;
+        this.moveColumn = moveColumn;
         this.difference = difference;
     }
+
 
     public int getWorkerRow() {
         return workerRow;

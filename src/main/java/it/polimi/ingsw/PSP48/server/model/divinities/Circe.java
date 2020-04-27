@@ -1,30 +1,30 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
-import it.polimi.ingsw.PSP48.server.model.GameData;
+import it.polimi.ingsw.PSP48.server.controller.GameController;
+import it.polimi.ingsw.PSP48.server.model.Model;
 import it.polimi.ingsw.PSP48.server.model.Player;
 import it.polimi.ingsw.PSP48.server.model.Position;
-import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Circe extends Divinity {
-    private final String name = "Circe";
     private final Boolean threePlayerSupported = false;
 
     @Override
     public String getName() {
-        return name;
+        return "Circe";
     }
 
     /**
-     * stole other player divinity if the the other palyer's workers are not adjacent
+     * stole other player divinity if the the other player's workers are not adjacent
      *
      * @param gd the game state
      * @author Daniele Mammone
      */
     @Override
-    public void turnBegin(GameData gd) {
+    public Consumer<GameController> turnBegin(Model gd) {
         //first, i must rollback the divinities of the players
         for (Player p : gd.getPlayersInGame()) {
             if (p.getTempDivinity() != null) p.restoreTempDivinity();
@@ -47,5 +47,6 @@ public class Circe extends Divinity {
                 gd.getPlayer(otherPlayer).setDivinity(new Divinity());
             }
         }
+        return GameController::requestMove;
     }
 }

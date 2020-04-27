@@ -1,13 +1,11 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
-import it.polimi.ingsw.PSP48.server.model.BuildPosition;
-import it.polimi.ingsw.PSP48.server.model.Cell;
-import it.polimi.ingsw.PSP48.server.model.GameData;
-import it.polimi.ingsw.PSP48.server.model.Player;
-import it.polimi.ingsw.PSP48.server.model.exceptions.*;
+import it.polimi.ingsw.PSP48.server.controller.GameController;
+import it.polimi.ingsw.PSP48.server.model.*;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public class Zeus extends Divinity {
     private final String name = "Eros";
@@ -22,9 +20,9 @@ public class Zeus extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public ArrayList<Cell> getValidCellForBuilding(int WorkerColumn, int WorkerRow, ArrayList<Divinity> divinitiesInGame, Cell[][] gameCells) {
-        ArrayList<Cell> validCells = super.getValidCellForBuilding(WorkerColumn, WorkerRow, divinitiesInGame, gameCells);
-        if (gameCells[WorkerRow][WorkerColumn].getLevel() < 3) validCells.add(gameCells[WorkerRow][WorkerColumn]);
+    public ArrayList<Position> getValidCellForBuilding(int WorkerColumn, int WorkerRow, ArrayList<Divinity> divinitiesInGame, Cell[][] gameCells) {
+        ArrayList<Position> validCells = super.getValidCellForBuilding(WorkerColumn, WorkerRow, divinitiesInGame, gameCells);
+        if (gameCells[WorkerRow][WorkerColumn].getLevel() < 3) validCells.add(new Position(WorkerRow, WorkerColumn));
         return validCells;
     }
 
@@ -34,7 +32,7 @@ public class Zeus extends Divinity {
      * @param buildRow     the row where the player wants to add a level
      * @param buildColumn  the column where the player wants to add a level
      * @param gd           the game status
-     * @throws NotAdiacentCellException     if the cell where the player wants to build is not adiacent to the worker's one
+     * @throws NotAdjacentCellException     if the cell where the player wants to build is not adiacent to the worker's one
      * @throws OccupiedCellException        if the destination cell is occupied by another worker
      * @throws DomedCellException           is the cell is already domed
      * @throws MaximumLevelReachedException if the cell contains a level 3 building
@@ -42,13 +40,13 @@ public class Zeus extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public void build(int workerRow, int workerColumn, int buildRow, int buildColumn, GameData gd) throws
-            NotAdiacentCellException, OccupiedCellException, DomedCellException, MaximumLevelReachedException, DivinityPowerException {
+    public Consumer<GameController> build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws
+            NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelReachedException, DivinityPowerException {
         //first check: the two cells must be adiacent
         if (!(adiacentCellVerifier(workerRow, workerColumn, buildRow, buildColumn))) {
             if (workerRow == buildRow && workerColumn == buildColumn && gd.getCell(workerRow, workerColumn).getLevel() == 3)
                 throw new MaximumLevelReachedException("Livello massimo già raggiunto");
-            else throw new NotAdiacentCellException("Celle non adiacenti");
+            else throw new NotAdjacentCellException("Celle non adiacenti");
         }
         //second check: the cell must be empty of workers
         if (!(gd.getCell(buildRow, buildColumn).getPlayer() == null)) throw new OccupiedCellException("Cella occupata");
@@ -69,7 +67,12 @@ public class Zeus extends Divinity {
 
         gd.getCell(buildRow, buildColumn).addLevel();
 
+        ArrayList<Cell> changedCell = new ArrayList<>();
+        changedCell.add((Cell) gd.getCell(buildRow, buildColumn).clone());
+        gd.notifyObservers(x -> x.changedBoard(changedCell));
+
         //now, the game board has been modified
+        return GameController::turnChange;
     }
 
     @Override

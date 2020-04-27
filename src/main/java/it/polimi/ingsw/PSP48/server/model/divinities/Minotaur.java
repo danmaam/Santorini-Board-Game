@@ -1,15 +1,16 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
 import it.polimi.ingsw.PSP48.model.*;
+import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import it.polimi.ingsw.PSP48.server.model.*;
-import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Minotaur extends Divinity {
-    private final String name = "Basic";
+    private final String name = "Minotaur";
     private final Boolean threePlayerSupported = true;
 
 
@@ -29,7 +30,7 @@ public class Minotaur extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public ArrayList<Cell> getValidCellForMove(int WorkerColumn, int WorkerRow, Cell[][] gameCells, ArrayList<Divinity> otherDivinitiesInGame) {
+    public ArrayList<Position> getValidCellForMove(int WorkerColumn, int WorkerRow, Cell[][] gameCells, ArrayList<Divinity> otherDivinitiesInGame) {
         Cell actualWorkerCell = gameCells[WorkerRow][WorkerColumn];
         ArrayList<Cell> validCells = new ArrayList<>();
 
@@ -83,7 +84,10 @@ public class Minotaur extends Divinity {
 
         //now in valid cells there is the list with compatible moves cells
 
-        return validCells;
+        ArrayList<Position> validPositions = new ArrayList<>();
+        validCells.forEach((Cell c) -> validPositions.add(new Position(c.getRow(), c.getColumn())));
+
+        return validPositions;
     }
 
     private direction getDirection(int moveRow, int moveCol, int workRow, int workCol) {
@@ -140,17 +144,17 @@ public class Minotaur extends Divinity {
      * @param moveColumn   the column of the board where the worker wants to move
      * @param moveRow      the row of the board where the worker wants to move
      * @param gd           the actual game state
-     * @throws NotAdiacentCellException if the destination cell is not adiacent to the worker
+     * @throws NotAdjacentCellException if the destination cell is not adiacent to the worker
      * @throws IncorrectLevelException  if the destination cell is too high to be reached
      * @throws OccupiedCellException    if the destination cell has another worker on it
      * @throws DomedCellException       if the destination cell has a dome on it
      * @author Daniele Mammone
      */
-    public void move(int WorkerColumn, int WorkerRow, int moveColumn, int moveRow, GameData gd) throws
-            NotAdiacentCellException, IncorrectLevelException, OccupiedCellException, DomedCellException, DivinityPowerException, NotEmptyCellException {
+    public Consumer<GameController> move(int WorkerColumn, int WorkerRow, int moveColumn, int moveRow, Model gd) throws
+            NotAdjacentCellException, IncorrectLevelException, OccupiedCellException, DomedCellException, DivinityPowerException {
         //first check: the two cells must be adiacent
         if (!(adiacentCellVerifier(WorkerRow, WorkerColumn, moveRow, moveColumn)))
-            throw new NotAdiacentCellException("Celle non adiacenti");
+            throw new NotAdjacentCellException("Celle non adiacenti");
         //second check: the two levels must be compatible
         int workerLevel = gd.getCell(WorkerRow, WorkerColumn).getLevel();
         int moveLevel = gd.getCell(moveRow, moveColumn).getLevel();
@@ -158,10 +162,11 @@ public class Minotaur extends Divinity {
             throw new IncorrectLevelException("Stai cerando di salire a un livello troppo alto");
         //third check: the cell must not be occupied
         direction nextDir = getDirection(moveRow, moveColumn, WorkerRow, WorkerColumn);
-        Position pushingPosition = getNextPosition(moveRow, moveColumn, nextDir);
+        Position pushingPosition = null;
         if (!(gd.getCell(moveRow, moveColumn).getPlayer() == null)) {
             if (gd.getCell(moveRow, moveColumn).getPlayer().equals(gd.getCurrentPlayer().getName()))
                 throw new OccupiedCellException("Cella occupata da un tuo stesso worker");
+            pushingPosition = getNextPosition(moveRow, moveColumn, nextDir);
             if (!(0 <= pushingPosition.getRow() && pushingPosition.getRow() <= 4) ||
                     !(0 <= pushingPosition.getColumn() && pushingPosition.getColumn() <= 4))
                 throw new DivinityPowerException("Cella di push fuori tabellone");
@@ -187,9 +192,21 @@ public class Minotaur extends Divinity {
         String tempPlayer = gd.getCell(moveRow, moveColumn).getPlayer();
         gd.getCell(WorkerRow, WorkerColumn).setPlayer(null);
         gd.getCell(moveRow, moveColumn).setPlayer(gd.getCurrentPlayer().getName());
-        gd.getCell(pushingPosition.getRow(), pushingPosition.getColumn()).setPlayer(tempPlayer);
 
+        ArrayList<Cell> changedCell = new ArrayList<>();
+        changedCell.add((Cell) gd.getCell(moveRow, moveColumn).clone());
+        changedCell.add((Cell) gd.getCell(WorkerRow, WorkerColumn).clone());
+
+
+        if (pushingPosition != null) {
+            gd.getCell(pushingPosition.getRow(), pushingPosition.getColumn()).setPlayer(tempPlayer);
+            changedCell.add((Cell) gd.getCell(pushingPosition.getRow(), pushingPosition.getColumn()));
+        }
+
+        gd.notifyObservers(x -> x.changedBoard(changedCell));
         //now, the game board has been modified
+
+        return GameController::requestBuildDome;
     }
 
 

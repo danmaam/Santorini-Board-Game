@@ -1,11 +1,13 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
+import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.Cell;
-import it.polimi.ingsw.PSP48.server.model.GameData;
-import it.polimi.ingsw.PSP48.server.model.exceptions.*;
+import it.polimi.ingsw.PSP48.server.model.Model;
+import it.polimi.ingsw.PSP48.server.model.Position;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Artemis extends Divinity {
@@ -20,9 +22,10 @@ public class Artemis extends Divinity {
      * reset the last move coordinate
      */
     @Override
-    public void turnBegin(GameData gd) {
+    public Consumer<GameController> turnBegin(Model gd) {
         oldColumnMove = -1;
         oldRowMove = -1;
+        return GameController::CheckIfCanEndTurnBaseDivinity;
     }
 
     /**
@@ -33,7 +36,7 @@ public class Artemis extends Divinity {
      * @return a list of cells valid for the move of the worker
      */
     @Override
-    public ArrayList<Cell> getValidCellForMove(int WorkerColumn, int WorkerRow, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
+    public ArrayList<Position> getValidCellForMove(int WorkerColumn, int WorkerRow, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
         return super.getValidCellForMove(WorkerColumn, WorkerRow, gameCells, divinitiesInGame).stream()
                 .filter(cell -> !(cell.getColumn() == oldColumnMove && cell.getRow() == oldRowMove))
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -47,24 +50,31 @@ public class Artemis extends Divinity {
      * @param moveColumn   the column of the board where the worker wants to move
      * @param moveRow      the row of the board where the worker wants to move
      * @param gd           the game status
-     * @throws NotAdiacentCellException if the destination cell is not adiacent to the worker
+     * @return the next method to be invoked by the controller
+     * @throws NotAdjacentCellException if the destination cell is not adjacent to the worker
      * @throws IncorrectLevelException  if the destination cell is too high to be reached
      * @throws OccupiedCellException    if the destination cell has another worker on it
      * @throws DomedCellException       if the destination cell has a dome on it
      * @author Daniele Mammone
      */
     @Override
-    public void move(int WorkerColumn, int WorkerRow, int moveColumn, int moveRow, GameData gd) throws NotAdiacentCellException, IncorrectLevelException, OccupiedCellException, DomedCellException, DivinityPowerException, NotEmptyCellException {
+    public Consumer<GameController> move(int WorkerColumn, int WorkerRow, int moveColumn, int moveRow, Model gd) throws NotAdjacentCellException, IncorrectLevelException, OccupiedCellException, DomedCellException, DivinityPowerException, NoTurnEndException {
+        Consumer<GameController> nextAction;
+        if (oldRowMove == -1 && oldColumnMove == -1) nextAction = GameController::requestOptionalMove;
+        else {
+            nextAction = GameController::requestBuildDome;
+            //the player doen't want to do the optional move, or the controller requests the next action since the optional move isn't possible
+            if (moveColumn == -1 && moveRow == -1) return nextAction;
+        }
         if (oldRowMove != -1 && oldColumnMove != -1 && oldRowMove == moveRow && oldColumnMove == moveColumn)
             throw new DivinityPowerException("Fail to move on the previous cell");
-        int workerLevel = gd.getCell(WorkerRow, WorkerColumn).getLevel();
-        int moveLevel = gd.getCell(moveRow, moveColumn).getLevel();
         super.move(WorkerColumn, WorkerRow, moveColumn, moveRow, gd);
         if (oldRowMove == -1 && oldColumnMove == -1) {
             oldRowMove = WorkerRow;
             oldColumnMove = WorkerColumn;
         }
 
+        return nextAction;
     }
 
     @Override

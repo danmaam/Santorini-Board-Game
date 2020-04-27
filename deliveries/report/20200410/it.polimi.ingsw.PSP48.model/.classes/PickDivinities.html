@@ -93,7 +93,7 @@
         <i>18</i>&nbsp; */
         <i>19</i>&nbsp; public Status handleRequest(Divinity pickedDivinity, GameData gamedata, ColourPick colourPick)
         <i>20</i>&nbsp; {
-        <i>21</i>&nbsp; Status nextState;
+        <i>21</i>&nbsp; Status nextControllerState;
         <i>22</i>&nbsp;
         <b class="nc"><i>23</i>&nbsp; gamedata.getChosenDivinities().add(gamedata.getChosenDivinities().size(),
             pickedDivinity); //vado a modificare direttamente l-arrayList presente in gameData aggiungendo un nuovo
@@ -105,12 +105,12 @@
         <b class="nc"><i>27</i>&nbsp; if(gamedata.getChosenDivinities().size()&lt;gamedata.getNumberOfPlayers())
             //controlliamo che non ci siano altre divinit&#39; da scegliere, in tal caso rimaniamo in questo stato</b>
         <i>28</i>&nbsp; {
-        <b class="nc"><i>29</i>&nbsp; nextState=this;</b>
-        <b class="nc"><i>30</i>&nbsp; return(nextState);</b>
+        <b class="nc"><i>29</i>&nbsp; nextControllerState=this;</b>
+        <b class="nc"><i>30</i>&nbsp; return(nextControllerState);</b>
         <i>31</i>&nbsp; }
-        <b class="nc"><i>32</i>&nbsp; else nextState=colourPick;</b>
+        <b class="nc"><i>32</i>&nbsp; else nextControllerState=colourPick;</b>
         <i>33</i>&nbsp;
-        <b class="nc"><i>34</i>&nbsp; return(nextState);</b>
+        <b class="nc"><i>34</i>&nbsp; return(nextControllerState);</b>
         <i>35</i>&nbsp; }
         <i>36</i>&nbsp;
         <i>37</i>&nbsp; /**

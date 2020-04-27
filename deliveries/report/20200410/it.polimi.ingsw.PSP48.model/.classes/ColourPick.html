@@ -101,7 +101,7 @@
         <i>29</i>&nbsp; public Status handleRequest(Colour pickedColour, String name, GameData gameData, DivinityChoice
         divinityChoice)
         <i>30</i>&nbsp; {
-        <b class="nc"><i>31</i>&nbsp; Status followingState=null;</b>
+        <b class="nc"><i>31</i>&nbsp; Status followingControllerState=null;</b>
         <i>32</i>&nbsp;
         <b class="nc"><i>33</i>&nbsp; gameData.getCurrentPlayer().setColour(pickedColour); //settiamo il colore scelto
             all&#39;interno del player che lo ha selezionato</b>
@@ -113,14 +113,15 @@
         <b class="nc"><i>38</i>&nbsp; if(p.getColour()==null) //se c&#39;è un giocatore senza colore devo proseguire con
             la scelta e rimanere in questo stato</b>
         <i>39</i>&nbsp; {
-        <b class="nc"><i>40</i>&nbsp; followingState=this;</b>
-        <b class="nc"><i>41</i>&nbsp; return (followingState);</b>
+        <b class="nc"><i>40</i>&nbsp; followingControllerState=this;</b>
+        <b class="nc"><i>41</i>&nbsp; return (followingControllerState);</b>
         <i>42</i>&nbsp; }
-        <b class="nc"><i>43</i>&nbsp; else followingState=divinityChoice; //se trovo un colore nel giocatore setto
+        <b class="nc"><i>43</i>&nbsp; else followingControllerState=divinityChoice; //se trovo un colore nel giocatore
+            setto
             temporaneamente lo stato al prossimo valore, ma proseguo il controllo</b>
         <b class="nc"><i>44</i>&nbsp; }</b>
         <i>45</i>&nbsp;
-        <b class="nc"><i>46</i>&nbsp; return(followingState);</b>
+        <b class="nc"><i>46</i>&nbsp; return(followingControllerState);</b>
         <i>47</i>&nbsp; }
         <i>48</i>&nbsp;
         <i>49</i>&nbsp; /**

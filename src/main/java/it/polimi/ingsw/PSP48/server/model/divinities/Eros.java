@@ -1,11 +1,8 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
 import it.polimi.ingsw.PSP48.server.model.Cell;
-import it.polimi.ingsw.PSP48.server.model.GameData;
+import it.polimi.ingsw.PSP48.server.model.Model;
 import it.polimi.ingsw.PSP48.server.model.Position;
-import it.polimi.ingsw.PSP48.server.model.exceptions.*;
-import it.polimi.ingsw.PSP48.server.model.exceptions.DivinityPowerException;
-import it.polimi.ingsw.PSP48.server.model.exceptions.NotEmptyCellException;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -23,13 +20,13 @@ public class Eros extends Divinity {
      * @return an array list of cells valid fro the positioning
      */
     @Override
-    public ArrayList<Cell> validCellsForInitialPositioning(Cell[][] gameCells) {
-        ArrayList<Cell> validCells = super.validCellsForInitialPositioning(gameCells);
+    public ArrayList<Position> validCellsForInitialPositioning(Cell[][] gameCells) {
+        ArrayList<Position> validCells = super.validCellsForInitialPositioning(gameCells);
         validCells = validCells.stream()
                 .filter(cell -> cell.getColumn() == 0 || cell.getColumn() == 4 || cell.getRow() == 0 || cell.getRow() == 4)
                 .collect(Collectors.toCollection(ArrayList::new));
-        ArrayList<Cell> tbr = new ArrayList<>();
-        for (Cell c : validCells) {
+        ArrayList<Position> tbr = new ArrayList<>();
+        for (Position c : validCells) {
             if (previousRow != -1 || previousColumn != -1) {
                 if (previousRow == -1) {
                     if (c.getColumn() != 4 - previousColumn) tbr.add(c);
@@ -43,34 +40,9 @@ public class Eros extends Divinity {
             }
         }
 
-        for (Cell c : tbr) validCells.remove(c);
+        for (Position c : tbr) validCells.remove(c);
         return validCells;
 
-    }
-
-
-    /**
-     * @param row        the row where the player wants to put his worker
-     * @param column     the column where the player wants to put his worker
-     * @param gameCells  the actual state of the board
-     * @param playerName the name of the player that is positioning his workers
-     * @return true if the positioning is valid
-     * @throws NotEmptyCellException  is on the cell there is already another worker
-     * @throws DivinityPowerException if the player is trying to put his workers not on the board's border
-     * @author Daniele Mammone
-     */
-    @Override
-    public void gameSetUp(int row, int column, Cell[][] gameCells, String playerName) throws NotEmptyCellException, DivinityPowerException {
-        if (gameCells[row][column].getPlayer() != null) throw new NotEmptyCellException("Cella già occupata");
-        if (!(row == 4 || row == 0 || column == 4 || column == 0))
-            throw new DivinityPowerException("Non su lati opposti");
-        if (!(previousRow == -1 && previousColumn == -1) && !(previousRow != -1 && row == 4 - previousRow) && !(previousColumn != -1 && column == 4 - previousColumn))
-            throw new DivinityPowerException("Not opposite side");
-        else if (previousRow == -1 && previousColumn == -1) {
-            if (row == 4 || row == 0) previousRow = row;
-            if (column == 4 || column == 0) previousColumn = column;
-        }
-        gameCells[row][column].setPlayer(playerName);
     }
 
 
@@ -84,7 +56,7 @@ public class Eros extends Divinity {
      * @return true if the actual player considererd has won, false if the game must go on
      */
     @Override
-    public boolean winCondition(GameData gd) {
+    public boolean winCondition(Model gd) {
         Boolean divinityWinCondition = false;
         //first, we have to check if the player has two workers in game
         String playerName = gd.getCurrentPlayer().getName();

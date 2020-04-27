@@ -1,18 +1,19 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
 import it.polimi.ingsw.PSP48.model.*;
+import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import it.polimi.ingsw.PSP48.server.model.*;
-import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Divinity {
     private final String name = "Basic";
     private final Boolean threePlayerSupported = true;
-
+    private final String Description = "questa divinità fa cose e robe";
 
     //Methods
 
@@ -23,8 +24,11 @@ public class Divinity {
         return this.name;
     }
 
+    public String getDescription() {
+        return this.Description;
+    }
+
     /**
-     *
      * @return if the divinity supports the three player gaming
      */
     public Boolean getThreePlayerSupported() {
@@ -44,7 +48,7 @@ public class Divinity {
      * @return a list of cells valid for the move of the worker
      * @author Daniele Mammone
      */
-    public ArrayList<Cell> getValidCellForMove(int WorkerColumn, int WorkerRow, Cell[][] gameCells, ArrayList<Divinity> otherDivinitiesInGame) {
+    public ArrayList<Position> getValidCellForMove(int WorkerColumn, int WorkerRow, Cell[][] gameCells, ArrayList<Divinity> otherDivinitiesInGame) {
         Cell actualWorkerCell = gameCells[WorkerRow][WorkerColumn];
         ArrayList<Cell> validCells = new ArrayList<>();
 
@@ -83,7 +87,11 @@ public class Divinity {
 
         //now in valid cells there is the list with compatible moves cells
 
-        return validCells;
+        ArrayList<Position> validPositions = new ArrayList<>();
+        for (Cell c : validCells) {
+            validPositions.add(new Position(c.getRow(), c.getColumn()));
+        }
+        return validPositions;
     }
 
     /**
@@ -92,17 +100,17 @@ public class Divinity {
      * @param moveColumn   the column of the board where the worker wants to move
      * @param moveRow      the row of the board where the worker wants to move
      * @param gd           the actual game state
-     * @throws NotAdiacentCellException if the destination cell is not adiacent to the worker
+     * @throws NotAdjacentCellException if the destination cell is not adiacent to the worker
      * @throws IncorrectLevelException  if the destination cell is too high to be reached
      * @throws OccupiedCellException    if the destination cell has another worker on it
      * @throws DomedCellException       if the destination cell has a dome on it
      * @author Daniele Mammone
      */
-    public void move(int WorkerColumn, int WorkerRow, int moveColumn, int moveRow, GameData gd) throws
-            NotAdiacentCellException, IncorrectLevelException, OccupiedCellException, DomedCellException, DivinityPowerException, NotEmptyCellException {
+    public Consumer<GameController> move(int WorkerColumn, int WorkerRow, int moveColumn, int moveRow, Model gd) throws
+            NotAdjacentCellException, IncorrectLevelException, OccupiedCellException, DomedCellException, DivinityPowerException, NoTurnEndException {
         //first check: the two cells must be adiacent
         if (!(adiacentCellVerifier(WorkerRow, WorkerColumn, moveRow, moveColumn)))
-            throw new NotAdiacentCellException("Celle non adiacenti");
+            throw new NotAdjacentCellException("Celle non adiacenti");
         //second check: the two levels must be compatible
         int workerLevel = gd.getCell(WorkerRow, WorkerColumn).getLevel();
         int moveLevel = gd.getCell(moveRow, moveColumn).getLevel();
@@ -120,14 +128,20 @@ public class Divinity {
                 throw new DivinityPowerException("Fail due to other divinity");
         }
 
-        //at this point, the move is valid and we must change the state of the game board
 
         gd.getCurrentPlayer().setOldLevel(workerLevel);
         gd.getCurrentPlayer().setNewLevel(moveLevel);
         gd.getCell(moveRow, moveColumn).setPlayer(gd.getCell(WorkerRow, WorkerColumn).getPlayer());
         gd.getCell(WorkerRow, WorkerColumn).setPlayer(null);
+        gd.getCurrentPlayer().setLastWorkerUsed(moveRow, moveColumn);
 
+        ArrayList<Cell> changedCell = new ArrayList<>();
+        changedCell.add((Cell) gd.getCell(WorkerRow, WorkerColumn).clone());
+        changedCell.add((Cell) gd.getCell(moveRow, moveColumn).clone());
+        gd.notifyObservers(x -> x.changedBoard(changedCell));
         //now, the game board has been modified
+
+        return GameController::requestBuildDome;
     }
 
     //
@@ -144,20 +158,20 @@ public class Divinity {
      * @return a list of cell valid for the building of the worker
      * @author Daniele Mammone
      */
-    public ArrayList<Cell> getValidCellForBuilding(int WorkerColumn, int WorkerRow, ArrayList<Divinity> otherDivinitiesInGame, Cell[][] gameCell) {
+    public ArrayList<Position> getValidCellForBuilding(int WorkerColumn, int WorkerRow, ArrayList<Divinity> otherDivinitiesInGame, Cell[][] gameCell) {
         //with the for loop, i'm adding to the arrayList the cell adiacent to the worker
-        ArrayList<Cell> validCells = new ArrayList<>();
+        ArrayList<Cell> validBuild = new ArrayList<>();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (!(i == 0 && j == 0) && 0 <= WorkerRow + i && WorkerRow + i <= 4 && 0 <= WorkerColumn + j && WorkerColumn + j <= 4) {
-                    validCells.add(gameCell[WorkerRow + i][WorkerColumn + j]);
+                    validBuild.add(gameCell[WorkerRow + i][WorkerColumn + j]);
                 }
             }
         }
 
         //now we have to remove cells where the move is invalid
 
-        validCells = validCells.stream()
+        validBuild = validBuild.stream()
                 .filter(cell -> cell.getPlayer() == null)
                 .filter(cell -> !cell.isDomed())
                 .filter(cell -> cell.getLevel() != 3)
@@ -168,7 +182,7 @@ public class Divinity {
 
         ArrayList<Cell> notValid = new ArrayList<>();
 
-        for (Cell c : validCells) {
+        for (Cell c : validBuild) {
             for (Divinity d : otherDivinitiesInGame) {
                 if (d.othersBuilding(new BuildPosition(WorkerRow, WorkerColumn, c.getRow(), c.getColumn(), c.getLevel()))) {
                     notValid.add(c);
@@ -178,10 +192,12 @@ public class Divinity {
         }
 
         for (Cell c : notValid) {
-            validCells.remove(c);
+            validBuild.remove(c);
         }
 
-        return validCells;
+        ArrayList<Position> validPositions = new ArrayList<>();
+        validBuild.stream().forEach((Cell c) -> validPositions.add(new Position(c.getRow(), c.getColumn())));
+        return validPositions;
     }
 
 
@@ -191,18 +207,18 @@ public class Divinity {
      * @param buildRow     the row where the player wants to add a level
      * @param buildColumn  the column where the player wants to add a level
      * @param gd           the actual game board state
-     * @throws NotAdiacentCellException     if the cell where the player wants to build is not adiacent to the worker's one
+     * @throws NotAdjacentCellException     if the cell where the player wants to build is not adiacent to the worker's one
      * @throws OccupiedCellException        if the destination cell is occupied by another worker
      * @throws DomedCellException           is the cell is already domed
      * @throws MaximumLevelReachedException if the cell contains a level 3 building
      * @throws DivinityPowerException       if another divinity blocks the increment of the level
      * @author Daniele Mammone
      */
-    public void build(int workerRow, int workerColumn, int buildRow, int buildColumn, GameData gd) throws
-            NotAdiacentCellException, OccupiedCellException, DomedCellException, MaximumLevelReachedException, DivinityPowerException {
+    public Consumer<GameController> build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws
+            NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelReachedException, DivinityPowerException {
         //first check: the two cells must be adiacent
         if (!(adiacentCellVerifier(workerRow, workerColumn, buildRow, buildColumn)))
-            throw new NotAdiacentCellException("Celle non adiacenti");
+            throw new NotAdjacentCellException("Celle non adiacenti");
         //second check: the cell must be empty of workers
         if (!(gd.getCell(buildRow, buildColumn).getPlayer() == null)) throw new OccupiedCellException("Cella occupata");
         //third check: the cell must not be domed
@@ -223,6 +239,13 @@ public class Divinity {
         gd.getCell(buildRow, buildColumn).addLevel();
 
         //now, the game has been modified
+
+        //notify the observers
+        ArrayList<Cell> changedCell = new ArrayList<>();
+        changedCell.add((Cell) gd.getCell(buildRow, buildColumn).clone());
+        gd.notifyObservers(x -> x.changedBoard(changedCell));
+
+        return GameController::turnEnd;
     }
 
 
@@ -232,13 +255,13 @@ public class Divinity {
     // METHODS FOR DOME CONSTRUCTION
 
     /**
-     * @author Daniele Mammone
      * @param workerColumn the column where the worker is
      * @param workerRow    the row where the worker is
      * @param gameCells    the actual state of the board
      * @return true if it's possible to add the dome
+     * @author Daniele Mammone
      */
-    public ArrayList<Cell> getValidCellsToPutDome(int workerColumn, int workerRow, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
+    public ArrayList<Position> getValidCellsToPutDome(int workerColumn, int workerRow, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
         ArrayList<Cell> newCells = new ArrayList<>();
         //with the for loop, i'm adding to the arrayList the cell adiacent to the worker
         ArrayList<Cell> validCells = new ArrayList<>();
@@ -269,7 +292,9 @@ public class Divinity {
 
         for (Cell c : notValid) validCells.remove(c);
 
-        return validCells;
+        ArrayList<Position> validPositions = new ArrayList<>();
+        validCells.stream().forEach((Cell c) -> validPositions.add(new Position(c.getRow(), c.getColumn())));
+        return validPositions;
     }
 
     /**
@@ -278,18 +303,18 @@ public class Divinity {
      * @param domeRow      the row where the player wants to add the dome
      * @param domeColumn   the column where the player wants to add the dome
      * @param gd           the current game board state
-     * @throws NotAdiacentCellException        if the cell where the player wants to add the dome is not adiacent to the worker's one
+     * @throws NotAdjacentCellException        if the cell where the player wants to add the dome is not adiacent to the worker's one
      * @throws OccupiedCellException           if the destination cell is occupied by another worker
      * @throws DomedCellException              is the cell is already domed
      * @throws MaximumLevelNotReachedException if the cell doesn't contain a level 3 building
      * @throws DivinityPowerException          if another divinity blocks the adding of the dome
      * @author Daniele Mammone
      */
-    public void dome(int workerRow, int workerColumn, int domeRow, int domeColumn, GameData gd) throws
-            NotAdiacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
+    public Consumer<GameController> dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws
+            NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
         //first check: the two cells must be adiacent
         if (!(adiacentCellVerifier(workerRow, workerColumn, domeRow, domeColumn)))
-            throw new NotAdiacentCellException("Celle non adiacenti");
+            throw new NotAdjacentCellException("Celle non adiacenti");
         //second check: the cell must be empty of workers
         if (!(gd.getCell(domeRow, domeColumn).getPlayer() == null)) throw new OccupiedCellException("Cella occupata");
         //third check: the cell must not be already domed
@@ -309,6 +334,15 @@ public class Divinity {
         //at this point, the move is valid and we must change the state of the game board
 
         gd.getCell(domeRow, domeColumn).addDome();
+
+        //i must notify the clients that the cell have been modified
+
+        ArrayList<Cell> changedCell = new ArrayList<>();
+        changedCell.add((Cell) gd.getCell(domeRow, domeColumn).clone());
+        gd.notifyObservers(x -> x.changedBoard(changedCell));
+
+        return GameController::turnEnd;
+
         //now, the game has been modified
     }
 
@@ -348,46 +382,34 @@ public class Divinity {
         return true;
     }
 
-    //////
-
-    /**
-     * @param row       the row where the player wants to put his worker
-     * @param column    the column where the player wants to put his worker
-     * @param gameCells the actual state of the board
-     * @throws NotEmptyCellException is on the cell there is already another worker
-     * @author Daniele Mammone
-     */
-    public void gameSetUp(int row, int column, Cell[][] gameCells, String playerName) throws NotEmptyCellException, DivinityPowerException {
-        if (gameCells[row][column].getPlayer() != null) throw new NotEmptyCellException("Cella già occupata");
-        gameCells[row][column].setPlayer(playerName);
-    }
-
 
     /**
      * don't do anything since without a divinity there isn't a modifier
      */
-    public void turnEnd() {
-
+    public Consumer<GameController> turnEnd() {
+        return GameController::turnChange;
     }
 
     /**
      * don't do anything since without a divinity there isn't a modifier
      */
 
-    public void turnBegin(GameData gd) {
+    public Consumer<GameController> turnBegin(Model gd) {
 
+        return GameController::CheckIfCanEndTurnBaseDivinity;
     }
 
     /**
      * @param gd the state of the game
      * @return true if the actual player considererd has won, false if the game must go on
      */
-    public boolean winCondition(GameData gd) {
+    public boolean winCondition(Model gd) {
         return (gd.getCurrentPlayer().getOldLevel() != gd.getCurrentPlayer().getNewLevel() && gd.getCurrentPlayer().getNewLevel() == 3);
     }
 
 
     ///// AUXILIARY METHODS
+
     /**
      * @author Daniele Mammone
      * @param workerRow the row where the worker is
@@ -403,13 +425,29 @@ public class Divinity {
                 !(columnDifference == 0 && rowDifference == 0) && !(workerColumn == cellColumn && workerRow == cellRow));
     }
 
-    public ArrayList<Cell> validCellsForInitialPositioning(Cell[][] gameCells) {
+    public ArrayList<Position> validCellsForInitialPositioning(Cell[][] gameCells) {
         ArrayList<Cell> validCells = new ArrayList<>();
+        ArrayList<Position> validPositions = new ArrayList<>();
         for (int i = 0; i <= 4; i++) {
             validCells.addAll(Arrays.asList(gameCells[i]).subList(0, 5));
         }
 
-        return validCells.stream().filter(cell -> cell.getPlayer() == null).collect(Collectors.toCollection(ArrayList::new));
+        validCells.stream().filter(cell -> cell.getPlayer() == null).forEach((Cell c) -> validPositions.add(new Position(c.getRow(), c.getColumn())));
+        return validPositions;
     }
 
+    public Consumer<GameController> putWorkerOnBoard(Position p, Model gd) throws OccupiedCellException {
+        //check if the cell is occupied
+        if (gd.getCell(p.getRow(), p.getColumn()).getPlayer() != null)
+            throw new OccupiedCellException("trying to put worker on an occupied cell");
+        gd.getCell(p.getRow(), p.getColumn()).setPlayer(gd.getCurrentPlayer().getName());
+        gd.getCurrentPlayer().addWorker();
+        //i have to notify board status change
+        ArrayList<Cell> modifiedCells = new ArrayList<>();
+        modifiedCells.add((Cell) gd.getCell(p.getRow(), p.getColumn()).clone());
+        gd.notifyObservers(x -> x.changedBoard(modifiedCells));
+        //now i have to manage the number of workers that i have positioned
+        if (gd.getCurrentPlayer().getWorkersOnTable() == 2) return GameController::initialPositioningTurnChange;
+        else return GameController::requestInitialPositioning;
+    }
 }
