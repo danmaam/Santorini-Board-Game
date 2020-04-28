@@ -13,8 +13,6 @@ public interface ViewInterface {
 
     public void declareLose();
 
-    public void requestColourSelection(ArrayList<String> availableColours);
-
     public void requestDivinitySelection(ArrayList<DivinitiesWithDescription> availableDivinities);
 
     public void requestInitialPlayerSelection(ArrayList<String> players);

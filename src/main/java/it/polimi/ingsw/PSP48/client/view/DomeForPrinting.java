@@ -28,6 +28,11 @@ public class DomeForPrinting
         return(this.domeColour);
     }
 
+    public void setDomeColour(ColoursForPrinting newDomeColour)
+    {
+        this.domeColour=newDomeColour;
+    }
+
     @Override
     /**
      * method converting this object into a string for its printing

@@ -4,7 +4,7 @@ import it.polimi.ingsw.PSP48.observers.ViewObserver;
 import it.polimi.ingsw.PSP48.observers.ModelObserver;
 
 import java.util.ArrayList;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public abstract class AbstractView implements ViewInterface, ModelObserver {
     private ArrayList<ViewObserver> observers = new ArrayList<ViewObserver>();
@@ -17,7 +17,7 @@ public abstract class AbstractView implements ViewInterface, ModelObserver {
         observers.remove(obv);
     }
 
-    public void notifyObserver(BiConsumer<ViewObserver, Object> lambda, Object o) {
-        for (ViewObserver obv : observers) lambda.accept(obv, o);
+    public void notifyObserver(Consumer<ViewObserver> lambda) {
+        for (ViewObserver obv : observers) lambda.accept(obv);
     }
 }

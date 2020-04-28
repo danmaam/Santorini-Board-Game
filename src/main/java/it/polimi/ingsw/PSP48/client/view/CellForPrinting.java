@@ -51,6 +51,11 @@ public class CellForPrinting
         return(this.cellColour);
     }
 
+    public void setCellColour(ColoursForPrinting newCellColour)
+    {
+        this.cellColour = newCellColour;
+    }
+
     public Player getPlayerOnCell()
     {
         return(this.playerOnCell);

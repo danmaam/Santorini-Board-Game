@@ -25,6 +25,11 @@ public class BuildingsForPrinting {
         return buildingColour;
     }
 
+    public void setBuildingColour(ColoursForPrinting newBuildingColour)
+    {
+        this.buildingColour = newBuildingColour;
+    }
+
     public void setLevel(int level) {
         this.level = level;
     }
