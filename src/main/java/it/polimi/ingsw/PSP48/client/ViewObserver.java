@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP48.client;
 
+import it.polimi.ingsw.PSP48.server.MoveCoordinates;
 import java.util.ArrayList;
 
 /**
@@ -7,9 +8,9 @@ import java.util.ArrayList;
  */
 public interface ViewObserver
 {
-    //void move(MoveCoordinates p);
-    //void build (MoveCoordinates p);
-    //void dome (MoveCoordinates p);
+    void move(MoveCoordinates p);
+    void build (MoveCoordinates p);
+    void dome (MoveCoordinates p);
     void selectDivinity(String divinity);
     void addPlayer(String playerDetails);
     void selectColour(String colour);

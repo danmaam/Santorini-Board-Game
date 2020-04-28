@@ -14,7 +14,13 @@ public class CellForPrinting
     private BuildingsForPrinting buildings=null;
     private DomeForPrinting dome=null;
 
-    public CellForPrinting(int row, int column, ColoursForPrinting initialCellColour) //class constructor
+    /**
+     * class constructor initialising row, column and colour of a cell
+     * @param row is the row of each cell of the board
+     * @param column is the column of each cell of the board
+     * @param initialCellColour is the colour of each cell, it only changes when we highlight particular cells to the players
+     */
+    public CellForPrinting(int row, int column, ColoursForPrinting initialCellColour)
     {
         this.cellRow=row;
         this.cellColumn=column;
@@ -31,6 +37,10 @@ public class CellForPrinting
         return(this.cellColumn);
     }
 
+    /**
+     * getter of the empty space symbol contained in the cell
+     * @return said symbol (represented using a string)
+     */
     public String getEmptySpaceInCell()
     {
         return(this.emptySpaceInCell);
@@ -72,6 +82,9 @@ public class CellForPrinting
     }
 
     @Override
+    /**
+     * this method takes a cell object (we have different types of it, based on the other things that can be on a cell) and transforms it into a string in order to print it
+     */
     public String toString()
     {
         String emptyCell, completeCell, builtCell, domedCell;
@@ -124,6 +137,9 @@ public class CellForPrinting
         }
     }
 
+    /**
+     * method used to print a single cell on the screen
+     */
     public void printCellOnScreen() //method used to print the single cells on the screen
     {
         System.out.print(this.toString());

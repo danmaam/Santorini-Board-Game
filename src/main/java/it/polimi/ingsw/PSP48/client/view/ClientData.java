@@ -1,24 +1,31 @@
 package it.polimi.ingsw.PSP48.client.view;
 
+import it.polimi.ingsw.PSP48.WorkerValidCells;
 import it.polimi.ingsw.PSP48.client.View;
 import it.polimi.ingsw.PSP48.client.ViewObserver;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Position;
 
 import java.awt.*;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
 /**
  * concrete class that represents all the interactions with the client
+ * @author Rebecca Marelli, Annalaura Massa
  */
 public class ClientData extends View
 {
     private static final CellForPrinting[][] gameBoard = new CellForPrinting[5][5]; //class attributes
     private ArrayList<Player> playerList= new ArrayList<Player>();
 
-    public ClientData(ColoursForPrinting colour) //class constructor initialising the game board (to do it we just need the colour we want to assign to the cells)
+    /**
+     * class constructor initialising the cells of the board
+     * @param colour is the colour we assign to the cells
+     */
+    public ClientData(ColoursForPrinting colour)
     {
         for(int i=0; i<5; i++)
         {
@@ -34,12 +41,21 @@ public class ClientData extends View
         return(this.gameBoard);
     }
 
-    public CellForPrinting getCellOnBoard (int row, int column) //method used to immediately retrieve a cell from the board
+    /**
+     * method used to retrieve a specific cell on the board
+     * @param row is the row of the cell we need
+     * @param column is the column of the cell we need
+     * @return a reference to the cell once we find it
+     */
+    public CellForPrinting getCellOnBoard (int row, int column)
     {
         return(gameBoard[row][column]);
     }
 
-    public void printBoard() //method used to print the board
+    /**
+     * method that scans the board and prints each cell on the screen
+     */
+    public void printBoard()
     {
         for(int i=0; i<5; i++)
         {
@@ -57,11 +73,15 @@ public class ClientData extends View
     }
 
     @Override
+    /**
+     * method that is called whenever there is a change on the board and we need to update the cells
+     * @param newCells represents the list of the cells that have been changed during the turn
+     */
     public void changedBoard(ArrayList<Cell> newCells) //method applying changes to the game board after every action by the player
     {
         CellForPrinting tempCell;
         ArrayList<Player> list;
-        Player tempPlayer;
+        Player tempPlayer=null;
 
         for (Cell c : newCells)
         {
@@ -114,13 +134,17 @@ public class ClientData extends View
     }
 
     @Override
+    /**
+     * method used to request a move action to the player, showing the valid options and then taking the choice of the player
+     * @param validCellsForMove contains the positions of both workers and for each of them the valid cells for the move action
+     */
     public void requestMove(ArrayList<WorkerValidCells> validCellsForMove)
     {
         ArrayList<Position> tempList;
-        ColoursForPrinting cellColour;
-        WorkerValidCells notChosenPosition, temp;
-        int workerRow, workerColumn;
-        int chosenRow, chosenColumn;
+        ColoursForPrinting cellColour=null;
+        WorkerValidCells notChosenPosition=null, temp=null;
+        int workerRow=-1, workerColumn=-1;
+        int chosenRow=-1, chosenColumn=-1;
 
         for (WorkerValidCells c : validCellsForMove)
         {
@@ -152,7 +176,7 @@ public class ClientData extends View
         do {
             for(int i=0; (i<validCellsForMove.size() && valid==false); i++)
             {
-                if(workerRow==validCellsForMove.get(i).getwr() && workerColumn==validCellsForMove.get(i).getwC())
+                if(workerRow==validCellsForMove.get(i).getwR() && workerColumn==validCellsForMove.get(i).getwC())
                 {
                     valid=true;
                 }
@@ -160,6 +184,7 @@ public class ClientData extends View
             if (valid==false)
             {
                 System.out.println("You need to choose a valid worker!!");
+                this.printBoard();
                 System.out.println("Choose the row of the worker you want to move: ");
                 while(s.hasNext())
                 {
@@ -224,6 +249,7 @@ public class ClientData extends View
             if (validMove==false)
             {
                 System.out.println("You need to choose a valid cell!!");
+                this.printBoard();
                 System.out.println("Choose the row where you want to move, among the red ones: ");
                 while(s.hasNext())
                 {
@@ -266,6 +292,9 @@ public class ClientData extends View
     }
 
     @Override
+    /**
+     * method used to communicate to a player that the game has been lost
+     */
     public void declareLose()
     {
         System.out.println(" You lost the game! :( ");
@@ -287,8 +316,71 @@ public class ClientData extends View
     }
 
     @Override
-    public void requestInitialPositioning(ArrayList<WorkerValidCells> validForInitialPositioning) {
+    /**
+     * method that handles the initial positioning of each worker on the board, showing the valid cells to the players and taking their choices
+     * @param validCells is the list of valid cells for the worker we are currently positioning
+     */
+    public void requestInitialPositioning(ArrayList<Position> validCells)
+    {
+        ColoursForPrinting highlightColour=null, oldColour=null;
+        int chosenRow=-1, chosenColumn=-1;
 
+        //first we need to highlight each of the valid cells to the player
+        for(Position p : validCells)
+        {
+            highlightColour=this.getCellOnBoard(p.getRow(), p.getColumn()).getCellColour();
+            highlightColour=ColoursForPrinting.red;
+        }
+        this.printBoard();
+
+        //after that, we need to ask the player their choice
+        Scanner s= new Scanner(System.in);
+        System.out.println("Choose the row where you want to position: ");
+        while(s.hasNext())
+        {
+            chosenRow=((s.nextInt())-1);
+        }
+        System.out.println("Choose the column where you want to position: ");
+        while(s.hasNext())
+        {
+            chosenColumn=((s.nextInt())-1);
+        }
+
+        //now we need to check if the choice is valid
+        boolean validChoice=false;
+        do
+        {
+            for(int i=0; (i<validCells.size() && validChoice==false); i++)
+            {
+                if (validCells.get(i).getRow()==chosenRow && validCells.get(i).getColumn()==chosenColumn) //it means that we have found the chosen position in the list of the valid ones
+                {
+                    validChoice=true;
+                }
+            }
+            if (validChoice==false)
+            {
+                System.out.println("You need to choose a valid cell!!");
+                this.printBoard();
+                System.out.println("Choose the row where you want to position: ");
+                while(s.hasNext())
+                {
+                    chosenRow=((s.nextInt())-1);
+                }
+                System.out.println("Choose the column where you want to position: ");
+                while(s.hasNext())
+                {
+                    chosenColumn=((s.nextInt())-1);
+                }
+            }
+        } while (validChoice==false);
+
+        //after checking that the player has chosen a valid cell, we need to bring the board back to its original colours and notify the observers
+        for(Position p : validCells)
+        {
+            oldColour=this.getCellOnBoard(p.getRow(), p.getColumn()).getCellColour();
+            oldColour=ColoursForPrinting.white;
+        }
+        this.printBoard();
     }
 
     @Override

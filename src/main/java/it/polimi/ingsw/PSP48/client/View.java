@@ -1,6 +1,9 @@
 package it.polimi.ingsw.PSP48.client;
 
+import it.polimi.ingsw.PSP48.WorkerValidCells;
 import it.polimi.ingsw.PSP48.server.model.Cell;
+import it.polimi.ingsw.PSP48.server.model.Position;
+
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
@@ -21,7 +24,7 @@ public abstract class View extends ViewInterface implements ModelObserver
     public abstract void requestColourSelection(ArrayList<String> availableColours);
     public abstract void requestDivinityList(ArrayList<String> availableDivinities);
     public abstract void requestDivinitySelection(ArrayList<String> availableDivinities);
-    public abstract void requestInitialPositioning(ArrayList<WorkerValidCells> validForInitialPositioning);
+    public abstract void requestInitialPositioning(ArrayList<Position> validCells);
 
     public abstract void registerObserver(ViewObserver obv);
     public abstract void unregisterObserver(ViewObserver obv);

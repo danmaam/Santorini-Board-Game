@@ -18,7 +18,11 @@ public enum ColoursForPrinting
 
     private String colour;
 
-    ColoursForPrinting(String initialColour) //class constructor
+    /**
+     * class constructor
+     * @param initialColour is the field we need to initialise (the codes of the colours)
+     */
+    ColoursForPrinting(String initialColour)
     {
         this.colour=initialColour;
     }
@@ -34,7 +38,10 @@ public enum ColoursForPrinting
     }
 
     @Override
-    public String toString() //we need to have a string in order to print coloured symbols and letters
+    /**
+     * we need to convert objects into strings in order to print them
+     */
+    public String toString()
     {
         return(this.colour);
     }
