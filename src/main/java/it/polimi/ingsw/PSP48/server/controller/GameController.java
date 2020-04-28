@@ -7,7 +7,7 @@ import it.polimi.ingsw.PSP48.server.MoveCoordinates;
 import it.polimi.ingsw.PSP48.server.model.*;
 import it.polimi.ingsw.PSP48.server.model.divinities.Divinity;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
-import it.polimi.ingsw.PSP48.server.observers.ViewObserver;
+import it.polimi.ingsw.PSP48.observers.ViewObserver;
 
 import java.util.ArrayList;
 import java.util.Calendar;

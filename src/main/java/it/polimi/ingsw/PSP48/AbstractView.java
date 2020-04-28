@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP48;
 
-import it.polimi.ingsw.PSP48.server.observers.ViewObserver;
-import it.polimi.ingsw.PSP48.server.observers.ModelObserver;
+import it.polimi.ingsw.PSP48.observers.ViewObserver;
+import it.polimi.ingsw.PSP48.observers.ModelObserver;
 
 import java.util.ArrayList;
 import java.util.function.BiConsumer;

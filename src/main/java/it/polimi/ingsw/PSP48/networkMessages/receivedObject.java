@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP48.networkMessages;
 
-import it.polimi.ingsw.PSP48.server.observers.ModelObserver;
+import it.polimi.ingsw.PSP48.observers.ModelObserver;
 
 import java.io.Serializable;
 

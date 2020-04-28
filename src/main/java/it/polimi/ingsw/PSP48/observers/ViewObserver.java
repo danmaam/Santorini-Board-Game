@@ -1,8 +1,7 @@
-package it.polimi.ingsw.PSP48.server.observers;
+package it.polimi.ingsw.PSP48.observers;
 
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
 import it.polimi.ingsw.PSP48.server.MoveCoordinates;
-import it.polimi.ingsw.PSP48.server.model.MovePosition;
 import it.polimi.ingsw.PSP48.server.model.Position;
 
 import java.util.ArrayList;

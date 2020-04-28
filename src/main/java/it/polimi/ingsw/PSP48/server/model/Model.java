@@ -2,7 +2,7 @@ package it.polimi.ingsw.PSP48.server.model;
 
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
 import it.polimi.ingsw.PSP48.server.model.divinities.Divinity;
-import it.polimi.ingsw.PSP48.server.observers.ModelObserver;
+import it.polimi.ingsw.PSP48.observers.ModelObserver;
 
 import java.util.ArrayList;
 import java.util.Calendar;

@@ -1,8 +1,7 @@
-package it.polimi.ingsw.PSP48.server.observers;
+package it.polimi.ingsw.PSP48.observers;
 
 
 import it.polimi.ingsw.PSP48.server.model.Cell;
-import it.polimi.ingsw.PSP48.server.model.Position;
 
 import java.util.ArrayList;
 
