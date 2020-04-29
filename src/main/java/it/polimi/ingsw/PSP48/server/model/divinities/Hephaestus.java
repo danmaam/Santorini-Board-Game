@@ -12,9 +12,19 @@ import java.util.stream.Collectors;
 
 public class Hephaestus extends Divinity {
     private final String name = "Basic";
-    private final Boolean threePlayerSupported = true;
+
     private int prevBuildRow = -1;
     private int prevBuildColumn = -1;
+
+    public static Boolean supportedDivinity(int pNum) {
+        switch (pNum) {
+            case 2:
+                return true;
+            case 3:
+                return true;
+        }
+        return false;
+    }
 
     /**
      * @param WorkerColumn     the column where the worker is

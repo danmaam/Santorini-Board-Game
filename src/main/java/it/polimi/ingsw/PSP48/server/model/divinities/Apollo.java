@@ -9,7 +9,16 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Apollo extends Divinity {
-    private final Boolean threePlayerSupported = true;
+
+    public static Boolean supportedDivinity(int pNum) {
+        switch (pNum) {
+            case 2:
+                return true;
+            case 3:
+                return true;
+        }
+        return false;
+    }
 
     @Override
     public String getName() {
@@ -97,7 +106,7 @@ public class Apollo extends Divinity {
      * @param moveColumn   the column of the board where the worker wants to move
      * @param moveRow      the row of the board where the worker wants to move
      * @param gd           the Game status
-     * @return
+     * @return the next action of the controller
      * @throws NotAdjacentCellException if the destination cell is not adiacent to the worker
      * @throws IncorrectLevelException  if the destination cell is too high to be reached
      * @throws OccupiedCellException    if the destination cell has another worker on it

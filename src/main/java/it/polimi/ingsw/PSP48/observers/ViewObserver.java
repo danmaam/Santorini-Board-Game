@@ -5,6 +5,7 @@ import it.polimi.ingsw.PSP48.server.MoveCoordinates;
 import it.polimi.ingsw.PSP48.server.model.Position;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public interface ViewObserver {
     public void move(MoveCoordinates p);
@@ -17,7 +18,7 @@ public interface ViewObserver {
 
     public void registerPlayerDivinity(String divinity);
 
-    public void addPlayer(String playerDetails);
+    public void addPlayer(String playerDetails, Calendar birthday);
 
     public void selectAvailableDivinities(ArrayList<DivinitiesWithDescription> divinities);
 

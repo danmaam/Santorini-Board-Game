@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
-import it.polimi.ingsw.PSP48.model.*;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import it.polimi.ingsw.PSP48.server.model.*;
@@ -12,8 +11,17 @@ import java.util.stream.Collectors;
 
 public class Divinity {
     private final String name = "Basic";
-    private final Boolean threePlayerSupported = true;
     private final String Description = "questa divinità fa cose e robe";
+
+    public static Boolean supportedDivinity(int pNum) {
+        switch (pNum) {
+            case 2:
+                return true;
+            case 3:
+                return true;
+        }
+        return false;
+    }
 
     //Methods
 
@@ -28,12 +36,6 @@ public class Divinity {
         return this.Description;
     }
 
-    /**
-     * @return if the divinity supports the three player gaming
-     */
-    public Boolean getThreePlayerSupported() {
-        return threePlayerSupported;
-    }
 
     //
     //
@@ -196,7 +198,7 @@ public class Divinity {
         }
 
         ArrayList<Position> validPositions = new ArrayList<>();
-        validBuild.stream().forEach((Cell c) -> validPositions.add(new Position(c.getRow(), c.getColumn())));
+        validBuild.forEach((Cell c) -> validPositions.add(new Position(c.getRow(), c.getColumn())));
         return validPositions;
     }
 
@@ -293,7 +295,7 @@ public class Divinity {
         for (Cell c : notValid) validCells.remove(c);
 
         ArrayList<Position> validPositions = new ArrayList<>();
-        validCells.stream().forEach((Cell c) -> validPositions.add(new Position(c.getRow(), c.getColumn())));
+        validCells.forEach((Cell c) -> validPositions.add(new Position(c.getRow(), c.getColumn())));
         return validPositions;
     }
 

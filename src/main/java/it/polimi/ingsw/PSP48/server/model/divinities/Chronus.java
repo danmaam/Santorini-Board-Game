@@ -4,7 +4,15 @@ import it.polimi.ingsw.PSP48.server.model.Model;
 
 
 public class Chronus extends Divinity {
-    private final Boolean threePlayerSupported = false;
+    public static Boolean supportedDivinity(int pNum) {
+        switch (pNum) {
+            case 2:
+                return true;
+            case 3:
+                return false;
+        }
+        return false;
+    }
 
     /**
      * @param gd the state of the game

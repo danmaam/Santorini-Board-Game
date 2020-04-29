@@ -9,10 +9,7 @@ import it.polimi.ingsw.PSP48.server.model.divinities.Divinity;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import it.polimi.ingsw.PSP48.observers.ViewObserver;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -20,11 +17,20 @@ import java.util.function.Consumer;
  * the entire game controller in his magnificence
  * it's an observer f the view, invokes methods on view and model
  */
+
 public class GameController implements ViewObserver {
     private Model model;
     private Consumer<GameController> nextAction;
 
     private HashMap<String, AbstractView> playersViews = new HashMap<>();
+
+    public void associateViewWithPlayer(String name, AbstractView view) {
+        playersViews.put(name, view);
+    }
+
+    public GameController(Model m) {
+        model = m;
+    }
 
     public AbstractView getPlayerView(String playerName) {
         return playersViews.get(playerName);
@@ -33,16 +39,12 @@ public class GameController implements ViewObserver {
     /**
      * Adds a player in the game when a client connects to the server; if the game's player number is reached, the controller starts the game.
      *
-     * @param playerDetails a string containing player's bio, formatted as nickname.dd.mm.aaaa
      * @author Daniele Mammone
      */
     @Override
-    public void addPlayer(String playerDetails) {
-        String[] datas = playerDetails.split(".");
+    public void addPlayer(String name, Calendar birthday) {
         Calendar c = Calendar.getInstance();
-        c.set(Integer.parseInt(datas[3]), Integer.parseInt(datas[2]), Integer.parseInt(datas[1]));
-        String col = model.getNextColour();
-        model.addPlayer(datas[0], col, c);
+        model.addPlayer(name, model.getNextColour(), birthday);
 
         if (model.getPlayersInGame().size() == model.getGamePlayerNumber()) {
             if (model.isGameWithDivinities()) this.startGameWithDivinities();
@@ -178,7 +180,7 @@ public class GameController implements ViewObserver {
 
 
     /**
-     * @param divinities
+     * @param divinities the divinities chosen by the challenger
      * @author Daniele Mammone
      * method invoked when the chosen one has chosen his divinities
      */
@@ -252,7 +254,7 @@ public class GameController implements ViewObserver {
     public void postMove() {
         boolean endGame = model.getCurrentPlayer().getDivinity().winCondition(model);
         if (endGame) {
-            ArrayList<String> players = new ArrayList<String>();
+            ArrayList<String> players = new ArrayList<>();
             playersViews.forEach((k, v) -> players.add(k));
             for (String p : players) {
                 if (p.equals(model.getCurrentPlayer().getName())) getPlayerView(p).declareWin();
@@ -494,7 +496,7 @@ public class GameController implements ViewObserver {
         ArrayList<Position> validPositionsForMove = model.getCurrentPlayer().getDivinity().getValidCellForMove(model.getCurrentPlayer().getLastWorkerMoved().getColumn(), model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getClonedGameBoard(), otherDivinities);
         if (validPositionsForMove.isEmpty()) {
             try {
-                nextAction = model.getCurrentPlayer().getDivinity().move(-1, -1, -1, -1, null);
+                nextAction = model.getCurrentPlayer().getDivinity().move(-1, -1, -1, -1, model);
                 nextAction();
             } catch (Exception e) {
                 System.out.println("fatal error");

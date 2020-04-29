@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP48.server.virtualview;
 import it.polimi.ingsw.PSP48.AbstractView;
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
+import it.polimi.ingsw.PSP48.networkMessages.receivedObject;
 import it.polimi.ingsw.PSP48.server.MoveCoordinates;
 import it.polimi.ingsw.PSP48.observers.ViewObserver;
 import it.polimi.ingsw.PSP48.server.model.Cell;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
  */
 public class VirtualView extends AbstractView {
 
+    private VirtualViewNetworkManager viewNet = new VirtualViewNetworkManager();
 
     @Override
     public void requestInitialPlayerSelection(ArrayList<String> players) {
@@ -64,10 +66,7 @@ public class VirtualView extends AbstractView {
         //placeholder per scrivere il codice di connessione al controller
         MoveCoordinates mc = new MoveCoordinates(2, 2, 4, 4);
         try {
-            notifyObserver((ViewObserver c, Object o) -> {
-                MoveCoordinates p = (MoveCoordinates) o;
-                c.move(p);
-            }, mc);
+            notifyObserver((ViewObserver c) -> c.move(mc));
         } catch (Exception e) {
             System.out.println("Errore");
         }
@@ -88,10 +87,6 @@ public class VirtualView extends AbstractView {
         //cose da far fare al network handler
     }
 
-    @Override
-    public void requestColourSelection(ArrayList<String> availableColours) {
-        //cose da far fare al network handler
-    }
 
     @Override
     public void requestDivinitySelection(ArrayList<DivinitiesWithDescription> availableDivinities) {
@@ -99,4 +94,8 @@ public class VirtualView extends AbstractView {
     }
 
 
+    @Override
+    public void update(receivedObject obj) {
+
+    }
 }

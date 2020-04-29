@@ -12,7 +12,16 @@ import java.util.stream.Collectors;
 
 public class Demeter extends Divinity {
     private final String name = "Basic";
-    private final Boolean threePlayerSupported = true;
+
+    public static Boolean supportedDivinity(int pNum) {
+        switch (pNum) {
+            case 2:
+                return true;
+            case 3:
+                return true;
+        }
+        return false;
+    }
 
     private int oldRowBuild = -1;
     private int oldColumnBuild = -1;

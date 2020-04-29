@@ -56,12 +56,13 @@ public class Player {
      * @param birthday The player's birthday.
      * @throws IllegalArgumentException if name or birthday are null.
      */
-    public Player(String name, Calendar birthday, Colour colour) {
-        if (name == null || birthday == null) {
+    public Player(String name, Calendar birthday, boolean divinities, Colour c) {
+        if (name == null || (birthday == null && !divinities)) {
             throw new IllegalArgumentException("Name and birthday must not be null.");
         } else {
             this.name = name;
             this.birthday = birthday;
+            this.colour = c;
         }
     }
 

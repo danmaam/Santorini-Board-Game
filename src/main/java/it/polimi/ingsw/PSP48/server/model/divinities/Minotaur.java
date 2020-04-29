@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
-import it.polimi.ingsw.PSP48.model.*;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import it.polimi.ingsw.PSP48.server.model.*;
@@ -11,7 +10,16 @@ import java.util.stream.Collectors;
 
 public class Minotaur extends Divinity {
     private final String name = "Minotaur";
-    private final Boolean threePlayerSupported = true;
+
+    public static Boolean supportedDivinity(int pNum) {
+        switch (pNum) {
+            case 2:
+                return true;
+            case 3:
+                return true;
+        }
+        return false;
+    }
 
 
     @Override

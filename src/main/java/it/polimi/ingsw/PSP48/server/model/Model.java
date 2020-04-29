@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP48.server.model;
 
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
-import it.polimi.ingsw.PSP48.server.model.divinities.Divinity;
+import it.polimi.ingsw.PSP48.server.model.divinities.*;
 import it.polimi.ingsw.PSP48.observers.ModelObserver;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class Model {
 
     private String playerWithCirce = null;
 
-    private ArrayList<Divinity> availableDivinities = new ArrayList<Divinity>();
+    private ArrayList<Divinity> availableDivinities;
     private int currentPlayer = -1; //se siamo in un momento per cui il current player non deve avere un valore possiamo settarlo a -1
     private final Cell[][] boardCell = new Cell[5][5]; //tramite il costruttore di Cell devo inizializzare le celle, qui sono tutte a null
     private final int gamePlayerNumber;
@@ -48,6 +48,25 @@ public class Model {
     }
 
     public Model(int number, boolean divinities) {
+        if (divinities) {
+            availableDivinities = new ArrayList<>();
+            if (Apollo.supportedDivinity(number)) availableDivinities.add(new Apollo());
+            if (Artemis.supportedDivinity(number)) availableDivinities.add(new Artemis());
+            if (Athena.supportedDivinity(number)) availableDivinities.add(new Athena());
+            if (Chronus.supportedDivinity(number)) availableDivinities.add(new Chronus());
+            if (Circe.supportedDivinity(number)) availableDivinities.add(new Circe());
+            if (Demeter.supportedDivinity(number)) availableDivinities.add(new Demeter());
+            if (Eros.supportedDivinity(number)) availableDivinities.add(new Eros());
+            if (Hephaestus.supportedDivinity(number)) availableDivinities.add(new Hephaestus());
+            if (Hestia.supportedDivinity(number)) availableDivinities.add(new Hestia());
+            if (Minotaur.supportedDivinity(number)) availableDivinities.add(new Minotaur());
+            if (Pan.supportedDivinity(number)) availableDivinities.add(new Pan());
+            if (Prometheus.supportedDivinity(number)) availableDivinities.add(new Prometheus());
+            if (Zeus.supportedDivinity(number)) availableDivinities.add(new Zeus());
+        }
+        availableColours.add(Colour.BLUE);
+        availableColours.add(Colour.GRAY);
+        availableColours.add(Colour.WHITE);
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 boardCell[i][j] = new Cell(i, j);
@@ -55,6 +74,7 @@ public class Model {
         }
         gamePlayerNumber = number;
         gameWithDivinities = divinities;
+
     }
 
     //OBSERVER METHODS
@@ -94,9 +114,8 @@ public class Model {
         return playersInGame;
     }
 
-    public void addPlayer(String playerName, String playerColour, Calendar playerBirthday) {
-        Colour pColour = Colour.valueOf(playerColour.toUpperCase());
-        playersInGame.add(new Player(playerName, playerBirthday, pColour));
+    public void addPlayer(String playerName, Colour playerColour, Calendar playerBirthday) {
+        playersInGame.add(new Player(playerName, playerBirthday, gameWithDivinities, playerColour));
         ArrayList<String> newPlayerString = new ArrayList<>();
         for (Player p : playersInGame) {
             if (p.getDivinity() == null && gameWithDivinities) {
@@ -115,9 +134,8 @@ public class Model {
      *
      * @return the next available colour
      */
-    public String getNextColour() {
-        Colour c = availableColours.pop();
-        return c.toString();
+    public Colour getNextColour() {
+        return availableColours.pop();
     }
 
 

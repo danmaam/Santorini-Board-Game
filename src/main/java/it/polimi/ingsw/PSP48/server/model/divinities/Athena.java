@@ -9,8 +9,18 @@ import java.util.function.Consumer;
 
 public class Athena extends Divinity {
     private final String name = "Athena";
-    private final Boolean threePlayerSupported = true;
+
     private Boolean lastTurnLevelUp = false;
+
+    public static Boolean supportedDivinity(int pNum) {
+        switch (pNum) {
+            case 2:
+                return true;
+            case 3:
+                return true;
+        }
+        return false;
+    }
 
     /**
      * Resets the flag if the player went level up on the last turn

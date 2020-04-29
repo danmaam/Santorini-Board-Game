@@ -14,7 +14,16 @@ import java.util.stream.Collectors;
 
 public class Prometheus extends Divinity {
     private final String name = "Prometheus";
-    private final Boolean threePlayerSupported = true;
+
+    public static Boolean supportedDivinity(int pNum) {
+        switch (pNum) {
+            case 2:
+                return true;
+            case 3:
+                return true;
+        }
+        return false;
+    }
 
     boolean previousBuild = false;
     boolean doneMove = false;
@@ -117,7 +126,7 @@ public class Prometheus extends Divinity {
      * @param buildRow     the row where the player wants to add a level
      * @param buildColumn  the column where the player wants to add a level
      * @param gd           the actual game board state
-     * @return
+     * @return the next action of the controller
      * @throws NotAdjacentCellException     if the cell where the player wants to build is not adiacent to the worker's one
      * @throws OccupiedCellException        if the destination cell is occupied by another worker
      * @throws DomedCellException           is the cell is already domed
@@ -142,7 +151,7 @@ public class Prometheus extends Divinity {
      * @param domeRow      the row where the player wants to add the dome
      * @param domeColumn   the column where the player wants to add the dome
      * @param gd           the current game board state
-     * @return
+     * @return the next action of the controller
      * @throws NotAdjacentCellException        if the cell where the player wants to add the dome is not adiacent to the worker's one
      * @throws OccupiedCellException           if the destination cell is occupied by another worker
      * @throws DomedCellException              is the cell is already domed

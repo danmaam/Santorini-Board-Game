@@ -9,7 +9,16 @@ import java.util.stream.Collectors;
 
 public class Eros extends Divinity {
     private final String name = "Eros";
-    private final Boolean threePlayerSupported = true;
+
+    public static Boolean supportedDivinity(int pNum) {
+        switch (pNum) {
+            case 2:
+                return true;
+            case 3:
+                return true;
+        }
+        return false;
+    }
 
     private int previousRow = -1;
     private int previousColumn = -1;

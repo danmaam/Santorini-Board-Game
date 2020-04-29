@@ -12,11 +12,19 @@ import java.util.stream.Collectors;
 
 public class Artemis extends Divinity {
     private final String name = "Artemis";
-    private final Boolean threePlayerSupported = true;
 
     private int oldRowMove = -1;
     private int oldColumnMove = -1;
 
+    public static Boolean supportedDivinity(int pNum) {
+        switch (pNum) {
+            case 2:
+                return true;
+            case 3:
+                return true;
+        }
+        return false;
+    }
 
     /**
      * reset the last move coordinate

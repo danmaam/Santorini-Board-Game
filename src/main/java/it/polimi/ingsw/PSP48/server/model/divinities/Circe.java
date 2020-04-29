@@ -10,12 +10,22 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Circe extends Divinity {
-    private final Boolean threePlayerSupported = false;
+
+    public static Boolean supportedDivinity(int pNum) {
+        switch (pNum) {
+            case 2:
+                return true;
+            case 3:
+                return false;
+        }
+        return false;
+    }
 
     @Override
     public String getName() {
         return "Circe";
     }
+
 
     /**
      * stole other player divinity if the the other player's workers are not adjacent
