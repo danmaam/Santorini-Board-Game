@@ -16,4 +16,8 @@ public class Position {
     public int getColumn() {
         return column;
     }
+
+    public Position clone() {
+        return new Position(row, column);
+    }
 }

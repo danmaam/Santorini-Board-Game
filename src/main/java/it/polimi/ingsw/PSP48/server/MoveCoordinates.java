@@ -29,4 +29,8 @@ public class MoveCoordinates {
     }
 
     private int moveColumn;
+
+    public MoveCoordinates clone() {
+        return new MoveCoordinates(workerRow, workerColumn, moveRow, moveColumn);
+    }
 }

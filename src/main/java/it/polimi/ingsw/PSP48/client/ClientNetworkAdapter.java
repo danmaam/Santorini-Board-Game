@@ -1,4 +1,6 @@
-package it.polimi.ingsw.PSP48.client.view;
+package it.polimi.ingsw.PSP48.client;
+
+import it.polimi.ingsw.PSP48.observers.ClientNetworkObserver;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,13 +13,13 @@ public class ClientNetworkAdapter implements Runnable {
     private Socket server;
     private ObjectOutputStream outputStm;
     private ObjectInputStream inputStm;
-    private ArrayList<NetworkObserver> observers = new ArrayList<>();
+    private ArrayList<ClientNetworkObserver> observers = new ArrayList<>();
 
-    public void addObserver(NetworkObserver n) {
+    public void addObserver(ClientNetworkObserver n) {
         observers.add(n);
     }
 
-    public void removeObserver(NetworkObserver n) {
+    public void removeObserver(ClientNetworkObserver n) {
         observers.remove(n);
     }
 
@@ -74,14 +76,14 @@ public class ClientNetworkAdapter implements Runnable {
         outputStm.writeObject(nextMessage);
         String newStr = (String) inputStm.readObject();
 
-        List<NetworkObserver> observersCpy;
+        List<ClientNetworkObserver> observersCpy;
 
         synchronized (observers) {
             observersCpy = new ArrayList<>(observers);
         }
 
         /* notify the observers that we got the string */
-        for (NetworkObserver observer : observersCpy) {
+        for (ClientNetworkObserver observer : observersCpy) {
             observer.nicknameResult(newStr);
         }
     }
@@ -90,14 +92,14 @@ public class ClientNetworkAdapter implements Runnable {
         outputStm.writeObject(nextMessage);
         String newStr = (String) inputStm.readObject();
 
-        List<NetworkObserver> observersCpy;
+        List<ClientNetworkObserver> observersCpy;
 
         synchronized (observers) {
             observersCpy = new ArrayList<>(observers);
         }
 
         /* notify the observers that we got the string */
-        for (NetworkObserver observer : observersCpy) {
+        for (ClientNetworkObserver observer : observersCpy) {
             observer.gameModeResult(newStr);
         }
     }

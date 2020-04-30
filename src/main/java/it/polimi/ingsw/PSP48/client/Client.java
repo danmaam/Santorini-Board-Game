@@ -1,9 +1,8 @@
-package it.polimi.ingsw.PSP48.client.view;
+package it.polimi.ingsw.PSP48.client;
 
 import it.polimi.ingsw.PSP48.AbstractView;
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
-import it.polimi.ingsw.PSP48.networkMessagesToClient.receivedObject;
 import it.polimi.ingsw.PSP48.observers.ClientNetworkObserver;
 import it.polimi.ingsw.PSP48.server.MoveCoordinates;
 import it.polimi.ingsw.PSP48.server.model.Cell;

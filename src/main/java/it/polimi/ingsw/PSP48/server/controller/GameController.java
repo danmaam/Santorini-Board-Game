@@ -182,10 +182,10 @@ public class GameController implements ViewObserver {
     /**
      * @param divinities the divinities chosen by the challenger
      * @author Daniele Mammone
-     * method invoked when the chosen one has chosen his divinities
+     * method invoked when the challenger has chosen his divinities
      */
     @Override
-    public void selectAvailableDivinities(ArrayList<DivinitiesWithDescription> divinities) {
+    public void selectAvailableDivinities(ArrayList<String> divinities) {
         model.challengerDivinityChoice(divinities);
         model.setNextPlayer();
         this.requestDivinitySelection();
@@ -397,6 +397,9 @@ public class GameController implements ViewObserver {
      * starts the game without divinites, so set the first player the younger player, and then requests it's first move
      */
     public void startGameWithoutDivinities() {
+        for (Player p : model.getPlayersInGame()) {
+            getPlayerView(p.getName()).printMessage("Game started. Waiting for your turn to put your workers on the board");
+        }
         Player firstPlayer = model.getPlayersInGame().get(0);
         for (Player p : model.getPlayersInGame()) {
             if (p.getBirthday().compareTo(firstPlayer.getBirthday()) < 0) firstPlayer = p;

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP48.server;
 
 import it.polimi.ingsw.PSP48.AbstractView;
-import it.polimi.ingsw.PSP48.server.virtualview.VirtualView;
+import it.polimi.ingsw.PSP48.server.networkmanager.ClientHandler;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -10,7 +10,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Optional;
 
 public class Server {
     private static ArrayList<String> playersConnectedToTheGame = new ArrayList<>();

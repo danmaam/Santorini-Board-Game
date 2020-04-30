@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP48.networkMessages;
+package it.polimi.ingsw.PSP48.networkMessagesToClient;
 
 import it.polimi.ingsw.PSP48.observers.ModelObserver;
 

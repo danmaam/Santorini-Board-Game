@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP48.client.view;
+package it.polimi.ingsw.PSP48.client;
 
 /**
  * class used to represent the cells of the board, we use it to print them on the terminal

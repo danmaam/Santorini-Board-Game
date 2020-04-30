@@ -276,12 +276,12 @@ public class Model {
      * @param s Divinities chosen by the challenger.
      * @author Daniele Mammone
      */
-    public void challengerDivinityChoice(ArrayList<DivinitiesWithDescription> s) {
+    public void challengerDivinityChoice(ArrayList<String> s) {
         ArrayList<Divinity> toBeDeleted = new ArrayList<>();
         for (Divinity d : availableDivinities) {
             boolean tbd = true;
-            for (DivinitiesWithDescription k : s) {
-                if (d.getName().equals(k.getName())) tbd = false;
+            for (String k : s) {
+                if (d.getName().equals(k)) tbd = false;
                 break;
             }
             if (tbd) toBeDeleted.add(d);

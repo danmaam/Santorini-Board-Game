@@ -3,20 +3,25 @@ package it.polimi.ingsw.PSP48.server.virtualview;
 import it.polimi.ingsw.PSP48.AbstractView;
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
-import it.polimi.ingsw.PSP48.networkMessages.receivedObject;
+import it.polimi.ingsw.PSP48.server.networkmanager.ClientHandler;
 import it.polimi.ingsw.PSP48.server.MoveCoordinates;
 import it.polimi.ingsw.PSP48.observers.ViewObserver;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Position;
+import it.polimi.ingsw.PSP48.observers.ServerNetworkObserver;
 
 import java.util.ArrayList;
 
 /**
  * class used to implements a model observer as view
  */
-public class VirtualView extends AbstractView {
+public class VirtualView extends AbstractView implements ServerNetworkObserver {
 
-    private VirtualViewNetworkManager viewNet = new VirtualViewNetworkManager();
+    ClientHandler playerHandler;
+
+    public VirtualView(ClientHandler p) {
+        playerHandler = p;
+    }
 
     @Override
     public void requestInitialPlayerSelection(ArrayList<String> players) {
@@ -36,7 +41,7 @@ public class VirtualView extends AbstractView {
 
     @Override
     public void printMessage(String s) {
-
+        playerHandler.requestMessageSend(null);
     }
 
     @Override
@@ -95,7 +100,32 @@ public class VirtualView extends AbstractView {
 
 
     @Override
-    public void update(receivedObject obj) {
+    public void move(MoveCoordinates p) {
+        notifyObserver(c -> c.move(p));
+    }
 
+    @Override
+    public void build(MoveCoordinates p) {
+        notifyObserver(c -> c.build(p));
+    }
+
+    @Override
+    public void dome(MoveCoordinates p) {
+        notifyObserver(c -> c.dome(p));
+    }
+
+    @Override
+    public void putWorkerOnTable(Position p) {
+        notifyObserver(c -> c.putWorkerOnTable(p));
+    }
+
+    @Override
+    public void registerPlayerDivinity(String divinity) {
+        notifyObserver(c -> c.registerPlayerDivinity(divinity));
+    }
+
+    @Override
+    public void selectAvailableDivinities(ArrayList<String> divinities) {
+        notifyObserver(c -> c.selectAvailableDivinities(divinities));
     }
 }
