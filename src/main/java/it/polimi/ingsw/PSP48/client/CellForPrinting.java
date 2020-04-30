@@ -8,7 +8,7 @@ public class CellForPrinting
 {
     private int cellRow;
     private int cellColumn;
-    private final String emptySpaceInCell="";
+    private final String emptySpaceInCell = " ";
     private ColoursForPrinting cellColour; //it will be white by default and other colours when we highlight choices to the players
     private Player playerOnCell=null; //at the beginning cells are empty so they don't have any players or constructions on them
     private BuildingsForPrinting buildings=null;
@@ -86,10 +86,11 @@ public class CellForPrinting
         this.dome=newDome;
     }
 
-    @Override
+
     /**
      * this method takes a cell object (we have different types of it, based on the other things that can be on a cell) and transforms it into a string in order to print it
      */
+    @Override
     public String toString()
     {
         String emptyCell, completeCell, builtCell, domedCell;

@@ -23,7 +23,7 @@ public interface ViewInterface {
 
     public void printMessage(String s);
 
-    public void requestOptionalMove(WorkerValidCells validCellsForMove);
+    public void requestOptionalMove(ArrayList<WorkerValidCells> validCellsForMove);
 
-    public void requestOptionalBuild(WorkerValidCells build, WorkerValidCells dome);
+    public void requestOptionalBuild(ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome);
 }

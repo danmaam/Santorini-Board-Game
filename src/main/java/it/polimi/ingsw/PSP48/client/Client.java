@@ -7,7 +7,6 @@ import it.polimi.ingsw.PSP48.observers.ClientNetworkObserver;
 import it.polimi.ingsw.PSP48.server.MoveCoordinates;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Position;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -33,10 +32,8 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
     private boolean serverAnswer = false;
     boolean completedAction;
 
-
     /**
      * class constructor initialising the cells of the board
-     *
      * @param colour is the colour we assign to the cells
      */
     public Client(ColoursForPrinting colour) {
@@ -48,12 +45,11 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
     }
 
     public CellForPrinting[][] getGameBoard() {
-        return (this.gameBoard);
+        return (gameBoard);
     }
 
     /**
      * method used to retrieve a specific cell on the board
-     *
      * @param row    is the row of the cell we need
      * @param column is the column of the cell we need
      * @return a reference to the cell once we find it
@@ -82,11 +78,12 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
         return (this.playerList);
     }
 
-    @Override
+
     /**
      * method that is called whenever there is a change on the board and we need to update the cells
      * @param newCells represents the list of the cells that have been changed during the turn
      */
+    @Override
     public void changedBoard(ArrayList<Cell> newCells) //method applying changes to the game board after every action by the player
     {
         CellForPrinting tempCell;
@@ -97,7 +94,7 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
             tempCell = this.getCellOnBoard(c.getRow(), c.getColumn()); //retrieved cell from the board on the client side, now we have to update its values
 
             //first we check the dome field of the cell
-            if (c.isDomed() == false) tempCell.setDome(null);
+            if (!c.isDomed()) tempCell.setDome(null);
             else {
                 if (tempCell.getDome() == null) tempCell.setDome(new DomeForPrinting(ColoursForPrinting.blue));
             }
@@ -115,7 +112,7 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
             else {
                 list = this.getPlayerList(); //we have to search for the right player in the list, in order to have the parameters to put in the cell
                 for (Player p : list) {
-                    if (p.getName() == c.getPlayer()) {
+                    if (p.getName().equals(c.getPlayer())) {
                         tempPlayer = p;
                         break;
                     }
@@ -158,120 +155,121 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
         }
     }
 
-    @Override
+
     /**
      * method used to request a move action to the player, showing the valid options and then taking the choice of the player
+     *
      * @param validCellsForMove contains the positions of both workers and for each of them the valid cells for the move action
      */
+    @Override
     public void requestMove(ArrayList<WorkerValidCells> validCellsForMove) {
-        ArrayList<Position> tempList;
-        WorkerValidCells notChosenPosition = null, temp = null;
+        ArrayList<Position> tempList = new ArrayList<>();
         int workerRow = -1, workerColumn = -1;
         int chosenRow = -1, chosenColumn = -1;
 
         for (WorkerValidCells c : validCellsForMove) {
             tempList = c.getValidPositions(); //each time we retrieve the list of valid positions for the move action
-
             for (Position p : tempList) // for each of the valid positions, we need to highlight the cells on the board
             {
-                this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.red);
+                if (this.getCellOnBoard(p.getRow(), p.getColumn()).getCellColour() == ColoursForPrinting.white) //if the request move method is called by the optional move method, we don't need to highlight the cells again
+                {
+                    this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.red);
+                }
             }
         }
         this.printBoard(); //after highlighting all the cells, we need to print the whole board
 
         //first we ask the player which one of his workers he wants to move
         Scanner s = new Scanner(System.in);
-        System.out.println("Choose the row of the worker you want to move: ");
-        while (s.hasNext()) {
+        System.out.println("Choose the row of the worker you want to move, among the workers with coloured cells: ");
+        if (s.hasNext()) {
             workerRow = ((s.nextInt()) - 1);
         }
-        System.out.println("Choose the column of the worker you want to move: ");
-        while (s.hasNext()) {
+        System.out.println("Choose the column of the worker you want to move, among the workers with coloured cells: ");
+        if (s.hasNext()) {
             workerColumn = ((s.nextInt()) - 1);
         }
 
         //after reading the commands, we need to check if the player has chosen a valid worker
         boolean valid = false;
         do {
-            for (int i = 0; (i < validCellsForMove.size() && valid == false); i++) {
+            for (int i = 0; (i < validCellsForMove.size() && !valid); i++) {
                 if (workerRow == validCellsForMove.get(i).getwR() && workerColumn == validCellsForMove.get(i).getwC()) {
                     valid = true;
                 }
             }
-            if (valid == false) {
+            if (!valid) {
                 System.out.println("You need to choose a valid worker!!");
                 this.printBoard();
-                System.out.println("Choose the row of the worker you want to move: ");
-                while (s.hasNext()) {
+                System.out.println("Choose the row of the worker you want to move, among the workers with coloured cells: ");
+                if (s.hasNext()) {
                     workerRow = ((s.nextInt()) - 1);
                 }
-                System.out.println("Choose the column of the worker you want to move: ");
-                while (s.hasNext()) {
+                System.out.println("Choose the column of the worker you want to move, among the workers with coloured cells: ");
+                if (s.hasNext()) {
                     workerColumn = ((s.nextInt()) - 1);
                 }
             }
-
-        } while (valid == false);
+        } while (!valid);
 
         //after we make sure that the player has chosen a valid worker to move, we highlight again the board, but only with the cells of that worker
-        for (WorkerValidCells c : validCellsForMove) {
-            if (c.getwR() != workerRow && c.getwC() != workerColumn) {
-                notChosenPosition = c;
-                break;
+        if (validCellsForMove.size() > 1) {
+            for (WorkerValidCells c : validCellsForMove) {
+                if (c.getwR() != workerRow && c.getwC() != workerColumn) {
+                    for (Position po : c.getValidPositions()) {
+                        this.getCellOnBoard(po.getRow(), po.getColumn()).setCellColour(ColoursForPrinting.white);
+                    }
+                }
+
             }
-        }
-        for (Position po : notChosenPosition.getValidPositions()) {
-            this.getCellOnBoard(po.getRow(), po.getColumn()).setCellColour(ColoursForPrinting.white);
         }
         this.printBoard();
 
         //now we ask to the player the move he wants to make
-        System.out.println("Choose the row where you want to move, among the red ones: ");
-        while (s.hasNext()) {
+        System.out.println("Choose the row where you want to move, among the coloured ones: ");
+        if (s.hasNext()) {
             chosenRow = ((s.nextInt()) - 1);
         }
-        System.out.println("Choose the column where you want to move, among the red ones: ");
-        while (s.hasNext()) {
+        System.out.println("Choose the column where you want to move, among the coloured ones: ");
+        if (s.hasNext()) {
             chosenColumn = ((s.nextInt()) - 1);
         }
 
         //we have to check if the player has chosen a valid cell
         boolean validMove = false;
+        Position chosenPositionToMove = new Position(chosenRow, chosenColumn); //we put the chosen row and column in a Position object, to check if it is contained in the valid cells list
         do {
-            for (WorkerValidCells c : validCellsForMove) {
-                if (c != notChosenPosition) {
-                    temp = c;
+            for (WorkerValidCells c : validCellsForMove) //we select the chosen worker, in order to get the list of valid cells for the move
+            {
+                if (c.getwR() == workerRow && c.getwC() == workerColumn) {
+                    tempList = c.getValidPositions();
                     break;
                 }
             }
-            tempList = temp.getValidPositions();
-            for (int i = 0; (i < tempList.size() && validMove == false); i++) {
-                if (chosenRow == tempList.get(i).getRow() && chosenColumn == tempList.get(i).getColumn()) {
-                    validMove = true;
-                }
-            }
-            if (validMove == false) {
+            if (tempList.contains(chosenPositionToMove))
+                validMove = true; //we check if the list of positions contains the chosen position to move
+            else {
                 System.out.println("You need to choose a valid cell!!");
                 this.printBoard();
-                System.out.println("Choose the row where you want to move, among the red ones: ");
-                while (s.hasNext()) {
+                System.out.println("Choose the row where you want to move, among the coloured ones: ");
+                if (s.hasNext()) {
                     chosenRow = ((s.nextInt()) - 1);
                 }
-                System.out.println("Choose the column where you want to move, among the red ones: ");
-                while (s.hasNext()) {
+                System.out.println("Choose the column where you want to move, among the coloured ones: ");
+                if (s.hasNext()) {
                     chosenColumn = ((s.nextInt()) - 1);
                 }
+                chosenPositionToMove = new Position(chosenRow, chosenColumn);
             }
-        } while (validMove = false);
+        } while (!validMove);
 
         //after checking that the move is valid, we just need to bring the colours of the board to their original state and notify the controller about the choice
         for (WorkerValidCells c : validCellsForMove) {
-            if (c != notChosenPosition) {
-                temp = c;
+            if (c.getwR() == workerRow && c.getwC() == workerColumn) {
+                tempList = c.getValidPositions();
                 break;
             }
         }
-        tempList = temp.getValidPositions();
         for (Position p : tempList) {
             this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.white);
         }
@@ -283,9 +281,228 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
         });
     }
 
+
+    /**
+     * method handling the building actions during the turn
+     *
+     * @param validForBuild represents the valid cells for the build action of each worker
+     * @param validForDome  represents the valid cells to put the dome for each worker
+     */
     @Override
     public void requestDomeOrBuild(ArrayList<WorkerValidCells> validForBuild, ArrayList<WorkerValidCells> validForDome) {
+        int workerRow = -1, workerColumn = -1;
+        int chosenRow = -1, chosenColumn = -1;
+        ArrayList<Position> tempPositions = new ArrayList<>();
 
+        for (WorkerValidCells c : validForBuild) {
+            for (Position p : c.getValidPositions()) {
+                if (this.getCellOnBoard(p.getRow(), p.getColumn()).getCellColour() == ColoursForPrinting.white) {
+                    this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.red);
+                }
+            }
+        }
+
+        for (WorkerValidCells cell : validForDome) {
+            for (Position pos : cell.getValidPositions()) {
+                if (this.getCellOnBoard(pos.getRow(), pos.getColumn()).getCellColour() == ColoursForPrinting.white) {
+                    if (this.getCellOnBoard(pos.getRow(), pos.getColumn()).getCellColour() == ColoursForPrinting.red)
+                        this.getCellOnBoard(pos.getRow(), pos.getColumn()).setCellColour(ColoursForPrinting.green);
+                    else this.getCellOnBoard(pos.getRow(), pos.getColumn()).setCellColour(ColoursForPrinting.yellow);
+                }
+            }
+        }
+        this.printBoard();
+
+        Scanner s = new Scanner(System.in);
+        System.out.println("Red cells are for building, yellow cells can be domed, green cells can take both actions");
+        System.out.println("Choose the row of the worker you want to move, among the workers with coloured cells: ");
+        if (s.hasNext()) {
+            workerRow = ((s.nextInt()) - 1);
+        }
+        System.out.println("Choose the column of the worker you want to move, among the workers with coloured cells: ");
+        if (s.hasNext()) {
+            workerColumn = ((s.nextInt()) - 1);
+        }
+
+        //we need to check if the worker is a valid one
+        boolean validWorker = false;
+        do {
+            for (int i = 0; (i < validForBuild.size() && !validWorker); i++) {
+                if (workerRow == validForBuild.get(i).getwR() && workerColumn == validForBuild.get(i).getwC()) {
+                    validWorker = true;
+                }
+            }
+            if (!validWorker) {
+                for (int i = 0; (i < validForDome.size() && !validWorker); i++) {
+                    if (workerRow == validForDome.get(i).getwR() && workerColumn == validForDome.get(i).getwC()) {
+                        validWorker = true;
+                    }
+                }
+                if (!validWorker) {
+                    System.out.println("You need to choose a valid worker!!");
+                    this.printBoard();
+                    System.out.println("Choose the row of the worker you want to move, among the workers with coloured cells: ");
+                    if (s.hasNext()) {
+                        workerRow = ((s.nextInt()) - 1);
+                    }
+                    System.out.println("Choose the column of the worker you want to move, among the workers with coloured cells: ");
+                    if (s.hasNext()) {
+                        workerColumn = ((s.nextInt()) - 1);
+                    }
+                }
+            }
+        } while (!validWorker);
+
+        //now we need to highlight the cells only belonging to the chosen worker, by bringing the other cells back to their original colour
+        for (WorkerValidCells c : validForBuild) {
+            if (c.getwR() != workerRow && c.getwC() != workerColumn) {
+                for (Position po : c.getValidPositions()) {
+                    this.getCellOnBoard(po.getRow(), po.getColumn()).setCellColour(ColoursForPrinting.white);
+                }
+            }
+        }
+        for (WorkerValidCells c : validForDome) {
+            if (c.getwR() != workerRow && c.getwC() != workerColumn) {
+                for (Position po : c.getValidPositions()) {
+                    this.getCellOnBoard(po.getRow(), po.getColumn()).setCellColour(ColoursForPrinting.white);
+                }
+            }
+        }
+
+        //now we ask the player the action he wants to make and check if it is compatible with the chosen worker
+        String chosenAction = null;
+        boolean validAction = false;
+        do {
+            this.printBoard();
+            System.out.println("Red cells are for building, yellow cells can be domed, green cells can take both actions");
+            System.out.println("Write build if you want to build, write dome if you want to put a dome: ");
+            if (s.hasNext()) {
+                chosenAction = s.nextLine(); //we read the action chosen by the player from input stream
+            }
+            if (chosenAction.equals("build")) {
+                for (int i = 0; (i < validForBuild.size() && !validAction); i++) {
+                    if (workerRow == validForBuild.get(i).getwR() && workerColumn == validForBuild.get(i).getwC()) {
+                        validAction = true;
+                    }
+                }
+            } else {
+                for (int i = 0; (i < validForDome.size() && !validAction); i++) {
+                    if (workerRow == validForDome.get(i).getwR() && workerColumn == validForDome.get(i).getwC()) {
+                        validAction = true;
+                    }
+                }
+            }
+            if (!validAction) {
+                System.out.println("You need to choose a valid action for your worker!!");
+            }
+        } while (!validAction);
+
+        //after getting the command from the player, we need to ask him where he wants to make his action
+        if (chosenAction.equals("build")) {
+            System.out.println("Choose the row where you want to build, among the coloured ones: ");
+            if (s.hasNext()) {
+                chosenRow = ((s.nextInt()) - 1);
+            }
+            System.out.println("Choose the column where you want to build, among the coloured ones: ");
+            if (s.hasNext()) {
+                chosenColumn = ((s.nextInt()) - 1);
+            }
+
+            //we need to check if the cell is actually a valid one
+            boolean validBuildCell = false;
+            Position chosenBuildPosition = new Position(chosenRow, chosenColumn);
+            do {
+                for (WorkerValidCells cell : validForBuild) {
+                    if (cell.getwR() == workerRow && cell.getwC() == workerColumn) {
+                        tempPositions = cell.getValidPositions();
+                        break;
+                    }
+                }
+                if (tempPositions.contains(chosenBuildPosition)) validBuildCell = true;
+                else {
+                    System.out.println("You need to choose a valid cell!!");
+                    this.printBoard();
+                    System.out.println("Choose the row where you want to build, among the coloured ones: ");
+                    if (s.hasNext()) {
+                        chosenRow = ((s.nextInt()) - 1);
+                    }
+                    System.out.println("Choose the column where you want to build, among the coloured ones: ");
+                    if (s.hasNext()) {
+                        chosenColumn = ((s.nextInt()) - 1);
+                    }
+                    chosenBuildPosition = new Position(chosenRow, chosenColumn);
+                }
+            } while (!validBuildCell);
+
+            //now we need to bring the board back to its original colour and notify the server about the choice
+            for (WorkerValidCells c : validForBuild) {
+                if (c.getwR() == workerRow && c.getwC() == workerColumn) {
+                    tempPositions = c.getValidPositions();
+                    break;
+                }
+            }
+            for (Position p : tempPositions) {
+                this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.white);
+            }
+            this.printBoard();
+
+            MoveCoordinates chosenCoordinates = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
+            this.notifyObserver(x -> {
+                x.build(chosenCoordinates);
+            });
+        } else {
+            System.out.println("Choose the row where you want to put a dome, among the coloured ones: ");
+            if (s.hasNext()) {
+                chosenRow = ((s.nextInt()) - 1);
+            }
+            System.out.println("Choose the column where you want to put a dome, among the coloured ones: ");
+            if (s.hasNext()) {
+                chosenColumn = ((s.nextInt()) - 1);
+            }
+
+            //we need to check if the cell is actually a valid one
+            boolean validDomeCell = false;
+            Position chosenDomePosition = new Position(chosenRow, chosenColumn);
+            do {
+                for (WorkerValidCells cell : validForDome) {
+                    if (cell.getwR() == workerRow && cell.getwC() == workerColumn) {
+                        tempPositions = cell.getValidPositions();
+                        break;
+                    }
+                }
+                if (tempPositions.contains(chosenDomePosition)) validDomeCell = true;
+                else {
+                    System.out.println("You need to choose a valid cell!!");
+                    this.printBoard();
+                    System.out.println("Choose the row where you want to put a dome, among the coloured ones: ");
+                    if (s.hasNext()) {
+                        chosenRow = ((s.nextInt()) - 1);
+                    }
+                    System.out.println("Choose the column where you want to put a dome, among the coloured ones: ");
+                    if (s.hasNext()) {
+                        chosenColumn = ((s.nextInt()) - 1);
+                    }
+                    chosenDomePosition = new Position(chosenRow, chosenColumn);
+                }
+            } while (!validDomeCell);
+
+            //now we need to bring the board back to its original colour and notify the server about the choice
+            for (WorkerValidCells c : validForDome) {
+                if (c.getwR() == workerRow && c.getwC() == workerColumn) {
+                    tempPositions = c.getValidPositions();
+                    break;
+                }
+            }
+            for (Position p : tempPositions) {
+                this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.white);
+            }
+            this.printBoard();
+
+            MoveCoordinates chosenCoordinates = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
+            this.notifyObserver(x -> {
+                x.dome(chosenCoordinates);
+            });
+        }
     }
 
     /**
@@ -296,10 +513,11 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
         System.out.println("You win! :)");
     }
 
-    @Override
+
     /**
      * method communicating to a player that the game has been lost
      */
+    @Override
     public void declareLose() {
         System.out.println(" You lost the game! :( ");
     }
@@ -363,11 +581,12 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
     }
 
 
-    @Override
     /**
      * method that handles the initial positioning of each worker on the board, showing the valid cells to the players and taking their choices
+     *
      * @param validCells is the list of valid cells for the worker we are currently positioning
      */
+    @Override
     public void requestInitialPositioning(ArrayList<Position> validCells) {
         int chosenRow = -1, chosenColumn = -1;
 
@@ -380,36 +599,33 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
         //after that, we need to ask the player their choice
         Scanner s = new Scanner(System.in);
         System.out.println("Choose the row where you want to position: ");
-        while (s.hasNext()) {
+        if (s.hasNext()) {
             chosenRow = ((s.nextInt()) - 1);
         }
         System.out.println("Choose the column where you want to position: ");
-        while (s.hasNext()) {
+        if (s.hasNext()) {
             chosenColumn = ((s.nextInt()) - 1);
         }
 
         //now we need to check if the choice is valid
         boolean validChoice = false;
+        Position chosenInitialPosition = new Position(chosenRow, chosenColumn);
         do {
-            for (int i = 0; (i < validCells.size() && validChoice == false); i++) {
-                if (validCells.get(i).getRow() == chosenRow && validCells.get(i).getColumn() == chosenColumn) //it means that we have found the chosen position in the list of the valid ones
-                {
-                    validChoice = true;
-                }
-            }
-            if (validChoice == false) {
+            if (validCells.contains(chosenInitialPosition)) validChoice = true;
+            else {
                 System.out.println("You need to choose a valid cell!!");
                 this.printBoard();
                 System.out.println("Choose the row where you want to position: ");
-                while (s.hasNext()) {
+                if (s.hasNext()) {
                     chosenRow = ((s.nextInt()) - 1);
                 }
                 System.out.println("Choose the column where you want to position: ");
-                while (s.hasNext()) {
+                if (s.hasNext()) {
                     chosenColumn = ((s.nextInt()) - 1);
                 }
+                chosenInitialPosition = new Position(chosenRow, chosenColumn);
             }
-        } while (validChoice == false);
+        } while (!validChoice);
 
         //after checking that the player has chosen a valid cell, we need to bring the board back to its original colours and notify the observers
         for (Position p : validCells) {
@@ -417,10 +633,9 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
         }
         this.printBoard();
 
-        Position chosenPosition = new Position(chosenRow, chosenColumn);
+        Position notifiedPosition = new Position(chosenRow, chosenColumn);
         this.notifyObserver(x -> {
-            x.putWorkerOnTable(chosenPosition);
-        });
+            x.putWorkerOnTable(notifiedPosition);});
     }
 
     /**
@@ -453,12 +668,14 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
             if (!validDivinity) {
                 System.out.println("Divinity not valid or no more available, please retry.");
             }
-        } while (!validDivinity || n>0);
+        } while (!validDivinity || n > 0);
         System.out.print("You selected: ");
-        for (DivinitiesWithDescription d : selectedDivinities){
-            System.out.print(d.getName()+ " ");
+        for (DivinitiesWithDescription d : selectedDivinities) {
+            System.out.print(d.getName() + " ");
         }
-        notifyObserver(x->x.selectAvailableDivinities(selectedDivinities));
+        ArrayList<String> selected = new ArrayList<>();
+        selectedDivinities.forEach(d -> selected.add(d.getName()));
+        notifyObserver(x -> x.selectAvailableDivinities(selected));
     }
 
     @Override
@@ -466,14 +683,89 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
         System.out.println(s);
     }
 
-    @Override
-    public void requestOptionalMove(WorkerValidCells validCellsForMove) {
 
+    /**
+     * method handling the optional move actions of the player
+     *
+     * @param validCellsForMove is the list of cells where the player can choose to make another optional move
+     */
+    @Override
+    public void requestOptionalMove(ArrayList<WorkerValidCells> validCellsForMove) {
+        ArrayList<Position> tempList;
+        int workerRow = -1, workerColumn = -1;
+        int chosenRow = -1, chosenColumn = -1;
+
+        for (WorkerValidCells c : validCellsForMove) {
+            tempList = c.getValidPositions(); //each time we retrieve the list of valid positions for the move action
+            for (Position p : tempList) // for each of the valid positions, we need to highlight the cells on the board
+            {
+                this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.red);
+            }
+        }
+        this.printBoard();
+
+        //after highlighting the cells to the player, we ask him if he wants to move or to skip the action
+        String chosenAction = null;
+        Scanner s = new Scanner(System.in);
+        System.out.println("Write skip if you want to skip the optional move action, if you don't press enter: ");
+        if (s.hasNext()) {
+            chosenAction = s.nextLine();
+        }
+
+        if (chosenAction.equals("skip")) //the player has chosen to skip so we can just notify the server
+        {
+            MoveCoordinates chosenCoordinates = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
+            this.notifyObserver(x -> {
+                x.move(chosenCoordinates);
+            });
+        } else {
+            this.requestMove(validCellsForMove);
+        }
     }
 
-    @Override
-    public void requestOptionalBuild(WorkerValidCells build, WorkerValidCells dome) {
 
+    /**
+     * method handling the optional construction operations during the turn
+     *
+     * @param build is the list of valid cells for the building operations
+     * @param dome  is the list of valid cells for the dome operations
+     */
+    @Override
+    public void requestOptionalBuild(ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome) {
+        int workerRow = -1, workerColumn = -1;
+        int chosenRow = -1, chosenColumn = -1;
+
+        for (WorkerValidCells c : build) {
+            for (Position p : c.getValidPositions()) {
+                this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.red);
+            }
+        }
+
+        for (WorkerValidCells cell : dome) {
+            for (Position pos : cell.getValidPositions()) {
+                if (this.getCellOnBoard(pos.getRow(), pos.getColumn()).getCellColour() == ColoursForPrinting.red)
+                    this.getCellOnBoard(pos.getRow(), pos.getColumn()).setCellColour(ColoursForPrinting.green);
+                else this.getCellOnBoard(pos.getRow(), pos.getColumn()).setCellColour(ColoursForPrinting.yellow);
+            }
+        }
+        this.printBoard();
+
+        String chosenAction = null;
+        Scanner s = new Scanner(System.in);
+        System.out.println("Write skip if you want to skip the optional construction actions, if you don't press enter: ");
+        if (s.hasNext()) {
+            chosenAction = s.nextLine();
+        }
+
+        if (chosenAction.equals("skip")) //the player has chosen to skip so we can just notify the server
+        {
+            MoveCoordinates chosenCoordinates = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
+            this.notifyObserver(x -> {
+                x.build(chosenCoordinates);
+            });
+        } else {
+            this.requestDomeOrBuild(build, dome);
+        }
     }
 
     /**
@@ -557,7 +849,4 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
         else completedAction = true;
         notifyAll();
     }
-
-
 }
-
