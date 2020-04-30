@@ -74,6 +74,10 @@ public class Client extends AbstractView implements Runnable, NetworkObserver {
         }
     }
 
+    /**
+     * Method used to get the list of the players in the game.
+     * @return list of players
+     */
     public ArrayList<Player> getPlayerList() {
         return (this.playerList);
     }
@@ -129,9 +133,29 @@ public class Client extends AbstractView implements Runnable, NetworkObserver {
         this.printBoard(); //after we modified all the cells we need to print the whole updated board
     }
 
+    /**
+     * method used to update the list of the players currently in the game
+     * @param newPlayerList the updated list
+     */
     @Override
     public void changedPlayerList(ArrayList<String> newPlayerList) {
-
+        ArrayList<Player> newList = new ArrayList<Player>();
+        for (String str : newPlayerList) {
+            newList.add(new Player(str));
+        }
+        for (Player p1 : newList) {
+            for (Player p2 : playerList) {
+                if (p1.getName().equals(p2.getName())) {
+                    p1.setPlayerColour(p2.getPlayerColour());
+                    p1.setDivinity(p2.getDivinity());
+                }
+            }
+        }
+        playerList = newList;
+        System.out.print("Players in game: ");
+        for(Player p : playerList){
+            System.out.print(p.getName()+ " ");
+        }
     }
 
     @Override
@@ -264,9 +288,12 @@ public class Client extends AbstractView implements Runnable, NetworkObserver {
 
     }
 
+    /**
+     * Method used to communicate to a player that he has won the game.
+     */
     @Override
     public void declareWin() {
-
+        System.out.println("You win! :)");
     }
 
     @Override
@@ -277,15 +304,64 @@ public class Client extends AbstractView implements Runnable, NetworkObserver {
         System.out.println(" You lost the game! :( ");
     }
 
+    /**
+     * Method used to request a player to choose a divinity.
+     * @param availableDivinities the list of the available divinities.
+     */
     @Override
     public void requestDivinitySelection(ArrayList<DivinitiesWithDescription> availableDivinities) {
-
+        String input;
+        Scanner s = new Scanner (System.in);
+        boolean validDivinity=false;
+        do {
+            System.out.print("Choose your divinity out of the following list: ");
+            for (DivinitiesWithDescription d : availableDivinities) {
+                System.out.print(d.getName()+": " + d.getDescription());
+            }
+            input = s.nextLine();
+            for (DivinitiesWithDescription d : availableDivinities) {
+                if (input.equals(d.getName())) {
+                    validDivinity = true;
+                    availableDivinities.remove(d);
+                    break;
+                }
+            }
+            if (!validDivinity) {
+                System.out.println("Divinity not valid or no more available, please retry.");
+            }
+        } while (!validDivinity);
+        System.out.println("You selected: " + input);;
+        String selectedDivinity = input;
+        notifyObserver(x->x.registerPlayerDivinity(selectedDivinity));
     }
 
+    /**
+     * Method used to request the selection of the initial player
+     * @param players the list of the available players
+     */
     @Override
     public void requestInitialPlayerSelection(ArrayList<String> players) {
-
+        Scanner s = new Scanner(System.in);
+        String input;
+        boolean validName=false;
+        do {
+            System.out.println("Select a player out of the following: ");
+            for (String str : players) {
+                System.out.println(str);
+            }
+            input=s.nextLine();
+            if (players.contains(input)){
+                validName=true;
+            }
+            else {
+                System.out.println("Player not valid, please retry.");
+            }
+        } while (!validName);
+        System.out.println("You selected: " + input);
+        String firstPlayer = input;
+        notifyObserver(x->x.selectFirstPlayer(firstPlayer));
     }
+
 
     @Override
     /**
@@ -347,14 +423,47 @@ public class Client extends AbstractView implements Runnable, NetworkObserver {
         });
     }
 
+    /**
+     * method used to request a player to pick the divinities for other players
+     * @param div the list of the available divinities
+     * @param playerNumber the number of the players in the game
+     */
     @Override
     public void requestChallengerDivinitiesSelection(ArrayList<DivinitiesWithDescription> div, int playerNumber) {
-
+        String input;
+        Scanner s = new Scanner(System.in);
+        ArrayList<DivinitiesWithDescription> selectedDivinities = new ArrayList<DivinitiesWithDescription>();
+        boolean validDivinity=false;
+        int n = playerNumber;
+        do{
+            System.out.println("Choose " + n + "divinities out of the following:");
+            for (DivinitiesWithDescription d : div){
+                System.out.println(d.getName()+ ": " + d.getDescription());
+            }
+            input = s.nextLine();
+            for (DivinitiesWithDescription d : div) {
+                if (input.equals(d.getName())) {
+                    validDivinity = true;
+                    selectedDivinities.add(d);
+                    div.remove(d);
+                    n--;
+                    break;
+                }
+            }
+            if (!validDivinity) {
+                System.out.println("Divinity not valid or no more available, please retry.");
+            }
+        } while (!validDivinity || n>0);
+        System.out.print("You selected: ");
+        for (DivinitiesWithDescription d : selectedDivinities){
+            System.out.print(d.getName()+ " ");
+        }
+        notifyObserver(x->x.selectAvailableDivinities(selectedDivinities));
     }
 
     @Override
     public void printMessage(String s) {
-
+        System.out.println(s);
     }
 
     @Override
