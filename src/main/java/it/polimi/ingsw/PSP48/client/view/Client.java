@@ -3,7 +3,8 @@ package it.polimi.ingsw.PSP48.client.view;
 import it.polimi.ingsw.PSP48.AbstractView;
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
-import it.polimi.ingsw.PSP48.networkMessages.receivedObject;
+import it.polimi.ingsw.PSP48.networkMessagesToClient.receivedObject;
+import it.polimi.ingsw.PSP48.observers.ClientNetworkObserver;
 import it.polimi.ingsw.PSP48.server.MoveCoordinates;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Position;
@@ -20,7 +21,7 @@ import java.util.Scanner;
  *
  * @author Rebecca Marelli, Annalaura Massa
  */
-public class Client extends AbstractView implements Runnable, NetworkObserver {
+public class Client extends AbstractView implements Runnable, ClientNetworkObserver {
     private static final CellForPrinting[][] gameBoard = new CellForPrinting[5][5]; //class attributes
     private ArrayList<Player> playerList = new ArrayList<Player>();
 
@@ -553,14 +554,11 @@ public class Client extends AbstractView implements Runnable, NetworkObserver {
     @Override
     public synchronized void gameModeResult(String result) {
         System.out.println(result);
-        if (result.equals("Not valid mode. Retry")) completedAction = false;
+        if (result.equals("Not valid mode. Retry") || result.equals("Missing Birthday. Retry")) completedAction = false;
         else completedAction = true;
         notifyAll();
     }
 
-    @Override
-    public void update(receivedObject obj) {
 
-    }
 }
 
