@@ -3,10 +3,14 @@ package it.polimi.ingsw.PSP48.client;
 import it.polimi.ingsw.PSP48.AbstractView;
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
+import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkIncoming;
+import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkOutcoming;
 import it.polimi.ingsw.PSP48.observers.ClientNetworkObserver;
+import it.polimi.ingsw.PSP48.observers.ServerNetworkObserver;
 import it.polimi.ingsw.PSP48.server.MoveCoordinates;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Position;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -787,7 +791,7 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
             System.out.println("Can't connect to the Server. Aborting.");
             return;
         }
-        ClientNetworkAdapter cA = new ClientNetworkAdapter(server);
+        ClientNetworkOutcoming cA = new ClientNetworkOutcoming(server);
         cA.addObserver(this);
         Thread cAThread = new Thread(cA);
         cAThread.start();
@@ -827,9 +831,10 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
 
                 }
             }
-
-
-            /* we have the response, print it */
+            //at this point, the connection and the game room are initialized. now, we must initialize a listener for incoming network messages.
+            ClientNetworkIncoming incomingPacketManager = new ClientNetworkIncoming(server, this);
+            Thread inPacketManagerThread = new Thread(incomingPacketManager);
+            inPacketManagerThread.start();
         }
     }
 

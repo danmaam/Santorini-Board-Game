@@ -478,9 +478,14 @@ public class GameController implements ViewObserver {
             } catch (Exception e) {
                 System.out.println("Fatal error");
             }
-        } else
-            getPlayerView(model.getCurrentPlayer().getName()).requestOptionalBuild(new WorkerValidCells(validForBuilding, model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getCurrentPlayer().getLastWorkerMoved().getColumn()),
-                    new WorkerValidCells(validForDoming, model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getCurrentPlayer().getLastWorkerMoved().getColumn()));
+        } else {
+            ArrayList<WorkerValidCells> build = new ArrayList<>();
+            ArrayList<WorkerValidCells> dome = new ArrayList<>();
+            build.add(new WorkerValidCells(validForBuilding, model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getCurrentPlayer().getLastWorkerMoved().getColumn()));
+            dome.add(new WorkerValidCells(validForDoming, model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getCurrentPlayer().getLastWorkerMoved().getColumn()));
+
+            getPlayerView(model.getCurrentPlayer().getName()).requestOptionalBuild(build, dome);
+        }
     }
 
     //SPECIFIC DIVINITY BEHAVIOUR
@@ -504,8 +509,12 @@ public class GameController implements ViewObserver {
             } catch (Exception e) {
                 System.out.println("fatal error");
             }
-        } else
-            getPlayerView(model.getCurrentPlayer().getName()).requestOptionalMove(new WorkerValidCells(validPositionsForMove, model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getCurrentPlayer().getLastWorkerMoved().getColumn()));
+        } else {
+            ArrayList<WorkerValidCells> move = new ArrayList<>();
+            move.add(new WorkerValidCells(validPositionsForMove, model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getCurrentPlayer().getLastWorkerMoved().getColumn()));
+            getPlayerView(model.getCurrentPlayer().getName()).requestOptionalMove(move);
+        }
+
     }
 
 }

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP48.server;
 
 import it.polimi.ingsw.PSP48.AbstractView;
-import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.Model;
 

@@ -8,9 +8,16 @@ import java.util.ArrayList;
 
 public interface ServerNetworkObserver {
     public void move(MoveCoordinates p);
+
     public void build(MoveCoordinates p);
+
     public void dome(MoveCoordinates p);
+
     public void putWorkerOnTable(Position p);
+
     public void registerPlayerDivinity(String divinity);
+
     public void selectAvailableDivinities(ArrayList<String> divinities);
+
+    public void firstPlayerRegistration(String player);
 }

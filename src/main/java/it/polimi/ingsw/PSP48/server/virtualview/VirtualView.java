@@ -25,17 +25,17 @@ public class VirtualView extends AbstractView implements ServerNetworkObserver {
 
     @Override
     public void requestInitialPlayerSelection(ArrayList<String> players) {
-
+        playerHandler.requestInitialPlayerSelection(players);
     }
 
     @Override
     public void requestInitialPositioning(ArrayList<Position> validCells) {
-
+        playerHandler.requestInitialPositioning(validCells);
     }
 
     @Override
     public void requestChallengerDivinitiesSelection(ArrayList<DivinitiesWithDescription> div, int playerNumber) {
-
+        playerHandler.requestChallengerDivinitiesSelection(div, playerNumber);
     }
 
 
@@ -45,59 +45,50 @@ public class VirtualView extends AbstractView implements ServerNetworkObserver {
     }
 
     @Override
-    public void requestOptionalMove(WorkerValidCells validCellsForMove) {
-
+    public void requestOptionalMove(ArrayList<WorkerValidCells> validCellsForMove) {
+        playerHandler.requestOptionalMove(validCellsForMove);
     }
 
     @Override
-    public void requestOptionalBuild(WorkerValidCells build, WorkerValidCells dome) {
-
+    public void requestOptionalBuild(ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome) {
+        playerHandler.requestOptionalBuild(build, dome);
     }
 
     @Override
     public void changedBoard(ArrayList<Cell> newCells) {
-        //cose da far fare al network handler
+        playerHandler.changedBoard(newCells);
     }
 
     @Override
     public void changedPlayerList(ArrayList<String> newPlayerList) {
-        //cose che deve fare il network handler
+        playerHandler.changedPlayerList(newPlayerList);
     }
 
     @Override
     public void requestMove(ArrayList<WorkerValidCells> validCellsForMove) {
-        //cose che deve fare il network handler
-        //dopo aver ricevuto la mossa, notifico al controller la ricezione di questa
-        //placeholder per scrivere il codice di connessione al controller
-        MoveCoordinates mc = new MoveCoordinates(2, 2, 4, 4);
-        try {
-            notifyObserver((ViewObserver c) -> c.move(mc));
-        } catch (Exception e) {
-            System.out.println("Errore");
-        }
+        playerHandler.requestMove(validCellsForMove);
     }
 
     @Override
     public void requestDomeOrBuild(ArrayList<WorkerValidCells> validForBuild, ArrayList<WorkerValidCells> validForDome) {
-        //cose da far fare al network handler
+        playerHandler.requestBuild(validForBuild, validForDome);
     }
 
     @Override
     public void declareWin() {
-        //cose da far fare al network handler
+        playerHandler.declareWin();
     }
 
     @Override
     public void declareLose() {
-        //cose da far fare al network handler
+        playerHandler.declareLose();
     }
 
 
     @Override
     public void requestDivinitySelection(ArrayList<DivinitiesWithDescription> availableDivinities) {
-
+        playerHandler.requestDivinitySelection(availableDivinities);
     }
-
 
     @Override
     public void move(MoveCoordinates p) {
@@ -127,5 +118,10 @@ public class VirtualView extends AbstractView implements ServerNetworkObserver {
     @Override
     public void selectAvailableDivinities(ArrayList<String> divinities) {
         notifyObserver(c -> c.selectAvailableDivinities(divinities));
+    }
+
+    @Override
+    public void firstPlayerRegistration(String player) {
+        notifyObserver(c -> c.selectFirstPlayer(player));
     }
 }

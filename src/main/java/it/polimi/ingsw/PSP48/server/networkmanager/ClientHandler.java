@@ -2,9 +2,10 @@ package it.polimi.ingsw.PSP48.server.networkmanager;
 
 import it.polimi.ingsw.PSP48.AbstractView;
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
-import it.polimi.ingsw.PSP48.networkMessagesToClient.NetworkMessagesToClient;
-import it.polimi.ingsw.PSP48.networkMessagesToClient.requestMessagePrint;
+import it.polimi.ingsw.PSP48.WorkerValidCells;
+import it.polimi.ingsw.PSP48.networkMessagesToClient.*;
 import it.polimi.ingsw.PSP48.server.Server;
+import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Position;
 import it.polimi.ingsw.PSP48.server.virtualview.VirtualView;
 
@@ -144,7 +145,7 @@ public class ClientHandler implements Runnable {
             switch (toDO) {
                 case requestAction:
                     sendNetworkMessage();
-                    toDO = null;
+                    break;
             }
         }
     }
@@ -160,15 +161,77 @@ public class ClientHandler implements Runnable {
     }
 
     public synchronized void requestInitialPlayerSelection(ArrayList<String> players) {
-
+        nextObject = new requestForMoveAction(players);
+        toDO = nextAction.requestAction;
+        notifyAll();
     }
 
     public synchronized void requestInitialPositioning(ArrayList<Position> validCells) {
-
+        nextObject = new PositioningRequest(validCells);
+        toDO = nextAction.requestAction;
+        notifyAll();
     }
 
     public synchronized void requestChallengerDivinitiesSelection(ArrayList<DivinitiesWithDescription> div, int playerNumber) {
+        nextObject = new ChallengerDivinitiesSelectionRequest(div, playerNumber);
+        toDO = nextAction.requestAction;
+        notifyAll();
+    }
 
+    public synchronized void requestOptionalMove(ArrayList<WorkerValidCells> validCellsForMove) {
+        nextObject = new OptionalMoveRequest(validCellsForMove);
+        toDO = nextAction.requestAction;
+        notifyAll();
+    }
+
+    public synchronized void requestOptionalBuild(ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome) {
+        nextObject = new RequestOpionalBuild(build, dome);
+        toDO = nextAction.requestAction;
+        notifyAll();
+    }
+
+    public synchronized void changedBoard(ArrayList<Cell> newCells) {
+        nextObject = new ChangedBoard(newCells);
+        toDO = nextAction.requestAction;
+        notifyAll();
+    }
+
+    public synchronized void changedPlayerList(ArrayList<String> newPlayerList) {
+        nextObject = new UpdatedPlayerList(newPlayerList);
+        toDO = nextAction.requestAction;
+        notifyAll();
+    }
+
+    public synchronized void requestMove(ArrayList<WorkerValidCells> validCellsForMove) {
+        nextObject = new RequestMove(validCellsForMove);
+        toDO = nextAction.requestAction;
+        notifyAll();
+    }
+
+    public synchronized void requestBuild(ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome) {
+        nextObject = new RequestBuild(build, dome);
+        toDO = nextAction.requestAction;
+        notifyAll();
+        ;
+    }
+
+
+    public synchronized void declareWin() {
+        nextObject = new WinMessage();
+        toDO = nextAction.requestAction;
+        notifyAll();
+    }
+
+    public synchronized void declareLose() {
+        nextObject = new LoseMessage();
+        toDO = nextAction.requestAction;
+        notifyAll();
+    }
+
+    public synchronized void requestDivinitySelection(ArrayList<DivinitiesWithDescription> availableDivinities) {
+        nextObject = new DivinitySelectionRequest(availableDivinities);
+        toDO = nextAction.requestAction;
+        notifyAll();
     }
 
 

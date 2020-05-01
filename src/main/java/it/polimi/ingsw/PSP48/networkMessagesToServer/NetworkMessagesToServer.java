@@ -5,7 +5,5 @@ import it.polimi.ingsw.PSP48.observers.ServerNetworkObserver;
 import java.io.Serializable;
 
 public abstract class NetworkMessagesToServer implements Serializable {
-    public void doThings(ServerNetworkObserver obv) {
-
-    }
+    public abstract void doThings(ServerNetworkObserver obv);
 }
