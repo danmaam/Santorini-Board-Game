@@ -32,12 +32,11 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
         playerClient.run();
     }
 
-    private String serverResponse = null;
-    private boolean serverAnswer = false;
     boolean completedAction;
 
     /**
      * class constructor initialising the cells of the board
+     *
      * @param colour is the colour we assign to the cells
      */
     public Client(ColoursForPrinting colour) {
@@ -54,6 +53,7 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
 
     /**
      * method used to retrieve a specific cell on the board
+     *
      * @param row    is the row of the cell we need
      * @param column is the column of the cell we need
      * @return a reference to the cell once we find it
@@ -70,12 +70,13 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
             for (int j = 0; j < 5; j++) {
                 gameBoard[i][j].printCellOnScreen();
             }
-            System.out.print("\n");
+            System.out.println("\n");
         }
     }
 
     /**
      * Method used to get the list of the players in the game.
+     *
      * @return list of players
      */
     public ArrayList<Player> getPlayerList() {
@@ -85,6 +86,7 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
 
     /**
      * method that is called whenever there is a change on the board and we need to update the cells
+     *
      * @param newCells represents the list of the cells that have been changed during the turn
      */
     @Override
@@ -98,10 +100,9 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
             tempCell = this.getCellOnBoard(c.getRow(), c.getColumn()); //retrieved cell from the board on the client side, now we have to update its values
 
             //first we check the dome field of the cell
-            if (!c.isDomed()) tempCell.setDome(null);
-            else {
-                if (tempCell.getDome() == null) tempCell.setDome(new DomeForPrinting(ColoursForPrinting.blue));
-            }
+            if (c.isDomed() && tempCell.getDome() == null)
+                tempCell.setDome(new DomeForPrinting(ColoursForPrinting.blue));
+
             //then we check the building field of the cell
             if (c.getLevel() == 0) tempCell.setBuildings(null);
             else {
@@ -121,21 +122,15 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
                         break;
                     }
                 }
-
-                if (tempCell.getPlayerOnCell() == null)
-                    tempCell.setPlayerOnCell(new Player(tempPlayer.getName(), tempPlayer.getPlayerColour(), tempPlayer.getDivinity()));
-                else {
-                    tempCell.getPlayerOnCell().setName(tempPlayer.getName());
-                    tempCell.getPlayerOnCell().setPlayerColour(tempPlayer.getPlayerColour());
-                    tempCell.getPlayerOnCell().setDivinity(tempPlayer.getDivinity());
-                }
+                tempCell.setPlayerOnCell(tempPlayer);
             }
         }
-        this.printBoard(); //after we modified all the cells we need to print the whole updated board
+        this.printBoard(); //after we modified all the cells we need to println the whole updated board
     }
 
     /**
      * method used to update the list of the players currently in the game
+     *
      * @param newPlayerList the updated list
      */
     @Override
@@ -153,9 +148,9 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
             }
         }
         playerList = newList;
-        System.out.print("Players in game: ");
-        for(Player p : playerList){
-            System.out.print(p.getName()+ " ");
+        System.out.println("Players in game: ");
+        for (Player p : playerList) {
+            System.out.println(p.getName() + " ");
         }
     }
 
@@ -181,7 +176,7 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
                 }
             }
         }
-        this.printBoard(); //after highlighting all the cells, we need to print the whole board
+        this.printBoard(); //after highlighting all the cells, we need to println the whole board
 
         //first we ask the player which one of his workers he wants to move
         Scanner s = new Scanner(System.in);
@@ -528,17 +523,18 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
 
     /**
      * Method used to request a player to choose a divinity.
+     *
      * @param availableDivinities the list of the available divinities.
      */
     @Override
     public void requestDivinitySelection(ArrayList<DivinitiesWithDescription> availableDivinities) {
         String input;
-        Scanner s = new Scanner (System.in);
-        boolean validDivinity=false;
+        Scanner s = new Scanner(System.in);
+        boolean validDivinity = false;
         do {
-            System.out.print("Choose your divinity out of the following list: ");
+            System.out.println("Choose your divinity out of the following list: ");
             for (DivinitiesWithDescription d : availableDivinities) {
-                System.out.print(d.getName()+": " + d.getDescription());
+                System.out.println(d.getName() + ": " + d.getDescription());
             }
             input = s.nextLine();
             for (DivinitiesWithDescription d : availableDivinities) {
@@ -552,36 +548,36 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
                 System.out.println("Divinity not valid or no more available, please retry.");
             }
         } while (!validDivinity);
-        System.out.println("You selected: " + input);;
+        System.out.println("You selected: " + input);
         String selectedDivinity = input;
-        notifyObserver(x->x.registerPlayerDivinity(selectedDivinity));
+        notifyObserver(x -> x.registerPlayerDivinity(selectedDivinity));
     }
 
     /**
      * Method used to request the selection of the initial player
+     *
      * @param players the list of the available players
      */
     @Override
     public void requestInitialPlayerSelection(ArrayList<String> players) {
         Scanner s = new Scanner(System.in);
         String input;
-        boolean validName=false;
+        boolean validName = false;
         do {
             System.out.println("Select a player out of the following: ");
             for (String str : players) {
                 System.out.println(str);
             }
-            input=s.nextLine();
-            if (players.contains(input)){
-                validName=true;
-            }
-            else {
+            input = s.nextLine();
+            if (players.contains(input)) {
+                validName = true;
+            } else {
                 System.out.println("Player not valid, please retry.");
             }
         } while (!validName);
         System.out.println("You selected: " + input);
         String firstPlayer = input;
-        notifyObserver(x->x.selectFirstPlayer(firstPlayer));
+        notifyObserver(x -> x.selectFirstPlayer(firstPlayer));
     }
 
 
@@ -603,13 +599,9 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
         //after that, we need to ask the player their choice
         Scanner s = new Scanner(System.in);
         System.out.println("Choose the row where you want to position: ");
-        if (s.hasNext()) {
-            chosenRow = ((s.nextInt()) - 1);
-        }
+        chosenRow = s.nextInt() - 1;
         System.out.println("Choose the column where you want to position: ");
-        if (s.hasNext()) {
-            chosenColumn = ((s.nextInt()) - 1);
-        }
+        chosenColumn = s.nextInt() - 1;
 
         //now we need to check if the choice is valid
         boolean validChoice = false;
@@ -620,13 +612,9 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
                 System.out.println("You need to choose a valid cell!!");
                 this.printBoard();
                 System.out.println("Choose the row where you want to position: ");
-                if (s.hasNext()) {
-                    chosenRow = ((s.nextInt()) - 1);
-                }
+                chosenRow = s.nextInt() - 1;
                 System.out.println("Choose the column where you want to position: ");
-                if (s.hasNext()) {
-                    chosenColumn = ((s.nextInt()) - 1);
-                }
+                chosenColumn = s.nextInt() - 1;
                 chosenInitialPosition = new Position(chosenRow, chosenColumn);
             }
         } while (!validChoice);
@@ -639,12 +627,14 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
 
         Position notifiedPosition = new Position(chosenRow, chosenColumn);
         this.notifyObserver(x -> {
-            x.putWorkerOnTable(notifiedPosition);});
+            x.putWorkerOnTable(notifiedPosition);
+        });
     }
 
     /**
      * method used to request a player to pick the divinities for other players
-     * @param div the list of the available divinities
+     *
+     * @param div          the list of the available divinities
      * @param playerNumber the number of the players in the game
      */
     @Override
@@ -652,12 +642,12 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
         String input;
         Scanner s = new Scanner(System.in);
         ArrayList<DivinitiesWithDescription> selectedDivinities = new ArrayList<DivinitiesWithDescription>();
-        boolean validDivinity=false;
+        boolean validDivinity = false;
         int n = playerNumber;
-        do{
+        do {
             System.out.println("Choose " + n + "divinities out of the following:");
-            for (DivinitiesWithDescription d : div){
-                System.out.println(d.getName()+ ": " + d.getDescription());
+            for (DivinitiesWithDescription d : div) {
+                System.out.println(d.getName() + ": " + d.getDescription());
             }
             input = s.nextLine();
             for (DivinitiesWithDescription d : div) {
@@ -673,9 +663,9 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
                 System.out.println("Divinity not valid or no more available, please retry.");
             }
         } while (!validDivinity || n > 0);
-        System.out.print("You selected: ");
+        System.out.println("You selected: ");
         for (DivinitiesWithDescription d : selectedDivinities) {
-            System.out.print(d.getName() + " ");
+            System.out.println(d.getName() + " ");
         }
         ArrayList<String> selected = new ArrayList<>();
         selectedDivinities.forEach(d -> selected.add(d.getName()));
@@ -781,8 +771,7 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to Santorini CLI Mode\nPlease insert the Server IP and press ENTER.");
         String serverIP = scanner.nextLine();
-        ObjectOutputStream outputStm;
-        ObjectInputStream inputStm;
+
 
         Socket server;
         try {
@@ -791,10 +780,17 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
             System.out.println("Can't connect to the Server. Aborting.");
             return;
         }
+
         ClientNetworkOutcoming cA = new ClientNetworkOutcoming(server);
-        cA.addObserver(this);
         Thread cAThread = new Thread(cA);
         cAThread.start();
+        this.registerObserver(cA);
+
+        ClientNetworkIncoming cI = new ClientNetworkIncoming(this, server);
+        cI.addObserver(this);
+        Thread cIThread = new Thread(cI);
+        cIThread.start();
+
 
         System.out.println("Connected to the Santorini Server");
         String nextMessage;
@@ -831,10 +827,7 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
 
                 }
             }
-            //at this point, the connection and the game room are initialized. now, we must initialize a listener for incoming network messages.
-            ClientNetworkIncoming incomingPacketManager = new ClientNetworkIncoming(server, this);
-            Thread inPacketManagerThread = new Thread(incomingPacketManager);
-            inPacketManagerThread.start();
+            System.out.println("logged to the server. initializing message listener");
         }
     }
 

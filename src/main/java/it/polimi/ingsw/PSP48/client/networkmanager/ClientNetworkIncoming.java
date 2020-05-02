@@ -3,21 +3,36 @@ package it.polimi.ingsw.PSP48.client.networkmanager;
 import it.polimi.ingsw.PSP48.AbstractView;
 import it.polimi.ingsw.PSP48.client.Client;
 import it.polimi.ingsw.PSP48.networkMessagesToClient.NetworkMessagesToClient;
+import it.polimi.ingsw.PSP48.observers.ClientNetworkObserver;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class ClientNetworkIncoming implements Runnable {
-
-    private Socket server;
     private AbstractView playerView;
     private ObjectInputStream in;
+    private Socket server;
     private NetworkMessagesToClient newMessage;
+
+    private boolean nicknameSet = false;
+    private boolean gameModeSet = false;
+
+    private ArrayList<ClientNetworkObserver> observers = new ArrayList<>();
+
+    public void addObserver(ClientNetworkObserver n) {
+        observers.add(n);
+    }
+
+    public void removeObserver(ClientNetworkObserver n) {
+        observers.remove(n);
+    }
 
     @Override
     public void run() {
         try {
+            in = new ObjectInputStream(server.getInputStream());
             retrieveMessage();
         } catch (IOException e) {
             e.printStackTrace();
@@ -27,15 +42,27 @@ public class ClientNetworkIncoming implements Runnable {
     }
 
     public synchronized void retrieveMessage() throws IOException, ClassNotFoundException {
-        in = new ObjectInputStream(server.getInputStream());
         while (true) {
-            newMessage = (NetworkMessagesToClient) in.readObject();
-            newMessage.doAction(playerView);
+            if (!nicknameSet) {
+                String result = (String) in.readObject();
+                if (!result.equals("Invalid nickname. Retry")) nicknameSet = true;
+                for (ClientNetworkObserver o : observers) o.nicknameResult(result);
+            } else if (!gameModeSet) {
+                String result = (String) in.readObject();
+                if (!(result.equals("Not valid mode. Retry") || result.equals("Missing Birthday. Retry")))
+                    gameModeSet = true;
+                for (ClientNetworkObserver o : observers) o.gameModeResult(result);
+            } else {
+                System.out.println("waiting for message");
+                newMessage = (NetworkMessagesToClient) in.readObject();
+                System.out.println("received object" + newMessage.toString());
+                newMessage.doAction(playerView);
+            }
         }
     }
 
-    public ClientNetworkIncoming(Socket server, AbstractView playerView) {
-        this.server = server;
+    public ClientNetworkIncoming(AbstractView playerView, Socket server) {
         this.playerView = playerView;
+        this.server = server;
     }
 }

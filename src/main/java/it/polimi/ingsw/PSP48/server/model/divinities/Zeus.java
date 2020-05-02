@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 
 public class Zeus extends Divinity {
-    private final String name = "Eros";
 
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
@@ -86,6 +85,6 @@ public class Zeus extends Divinity {
 
     @Override
     public String getName() {
-        return name;
+        return "Zeus";
     }
 }

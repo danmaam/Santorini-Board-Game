@@ -8,7 +8,6 @@ import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import java.util.function.Consumer;
 
 public class Athena extends Divinity {
-    private final String name = "Athena";
 
     private Boolean lastTurnLevelUp = false;
 
@@ -48,6 +47,6 @@ public class Athena extends Divinity {
 
     @Override
     public String getName() {
-        return name;
+        return "Athena";
     }
 }

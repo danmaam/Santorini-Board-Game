@@ -8,10 +8,15 @@ import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class ClientHandlerListener<NetworkMessageToServer> implements Runnable {
+public class ClientHandlerListener implements Runnable {
 
-    private final Socket clientListener;
     private NetworkMessagesToServer nextMessage;
+
+    private boolean setNickname = false;
+    private boolean setGameMode = false;
+    private String setUp;
+
+    private Socket clientSocket;
 
     private ArrayList<ServerNetworkObserver> observers = new ArrayList<>();
 
@@ -24,13 +29,14 @@ public class ClientHandlerListener<NetworkMessageToServer> implements Runnable {
     }
 
     public void notifyObservers() {
+        System.out.println("received message " + nextMessage.toString());
         for (ServerNetworkObserver nO : observers) {
             nextMessage.doThings(nO);
         }
     }
 
     public ClientHandlerListener(Socket client) {
-        clientListener = client;
+        this.clientSocket = client;
     }
 
     @Override
@@ -45,10 +51,28 @@ public class ClientHandlerListener<NetworkMessageToServer> implements Runnable {
     }
 
     public synchronized void waitForMessages() throws IOException, ClassNotFoundException {
-        ObjectInputStream in = new ObjectInputStream(clientListener.getInputStream());
+        ObjectInputStream input = new ObjectInputStream(clientSocket.getInputStream());
         while (true) {
-            nextMessage = (NetworkMessagesToServer) in.readObject();
-            notifyObservers();
+            if (!setNickname) {
+                setUp = (String) input.readObject();
+                for (ServerNetworkObserver o : observers) o.processNickname(setUp);
+            } else if (!setGameMode) {
+                setUp = (String) input.readObject();
+                for (ServerNetworkObserver o : observers) o.processGameMode(setUp);
+            } else {
+                System.out.println("waiting for messages");
+                nextMessage = (NetworkMessagesToServer) input.readObject();
+                System.out.println("received message");
+                notifyObservers();
+            }
         }
+    }
+
+    public void nicknameSet(boolean value) {
+        setNickname = value;
+    }
+
+    public void setGameMode(boolean value) {
+        setGameMode = value;
     }
 }

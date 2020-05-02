@@ -17,8 +17,6 @@ public class Server {
     public static ArrayList<GameRoom> roomsOnTheServer = new ArrayList<>();
 
     public static void main(String[] args) {
-        ObjectOutputStream out;
-        ObjectInputStream in;
 
         System.out.println("Santorini Server V.0.1 Alpha.");
         ServerSocket socket;
@@ -32,6 +30,7 @@ public class Server {
 
         while (true) {
             try {
+
                 Socket client = socket.accept();
                 ClientHandler cH = new ClientHandler(client);
                 Thread th = new Thread(cH);
@@ -42,21 +41,18 @@ public class Server {
         }
     }
 
-    public static void addNickname(String s) throws IllegalArgumentException {
-        synchronized (playersConnectedToTheGame) {
-            if (playersConnectedToTheGame.contains(s)) throw new IllegalArgumentException();
-            playersConnectedToTheGame.add(s);
-        }
+    public synchronized static void addNickname(String s) throws IllegalArgumentException {
+        if (playersConnectedToTheGame.contains(s)) throw new IllegalArgumentException();
+        playersConnectedToTheGame.add(s);
     }
 
-    public static void removeNickname(String s) {
-        synchronized (playersConnectedToTheGame) {
-            if (playersConnectedToTheGame.contains(s)) playersConnectedToTheGame.remove(s);
-        }
+    public synchronized static void removeNickname(String s) {
+        if (playersConnectedToTheGame.contains(s)) playersConnectedToTheGame.remove(s);
     }
 
 
-    public static void insertPlayerInGameRoom(int playerNumber, boolean allowedDivinities, String name, Calendar Birthday, AbstractView playerVirtualView) {
+    public static synchronized void insertPlayerInGameRoom(int playerNumber, boolean allowedDivinities, String name, Calendar Birthday, AbstractView playerVirtualView) {
+        System.out.println("Adding in the game room");
         boolean added = false;
         for (GameRoom g : roomsOnTheServer) {
             if (g.isGameWithDivinities() == allowedDivinities && g.getRoomPlayerNumber() == playerNumber && g.getPlayersInTheRoom() < g.getRoomPlayerNumber()) {

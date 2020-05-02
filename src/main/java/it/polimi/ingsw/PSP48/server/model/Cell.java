@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP48.server.model;
 
 import it.polimi.ingsw.PSP48.server.model.exceptions.MaximumLevelReachedException;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Objects;
  * Also, a bulding can have a dome over the third floor; isDomed checks if there is a dome on the cell.
  * worker contains the reference to the worker placed on the cell of the board game; it can be set using setWorker.
  */
-public class Cell implements Cloneable {
+public class Cell implements Cloneable, Serializable {
     private int column;
     private int row;
     private String player = null;

@@ -14,7 +14,7 @@ public class Player {
     private Divinity divinity;
     private Divinity tempDivinity;
     private int oldLevel;
-    private int workersOnTable = 0;
+    private int workersOnTable;
 
     public void addWorker() {
         this.workersOnTable++;
@@ -63,6 +63,7 @@ public class Player {
             this.name = name;
             this.birthday = birthday;
             this.colour = c;
+            workersOnTable = 0;
         }
     }
 

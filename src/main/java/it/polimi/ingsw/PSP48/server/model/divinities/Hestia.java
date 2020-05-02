@@ -11,7 +11,6 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Hestia extends Divinity {
-    private final String name = "Hestia";
 
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
@@ -121,6 +120,6 @@ public class Hestia extends Divinity {
 
     @Override
     public String getName() {
-        return name;
+        return "Hestia";
     }
 }

@@ -10,12 +10,9 @@ import it.polimi.ingsw.PSP48.server.model.Position;
 import it.polimi.ingsw.PSP48.server.virtualview.VirtualView;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.function.Consumer;
 
 /**
  * Handles the connection of a player
@@ -23,215 +20,196 @@ import java.util.function.Consumer;
 public class ClientHandler implements Runnable {
 
     private enum nextAction {
-        requestAction;
+        requestAction, setupmessage;
     }
 
-    private nextAction toDO;
-
+    private nextAction toDO = null;
+    Object toDOLOCK = new Object();
 
     public ClientHandler(Socket client) {
         this.client = client;
     }
 
     ObjectOutputStream output;
-    ObjectInputStream input;
 
     private String playerDatas = null;
-    private String nextMessage;
-    private String playerName;
+    private String setUpMessage;
     private NetworkMessagesToClient nextObject;
 
 
     private final Socket client;
-    private VirtualView playerVirtualView;
 
     @Override
     public void run() {
+
+        ClientHandlerListener incomingMessagesHandler = new ClientHandlerListener(client);
+        VirtualView playerVirtualView = new VirtualView(this, incomingMessagesHandler);
+        incomingMessagesHandler.registerObserver(playerVirtualView);
+        Thread listenerThread = new Thread(incomingMessagesHandler);
+        listenerThread.start();
         try {
-            input = new ObjectInputStream(client.getInputStream());
-            output = new ObjectOutputStream(client.getOutputStream());
-            System.out.println("Connected to " + client.getInetAddress());
-
-            boolean done = false;
-
-            while (!done) {
-                try {
-                    playerDatas = (String) input.readObject();
-                    String nextMessage;
-                    try {
-                        Server.addNickname(playerDatas);
-                        playerName = playerDatas;
-                        done = true;
-                        nextMessage = "Valid Nickname. Welcome to the game";
-                    } catch (IllegalArgumentException e) {
-                        nextMessage = "Invalid nickname. Retry";
-                    }
-                    output.writeObject(nextMessage);
-                } catch (ClassNotFoundException e) {
-                    System.out.println("Error from the client");
-                }
-            }
-
-            //at this point, the player has logged to the server, and he must choose the preferred game mode
-
-            done = false;
-            nextMessage = null;
-            Calendar c = Calendar.getInstance();
-            String[] data;
-            while (!done) {
-                try {
-                    playerDatas = (String) input.readObject();
-                    String mode = playerDatas.split(" ")[0];
-                    if (!(mode.equals("3ND") || mode.equals("2ND") || mode.equals("3D") || mode.equals("2D")))
-                        nextMessage = "Not valid mode. Retry";
-                    else playerVirtualView = new VirtualView(this);
-
-                    if (mode.equals("3ND")) {
-                        if (playerDatas.split(" ").length == 1) {
-                            nextMessage = "Missing Birthday. Retry";
-                        }
-                        data = playerDatas.split(" ")[1].split("-");
-                        c.set(Integer.parseInt(data[2]), Integer.parseInt(data[1]), Integer.parseInt(data[0]));
-                        Server.insertPlayerInGameRoom(3, false, playerName, c, playerVirtualView);
-                        nextMessage = "You're in Game Room now! 3 Players, without divinities. The game will begin soon";
-                        done = true;
-                    } else if (mode.equals("2ND")) {
-                        if (playerDatas.split(" ").length == 1) {
-                            nextMessage = "Missing Birthday. Retry";
-                        } else {
-                            data = playerDatas.split(" ")[1].split("-");
-                            c.set(Integer.parseInt(data[2]), Integer.parseInt(data[1]), Integer.parseInt(data[0]));
-                            Server.insertPlayerInGameRoom(3, false, playerName, c, playerVirtualView);
-                            nextMessage = "You're in Game Room now! 2 Players, without divinities. The game will begin soon";
-                            done = true;
-                        }
-                    } else if (mode.equals("3D")) {
-                        Server.insertPlayerInGameRoom(3, true, playerName, null, playerVirtualView);
-                        nextMessage = "You are in the game room! 3 players with divinities. The game will begin soon";
-                        done = true;
-                    } else if (mode.equals("2D")) {
-                        Server.insertPlayerInGameRoom(2, true, playerName, null, playerVirtualView);
-                        nextMessage = "You are in the game room! 2 players with divinities. The game will begin soon";
-                        done = true;
-                    }
-                    output.writeObject(nextMessage);
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-            //at this point, the server is set-up, and will be the controller to start the game
-            //but, we must instantiate an handler for incoming messages
-            ClientHandlerListener incomingMessagesHandler = new ClientHandlerListener(client);
-            incomingMessagesHandler.registerObserver(playerVirtualView);
-            Thread listenerThread = new Thread(incomingMessagesHandler);
-            listenerThread.start();
             handleGamePhases();
         } catch (IOException e) {
-            System.out.println("Disconnected from " + client.getInetAddress());
-            if (playerDatas != null) Server.removeNickname(playerDatas);
+
         }
+
+        System.out.println("Disconnected from " + client.getInetAddress());
+        if (playerDatas != null) Server.removeNickname(playerDatas);
     }
 
-    private synchronized void handleGamePhases() throws IOException {
+    private void handleGamePhases() throws IOException {
+        output = new ObjectOutputStream(client.getOutputStream());
+        System.out.println("Connected to " + client.getInetAddress());
         while (true) {
-            toDO = null;
-            try {
-                wait();
-            } catch (InterruptedException e) {
+            synchronized (toDOLOCK) {
+                while (toDO == null) {
+                    try {
+                        toDOLOCK.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
 
-            }
-            if (toDO == null) continue;
-
-            switch (toDO) {
-                case requestAction:
-                    sendNetworkMessage();
-                    break;
+                switch (toDO) {
+                    case requestAction:
+                        output.writeObject(nextObject);
+                        toDO = null;
+                        break;
+                    case setupmessage:
+                        output.writeObject(setUpMessage);
+                        toDO = null;
+                        break;
+                }
             }
         }
     }
 
-    public synchronized void sendNetworkMessage() throws IOException {
-        output.writeObject(nextObject);
+
+    public void requestMessageSend(String lambda) {
+        synchronized (toDOLOCK) {
+            toDO = nextAction.requestAction;
+            nextObject = new requestMessagePrint(lambda);
+            toDOLOCK.notifyAll();
+        }
     }
 
-    public synchronized void requestMessageSend(Consumer<AbstractView> lambda) {
-        toDO = nextAction.requestAction;
-        nextObject = new requestMessagePrint(null);
-        notifyAll();
+    public void requestInitialPlayerSelection(ArrayList<String> players) {
+        System.out.println("Sending request for initial player selection");
+        synchronized (toDOLOCK) {
+            nextObject = new requestForMoveAction(players);
+            toDO = nextAction.requestAction;
+            toDOLOCK.notifyAll();
+        }
     }
 
-    public synchronized void requestInitialPlayerSelection(ArrayList<String> players) {
-        nextObject = new requestForMoveAction(players);
-        toDO = nextAction.requestAction;
-        notifyAll();
+    public void requestInitialPositioning(ArrayList<Position> validCells) {
+        System.out.println("Sending request for Initial Positioning");
+        synchronized (toDOLOCK) {
+            System.out.println("requesting initial positioning");
+            nextObject = new PositioningRequest(validCells);
+            toDO = nextAction.requestAction;
+            toDOLOCK.notifyAll();
+        }
+
     }
 
-    public synchronized void requestInitialPositioning(ArrayList<Position> validCells) {
-        nextObject = new PositioningRequest(validCells);
-        toDO = nextAction.requestAction;
-        notifyAll();
+    public void requestChallengerDivinitiesSelection(ArrayList<DivinitiesWithDescription> div, int playerNumber) {
+        synchronized (toDOLOCK) {
+            System.out.println("instantiating divinity list message, and requesting it's send");
+            nextObject = new ChallengerDivinitiesSelectionRequest(div, playerNumber);
+            toDO = nextAction.requestAction;
+            toDOLOCK.notifyAll();
+        }
     }
 
-    public synchronized void requestChallengerDivinitiesSelection(ArrayList<DivinitiesWithDescription> div, int playerNumber) {
-        nextObject = new ChallengerDivinitiesSelectionRequest(div, playerNumber);
-        toDO = nextAction.requestAction;
-        notifyAll();
+    public void requestOptionalMove(ArrayList<WorkerValidCells> validCellsForMove) {
+        System.out.println("sending an optional move request");
+        synchronized (toDOLOCK) {
+            nextObject = new OptionalMoveRequest(validCellsForMove);
+            toDO = nextAction.requestAction;
+            toDOLOCK.notifyAll();
+        }
     }
 
-    public synchronized void requestOptionalMove(ArrayList<WorkerValidCells> validCellsForMove) {
-        nextObject = new OptionalMoveRequest(validCellsForMove);
-        toDO = nextAction.requestAction;
-        notifyAll();
+    public void requestOptionalBuild(ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome) {
+        synchronized (toDOLOCK) {
+            nextObject = new RequestOpionalBuild(build, dome);
+            toDO = nextAction.requestAction;
+            toDOLOCK.notifyAll();
+        }
     }
 
-    public synchronized void requestOptionalBuild(ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome) {
-        nextObject = new RequestOpionalBuild(build, dome);
-        toDO = nextAction.requestAction;
-        notifyAll();
+    public void changedBoard(ArrayList<Cell> newCells) {
+        System.out.println("Sending changed board");
+        synchronized (toDOLOCK) {
+            nextObject = new ChangedBoard(newCells);
+            toDO = nextAction.requestAction;
+            toDOLOCK.notifyAll();
+        }
     }
 
-    public synchronized void changedBoard(ArrayList<Cell> newCells) {
-        nextObject = new ChangedBoard(newCells);
-        toDO = nextAction.requestAction;
-        notifyAll();
+    public void changedPlayerList(ArrayList<String> newPlayerList) {
+        synchronized (toDOLOCK) {
+            System.out.println("sending new player list");
+            nextObject = new UpdatedPlayerList(newPlayerList);
+            toDO = nextAction.requestAction;
+            toDOLOCK.notifyAll();
+        }
     }
 
-    public synchronized void changedPlayerList(ArrayList<String> newPlayerList) {
-        nextObject = new UpdatedPlayerList(newPlayerList);
-        toDO = nextAction.requestAction;
-        notifyAll();
-    }
-
-    public synchronized void requestMove(ArrayList<WorkerValidCells> validCellsForMove) {
-        nextObject = new RequestMove(validCellsForMove);
-        toDO = nextAction.requestAction;
-        notifyAll();
+    public void requestMove(ArrayList<WorkerValidCells> validCellsForMove) {
+        System.out.println("Sending move request");
+        synchronized (toDOLOCK) {
+            nextObject = new RequestMove(validCellsForMove);
+            toDO = nextAction.requestAction;
+            toDOLOCK.notifyAll();
+        }
     }
 
     public synchronized void requestBuild(ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome) {
-        nextObject = new RequestBuild(build, dome);
-        toDO = nextAction.requestAction;
-        notifyAll();
-        ;
+        System.out.println("Sending build request");
+        synchronized (toDOLOCK) {
+            nextObject = new RequestBuild(build, dome);
+            toDO = nextAction.requestAction;
+            toDOLOCK.notifyAll();
+        }
     }
 
 
-    public synchronized void declareWin() {
-        nextObject = new WinMessage();
-        toDO = nextAction.requestAction;
-        notifyAll();
+    public void declareWin() {
+        System.out.println("Sending win message");
+        synchronized (toDOLOCK) {
+            nextObject = new WinMessage();
+            toDO = nextAction.requestAction;
+            toDOLOCK.notifyAll();
+        }
     }
 
-    public synchronized void declareLose() {
-        nextObject = new LoseMessage();
-        toDO = nextAction.requestAction;
-        notifyAll();
+    public void declareLose() {
+        System.out.println("sending lose message");
+        synchronized (toDOLOCK) {
+            nextObject = new LoseMessage();
+            toDO = nextAction.requestAction;
+            toDOLOCK.notifyAll();
+        }
     }
 
-    public synchronized void requestDivinitySelection(ArrayList<DivinitiesWithDescription> availableDivinities) {
-        nextObject = new DivinitySelectionRequest(availableDivinities);
-        toDO = nextAction.requestAction;
-        notifyAll();
+    public void requestDivinitySelection(ArrayList<DivinitiesWithDescription> availableDivinities) {
+        System.out.println("Sending request for divinity selection");
+        synchronized (toDOLOCK) {
+            nextObject = new DivinitySelectionRequest(availableDivinities);
+            toDO = nextAction.requestAction;
+            toDOLOCK.notifyAll();
+        }
+    }
+
+    public void setUpMessage(String message) {
+        System.out.println("Sending a setup message");
+        synchronized (toDOLOCK) {
+            setUpMessage = message;
+            toDO = nextAction.setupmessage;
+            toDOLOCK.notifyAll();
+        }
     }
 
 

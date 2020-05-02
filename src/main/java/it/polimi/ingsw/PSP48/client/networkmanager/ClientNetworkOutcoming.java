@@ -18,16 +18,7 @@ import java.util.List;
 public class ClientNetworkOutcoming implements Runnable, ViewObserver {
     private Socket server;
     private ObjectOutputStream outputStm;
-    private ObjectInputStream inputStm;
-    private ArrayList<ClientNetworkObserver> observers = new ArrayList<>();
 
-    public void addObserver(ClientNetworkObserver n) {
-        observers.add(n);
-    }
-
-    public void removeObserver(ClientNetworkObserver n) {
-        observers.remove(n);
-    }
 
     public NetworkMessagesToServer o;
 
@@ -43,54 +34,54 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
     }
 
     @Override
-    public void build(MoveCoordinates p) {
+    public synchronized void build(MoveCoordinates p) {
         nextAction = action.send_gameAction;
         o = new BuildMessage(p);
         notifyAll();
     }
 
     @Override
-    public void dome(MoveCoordinates p) {
+    public synchronized void dome(MoveCoordinates p) {
         nextAction = action.send_gameAction;
         o = new DomeMessage(p);
         notifyAll();
     }
 
     @Override
-    public void putWorkerOnTable(Position p) {
+    public synchronized void putWorkerOnTable(Position p) {
         nextAction = action.send_gameAction;
         o = new WorkerPositionMessage(p);
         notifyAll();
     }
 
     @Override
-    public void registerPlayerDivinity(String divinity) {
+    public synchronized void registerPlayerDivinity(String divinity) {
         nextAction = action.send_gameAction;
         o = new PlayerDivinityMessage(divinity);
         notifyAll();
     }
 
     @Override
-    public void addPlayer(String playerDetails, Calendar birthday) {
+    public synchronized void addPlayer(String playerDetails, Calendar birthday) {
 
     }
 
     @Override
-    public void selectAvailableDivinities(ArrayList<String> divinities) {
+    public synchronized void selectAvailableDivinities(ArrayList<String> divinities) {
         nextAction = action.send_gameAction;
         o = new ChallengerDivinitiesMessage(divinities);
         notifyAll();
     }
 
     @Override
-    public void selectFirstPlayer(String playerName) {
+    public synchronized void selectFirstPlayer(String playerName) {
         nextAction = action.send_gameAction;
         o = new FirstPlayerSelectionMessage(playerName);
         notifyAll();
     }
 
     private enum action {
-        send_nickname, send_gamemode, send_gameAction
+        send_nickname, send_gamemode, send_gameAction, close_inputstream
     }
 
 
@@ -101,7 +92,7 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
     public void run() {
         try {
             outputStm = new ObjectOutputStream(server.getOutputStream());
-            inputStm = new ObjectInputStream(server.getInputStream());
+            System.out.println("starting message handler");
             handleServerConnection();
         } catch (IOException e) {
             System.out.println("server has died");
@@ -111,6 +102,7 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
     }
 
     public synchronized void handleServerConnection() throws IOException, ClassNotFoundException {
+        System.out.println("handling messages");
         while (true) {
             nextAction = null;
             try {
@@ -131,55 +123,38 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
                 case send_gameAction:
                     sendGameAction();
                     break;
+                case close_inputstream:
+                    break;
             }
         }
     }
 
     private synchronized void sendPlayerNickname() throws IOException, ClassNotFoundException {
+        System.out.println("sending nickname");
         outputStm.writeObject(nextMessage);
-        String newStr = (String) inputStm.readObject();
-
-        List<ClientNetworkObserver> observersCpy;
-
-        synchronized (observers) {
-            observersCpy = new ArrayList<>(observers);
-        }
-
-        /* notify the observers that we got the string */
-        for (ClientNetworkObserver observer : observersCpy) {
-            observer.nicknameResult(newStr);
-        }
     }
 
     private synchronized void sendGameMode() throws IOException, ClassNotFoundException {
+        System.out.println("sending game mode");
         outputStm.writeObject(nextMessage);
-        String newStr = (String) inputStm.readObject();
-
-        List<ClientNetworkObserver> observersCpy;
-
-        synchronized (observers) {
-            observersCpy = new ArrayList<>(observers);
-        }
-
-        /* notify the observers that we got the string */
-        for (ClientNetworkObserver observer : observersCpy) {
-            observer.gameModeResult(newStr);
-        }
     }
 
     public synchronized void requestNicknameSend(String nickname) {
+        System.out.println("sending nickname");
         nextAction = action.send_nickname;
         this.nextMessage = nickname;
         notifyAll();
     }
 
     public synchronized void setGameMode(String n) {
+        System.out.println("sending game mode");
         nextAction = action.send_gamemode;
         nextMessage = n;
         notifyAll();
     }
 
     public synchronized void sendGameAction() throws IOException, ClassNotFoundException {
+        System.out.println("sending game action");
         outputStm.writeObject(o);
     }
 

@@ -9,7 +9,6 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Minotaur extends Divinity {
-    private final String name = "Minotaur";
 
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
@@ -24,7 +23,7 @@ public class Minotaur extends Divinity {
 
     @Override
     public String getName() {
-        return name;
+        return "Minotaur";
     }
 
     /**

@@ -2,9 +2,10 @@ package it.polimi.ingsw.PSP48;
 
 import it.polimi.ingsw.PSP48.server.model.Position;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class WorkerValidCells {
+public class WorkerValidCells implements Serializable {
     private ArrayList<Position> validPositions;
     private int wR;
     private int wC;

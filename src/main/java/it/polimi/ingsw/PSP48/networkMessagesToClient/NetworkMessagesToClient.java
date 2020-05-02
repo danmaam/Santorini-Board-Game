@@ -9,4 +9,8 @@ public abstract class NetworkMessagesToClient implements Serializable {
 
     public abstract void doAction(AbstractView v);
 
+    public Boolean initializationMessage() {
+        return false;
+    }
+
 }

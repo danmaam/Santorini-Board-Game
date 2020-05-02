@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class Eros extends Divinity {
-    private final String name = "Eros";
 
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
@@ -57,7 +56,7 @@ public class Eros extends Divinity {
 
     @Override
     public String getName() {
-        return name;
+        return "Eros";
     }
 
     /**

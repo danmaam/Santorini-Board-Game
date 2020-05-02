@@ -1,5 +1,7 @@
 package it.polimi.ingsw.PSP48.server.model;
 
+import java.io.Serializable;
+
 public class MovePosition {
     private int workerRow;
     private int workerColumn;

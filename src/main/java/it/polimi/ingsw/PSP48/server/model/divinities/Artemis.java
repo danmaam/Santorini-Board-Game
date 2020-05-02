@@ -11,7 +11,6 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Artemis extends Divinity {
-    private final String name = "Artemis";
 
     private int oldRowMove = -1;
     private int oldColumnMove = -1;
@@ -87,6 +86,6 @@ public class Artemis extends Divinity {
 
     @Override
     public String getName() {
-        return name;
+        return "Artemis";
     }
 }

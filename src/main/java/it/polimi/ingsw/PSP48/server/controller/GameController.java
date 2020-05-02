@@ -9,6 +9,7 @@ import it.polimi.ingsw.PSP48.server.model.divinities.Divinity;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import it.polimi.ingsw.PSP48.observers.ViewObserver;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -43,6 +44,7 @@ public class GameController implements ViewObserver {
      */
     @Override
     public void addPlayer(String name, Calendar birthday) {
+        System.out.println("adding player");
         Calendar c = Calendar.getInstance();
         model.addPlayer(name, model.getNextColour(), birthday);
 
@@ -60,6 +62,7 @@ public class GameController implements ViewObserver {
      */
     @Override
     public void move(MoveCoordinates p) {
+        System.out.println("doing move");
         //i must check if this move allows the player to end the turn
         try {
             nextAction = model.getCurrentPlayer().getDivinity().move(p.getWorkerColumn(), p.getWorkerRow(), p.getMoveColumn(), p.getMoveRow(), model);
@@ -99,6 +102,7 @@ public class GameController implements ViewObserver {
      */
     @Override
     public void build(MoveCoordinates p) {
+        System.out.println("build");
         try {
             nextAction = model.getCurrentPlayer().getDivinity().build(p.getWorkerRow(), p.getWorkerColumn(), p.getMoveRow(), p.getMoveColumn(), model);
         } catch (Exception e) {
@@ -115,6 +119,7 @@ public class GameController implements ViewObserver {
      */
     @Override
     public void dome(MoveCoordinates p) {
+        System.out.println("dome");
         try {
             nextAction = model.getCurrentPlayer().getDivinity().dome(p.getWorkerRow(), p.getWorkerColumn(), p.getMoveRow(), p.getMoveColumn(), model);
         } catch (NotAdjacentCellException e) {
@@ -148,6 +153,7 @@ public class GameController implements ViewObserver {
      */
     @Override
     public void putWorkerOnTable(Position p) {
+        System.out.println("positioning worker");
         try {
             model.getCurrentPlayer().getDivinity().putWorkerOnBoard(p, model).accept(this);
         } catch (OccupiedCellException e) {
@@ -166,6 +172,7 @@ public class GameController implements ViewObserver {
     //@ requires (\exists int x; 0 <= x && x<= model.getAvailableDivinities().size(); model.getAvailableDivinities().get(x).getName().equals(divinity))
     @Override
     public void registerPlayerDivinity(String divinity) {
+        System.out.println("associating player divinity");
         Divinity a = null;
         model.setPlayerDivinity(model.getCurrentPlayer().getName(), divinity);
         //if the current player is the chosen, all divinities has benn selected, and the game must start
@@ -186,6 +193,7 @@ public class GameController implements ViewObserver {
      */
     @Override
     public void selectAvailableDivinities(ArrayList<String> divinities) {
+        System.out.println("arrived divinities from challenger");
         model.challengerDivinityChoice(divinities);
         model.setNextPlayer();
         this.requestDivinitySelection();
@@ -198,9 +206,10 @@ public class GameController implements ViewObserver {
      */
     @Override
     public void selectFirstPlayer(String playerName) {
+        System.out.println("setting first player");
         model.setNextPlayer(playerName);
-        nextAction = model.getCurrentPlayer().getDivinity().turnBegin(model);
-        this.nextAction();
+        model.setFirstPlayerIndex(model.getPlayersInGame().indexOf(model.getPlayer(playerName)));
+        this.requestInitialPositioning();
     }
 
 
@@ -210,6 +219,7 @@ public class GameController implements ViewObserver {
      * @author Daniele Mammone
      */
     public void requestBuildDome() {
+        System.out.println("requesting build or dome");
         ArrayList<Divinity> otherDivinities = new ArrayList<>();
         for (Player p : model.getPlayersInGame()) {
             if (!p.getName().equals(model.getCurrentPlayer().getName())) otherDivinities.add(p.getDivinity());
@@ -227,6 +237,7 @@ public class GameController implements ViewObserver {
      * Obtains valid cells for worker's moving, and requires the player to move his player
      */
     public void requestMove() {
+        System.out.println("requesting build or move");
         ArrayList<WorkerValidCells> validCells = new ArrayList<>();
         ArrayList<Position> workersPosition = model.getPlayerPositionsInMap(model.getCurrentPlayer().getName());
         ArrayList<Divinity> otherDivinities = new ArrayList<>();
@@ -235,8 +246,8 @@ public class GameController implements ViewObserver {
         }
         for (Position p : workersPosition) {
             validCells.add(new WorkerValidCells(new ArrayList<>(model.getCurrentPlayer().getDivinity().getValidCellForMove(p.getRow(), p.getColumn(), model.getGameBoard(), otherDivinities)), p.getRow(), p.getColumn()));
-            getPlayerView(model.getCurrentPlayer().getName()).requestMove(validCells);
         }
+        getPlayerView(model.getCurrentPlayer().getName()).requestMove(validCells);
     }
 
     /**
@@ -261,9 +272,8 @@ public class GameController implements ViewObserver {
                 else getPlayerView(p).declareLose();
             }
             nextAction = (GameController::gameEnd);
-        } else {
-            this.nextAction();
         }
+        this.nextAction();
     }
 
     public void gameEnd() {
@@ -315,6 +325,7 @@ public class GameController implements ViewObserver {
      * method that checks if a player can complete a turn by moving and then building
      */
     public void CheckIfCanEndTurnBaseDivinity() {
+        System.out.println("checking if can end turn");
         ArrayList<Position> playerPositions;
         Position position1, position2;
         ArrayList<Divinity> otherDivinities = new ArrayList<>();
@@ -384,8 +395,12 @@ public class GameController implements ViewObserver {
      * Starts the game, so, randomically, chose the "chosen", sets the chosen as last player to chose divinities, and asks the chosen to select a set of divinities
      */
     public void startGameWithDivinities() {
+        System.out.println("starting game");
         //i must choose randomically the challenger, than request him to choose divinities
         int i = new Random().nextInt(model.getNumberOfPlayers());
+        for (Player p : model.getPlayersInGame()) {
+            getPlayerView(p.getName()).printMessage("Game started!");
+        }
         model.setChallengerIndex(i);
         model.setNextPlayer(i);
         //set the challenger, i must ask him to select divinities
@@ -430,6 +445,7 @@ public class GameController implements ViewObserver {
     }
 
     public void requestInitialPositioning() {
+        System.out.println("requesting initial positioning");
         getPlayerView(model.getCurrentPlayer().getName()).requestInitialPositioning(model.getCurrentPlayer().getDivinity().validCellsForInitialPositioning(model.getGameBoard()));
     }
 
@@ -439,14 +455,18 @@ public class GameController implements ViewObserver {
      * his divinity; else, changes the current player and asks the next to perform initial positioning
      */
     public void initialPositioningTurnChange() {
+
         model.setNextPlayer();
         //Must check if all the players completed the initial positioning
         if (model.getPlayersInGame().indexOf(model.getCurrentPlayer()) == model.getFirstPlayerIndex()) {
             //it means all the workers are on the board, so I must request the turn begin to the first player
+            System.out.println("starting game");
             nextAction = model.getCurrentPlayer().getDivinity().turnBegin(model);
         } else {
+            System.out.println("changing initial positioning turn");
             nextAction = GameController::requestInitialPositioning;
         }
+        nextAction();
     }
 
     /**
@@ -475,6 +495,7 @@ public class GameController implements ViewObserver {
         if (validForBuilding.isEmpty() && validForDoming.isEmpty()) {
             try {
                 nextAction = model.getCurrentPlayer().getDivinity().build(-1, -1, -1, -1, null);
+                nextAction();
             } catch (Exception e) {
                 System.out.println("Fatal error");
             }
@@ -516,5 +537,34 @@ public class GameController implements ViewObserver {
         }
 
     }
+
+    public void PrometheusInitialOptionalBuild() {
+        ArrayList<WorkerValidCells> build = new ArrayList<>();
+        ArrayList<WorkerValidCells> dome = new ArrayList<>();
+
+        ArrayList<Divinity> otherDivinities = new ArrayList<>();
+        for (Player p : model.getPlayersInGame()) {
+            if (!p.getName().equals(model.getCurrentPlayer().getName())) otherDivinities.add(p.getDivinity());
+        }
+
+        ArrayList<Position> workersPosition = model.getPlayerPositionsInMap(model.getCurrentPlayer().getName());
+
+        for (Position p : workersPosition) {
+            build.add(new WorkerValidCells(new ArrayList<>(model.getCurrentPlayer().getDivinity().getValidCellForBuilding(p.getColumn(), p.getRow(), otherDivinities, model.getGameBoard())), p.getRow(), p.getColumn()));
+            dome.add(new WorkerValidCells(new ArrayList<>(model.getCurrentPlayer().getDivinity().getValidCellsToPutDome(p.getColumn(), p.getRow(), model.getGameBoard(), otherDivinities)), p.getRow(), p.getColumn()));
+        }
+        getPlayerView(model.getCurrentPlayer().getName()).requestOptionalBuild(build, dome);
+    }
+
+    public void PrometheusMovePostOptionalBuild() {
+        ArrayList<Divinity> otherDivinities = new ArrayList<>();
+        for (Player p : model.getPlayersInGame()) {
+            if (!p.getName().equals(model.getCurrentPlayer().getName())) otherDivinities.add(p.getDivinity());
+        }
+        ArrayList<WorkerValidCells> move = new ArrayList<>();
+        move.add(new WorkerValidCells(model.getCurrentPlayer().getDivinity().getValidCellForMove(model.getCurrentPlayer().getLastWorkerMoved().getColumn(), model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getGameBoard(), otherDivinities), model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getCurrentPlayer().getLastWorkerMoved().getColumn()));
+        getPlayerView(model.getCurrentPlayer().getName()).requestMove(move);
+    }
+
 
 }

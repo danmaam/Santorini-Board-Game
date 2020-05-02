@@ -3,7 +3,6 @@ package it.polimi.ingsw.PSP48.server.model.divinities;
 import it.polimi.ingsw.PSP48.server.model.Model;
 
 public class Pan extends Divinity {
-    private final String name = "Pan";
 
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
@@ -28,7 +27,7 @@ public class Pan extends Divinity {
 
     @Override
     public String getName() {
-        return name;
+        return "Pan";
     }
 
 }

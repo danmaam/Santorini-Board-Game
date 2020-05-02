@@ -13,7 +13,6 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Prometheus extends Divinity {
-    private final String name = "Prometheus";
 
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
@@ -69,7 +68,7 @@ public class Prometheus extends Divinity {
             if (build) break;
         }
 
-        if (!build) for (WorkerValidCells c : buildCells) {
+        if (!build) for (WorkerValidCells c : domeCells) {
             for (Position p : c.getValidPositions()) {
                 if (simulateBuildingCheckIfCanMoveAfterWards(c.getwR(), c.getwC(), p.getRow(), p.getColumn(), gd.getClonedGameBoard(), true, otherDivinities)) {
                     dome = true;
@@ -79,7 +78,7 @@ public class Prometheus extends Divinity {
             if (dome) break;
         }
 
-        if (!build && !dome) return GameController::requestOptionalBuilding;
+        if (build || dome) return GameController::PrometheusInitialOptionalBuild;
         else return GameController::CheckIfCanEndTurnBaseDivinity;
     }
 
@@ -137,10 +136,12 @@ public class Prometheus extends Divinity {
     @Override
     public Consumer<GameController> build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelReachedException, DivinityPowerException {
         Consumer<GameController> nextAction;
-        if (buildRow == -1 && buildColumn == -1) return GameController::requestMove;
+        if (buildRow == -1 && buildColumn == -1) return GameController::CheckIfCanEndTurnBaseDivinity;
         super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
-        if (!previousBuild && !doneMove) nextAction = GameController::requestOptionalBuilding;
-        else nextAction = GameController::turnEnd;
+        if (!previousBuild && !doneMove) {
+            gd.getCurrentPlayer().setLastWorkerUsed(workerRow, workerColumn);
+            nextAction = GameController::PrometheusMovePostOptionalBuild;
+        } else nextAction = GameController::turnEnd;
         previousBuild = true;
         return nextAction;
     }
@@ -162,33 +163,40 @@ public class Prometheus extends Divinity {
     @Override
     public Consumer<GameController> dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
         Consumer<GameController> nextAction;
-        if (domeRow == -1 && domeColumn == -1) return GameController::requestMove;
+        if (domeRow == -1 && domeColumn == -1) return GameController::CheckIfCanEndTurnBaseDivinity;
         super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
-        if (!previousBuild && !doneMove) nextAction = GameController::requestOptionalBuilding;
-        else nextAction = GameController::turnEnd;
+        if (!previousBuild && !doneMove) {
+            nextAction = GameController::PrometheusMovePostOptionalBuild;
+            gd.getCurrentPlayer().setLastWorkerUsed(workerRow, workerColumn);
+        } else nextAction = GameController::turnEnd;
         previousBuild = true;
         return nextAction;
     }
 
     @Override
     public String getName() {
-        return name;
+        return "Prometheus";
     }
 
     private boolean simulateBuildingCheckIfCanMoveAfterWards(int wR, int wC, int mR, int mC, Cell[][] gameBoard, boolean dome, ArrayList<Divinity> otherDiv) {
         //arrived here, the cell is valid, i simulate the move
         if (!dome) try {
             gameBoard[mR][mC].addLevel();
+            previousBuild = true;
         } catch (Exception e) {
             System.out.println("Fatal error");
         }
 
         else try {
             gameBoard[mR][mC].addDome();
+            previousBuild = true;
         } catch (Exception e) {
             System.out.println("Fatal error");
         }
-        return !getValidCellForMove(wC, wC, gameBoard, otherDiv).isEmpty();
+
+        Boolean can = !getValidCellForMove(wC, wR, gameBoard, otherDiv).isEmpty();
+        previousBuild = false;
+        return can;
     }
 
 

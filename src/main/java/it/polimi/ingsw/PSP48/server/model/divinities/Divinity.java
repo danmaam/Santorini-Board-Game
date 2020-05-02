@@ -186,7 +186,7 @@ public class Divinity {
 
         for (Cell c : validBuild) {
             for (Divinity d : otherDivinitiesInGame) {
-                if (d.othersBuilding(new BuildPosition(WorkerRow, WorkerColumn, c.getRow(), c.getColumn(), c.getLevel()))) {
+                if (!d.othersBuilding(new BuildPosition(WorkerRow, WorkerColumn, c.getRow(), c.getColumn(), c.getLevel()))) {
                     notValid.add(c);
                     break;
                 }

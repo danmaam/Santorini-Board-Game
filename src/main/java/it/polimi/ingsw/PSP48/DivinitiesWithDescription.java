@@ -1,6 +1,8 @@
 package it.polimi.ingsw.PSP48;
 
-public class DivinitiesWithDescription {
+import java.io.Serializable;
+
+public class DivinitiesWithDescription implements Serializable {
     private final String name;
     private final String description;
 

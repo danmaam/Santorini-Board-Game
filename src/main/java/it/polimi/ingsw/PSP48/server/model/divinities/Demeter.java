@@ -11,7 +11,6 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Demeter extends Divinity {
-    private final String name = "Basic";
 
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
@@ -104,7 +103,7 @@ public class Demeter extends Divinity {
 
     @Override
     public String getName() {
-        return name;
+        return "Demeter";
     }
 
     /**

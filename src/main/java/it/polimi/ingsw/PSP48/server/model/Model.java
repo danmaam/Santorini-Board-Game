@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Stack;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * class used to contain all the data of a certain game, like the players and their workers, the current player and the status of the game
@@ -116,17 +117,7 @@ public class Model {
 
     public void addPlayer(String playerName, Colour playerColour, Calendar playerBirthday) {
         playersInGame.add(new Player(playerName, playerBirthday, gameWithDivinities, playerColour));
-        ArrayList<String> newPlayerString = new ArrayList<>();
-        for (Player p : playersInGame) {
-            if (p.getDivinity() == null && gameWithDivinities) {
-                newPlayerString.add(p.getName() + '.' + p.getColour().toString() + ".Divinity Not Chosen");
-            } else if (p.getDivinity() == null && !gameWithDivinities) {
-                newPlayerString.add(p.getName() + '.' + p.getColour().toString() + ".Base Divinity");
-            } else {
-                newPlayerString.add(p.getName() + '.' + p.getColour().toString() + "." + p.getDivinity().getName());
-            }
-        }
-        notifyObservers(x -> x.changedPlayerList(newPlayerString));
+        sendPlayerList();
     }
 
     /**
@@ -224,17 +215,7 @@ public class Model {
 
     public void removePlayer(String pName) {
         playersInGame.remove(getPlayer(pName));
-        ArrayList<String> newPlayerString = new ArrayList<>();
-        for (Player p : playersInGame) {
-            if (p.getDivinity() == null && gameWithDivinities) {
-                newPlayerString.add(p.getName() + '.' + p.getColour().toString() + ".Divinity Not Chosen");
-            } else if (p.getDivinity() == null && !gameWithDivinities) {
-                newPlayerString.add(p.getName() + '.' + p.getColour().toString() + ".Base Divinity");
-            } else {
-                newPlayerString.add(p.getName() + '.' + p.getColour().toString() + "." + p.getDivinity().getName());
-            }
-        }
-        notifyObservers(x -> x.changedPlayerList(newPlayerString));
+        sendPlayerList();
     }
 
     public void setChallengerIndex(int challengerIndex) {
@@ -277,16 +258,7 @@ public class Model {
      * @author Daniele Mammone
      */
     public void challengerDivinityChoice(ArrayList<String> s) {
-        ArrayList<Divinity> toBeDeleted = new ArrayList<>();
-        for (Divinity d : availableDivinities) {
-            boolean tbd = true;
-            for (String k : s) {
-                if (d.getName().equals(k)) tbd = false;
-                break;
-            }
-            if (tbd) toBeDeleted.add(d);
-        }
-        for (Divinity d : toBeDeleted) availableDivinities.remove(d);
+        availableDivinities = availableDivinities.stream().filter((Divinity d) -> s.contains(d.getName())).collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -317,5 +289,19 @@ public class Model {
 
     public String getPlayerWithCirce() {
         return playerWithCirce;
+    }
+
+    public void sendPlayerList() {
+        ArrayList<String> newPlayerString = new ArrayList<>();
+        for (Player p : playersInGame) {
+            if (p.getDivinity() == null && gameWithDivinities) {
+                newPlayerString.add(p.getName() + '.' + p.getColour().toString() + ".Divinity Not Chosen");
+            } else if (p.getDivinity() == null && !gameWithDivinities) {
+                newPlayerString.add(p.getName() + '.' + p.getColour().toString() + ".Base Divinity");
+            } else {
+                newPlayerString.add(p.getName() + '.' + p.getColour().toString() + "." + p.getDivinity().getName());
+            }
+        }
+        notifyObservers(x -> x.changedPlayerList(newPlayerString));
     }
 }

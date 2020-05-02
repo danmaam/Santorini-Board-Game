@@ -1,6 +1,8 @@
 package it.polimi.ingsw.PSP48.server;
 
-public class MoveCoordinates {
+import java.io.Serializable;
+
+public class MoveCoordinates implements Serializable {
     private int workerRow;
     private int workerColumn;
     private int moveRow;

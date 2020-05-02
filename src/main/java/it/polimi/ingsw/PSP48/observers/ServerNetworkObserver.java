@@ -20,4 +20,8 @@ public interface ServerNetworkObserver {
     public void selectAvailableDivinities(ArrayList<String> divinities);
 
     public void firstPlayerRegistration(String player);
+
+    public void processNickname(String nickname);
+
+    public void processGameMode(String gameMode);
 }
