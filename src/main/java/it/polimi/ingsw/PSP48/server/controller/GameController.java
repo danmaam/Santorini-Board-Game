@@ -105,7 +105,25 @@ public class GameController implements ViewObserver {
         System.out.println("build");
         try {
             nextAction = model.getCurrentPlayer().getDivinity().build(p.getWorkerRow(), p.getWorkerColumn(), p.getMoveRow(), p.getMoveColumn(), model);
-        } catch (Exception e) {
+        } catch (NotAdjacentCellException e) {
+            getPlayerView(model.getCurrentPlayer().getName()).printMessage("Trying to build on a cell not adjacent");
+            nextAction();
+            return;
+        } catch (DivinityPowerException e) {
+            getPlayerView(model.getCurrentPlayer().getName()).printMessage("Trying to build on a cell blocked by a divinity power");
+            nextAction();
+            return;
+        } catch (DomedCellException e) {
+            getPlayerView(model.getCurrentPlayer().getName()).printMessage("Trying to build on a domed cell");
+            nextAction();
+            return;
+        } catch (OccupiedCellException e) {
+            getPlayerView(model.getCurrentPlayer().getName()).printMessage("Trying to build on a cell occupied by another worker");
+            nextAction();
+            return;
+        } catch (MaximumLevelReachedException e) {
+            getPlayerView(model.getCurrentPlayer().getName()).printMessage("Trying to go over level 3");
+            nextAction();
             return;
         }
         this.postBuild();

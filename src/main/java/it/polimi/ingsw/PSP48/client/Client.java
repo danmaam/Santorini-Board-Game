@@ -17,6 +17,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 /**
  * concrete class that represents all the interactions with the client
@@ -128,29 +129,31 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
         this.printBoard(); //after we modified all the cells we need to println the whole updated board
     }
 
-    /**
-     * method used to update the list of the players currently in the game
-     *
-     * @param newPlayerList the updated list
-     */
     @Override
     public void changedPlayerList(ArrayList<String> newPlayerList) {
         ArrayList<Player> newList = new ArrayList<Player>();
+        char separator = '.';
         for (String str : newPlayerList) {
-            newList.add(new Player(str));
-        }
-        for (Player p1 : newList) {
-            for (Player p2 : playerList) {
-                if (p1.getName().equals(p2.getName())) {
-                    p1.setPlayerColour(p2.getPlayerColour());
-                    p1.setDivinity(p2.getDivinity());
-                }
+            int n = str.indexOf(separator);
+            String playerName = str.substring(0, n);
+            int k = str.indexOf(separator, n + 1);
+            String playerColour = str.substring(n + 1, k);
+            ColoursForPrinting ansiPlayerColour;
+            if (playerColour.equals("BLUE")) {
+                ansiPlayerColour = ColoursForPrinting.blue;
+            } else if (playerColour.equals("GRAY")) {
+                ansiPlayerColour = ColoursForPrinting.gray;
+            } else {
+                ansiPlayerColour = ColoursForPrinting.white;
             }
+            String playerDivinity = str.substring(k + 1);
+            newList.add(new Player(playerName, ansiPlayerColour, playerDivinity));
         }
+
         playerList = newList;
-        System.out.println("Players in game: ");
+        System.out.println("Players in game:");
         for (Player p : playerList) {
-            System.out.println(p.getName() + " ");
+            System.out.println(p.getName() + " " + p.toString() + " " + p.getDivinity());
         }
     }
 
@@ -310,47 +313,28 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
                 }
             }
         }
-        this.printBoard();
+
 
         Scanner s = new Scanner(System.in);
-        System.out.println("Red cells are for building, yellow cells can be domed, green cells can take both actions");
-        System.out.println("Choose the row of the worker you want to move, among the workers with coloured cells: ");
-        if (s.hasNext()) {
-            workerRow = ((s.nextInt()) - 1);
-        }
-        System.out.println("Choose the column of the worker you want to move, among the workers with coloured cells: ");
-        if (s.hasNext()) {
-            workerColumn = ((s.nextInt()) - 1);
-        }
 
-        //we need to check if the worker is a valid one
-        boolean validWorker = false;
+        boolean inputSet = false;
+        String workerCoordinate;
         do {
-            for (int i = 0; (i < validForBuild.size() && !validWorker); i++) {
-                if (workerRow == validForBuild.get(i).getwR() && workerColumn == validForBuild.get(i).getwC()) {
-                    validWorker = true;
-                }
+            this.printBoard();
+            System.out.println("Red cells are for building, yellow cells can be domed, green cells can take both actions");
+            System.out.println("Choose the worker you want to do the build, in the format row,column");
+            workerCoordinate = s.nextLine();
+            if (workerCoordinate.split(",").length == 2) {
+                workerRow = Integer.parseInt(workerCoordinate.split(",")[0]) - 1;
+                workerColumn = Integer.parseInt(workerCoordinate.split(",")[1]) - 1;
+                if (!containsWorker(validForBuild, workerRow, workerColumn) && !containsWorker(validForBuild, workerRow, workerColumn)) {
+                    System.out.println("Invalid choice");
+                } else inputSet = true;
+            } else {
+                System.out.println("Invalid input format");
             }
-            if (!validWorker) {
-                for (int i = 0; (i < validForDome.size() && !validWorker); i++) {
-                    if (workerRow == validForDome.get(i).getwR() && workerColumn == validForDome.get(i).getwC()) {
-                        validWorker = true;
-                    }
-                }
-                if (!validWorker) {
-                    System.out.println("You need to choose a valid worker!!");
-                    this.printBoard();
-                    System.out.println("Choose the row of the worker you want to move, among the workers with coloured cells: ");
-                    if (s.hasNext()) {
-                        workerRow = ((s.nextInt()) - 1);
-                    }
-                    System.out.println("Choose the column of the worker you want to move, among the workers with coloured cells: ");
-                    if (s.hasNext()) {
-                        workerColumn = ((s.nextInt()) - 1);
-                    }
-                }
-            }
-        } while (!validWorker);
+        } while (!inputSet);
+
 
         //now we need to highlight the cells only belonging to the chosen worker, by bringing the other cells back to their original colour
         for (WorkerValidCells c : validForBuild) {
@@ -360,6 +344,7 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
                 }
             }
         }
+
         for (WorkerValidCells c : validForDome) {
             if (c.getwR() != workerRow && c.getwC() != workerColumn) {
                 for (Position po : c.getValidPositions()) {
@@ -369,138 +354,76 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
         }
 
         //now we ask the player the action he wants to make and check if it is compatible with the chosen worker
+        WorkerValidCells validCellsBuild = null;
+        WorkerValidCells validCellsDome = null;
+
+        for (WorkerValidCells c : validForBuild) {
+            if (c.getwR() == workerRow && c.getwC() == workerColumn) {
+                validCellsBuild = c;
+                break;
+            }
+        }
+
+        for (WorkerValidCells c : validForBuild) {
+            if (c.getwR() == workerRow && c.getwC() == workerColumn) {
+                validCellsDome = c;
+                break;
+            }
+        }
+
         String chosenAction = null;
-        boolean validAction = false;
+        String cellCoordinate;
+
+
         do {
             this.printBoard();
             System.out.println("Red cells are for building, yellow cells can be domed, green cells can take both actions");
-            System.out.println("Write build if you want to build, write dome if you want to put a dome: ");
-            if (s.hasNext()) {
-                chosenAction = s.nextLine(); //we read the action chosen by the player from input stream
-            }
-            if (chosenAction.equals("build")) {
-                for (int i = 0; (i < validForBuild.size() && !validAction); i++) {
-                    if (workerRow == validForBuild.get(i).getwR() && workerColumn == validForBuild.get(i).getwC()) {
-                        validAction = true;
-                    }
-                }
+            System.out.println("Choose the cell where you want to do the build, in the format row,build");
+            cellCoordinate = s.nextLine();
+            if (cellCoordinate.split(",").length == 2) {
+                chosenRow = Integer.parseInt(workerCoordinate.split(",")[0]) - 1;
+                chosenColumn = Integer.parseInt(workerCoordinate.split(",")[1]) - 1;
+                if (!validCellsBuild.contains(chosenRow, chosenColumn) && !validCellsDome.contains(chosenRow, chosenColumn)) {
+                    System.out.println("Invalid choice");
+                } else inputSet = true;
             } else {
-                for (int i = 0; (i < validForDome.size() && !validAction); i++) {
-                    if (workerRow == validForDome.get(i).getwR() && workerColumn == validForDome.get(i).getwC()) {
-                        validAction = true;
-                    }
-                }
+                System.out.println("Invalid input format");
             }
-            if (!validAction) {
-                System.out.println("You need to choose a valid action for your worker!!");
-            }
-        } while (!validAction);
+        } while (!inputSet);
 
-        //after getting the command from the player, we need to ask him where he wants to make his action
-        if (chosenAction.equals("build")) {
-            System.out.println("Choose the row where you want to build, among the coloured ones: ");
-            if (s.hasNext()) {
-                chosenRow = ((s.nextInt()) - 1);
-            }
-            System.out.println("Choose the column where you want to build, among the coloured ones: ");
-            if (s.hasNext()) {
-                chosenColumn = ((s.nextInt()) - 1);
-            }
 
-            //we need to check if the cell is actually a valid one
-            boolean validBuildCell = false;
-            Position chosenBuildPosition = new Position(chosenRow, chosenColumn);
+        //check if he can both dome and build, or only one of them
+        boolean build = false;
+        boolean dome = false;
+
+        if (validCellsBuild != null && validCellsBuild.contains(chosenRow, chosenColumn)) build = true;
+        if (validCellsDome != null && validCellsDome.contains(chosenRow, chosenColumn)) dome = true;
+
+        String input;
+        action whatToDO = null;
+        if (build && dome) {
+            boolean completed = false;
             do {
-                for (WorkerValidCells cell : validForBuild) {
-                    if (cell.getwR() == workerRow && cell.getwC() == workerColumn) {
-                        tempPositions = cell.getValidPositions();
-                        break;
-                    }
-                }
-                if (tempPositions.contains(chosenBuildPosition)) validBuildCell = true;
+                System.out.println("Enter d if you want to dome on the selected cell, or b if you want to build");
+                input = s.nextLine();
+                if (!input.equals("d") && !input.equals("b")) System.out.println("Invalid input. Retry");
                 else {
-                    System.out.println("You need to choose a valid cell!!");
-                    this.printBoard();
-                    System.out.println("Choose the row where you want to build, among the coloured ones: ");
-                    if (s.hasNext()) {
-                        chosenRow = ((s.nextInt()) - 1);
-                    }
-                    System.out.println("Choose the column where you want to build, among the coloured ones: ");
-                    if (s.hasNext()) {
-                        chosenColumn = ((s.nextInt()) - 1);
-                    }
-                    chosenBuildPosition = new Position(chosenRow, chosenColumn);
+                    if (input.equals("d")) whatToDO = action.dome;
+                    else whatToDO = action.build;
+                    completed = true;
                 }
-            } while (!validBuildCell);
+            } while (!completed);
 
-            //now we need to bring the board back to its original colour and notify the server about the choice
-            for (WorkerValidCells c : validForBuild) {
-                if (c.getwR() == workerRow && c.getwC() == workerColumn) {
-                    tempPositions = c.getValidPositions();
-                    break;
-                }
-            }
-            for (Position p : tempPositions) {
-                this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.white);
-            }
-            this.printBoard();
+        } else if (build) whatToDO = action.build;
+        else if (dome) whatToDO = action.dome;
 
-            MoveCoordinates chosenCoordinates = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
-            this.notifyObserver(x -> {
-                x.build(chosenCoordinates);
-            });
-        } else {
-            System.out.println("Choose the row where you want to put a dome, among the coloured ones: ");
-            if (s.hasNext()) {
-                chosenRow = ((s.nextInt()) - 1);
-            }
-            System.out.println("Choose the column where you want to put a dome, among the coloured ones: ");
-            if (s.hasNext()) {
-                chosenColumn = ((s.nextInt()) - 1);
-            }
 
-            //we need to check if the cell is actually a valid one
-            boolean validDomeCell = false;
-            Position chosenDomePosition = new Position(chosenRow, chosenColumn);
-            do {
-                for (WorkerValidCells cell : validForDome) {
-                    if (cell.getwR() == workerRow && cell.getwC() == workerColumn) {
-                        tempPositions = cell.getValidPositions();
-                        break;
-                    }
-                }
-                if (tempPositions.contains(chosenDomePosition)) validDomeCell = true;
-                else {
-                    System.out.println("You need to choose a valid cell!!");
-                    this.printBoard();
-                    System.out.println("Choose the row where you want to put a dome, among the coloured ones: ");
-                    if (s.hasNext()) {
-                        chosenRow = ((s.nextInt()) - 1);
-                    }
-                    System.out.println("Choose the column where you want to put a dome, among the coloured ones: ");
-                    if (s.hasNext()) {
-                        chosenColumn = ((s.nextInt()) - 1);
-                    }
-                    chosenDomePosition = new Position(chosenRow, chosenColumn);
-                }
-            } while (!validDomeCell);
-
-            //now we need to bring the board back to its original colour and notify the server about the choice
-            for (WorkerValidCells c : validForDome) {
-                if (c.getwR() == workerRow && c.getwC() == workerColumn) {
-                    tempPositions = c.getValidPositions();
-                    break;
-                }
-            }
-            for (Position p : tempPositions) {
-                this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.white);
-            }
-            this.printBoard();
-
-            MoveCoordinates chosenCoordinates = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
-            this.notifyObserver(x -> {
-                x.dome(chosenCoordinates);
-            });
+        MoveCoordinates move = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
+        switch (whatToDO) {
+            case build:
+                notifyObserver((x) -> x.build(move));
+            case dome:
+                notifyObserver((x) -> x.dome(move));
         }
     }
 
@@ -846,5 +769,16 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
         if (result.equals("Not valid mode. Retry") || result.equals("Missing Birthday. Retry")) completedAction = false;
         else completedAction = true;
         notifyAll();
+    }
+
+    public boolean containsWorker(ArrayList<WorkerValidCells> arr, int row, int column) {
+        for (WorkerValidCells v : arr) {
+            if (v.getwR() == row && v.getwC() == column) return true;
+        }
+        return false;
+    }
+
+    private enum action {
+        build, dome;
     }
 }

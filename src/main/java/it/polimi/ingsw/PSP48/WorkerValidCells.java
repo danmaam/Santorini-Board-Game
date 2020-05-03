@@ -27,4 +27,8 @@ public class WorkerValidCells implements Serializable {
         this.wR = wR;
         this.wC = wC;
     }
+
+    public boolean contains(int wR, int wC) {
+        return validPositions.contains(new Position(wR, wC));
+    }
 }
