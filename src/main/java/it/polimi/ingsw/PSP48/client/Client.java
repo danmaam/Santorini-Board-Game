@@ -214,18 +214,18 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
         //after we make sure that the player has chosen a valid worker to move, we highlight again the board, but only with the cells of that worker
         for (WorkerValidCells c : validCellsForMove)
         {
-                if (c.getwR() != workerRow && c.getwC() != workerColumn)
+                if (c.getwR() == workerRow && c.getwC() == workerColumn)
                 {
                     for (Position po : c.getValidPositions())
                     {
-                        this.getCellOnBoard(po.getRow(), po.getColumn()).setCellColour(ColoursForPrinting.white);
+                        this.getCellOnBoard(po.getRow(), po.getColumn()).setCellColour(ColoursForPrinting.red);
                     }
                 }
                 else
                 {
                     for (Position po : c.getValidPositions())
                     {
-                        this.getCellOnBoard(po.getRow(), po.getColumn()).setCellColour(ColoursForPrinting.red);
+                        this.getCellOnBoard(po.getRow(), po.getColumn()).setCellColour(ColoursForPrinting.white);
                     }
                 }
             }
