@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 /**
  * concrete class that represents all the interactions with the client
  *
- * @author Rebecca Marelli, Annalaura Massa
+ * @author Rebecca Marelli, Annalaura Massa, Daniele Mammone 
  */
 public class Client extends AbstractView implements Runnable, ClientNetworkObserver {
     private static final CellForPrinting[][] gameBoard = new CellForPrinting[5][5]; //class attributes
@@ -75,6 +75,18 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
                 gameBoard[i][j].printCellOnScreen();
             }
             System.out.println("\n");
+        }
+    }
+
+    /**
+     * method used to reset the colour of the board after we finish a move or build action during the turn
+     * @param positionsToReset are the cells we need to reset
+     */
+    public void resetBoard (ArrayList<Position> positionsToReset)
+    {
+        for (Position p : positionsToReset)
+        {
+            this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.white);
         }
     }
 
@@ -167,31 +179,27 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
      * @param validCellsForMove contains the positions of both workers and for each of them the valid cells for the move action
      */
     @Override
-    public void requestMove(ArrayList<WorkerValidCells> validCellsForMove) {
+    public void requestMove(ArrayList<WorkerValidCells> validCellsForMove)
+    {
         ArrayList<Position> tempList = new ArrayList<>();
         int workerRow = -1, workerColumn = -1;
         int chosenRow = -1, chosenColumn = -1;
 
-        for (WorkerValidCells c : validCellsForMove) {
+        for (WorkerValidCells c : validCellsForMove)
+        {
             tempList = c.getValidPositions(); //each time we retrieve the list of valid positions for the move action
             for (Position p : tempList) // for each of the valid positions, we need to highlight the cells on the board
             {
-                if (this.getCellOnBoard(p.getRow(), p.getColumn()).getCellColour() == ColoursForPrinting.white) //if the request move method is called by the optional move method, we don't need to highlight the cells again
-                {
-                    this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.red);
-                }
+                this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.red);
             }
         }
-
-
-        //after highlighting all the cells, we need to println the whole board
-
 
         //first we ask the player which one of his workers he wants to move
         Scanner s = new Scanner(System.in);
         String workerCoordinate;
         boolean inputSet = false;
-        if (validCellsForMove.size() > 1) {
+        if (validCellsForMove.size() > 1)
+        {
             do {
                 this.printBoard();
                 System.out.println("Choose the worker you want to move, in the format row,column");
@@ -206,23 +214,38 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
                     System.out.println("Invalid input format");
                 }
             } while (!inputSet);
-        } else {
+        }
+        else {
             workerRow = validCellsForMove.get(0).getwR();
             workerColumn = validCellsForMove.get(0).getwC();
         }
 
         //after we make sure that the player has chosen a valid worker to move, we highlight again the board, but only with the cells of that worker
-        for (WorkerValidCells c : validCellsForMove) {
-            if (c.getwR() == workerRow && c.getwC() == workerColumn) {
-                for (Position po : c.getValidPositions()) {
-                    this.getCellOnBoard(po.getRow(), po.getColumn()).setCellColour(ColoursForPrinting.red);
+        if (validCellsForMove.size() > 1) //if the player can only move one worker, the cells of that worker have already been highlighted
+        {
+            for (WorkerValidCells c : validCellsForMove)
+            {
+                if (c.getwR() == workerRow && c.getwC() == workerColumn)
+                {
+                    tempList=c.getValidPositions();
+                    break;
                 }
-            } else {
-                for (Position po : c.getValidPositions()) {
-                    this.getCellOnBoard(po.getRow(), po.getColumn()).setCellColour(ColoursForPrinting.white);
+            }
+            for (WorkerValidCells cell : validCellsForMove)
+            {
+                if (cell.getwR()!=workerRow || cell.getwC()!=workerColumn)
+                {
+                    for (Position p : cell.getValidPositions())
+                    {
+                        if (!tempList.contains(p))
+                        {
+                            this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.white);
+                        }
+                    }
                 }
             }
         }
+
 
         WorkerValidCells validCellsMove = null;
 
@@ -252,15 +275,7 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
         } while (!inputSet);
 
         //after checking that the move is valid, we just need to bring the colours of the board to their original state and notify the controller about the choice
-        for (WorkerValidCells c : validCellsForMove) {
-            if (c.getwR() == workerRow && c.getwC() == workerColumn) {
-                tempList = c.getValidPositions();
-                break;
-            }
-        }
-        for (Position p : tempList) {
-            this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.white);
-        }
+        this.resetBoard(validCellsMove.getValidPositions());
         this.printBoard();
 
         MoveCoordinates chosenCoordinates = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
@@ -277,29 +292,56 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
      * @param validForDome  represents the valid cells to put the dome for each worker
      */
     @Override
-    public void requestDomeOrBuild(ArrayList<WorkerValidCells> validForBuild, ArrayList<WorkerValidCells> validForDome) {
+    public void requestDomeOrBuild(ArrayList<WorkerValidCells> validForBuild, ArrayList<WorkerValidCells> validForDome)
+    {
         int workerRow = -1, workerColumn = -1;
         int chosenRow = -1, chosenColumn = -1;
-        ArrayList<Position> tempPositions = new ArrayList<>();
+        ArrayList<Position> tempPositionsBuild=new ArrayList<>();
+        ArrayList<Position> tempPositionsDome=new ArrayList<>();
 
-        for (WorkerValidCells c : validForBuild) {
-            for (Position p : c.getValidPositions()) {
-                if (this.getCellOnBoard(p.getRow(), p.getColumn()).getCellColour() == ColoursForPrinting.white) {
-                    this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.red);
+        for (WorkerValidCells c1 : validForBuild) //we highlight the cells of the worker that can only build or that can build and put a dome
+        {
+            tempPositionsBuild=c1.getValidPositions();
+            for (WorkerValidCells c2 : validForDome)
+            {
+                if (c2.getwR()==c1.getwR() && c2.getwC()==c1.getwC())
+                {
+                    tempPositionsDome=c2.getValidPositions();
+                    break;
+                }
+            }
+            for (Position p1 : tempPositionsBuild)
+            {
+                this.getCellOnBoard(p1.getRow(), p1.getColumn()).setCellColour(ColoursForPrinting.red);
+            }
+            for (Position p2 : tempPositionsDome)
+            {
+                if (this.getCellOnBoard(p2.getRow(), p2.getColumn()).getCellColour()==ColoursForPrinting.red) this.getCellOnBoard(p2.getRow(), p2.getColumn()).setCellColour(ColoursForPrinting.green);
+                else this.getCellOnBoard(p2.getRow(), p2.getColumn()).setCellColour(ColoursForPrinting.yellow);
+            }
+            tempPositionsDome=null;
+        }
+
+        boolean bothActions=false;
+        //now we have to highlight the cells of the remaining workers, the ones who can only put a dome on a cell
+        for (WorkerValidCells w1 : validForDome)
+        {
+            for (WorkerValidCells w2 : validForBuild)
+            {
+                if (w2.getwR() == w1.getwR() && w2.getwC() == w1.getwC())
+                {
+                    bothActions = true;
+                    break;
+                }
+            }
+            if (bothActions == false)
+            {
+                for (Position pos1 : w1.getValidPositions())
+                {
+                    this.getCellOnBoard(pos1.getRow(), pos1.getColumn()).setCellColour(ColoursForPrinting.yellow);
                 }
             }
         }
-
-        for (WorkerValidCells cell : validForDome) {
-            for (Position pos : cell.getValidPositions()) {
-                if (this.getCellOnBoard(pos.getRow(), pos.getColumn()).getCellColour() == ColoursForPrinting.white) {
-                    if (this.getCellOnBoard(pos.getRow(), pos.getColumn()).getCellColour() == ColoursForPrinting.red)
-                        this.getCellOnBoard(pos.getRow(), pos.getColumn()).setCellColour(ColoursForPrinting.green);
-                    else this.getCellOnBoard(pos.getRow(), pos.getColumn()).setCellColour(ColoursForPrinting.yellow);
-                }
-            }
-        }
-
 
         Scanner s = new Scanner(System.in);
 
@@ -327,28 +369,11 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
         }
 
 
-        //now we need to highlight the cells only belonging to the chosen worker, by bringing the other cells back to their original colour
-        for (WorkerValidCells c : validForBuild) {
-            if (c.getwR() != workerRow && c.getwC() != workerColumn) {
-                for (Position po : c.getValidPositions()) {
-                    this.getCellOnBoard(po.getRow(), po.getColumn()).setCellColour(ColoursForPrinting.white);
-                }
-            }
-        }
-
-        for (WorkerValidCells c : validForDome) {
-            if (c.getwR() != workerRow && c.getwC() != workerColumn) {
-                for (Position po : c.getValidPositions()) {
-                    this.getCellOnBoard(po.getRow(), po.getColumn()).setCellColour(ColoursForPrinting.white);
-                }
-            }
-        }
-
-        //now we ask the player the action he wants to make and check if it is compatible with the chosen worker
+        //now we get the workers that haven't been chosen and colour their cells back to white, only if those cells do not belong to the chosen worker too
         WorkerValidCells validCellsBuild = null;
         WorkerValidCells validCellsDome = null;
-
-        for (WorkerValidCells c : validForBuild) {
+        for (WorkerValidCells c : validForBuild) //with these two loops we are looking for the chosen worker in the two lists
+        {
             if (c.getwR() == workerRow && c.getwC() == workerColumn) {
                 validCellsBuild = c;
                 break;
@@ -361,10 +386,36 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
                 break;
             }
         }
+        ArrayList<Position> positionsToBuild;
+        ArrayList<Position> positionsToDome;
+        positionsToBuild=validCellsBuild.getValidPositions(); //we get the valid positions of the chosen worker, which have to remain highlighted
+        positionsToDome=validCellsDome.getValidPositions();
 
+
+        for (WorkerValidCells c : validForBuild)
+        {
+            if (c.getwR() != workerRow || c.getwC() != workerColumn)
+            {
+                for (Position po : c.getValidPositions())
+                {
+                    if(!positionsToBuild.contains(po) && !positionsToDome.contains(po)) this.getCellOnBoard(po.getRow(), po.getColumn()).setCellColour(ColoursForPrinting.white);
+                }
+            }
+        }
+        for (WorkerValidCells c : validForDome)
+        {
+            if (c.getwR() != workerRow || c.getwC() != workerColumn)
+            {
+                for (Position po : c.getValidPositions())
+                {
+                    if(!positionsToBuild.contains(po) && !positionsToDome.contains(po)) this.getCellOnBoard(po.getRow(), po.getColumn()).setCellColour(ColoursForPrinting.white);
+                }
+            }
+        }
+
+        //now we ask the player the action he wants to make and check if it is compatible with the chosen worker
         String chosenAction = null;
         String cellCoordinate;
-
 
         do {
             this.printBoard();
@@ -423,6 +474,9 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
         } else if (build) whatToDO = action.build;
         else if (dome) whatToDO = action.dome;
 
+        this.resetBoard(positionsToBuild);
+        this.resetBoard(positionsToDome);
+        this.printBoard();
 
         MoveCoordinates move = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
         if (whatToDO == action.build) notifyObserver((x) -> x.build(move));
@@ -502,11 +556,13 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
      * @param validCells is the list of valid cells for the worker we are currently positioning
      */
     @Override
-    public void requestInitialPositioning(ArrayList<Position> validCells) {
+    public void requestInitialPositioning(ArrayList<Position> validCells)
+    {
         int chosenRow = -1, chosenColumn = -1;
 
         //first we need to highlight each of the valid cells to the player
-        for (Position p : validCells) {
+        for (Position p : validCells)
+        {
             this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.red);
         }
 
@@ -530,9 +586,7 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
         } while (!inputSet);
 
         //after checking that the player has chosen a valid cell, we need to bring the board back to its original colours and notify the observers
-        for (Position p : validCells) {
-            this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.white);
-        }
+        this.resetBoard(validCells);
         this.printBoard();
 
         Position notifiedPosition = new Position(chosenRow, chosenColumn);
@@ -594,7 +648,8 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
      * @param validCellsForMove is the list of cells where the player can choose to make another optional move
      */
     @Override
-    public void requestOptionalMove(ArrayList<WorkerValidCells> validCellsForMove) {
+    public void requestOptionalMove(ArrayList<WorkerValidCells> validCellsForMove)
+    {
         ArrayList<Position> tempList;
         int workerRow = -1, workerColumn = -1;
         int chosenRow = -1, chosenColumn = -1;
@@ -632,7 +687,6 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
                 System.out.println("Invalid choice");
             }
         } while (!completed);
-
     }
 
 
@@ -643,21 +697,53 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
      * @param dome  is the list of valid cells for the dome operations
      */
     @Override
-    public void requestOptionalBuild(ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome) {
+    public void requestOptionalBuild(ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome)
+    {
         int workerRow = -1, workerColumn = -1;
         int chosenRow = -1, chosenColumn = -1;
+        ArrayList<Position> tempPositionsBuild=new ArrayList<>();
+        ArrayList<Position> tempPositionsDome=new ArrayList<>();
 
-        for (WorkerValidCells c : build) {
-            for (Position p : c.getValidPositions()) {
-                this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.red);
+        for (WorkerValidCells c1 : build)
+        {
+            tempPositionsBuild=c1.getValidPositions();
+            for (WorkerValidCells c2 : dome)
+            {
+                if (c2.getwR()==c1.getwR() && c2.getwC()==c1.getwC())
+                {
+                    tempPositionsDome=c2.getValidPositions();
+                    break;
+                }
             }
+            for (Position p1 : tempPositionsBuild)
+            {
+                this.getCellOnBoard(p1.getRow(), p1.getColumn()).setCellColour(ColoursForPrinting.red);
+            }
+            for (Position p2 : tempPositionsDome)
+            {
+                if (this.getCellOnBoard(p2.getRow(), p2.getColumn()).getCellColour()==ColoursForPrinting.red) this.getCellOnBoard(p2.getRow(), p2.getColumn()).setCellColour(ColoursForPrinting.green);
+                else this.getCellOnBoard(p2.getRow(), p2.getColumn()).setCellColour(ColoursForPrinting.yellow);
+            }
+            tempPositionsDome=null;
         }
 
-        for (WorkerValidCells cell : dome) {
-            for (Position pos : cell.getValidPositions()) {
-                if (this.getCellOnBoard(pos.getRow(), pos.getColumn()).getCellColour() == ColoursForPrinting.red)
-                    this.getCellOnBoard(pos.getRow(), pos.getColumn()).setCellColour(ColoursForPrinting.green);
-                else this.getCellOnBoard(pos.getRow(), pos.getColumn()).setCellColour(ColoursForPrinting.yellow);
+        boolean bothActions=false;
+        for (WorkerValidCells w1 : dome)
+        {
+            for (WorkerValidCells w2 : build)
+            {
+                if (w2.getwR() == w1.getwR() && w2.getwC() == w1.getwC())
+                {
+                    bothActions = true;
+                    break;
+                }
+            }
+            if (bothActions == false)
+            {
+                for (Position pos1 : w1.getValidPositions())
+                {
+                    this.getCellOnBoard(pos1.getRow(), pos1.getColumn()).setCellColour(ColoursForPrinting.yellow);
+                }
             }
         }
         this.printBoard();
@@ -686,8 +772,6 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
                 System.out.println("Invalid choice");
             }
         } while (!completed);
-
-
     }
 
     /**
