@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 public class ClientHandlerListener implements Runnable {
@@ -50,6 +51,21 @@ public class ClientHandlerListener implements Runnable {
         }
         try {
             waitForMessages();
+        } catch (SocketTimeoutException e) {
+            if (clientSocket.isConnected()) {
+
+                try {
+                    clientSocket.close();
+                    System.out.println("Disconnected for inactivity");
+                    for (ServerNetworkObserver o : observers) {
+                        o.destroyGame();
+                    }
+
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+
+                }
+            }
         } catch (IOException e) {
             //means that the connection dropped. i must close the game.
             if (!setClosed) {
