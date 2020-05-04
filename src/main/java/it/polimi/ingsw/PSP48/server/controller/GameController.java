@@ -4,6 +4,7 @@ import it.polimi.ingsw.PSP48.AbstractView;
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
 import it.polimi.ingsw.PSP48.server.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.Server;
 import it.polimi.ingsw.PSP48.server.model.*;
 import it.polimi.ingsw.PSP48.server.model.divinities.Divinity;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
@@ -22,6 +23,7 @@ import java.util.function.Consumer;
 public class GameController implements ViewObserver {
     private Model model;
     private Consumer<GameController> nextAction;
+    private int roomID;
 
     private HashMap<String, AbstractView> playersViews = new HashMap<>();
 
@@ -29,8 +31,9 @@ public class GameController implements ViewObserver {
         playersViews.put(name, view);
     }
 
-    public GameController(Model m) {
+    public GameController(Model m, int ID) {
         model = m;
+        roomID = ID;
     }
 
     public AbstractView getPlayerView(String playerName) {
@@ -286,8 +289,8 @@ public class GameController implements ViewObserver {
             ArrayList<String> players = new ArrayList<>();
             playersViews.forEach((k, v) -> players.add(k));
             for (String p : players) {
-                if (p.equals(model.getCurrentPlayer().getName())) getPlayerView(p).declareWin();
-                else getPlayerView(p).declareLose();
+                if (p.equals(model.getCurrentPlayer().getName())) getPlayerView(p).printMessage("You win!");
+                else getPlayerView(p).printMessage("You lost, anlaki :(");
             }
             nextAction = (GameController::gameEnd);
         }
@@ -295,7 +298,8 @@ public class GameController implements ViewObserver {
     }
 
     public void gameEnd() {
-
+        Server.destroyGameRoom(roomID, null);
+        return;
     }
 
 
@@ -313,8 +317,8 @@ public class GameController implements ViewObserver {
 
         if (win) {
             for (Player p : model.getPlayersInGame()) {
-                if (p.getDivinity().getName().equals("Chronus")) getPlayerView(p.getName()).declareWin();
-                else getPlayerView(p.getName()).declareLose();
+                if (p.getDivinity().getName().equals("Chronus")) getPlayerView(p.getName()).printMessage("You won!");
+                else getPlayerView(p.getName()).printMessage("You lost. Anlaki :(");
             }
             nextAction = (GameController::gameEnd);
         }
@@ -394,10 +398,10 @@ public class GameController implements ViewObserver {
         if (!position1Move && !position2Move) {
             //bisogna eliminare il giocatore dalla partita, e porre il controller in modalità gioco finito nel caso in cui vi siano solo due giocatori ancora in gioco
             if (model.getPlayersInGame().size() == 2) {
-                getPlayerView(model.getCurrentPlayer().getName()).declareLose();
+                getPlayerView(model.getCurrentPlayer().getName()).endgame("You lose cause you won't be able to end the turn");
                 for (Player p : model.getPlayersInGame()) {
                     if (!p.getName().equals(model.getCurrentPlayer().getName()))
-                        getPlayerView(p.getName()).declareWin();
+                        getPlayerView(p.getName()).endgame("You win!");
                 }
                 nextAction = GameController::gameEnd;
             } else {
@@ -583,6 +587,5 @@ public class GameController implements ViewObserver {
         move.add(new WorkerValidCells(model.getCurrentPlayer().getDivinity().getValidCellForMove(model.getCurrentPlayer().getLastWorkerMoved().getColumn(), model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getGameBoard(), otherDivinities), model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getCurrentPlayer().getLastWorkerMoved().getColumn()));
         getPlayerView(model.getCurrentPlayer().getName()).requestMove(move);
     }
-
 
 }

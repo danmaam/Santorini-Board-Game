@@ -6,6 +6,7 @@ import it.polimi.ingsw.PSP48.observers.ServerNetworkObserver;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 public class ClientHandlerListener implements Runnable {
@@ -14,6 +15,7 @@ public class ClientHandlerListener implements Runnable {
 
     private boolean setNickname = false;
     private boolean setGameMode = false;
+    private boolean setClosed = false;
     private String setUp;
 
     private Socket clientSocket;
@@ -42,9 +44,20 @@ public class ClientHandlerListener implements Runnable {
     @Override
     public void run() {
         try {
+            clientSocket.setSoTimeout(60 * 1000);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        try {
             waitForMessages();
         } catch (IOException e) {
-            e.printStackTrace();
+            //means that the connection dropped. i must close the game.
+            if (!setClosed) {
+                for (ServerNetworkObserver o : observers) {
+                    o.destroyGame();
+                }
+            } else return;
+
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -74,5 +87,9 @@ public class ClientHandlerListener implements Runnable {
 
     public void setGameMode(boolean value) {
         setGameMode = value;
+    }
+
+    public void setClosed() {
+        setClosed = true;
     }
 }

@@ -34,6 +34,8 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
     }
 
     boolean completedAction;
+    private Socket server;
+    private ClientNetworkOutcoming cA;
 
     /**
      * class constructor initialising the cells of the board
@@ -427,22 +429,12 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
         else notifyObserver((x) -> x.dome(move));
     }
 
-    /**
-     * Method used to communicate to a player that he has won the game.
-     */
     @Override
-    public void declareWin() {
-        System.out.println("You win! :)");
+    public void endgame(String messageOfEndGame) {
+        System.out.println(messageOfEndGame);
+        cA.shutDown();
     }
 
-
-    /**
-     * method communicating to a player that the game has been lost
-     */
-    @Override
-    public void declareLose() {
-        System.out.println(" You lost the game! :( ");
-    }
 
     /**
      * Method used to request a player to choose a divinity.
@@ -709,7 +701,7 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
         String serverIP = scanner.nextLine();
 
 
-        Socket server;
+
         try {
             server = new Socket(serverIP, 7777);
         } catch (IOException e) {
@@ -717,7 +709,7 @@ public class Client extends AbstractView implements Runnable, ClientNetworkObser
             return;
         }
 
-        ClientNetworkOutcoming cA = new ClientNetworkOutcoming(server);
+        cA = new ClientNetworkOutcoming(server);
         Thread cAThread = new Thread(cA);
         cAThread.start();
         this.registerObserver(cA);

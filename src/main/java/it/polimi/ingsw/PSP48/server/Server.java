@@ -1,6 +1,8 @@
 package it.polimi.ingsw.PSP48.server;
 
 import it.polimi.ingsw.PSP48.AbstractView;
+import it.polimi.ingsw.PSP48.server.controller.GameController;
+import it.polimi.ingsw.PSP48.server.model.Player;
 import it.polimi.ingsw.PSP48.server.networkmanager.ClientHandler;
 
 import java.io.IOException;
@@ -14,7 +16,8 @@ import java.util.Calendar;
 public class Server {
     private static ArrayList<String> playersConnectedToTheGame = new ArrayList<>();
     public final static int TCP_PORT = 7777;
-    public static ArrayList<GameRoom> roomsOnTheServer = new ArrayList<>();
+    private static ArrayList<GameRoom> roomsOnTheServer = new ArrayList<>();
+    private static int nextRoomID = 0;
 
     public static void main(String[] args) {
 
@@ -62,10 +65,24 @@ public class Server {
             }
         }
         if (!added) {
-            GameRoom newGameRoom = new GameRoom(playerNumber, allowedDivinities);
+            GameRoom newGameRoom = new GameRoom(playerNumber, allowedDivinities, nextRoomID);
             roomsOnTheServer.add(newGameRoom);
             newGameRoom.addPlayerInRoom(name, Birthday, playerVirtualView);
+            nextRoomID++;
         }
     }
 
+    public static synchronized void destroyGameRoom(int roomID, String disconnectedPlayer) {
+        //i must find the game room
+        GameRoom tbd = null;
+        for (GameRoom g : roomsOnTheServer) {
+            if (g.getGameRoomID() == roomID) {
+                tbd = g;
+            }
+        }
+        //found the game room, notify all the players to shutdown connection
+        tbd.notifyAllPlayersOfDisconnection(disconnectedPlayer);
+        //notified all the players,
+        roomsOnTheServer.remove(tbd);
+    }
 }

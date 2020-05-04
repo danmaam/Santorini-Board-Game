@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class ClientHandler implements Runnable {
 
     private enum nextAction {
-        requestAction, setupmessage;
+        requestAction, setupmessage, closegame;
     }
 
     private nextAction toDO = null;
@@ -32,9 +32,11 @@ public class ClientHandler implements Runnable {
 
     ObjectOutputStream output;
 
+    private ClientHandlerListener incomingMessagesHandler;
     private String playerDatas = null;
     private String setUpMessage;
     private NetworkMessagesToClient nextObject;
+    private Thread listenerThread;
 
 
     private final Socket client;
@@ -42,10 +44,10 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
 
-        ClientHandlerListener incomingMessagesHandler = new ClientHandlerListener(client);
+        incomingMessagesHandler = new ClientHandlerListener(client);
         VirtualView playerVirtualView = new VirtualView(this, incomingMessagesHandler);
         incomingMessagesHandler.registerObserver(playerVirtualView);
-        Thread listenerThread = new Thread(incomingMessagesHandler);
+        listenerThread = new Thread(incomingMessagesHandler);
         listenerThread.start();
         try {
             handleGamePhases();
@@ -79,6 +81,11 @@ public class ClientHandler implements Runnable {
                         output.writeObject(setUpMessage);
                         toDO = null;
                         break;
+                    case closegame:
+                        output.writeObject(nextObject);
+                        incomingMessagesHandler.setClosed();
+                        client.close();
+                        return;
                 }
             }
         }
@@ -176,24 +183,6 @@ public class ClientHandler implements Runnable {
     }
 
 
-    public void declareWin() {
-        System.out.println("Sending win message");
-        synchronized (toDOLOCK) {
-            nextObject = new WinMessage();
-            toDO = nextAction.requestAction;
-            toDOLOCK.notifyAll();
-        }
-    }
-
-    public void declareLose() {
-        System.out.println("sending lose message");
-        synchronized (toDOLOCK) {
-            nextObject = new LoseMessage();
-            toDO = nextAction.requestAction;
-            toDOLOCK.notifyAll();
-        }
-    }
-
     public void requestDivinitySelection(ArrayList<DivinitiesWithDescription> availableDivinities) {
         System.out.println("Sending request for divinity selection");
         synchronized (toDOLOCK) {
@@ -208,6 +197,14 @@ public class ClientHandler implements Runnable {
         synchronized (toDOLOCK) {
             setUpMessage = message;
             toDO = nextAction.setupmessage;
+            toDOLOCK.notifyAll();
+        }
+    }
+
+    public void gameEndMessage(String message) {
+        synchronized (toDOLOCK) {
+            nextObject = new EndGameMessage(message);
+            toDO = nextAction.closegame;
             toDOLOCK.notifyAll();
         }
     }

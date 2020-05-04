@@ -23,6 +23,11 @@ public class VirtualView extends AbstractView implements ServerNetworkObserver {
     private String playerName;
     ClientHandler playerHandler;
     ClientHandlerListener playerListener;
+    private int roomID;
+
+    public void setRoomID(int roomID) {
+        this.roomID = roomID;
+    }
 
     public VirtualView(ClientHandler p, ClientHandlerListener l) {
         playerHandler = p;
@@ -82,13 +87,8 @@ public class VirtualView extends AbstractView implements ServerNetworkObserver {
     }
 
     @Override
-    public void declareWin() {
-        playerHandler.declareWin();
-    }
-
-    @Override
-    public void declareLose() {
-        playerHandler.declareLose();
+    public void endgame(String messageOfEndGame) {
+        playerHandler.gameEndMessage(messageOfEndGame);
     }
 
 
@@ -195,5 +195,14 @@ public class VirtualView extends AbstractView implements ServerNetworkObserver {
             playerListener.setGameMode(true);
             Server.insertPlayerInGameRoom(playerNumber, divinities, playerName, c, this);
         }
+    }
+
+    @Override
+    public void destroyGame() {
+        Server.destroyGameRoom(roomID, playerName);
+    }
+
+    public void disconnectFromServer() {
+
     }
 }

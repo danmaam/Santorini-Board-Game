@@ -24,4 +24,6 @@ public interface ServerNetworkObserver {
     public void processNickname(String nickname);
 
     public void processGameMode(String gameMode);
+
+    public void destroyGame();
 }

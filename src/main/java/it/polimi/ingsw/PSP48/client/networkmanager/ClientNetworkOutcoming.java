@@ -112,6 +112,7 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
 
             if (nextAction == null)
                 continue;
+            else if (nextAction == action.close_inputstream) return;
 
             switch (nextAction) {
                 case send_nickname:
@@ -123,8 +124,7 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
                 case send_gameAction:
                     sendGameAction();
                     break;
-                case close_inputstream:
-                    break;
+
             }
         }
     }
@@ -156,6 +156,11 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
     public synchronized void sendGameAction() throws IOException, ClassNotFoundException {
         System.out.println("sending game action");
         outputStm.writeObject(o);
+    }
+
+    public synchronized void shutDown() {
+        nextAction = action.close_inputstream;
+        notifyAll();
     }
 
 

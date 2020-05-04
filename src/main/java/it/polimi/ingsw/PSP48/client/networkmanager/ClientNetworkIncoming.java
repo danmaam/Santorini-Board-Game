@@ -35,7 +35,8 @@ public class ClientNetworkIncoming implements Runnable {
             in = new ObjectInputStream(server.getInputStream());
             retrieveMessage();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Disconnected from server");
+            return;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

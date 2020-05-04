@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP48.server.model;
 
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
+import it.polimi.ingsw.PSP48.server.Server;
 import it.polimi.ingsw.PSP48.server.model.divinities.*;
 import it.polimi.ingsw.PSP48.observers.ModelObserver;
 
@@ -303,5 +304,11 @@ public class Model {
             }
         }
         notifyObservers(x -> x.changedPlayerList(newPlayerString));
+    }
+
+    public void flushPlayerList() {
+        for (Player p : playersInGame) {
+            Server.removeNickname(p.getName());
+        }
     }
 }

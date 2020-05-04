@@ -20,4 +20,5 @@ public abstract class AbstractView implements ViewInterface, ModelObserver {
     public void notifyObserver(Consumer<ViewObserver> lambda) {
         for (ViewObserver obv : observers) lambda.accept(obv);
     }
+
 }

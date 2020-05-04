@@ -9,9 +9,7 @@ public interface ViewInterface {
 
     public void requestDomeOrBuild(ArrayList<WorkerValidCells> validForBuild, ArrayList<WorkerValidCells> validForDome);
 
-    public void declareWin();
-
-    public void declareLose();
+    public void endgame(String messageOfEndGame);
 
     public void requestDivinitySelection(ArrayList<DivinitiesWithDescription> availableDivinities);
 
@@ -26,4 +24,5 @@ public interface ViewInterface {
     public void requestOptionalMove(ArrayList<WorkerValidCells> validCellsForMove);
 
     public void requestOptionalBuild(ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome);
+
 }
