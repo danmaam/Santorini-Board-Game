@@ -196,9 +196,11 @@ public class Minotaur extends Divinity {
 
         gd.getCurrentPlayer().setOldLevel(workerLevel);
         gd.getCurrentPlayer().setNewLevel(moveLevel);
+        gd.getCurrentPlayer().setLastWorkerUsed(moveRow, moveColumn);
         String tempPlayer = gd.getCell(moveRow, moveColumn).getPlayer();
         gd.getCell(WorkerRow, WorkerColumn).setPlayer(null);
         gd.getCell(moveRow, moveColumn).setPlayer(gd.getCurrentPlayer().getName());
+
 
         ArrayList<Cell> changedCell = new ArrayList<>();
         changedCell.add((Cell) gd.getCell(moveRow, moveColumn).clone());
