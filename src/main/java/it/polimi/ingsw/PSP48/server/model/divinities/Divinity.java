@@ -78,7 +78,7 @@ public class Divinity {
 
         for (Cell c : validCells) {
             for (Divinity d : otherDivinitiesInGame) {
-                if (!d.othersMove(new MovePosition(WorkerRow, WorkerColumn, c.getRow(), c.getColumn(), gameCells[c.getRow()][c.getColumn()].getLevel() - gameCells[WorkerRow][WorkerColumn].getLevel()))) {
+                if (!d.getName().equals(this.getName()) && !d.othersMove(new MovePosition(WorkerRow, WorkerColumn, c.getRow(), c.getColumn(), gameCells[c.getRow()][c.getColumn()].getLevel() - gameCells[WorkerRow][WorkerColumn].getLevel()))) {
                     cellsToBeRemoved.add(c);
                     break;
                 }
@@ -179,14 +179,14 @@ public class Divinity {
                 .filter(cell -> cell.getLevel() != 3)
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        //now we have to remove cells due to other divinites powers
+        //now we have to remove cells due to other divinities powers
         //we have to remove the current divinity from the others, to check if their power can invalid the move
 
         ArrayList<Cell> notValid = new ArrayList<>();
 
         for (Cell c : validBuild) {
             for (Divinity d : otherDivinitiesInGame) {
-                if (!d.othersBuilding(new BuildPosition(WorkerRow, WorkerColumn, c.getRow(), c.getColumn(), c.getLevel()))) {
+                if (!d.getName().equals(this.getName()) && !d.othersBuilding(new BuildPosition(WorkerRow, WorkerColumn, c.getRow(), c.getColumn(), c.getLevel()))) {
                     notValid.add(c);
                     break;
                 }
@@ -285,7 +285,7 @@ public class Divinity {
 
         for (Cell c : validCells) {
             for (Divinity d : divinitiesInGame) {
-                if (!d.othersDome(new DomePosition(workerRow, workerColumn, c.getRow(), c.getColumn(), c.getLevel()))) {
+                if (!d.getName().equals(this.getName()) && !d.othersDome(new DomePosition(workerRow, workerColumn, c.getRow(), c.getColumn(), c.getLevel()))) {
                     notValid.add(c);
                     break;
                 }

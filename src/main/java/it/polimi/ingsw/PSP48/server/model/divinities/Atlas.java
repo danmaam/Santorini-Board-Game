@@ -54,7 +54,7 @@ public class Atlas extends Divinity {
 
         for (Cell c : validCells) {
             for (Divinity d : divinitiesInGame) {
-                if (!d.othersDome(new DomePosition(workerRow, workerColumn, c.getRow(), c.getColumn(), c.getLevel()))) {
+                if (!d.getName().equals(this.getName()) && !d.othersDome(new DomePosition(workerRow, workerColumn, c.getRow(), c.getColumn(), c.getLevel()))) {
                     nV.add(c);
                     break;
                 }

@@ -45,7 +45,7 @@ public class ClientHandlerListener implements Runnable {
     @Override
     public void run() {
         try {
-            clientSocket.setSoTimeout(60 * 1000);
+            clientSocket.setSoTimeout(999999 * 1000);
         } catch (SocketException e) {
             e.printStackTrace();
         }

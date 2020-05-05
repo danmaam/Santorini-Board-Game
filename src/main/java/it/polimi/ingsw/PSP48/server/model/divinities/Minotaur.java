@@ -80,7 +80,7 @@ public class Minotaur extends Divinity {
 
         for (Cell c : validCells) {
             for (Divinity d : otherDivinitiesInGame) {
-                if (!d.othersMove(new MovePosition(WorkerRow, WorkerColumn, c.getRow(), c.getColumn(), 0))) {
+                if (!d.getName().equals(this.getName()) && !d.othersMove(new MovePosition(WorkerRow, WorkerColumn, c.getRow(), c.getColumn(), 0))) {
                     nV.add(c);
                     break;
                 }
