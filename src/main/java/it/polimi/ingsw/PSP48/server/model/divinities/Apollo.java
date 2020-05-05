@@ -3,7 +3,6 @@ package it.polimi.ingsw.PSP48.server.model.divinities;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.*;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
-import sun.tools.jconsole.Worker;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
@@ -151,7 +150,7 @@ public class Apollo extends Divinity {
         gd.getCell(WorkerRow, WorkerColumn).setPlayer(tempWorker);
         gd.getCurrentPlayer().setOldLevel(workerLevel);
         gd.getCurrentPlayer().setNewLevel(moveLevel);
-        gd.getCurrentPlayer().setLastWorkerUsed(WorkerRow, WorkerColumn);
+        gd.getCurrentPlayer().setLastWorkerUsed(moveRow, moveColumn);
 
         ArrayList<Cell> changedCell = new ArrayList<>();
         changedCell.add((Cell) gd.getCell(WorkerRow, WorkerColumn).clone());
