@@ -34,7 +34,7 @@ public class Athena extends Divinity {
         super.move(workerColumn, workerRow, moveColumn, moveRow, gd);
         if (gd.getCell(moveRow, moveColumn).getLevel() > gd.getCell(workerRow, workerColumn).getLevel())
             lastTurnLevelUp = true;
-        return GameController::postMove;
+        return GameController::requestBuildDome;
     }
 
 

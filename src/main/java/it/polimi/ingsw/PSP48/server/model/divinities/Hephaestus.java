@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Hephaestus extends Divinity {
-    private final String name = "Basic";
+    private final String name = "Hephaestus";
 
     private int prevBuildRow = -1;
     private int prevBuildColumn = -1;

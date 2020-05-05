@@ -111,7 +111,7 @@ public class Atlas extends Divinity {
         changedCell.add((Cell) gd.getCell(domeRow, domeColumn).clone());
         gd.notifyObservers(x -> x.changedBoard(changedCell));
 
-        return GameController::postBuild;
+        return GameController::turnEnd;
     }
 
 

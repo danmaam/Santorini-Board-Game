@@ -55,6 +55,7 @@ public class Model {
             if (Apollo.supportedDivinity(number)) availableDivinities.add(new Apollo());
             if (Artemis.supportedDivinity(number)) availableDivinities.add(new Artemis());
             if (Athena.supportedDivinity(number)) availableDivinities.add(new Athena());
+            if (Atlas.supportedDivinity(number)) availableDivinities.add(new Atlas());
             if (Chronus.supportedDivinity(number)) availableDivinities.add(new Chronus());
             if (Circe.supportedDivinity(number)) availableDivinities.add(new Circe());
             if (Demeter.supportedDivinity(number)) availableDivinities.add(new Demeter());

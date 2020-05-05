@@ -21,7 +21,7 @@ public class Server {
 
     public static void main(String[] args) {
 
-        System.out.println("Santorini Server V.0.1 Alpha.");
+        System.out.println("Santorini Server V.0.5 Alpha.");
         ServerSocket socket;
         try {
             socket = new ServerSocket(TCP_PORT);
