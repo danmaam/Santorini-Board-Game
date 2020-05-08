@@ -1,12 +1,11 @@
 package it.polimi.ingsw.PSP48.server;
 
-import it.polimi.ingsw.PSP48.AbstractView;
+import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.Model;
 import it.polimi.ingsw.PSP48.server.model.Player;
 import it.polimi.ingsw.PSP48.server.virtualview.VirtualView;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -35,7 +34,7 @@ public class GameRoom {
         return model.isGameWithDivinities();
     }
 
-    public void addPlayerInRoom(String name, Calendar birthday, AbstractView playerVirtualView) {
+    public void addPlayerInRoom(String name, Calendar birthday, ViewInterface playerVirtualView) {
         playerVirtualView.registerObserver(controller);
         ((VirtualView) playerVirtualView).setRoomID(gameRoomID);
         model.registerObserver(playerVirtualView);

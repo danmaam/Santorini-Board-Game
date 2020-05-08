@@ -1,13 +1,9 @@
 package it.polimi.ingsw.PSP48.server;
 
-import it.polimi.ingsw.PSP48.AbstractView;
-import it.polimi.ingsw.PSP48.server.controller.GameController;
-import it.polimi.ingsw.PSP48.server.model.Player;
+import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.server.networkmanager.ClientHandler;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -54,7 +50,7 @@ public class Server {
     }
 
 
-    public static synchronized void insertPlayerInGameRoom(int playerNumber, boolean allowedDivinities, String name, Calendar Birthday, AbstractView playerVirtualView) {
+    public static synchronized void insertPlayerInGameRoom(int playerNumber, boolean allowedDivinities, String name, Calendar Birthday, ViewInterface playerVirtualView) {
         System.out.println("Adding in the game room");
         boolean added = false;
         for (GameRoom g : roomsOnTheServer) {

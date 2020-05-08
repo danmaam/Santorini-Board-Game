@@ -1,10 +1,13 @@
 package it.polimi.ingsw.PSP48;
 
+import it.polimi.ingsw.PSP48.observers.ModelObserver;
+import it.polimi.ingsw.PSP48.observers.ViewObserver;
 import it.polimi.ingsw.PSP48.server.model.Position;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
-public interface ViewInterface {
+public interface ViewInterface extends ModelObserver {
     public void requestMove(ArrayList<WorkerValidCells> validCellsForMove);
 
     public void requestDomeOrBuild(ArrayList<WorkerValidCells> validForBuild, ArrayList<WorkerValidCells> validForDome);
@@ -24,5 +27,11 @@ public interface ViewInterface {
     public void requestOptionalMove(ArrayList<WorkerValidCells> validCellsForMove);
 
     public void requestOptionalBuild(ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome);
+
+    public void registerObserver(ViewObserver obv);
+
+    public void unregisterObserver(ViewObserver obv);
+
+    public void notifyObserver(Consumer<ViewObserver> lambda);
 
 }

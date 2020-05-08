@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP48.server.networkmanager;
 
-import it.polimi.ingsw.PSP48.AbstractView;
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
 import it.polimi.ingsw.PSP48.networkMessagesToClient.*;

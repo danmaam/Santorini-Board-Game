@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP48.networkMessagesToClient;
 
-import it.polimi.ingsw.PSP48.AbstractView;
+import it.polimi.ingsw.PSP48.ViewInterface;
 
 import java.util.ArrayList;
 
@@ -8,7 +8,7 @@ public class UpdatedPlayerList extends NetworkMessagesToClient {
     private ArrayList<String> newPlayerList;
 
     @Override
-    public void doAction(AbstractView v) {
+    public void doAction(ViewInterface v) {
         v.changedPlayerList(newPlayerList);
     }
 

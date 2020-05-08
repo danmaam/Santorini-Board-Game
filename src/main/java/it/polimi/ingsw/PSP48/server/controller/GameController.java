@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP48.server.controller;
 
-import it.polimi.ingsw.PSP48.AbstractView;
-import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
+import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
 import it.polimi.ingsw.PSP48.server.MoveCoordinates;
 import it.polimi.ingsw.PSP48.server.Server;
@@ -10,7 +9,6 @@ import it.polimi.ingsw.PSP48.server.model.divinities.Divinity;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import it.polimi.ingsw.PSP48.observers.ViewObserver;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -25,9 +23,9 @@ public class GameController implements ViewObserver {
     private Consumer<GameController> nextAction;
     private int roomID;
 
-    private HashMap<String, AbstractView> playersViews = new HashMap<>();
+    private HashMap<String, ViewInterface> playersViews = new HashMap<>();
 
-    public void associateViewWithPlayer(String name, AbstractView view) {
+    public void associateViewWithPlayer(String name, ViewInterface view) {
         playersViews.put(name, view);
     }
 
@@ -36,7 +34,7 @@ public class GameController implements ViewObserver {
         roomID = ID;
     }
 
-    public AbstractView getPlayerView(String playerName) {
+    public ViewInterface getPlayerView(String playerName) {
         return playersViews.get(playerName);
     }
 

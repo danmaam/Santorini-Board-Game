@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP48.networkMessagesToClient;
 
-import it.polimi.ingsw.PSP48.AbstractView;
+import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
 
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ public class OptionalMoveRequest extends NetworkMessagesToClient {
     ArrayList<WorkerValidCells> validCells;
 
     @Override
-    public void doAction(AbstractView v) {
+    public void doAction(ViewInterface v) {
         v.requestOptionalMove(validCells);
     }
 

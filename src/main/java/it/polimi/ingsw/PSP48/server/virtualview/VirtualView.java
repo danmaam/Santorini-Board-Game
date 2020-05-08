@@ -1,12 +1,12 @@
 package it.polimi.ingsw.PSP48.server.virtualview;
 
-import it.polimi.ingsw.PSP48.AbstractView;
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
+import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
+import it.polimi.ingsw.PSP48.observers.ViewObserver;
 import it.polimi.ingsw.PSP48.server.Server;
 import it.polimi.ingsw.PSP48.server.networkmanager.ClientHandler;
 import it.polimi.ingsw.PSP48.server.MoveCoordinates;
-import it.polimi.ingsw.PSP48.observers.ViewObserver;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Position;
 import it.polimi.ingsw.PSP48.observers.ServerNetworkObserver;
@@ -14,11 +14,26 @@ import it.polimi.ingsw.PSP48.server.networkmanager.ClientHandlerListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.function.Consumer;
 
 /**
  * class used to implements a model observer as view
  */
-public class VirtualView extends AbstractView implements ServerNetworkObserver {
+public class VirtualView implements ViewInterface, ServerNetworkObserver {
+
+    private ArrayList<ViewObserver> observers = new ArrayList<ViewObserver>();
+
+    public void registerObserver(ViewObserver obv) {
+        observers.add(obv);
+    }
+
+    public void unregisterObserver(ViewObserver obv) {
+        observers.remove(obv);
+    }
+
+    public void notifyObserver(Consumer<ViewObserver> lambda) {
+        for (ViewObserver obv : observers) lambda.accept(obv);
+    }
 
     private String playerName;
     ClientHandler playerHandler;
@@ -65,6 +80,7 @@ public class VirtualView extends AbstractView implements ServerNetworkObserver {
     public void requestOptionalBuild(ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome) {
         playerHandler.requestOptionalBuild(build, dome);
     }
+
 
     @Override
     public void changedBoard(ArrayList<Cell> newCells) {

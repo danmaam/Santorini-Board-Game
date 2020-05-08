@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP48.client.networkmanager;
 
-import it.polimi.ingsw.PSP48.AbstractView;
-import it.polimi.ingsw.PSP48.client.Client;
+import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.networkMessagesToClient.NetworkMessagesToClient;
 import it.polimi.ingsw.PSP48.observers.ClientNetworkObserver;
 
@@ -11,7 +10,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class ClientNetworkIncoming implements Runnable {
-    private AbstractView playerView;
+    private ViewInterface playerView;
     private ObjectInputStream in;
     private Socket server;
     private NetworkMessagesToClient newMessage;
@@ -62,7 +61,7 @@ public class ClientNetworkIncoming implements Runnable {
         }
     }
 
-    public ClientNetworkIncoming(AbstractView playerView, Socket server) {
+    public ClientNetworkIncoming(ViewInterface playerView, Socket server) {
         this.playerView = playerView;
         this.server = server;
     }

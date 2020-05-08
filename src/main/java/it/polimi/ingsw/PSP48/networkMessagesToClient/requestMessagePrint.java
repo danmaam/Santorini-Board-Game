@@ -1,12 +1,12 @@
 package it.polimi.ingsw.PSP48.networkMessagesToClient;
 
-import it.polimi.ingsw.PSP48.AbstractView;
+import it.polimi.ingsw.PSP48.ViewInterface;
 
 public class requestMessagePrint extends NetworkMessagesToClient {
 
     private String messageToPrint;
 
-    public void doAction(AbstractView v) {
+    public void doAction(ViewInterface v) {
         v.printMessage(messageToPrint);
     }
 
