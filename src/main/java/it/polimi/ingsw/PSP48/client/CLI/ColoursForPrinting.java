@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP48.client;
+package it.polimi.ingsw.PSP48.client.CLI;
 
 /**
  * enum class containing the ansi codes used to colour the board, so that we can use the names of colours instead of their code

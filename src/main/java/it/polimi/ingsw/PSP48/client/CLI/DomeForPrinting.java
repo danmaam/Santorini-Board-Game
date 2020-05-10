@@ -1,4 +1,6 @@
-package it.polimi.ingsw.PSP48.client;
+package it.polimi.ingsw.PSP48.client.CLI;
+
+import it.polimi.ingsw.PSP48.client.CLI.ColoursForPrinting;
 
 /**
  * class used to represent the dome on the board of the game

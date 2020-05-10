@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP48.client;
+package it.polimi.ingsw.PSP48.client.CLI;
 
 /**
  * @author Annalaura Massa

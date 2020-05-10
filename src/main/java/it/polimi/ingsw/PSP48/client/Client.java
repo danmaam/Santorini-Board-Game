@@ -1,5 +1,8 @@
 package it.polimi.ingsw.PSP48.client;
 
+import it.polimi.ingsw.PSP48.client.CLI.CLI;
+import it.polimi.ingsw.PSP48.client.CLI.ColoursForPrinting;
+
 public class Client {
     public static void main(String[] args) {
         if (args.length == 0) {
