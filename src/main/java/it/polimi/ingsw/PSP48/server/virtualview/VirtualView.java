@@ -11,6 +11,10 @@ import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Position;
 import it.polimi.ingsw.PSP48.observers.ServerNetworkObserver;
 import it.polimi.ingsw.PSP48.server.networkmanager.ClientHandlerListener;
+import it.polimi.ingsw.PSP48.setupMessagesToClient.ClientSetupMessages;
+import it.polimi.ingsw.PSP48.setupMessagesToClient.GameModeRequest;
+import it.polimi.ingsw.PSP48.setupMessagesToClient.completedSetup;
+import it.polimi.ingsw.PSP48.setupMessagesToClient.nicknameRequest;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -150,18 +154,16 @@ public class VirtualView implements ViewInterface, ServerNetworkObserver {
 
     @Override
     public void processNickname(String nickname) {
-        String nextMessage;
+        ClientSetupMessages nextMessage;
         try {
             Server.addNickname(nickname);
             playerName = nickname;
-            nextMessage = "Valid Nickname. Welcome to the game";
+            nextMessage = new GameModeRequest("Valid Nickname. Welcome to the game");
             playerListener.nicknameSet(true);
         } catch (IllegalArgumentException e) {
-            nextMessage = "Invalid nickname. Retry";
+            nextMessage = new nicknameRequest("Invalid nickname. Retry");
         }
-
         playerHandler.setUpMessage(nextMessage);
-
     }
 
     @Override
@@ -206,10 +208,12 @@ public class VirtualView implements ViewInterface, ServerNetworkObserver {
             divinities = true;
             nextMessage = "You are in the game room! 2 players with divinities. The game will begin soon";
         }
-        playerHandler.setUpMessage(nextMessage);
         if (!nextMessage.equals("Missing Birthday. Retry") && !nextMessage.equals("Not valid mode. Retry")) {
             playerListener.setGameMode(true);
+            playerHandler.setUpMessage(new completedSetup(nextMessage));
             Server.insertPlayerInGameRoom(playerNumber, divinities, playerName, c, this);
+        } else {
+            playerHandler.setUpMessage(new GameModeRequest("Invalid game mode. Please retry."));
         }
     }
 

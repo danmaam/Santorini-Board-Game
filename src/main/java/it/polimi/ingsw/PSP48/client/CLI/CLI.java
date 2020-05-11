@@ -40,9 +40,9 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
         for (ViewObserver obv : observers) lambda.accept(obv);
     }
 
-    boolean completedAction;
     private Socket server;
     private ClientNetworkOutcoming cA;
+    private ClientNetworkIncoming cI;
 
     /**
      * class constructor initialising the cells of the board
@@ -764,69 +764,52 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
 
         cA = new ClientNetworkOutcoming(server);
         Thread cAThread = new Thread(cA);
-        cAThread.start();
+
         this.registerObserver(cA);
 
-        ClientNetworkIncoming cI = new ClientNetworkIncoming(this, server);
+        cI = new ClientNetworkIncoming(this, server);
         cI.addObserver(this);
         Thread cIThread = new Thread(cI);
         cIThread.start();
-
+        cAThread.start();
 
         System.out.println("Connected to the Santorini Server");
-        String nextMessage;
-
-        synchronized (this) {
-            /* reset the variable that contains the next string to be consumed
-             * from the server */
-            completedAction = false;
-
-            while (!completedAction) {
-                System.out.println("Choose a nickname to login");
-                nextMessage = scanner.nextLine();
-                cA.requestNicknameSend(nextMessage);
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                }
-            }
-
-            //logged into the server, we must choose the game mode
-
-            completedAction = false;
-            while (!completedAction) {
-                System.out.println("Choose a game mode");
-                System.out.println("2D for two player game with divinities;");
-                System.out.println("3D for two player game with divinities;");
-                System.out.println("2ND for two player game without divinities, followed by your birthday in the form dd-mm-aaaa;");
-                System.out.println("3ND for two player game without divinities, followed by your birthday in the form dd-mm-aaaa;");
-                nextMessage = scanner.nextLine();
-                cA.setGameMode(nextMessage);
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-
-                }
-            }
-            System.out.println("logged to the server. initializing message listener");
-        }
     }
 
 
     @Override
     public synchronized void nicknameResult(String result) {
         System.out.println(result);
-        if (result.equals("Invalid nickname. Retry")) completedAction = false;
-        else completedAction = true;
-        notifyAll();
     }
 
     @Override
     public synchronized void gameModeResult(String result) {
         System.out.println(result);
-        if (result.equals("Not valid mode. Retry") || result.equals("Missing Birthday. Retry")) completedAction = false;
-        else completedAction = true;
-        notifyAll();
+    }
+
+    @Override
+    public void requestNicknameSend(String message) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Choose a nickname to login");
+        String nextMessage = scanner.nextLine();
+        cA.requestNicknameSend(nextMessage);
+    }
+
+    @Override
+    public void requestGameModeSend(String message) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Choose a game mode");
+        System.out.println("2D for two player game with divinities;");
+        System.out.println("3D for two player game with divinities;");
+        System.out.println("2ND for two player game without divinities, followed by your birthday in the form dd-mm-aaaa;");
+        System.out.println("3ND for two player game without divinities, followed by your birthday in the form dd-mm-aaaa;");
+        String nextMessage = scanner.nextLine();
+        cA.setGameMode(nextMessage);
+    }
+
+    @Override
+    public void completedSetup(String message) {
+        cI.completedSetup();
     }
 
     public boolean containsWorker(ArrayList<WorkerValidCells> arr, int row, int column) {

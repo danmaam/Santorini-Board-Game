@@ -2,11 +2,14 @@ package it.polimi.ingsw.PSP48.server.networkmanager;
 
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
+import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkIncoming;
 import it.polimi.ingsw.PSP48.networkMessagesToClient.*;
 import it.polimi.ingsw.PSP48.server.Server;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Position;
 import it.polimi.ingsw.PSP48.server.virtualview.VirtualView;
+import it.polimi.ingsw.PSP48.setupMessagesToClient.ClientSetupMessages;
+import it.polimi.ingsw.PSP48.setupMessagesToClient.nicknameRequest;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -25,15 +28,16 @@ public class ClientHandler implements Runnable {
     private nextAction toDO = null;
     Object toDOLOCK = new Object();
 
-    public ClientHandler(Socket client) {
+    public ClientHandler(Socket client, ClientHandlerListener i) {
         this.client = client;
+        this.incomingMessagesHandler = i;
     }
 
     ObjectOutputStream output;
 
     private ClientHandlerListener incomingMessagesHandler;
     private String playerDatas = null;
-    private String setUpMessage;
+    private ClientSetupMessages setUpMessage;
     private NetworkMessagesToClient nextObject;
     private Thread listenerThread;
 
@@ -43,11 +47,6 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
 
-        incomingMessagesHandler = new ClientHandlerListener(client);
-        VirtualView playerVirtualView = new VirtualView(this, incomingMessagesHandler);
-        incomingMessagesHandler.registerObserver(playerVirtualView);
-        listenerThread = new Thread(incomingMessagesHandler);
-        listenerThread.start();
         try {
             handleGamePhases();
         } catch (IOException e) {
@@ -61,6 +60,9 @@ public class ClientHandler implements Runnable {
     private void handleGamePhases() throws IOException {
         output = new ObjectOutputStream(client.getOutputStream());
         System.out.println("Connected to " + client.getInetAddress());
+
+        setUpMessage(new nicknameRequest("Please choose a nickname without dots and press enter"));
+
         while (true) {
             synchronized (toDOLOCK) {
                 while (toDO == null) {
@@ -191,7 +193,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    public void setUpMessage(String message) {
+    public void setUpMessage(ClientSetupMessages message) {
         System.out.println("Sending a setup message");
         synchronized (toDOLOCK) {
             setUpMessage = message;

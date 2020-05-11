@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP48.client.networkmanager;
 import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.networkMessagesToClient.NetworkMessagesToClient;
 import it.polimi.ingsw.PSP48.observers.ClientNetworkObserver;
+import it.polimi.ingsw.PSP48.setupMessagesToClient.ClientSetupMessages;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -15,8 +16,7 @@ public class ClientNetworkIncoming implements Runnable {
     private Socket server;
     private NetworkMessagesToClient newMessage;
 
-    private boolean nicknameSet = false;
-    private boolean gameModeSet = false;
+    private boolean completeSetup = false;
 
     private ArrayList<ClientNetworkObserver> observers = new ArrayList<>();
 
@@ -43,15 +43,9 @@ public class ClientNetworkIncoming implements Runnable {
 
     public synchronized void retrieveMessage() throws IOException, ClassNotFoundException {
         while (true) {
-            if (!nicknameSet) {
-                String result = (String) in.readObject();
-                if (!result.equals("Invalid nickname. Retry")) nicknameSet = true;
-                for (ClientNetworkObserver o : observers) o.nicknameResult(result);
-            } else if (!gameModeSet) {
-                String result = (String) in.readObject();
-                if (!(result.equals("Not valid mode. Retry") || result.equals("Missing Birthday. Retry")))
-                    gameModeSet = true;
-                for (ClientNetworkObserver o : observers) o.gameModeResult(result);
+            if (!completeSetup) {
+                ClientSetupMessages result = (ClientSetupMessages) in.readObject();
+                for (ClientNetworkObserver o : observers) result.doAction(o);
             } else {
                 System.out.println("waiting for message");
                 newMessage = (NetworkMessagesToClient) in.readObject();
@@ -64,5 +58,9 @@ public class ClientNetworkIncoming implements Runnable {
     public ClientNetworkIncoming(ViewInterface playerView, Socket server) {
         this.playerView = playerView;
         this.server = server;
+    }
+
+    public void completedSetup() {
+        completeSetup = true;
     }
 }

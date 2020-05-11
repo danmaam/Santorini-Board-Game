@@ -9,5 +9,10 @@ public interface ClientNetworkObserver {
 
     public void gameModeResult(String result);
 
+    public void requestNicknameSend(String message);
+
+    public void requestGameModeSend(String message);
+
+    public void completedSetup(String message);
 
 }

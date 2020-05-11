@@ -2,6 +2,8 @@ package it.polimi.ingsw.PSP48.server;
 
 import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.server.networkmanager.ClientHandler;
+import it.polimi.ingsw.PSP48.server.networkmanager.ClientHandlerListener;
+import it.polimi.ingsw.PSP48.server.virtualview.VirtualView;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -29,10 +31,17 @@ public class Server {
 
         while (true) {
             try {
-
                 Socket client = socket.accept();
-                ClientHandler cH = new ClientHandler(client);
+                ClientHandlerListener incomingMessagesHandler;
+                incomingMessagesHandler = new ClientHandlerListener(client);
+                ClientHandler cH = new ClientHandler(client, incomingMessagesHandler);
                 Thread th = new Thread(cH);
+
+
+                VirtualView playerVirtualView = new VirtualView(cH, incomingMessagesHandler);
+                incomingMessagesHandler.registerObserver(playerVirtualView);
+                Thread listenerThread = new Thread(incomingMessagesHandler);
+                listenerThread.start();
                 th.start();
             } catch (IOException e) {
                 System.out.println("connection error");
@@ -77,8 +86,12 @@ public class Server {
             }
         }
         //found the game room, notify all the players to shutdown connection
-        tbd.notifyAllPlayersOfDisconnection(disconnectedPlayer);
+        //but it may occur that the player disconnects before entering in a game room
+        if (tbd != null) {
+            tbd.notifyAllPlayersOfDisconnection(disconnectedPlayer);
+            roomsOnTheServer.remove(tbd);
+        }
         //notified all the players,
-        roomsOnTheServer.remove(tbd);
+
     }
 }

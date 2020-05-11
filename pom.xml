@@ -46,23 +46,32 @@
   </dependencies>
 
   <build>
+
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
-        <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
-        <plugin>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>3.1.0</version>
-        </plugin>
-        <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
-        <plugin>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>3.0.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.8.0</version>
-        </plugin>
-        <plugin>
+          <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+          <plugin>
+              <artifactId>maven-clean-plugin</artifactId>
+              <version>3.1.0</version>
+          </plugin>
+          <plugin>
+              <groupId>com.gluonhq</groupId>
+              <artifactId>client-maven-plugin</artifactId>
+              <version>0.1.18</version>
+              <configuration>
+                  <mainClass>your.mainClass</mainClass>
+              </configuration>
+          </plugin>
+          <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+          <plugin>
+              <artifactId>maven-resources-plugin</artifactId>
+              <version>3.0.2</version>
+          </plugin>
+          <plugin>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <version>3.8.0</version>
+          </plugin>
+          <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.22.1</version>
         </plugin>
@@ -90,14 +99,23 @@
       </plugins>
     </pluginManagement>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>8</source>
-          <target>8</target>
-        </configuration>
-      </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+                <source>8</source>
+                <target>8</target>
+            </configuration>
+        </plugin>
     </plugins>
   </build>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>gluon-releases</id>
+            <url>https://nexus.gluonhq.com/nexus/content/repositories/releases/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
 </project>
+
