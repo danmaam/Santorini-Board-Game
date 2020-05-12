@@ -17,14 +17,13 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -38,23 +37,25 @@ import java.util.function.Consumer;
 
 public class GUI extends Application implements ClientNetworkObserver, Runnable, ViewInterface {
     @FXML
-    TextField serverIP;
+    private TextField serverIP;
     @FXML
-    TextField playerNickname;
+    private TextField playerNickname;
     @FXML
-    DatePicker birthday;
+    private DatePicker birthday;
     @FXML
-    ToggleButton isGameWithThreePlayers;
+    private ToggleButton isGameWithThreePlayers;
     @FXML
-    ToggleButton isGameWithDivinities;
+    private ToggleButton isGameWithDivinities;
     @FXML
-    Text errorText;
+    private Text errorText;
     @FXML
-    Text gameMessage;
+    private Text gameMessage;
     @FXML
-    GridPane boardPane;
+    private GridPane boardPane;
     @FXML
-    GridPane playersPane;
+    private GridPane playersPane;
+    @FXML
+    private Pagination divinityList;
     private static ClientNetworkOutcoming cA;
     private static Socket server;
     private ClientNetworkIncoming cI;
@@ -98,6 +99,43 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
 
     @Override
     public void requestChallengerDivinitiesSelection(ArrayList<DivinitiesWithDescription> div, int playerNumber) {
+        ArrayList<String> selectedDivinities;
+        int selected = 0;
+
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                GUI newController;
+                Parent root = null;
+                Stage divinityRequestStage = new Stage();
+                FXMLLoader divinityRequestLoader = new FXMLLoader(getClass().getResource("/divinitySelection.fxml"));
+                try {
+                    root = divinityRequestLoader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                newController = divinityRequestLoader.getController();
+                System.out.println("new controller: " + newController);
+                Scene divinitySelectionRequest = new Scene(root, 315, 640);
+                divinityRequestStage.setScene(divinitySelectionRequest);
+                divinityRequestStage.setResizable(false);
+                divinityRequestStage.initModality(Modality.WINDOW_MODAL);
+                divinityRequestStage.initOwner(primaryStage);
+                //now i must parse the arrived divinities
+
+                newController.divinityList.setMaxPageIndicatorCount(0);
+                ArrayList<String> divinities = new ArrayList<>();
+
+                for (DivinitiesWithDescription d : div) {
+                    divinities.add(d.getName());
+                }
+                newController.divinityList.setPageFactory(n -> new ImageView("santorini_risorse-grafiche-2/Sprite/Cards/Full/" + divinities.get(n) + ".png"));
+
+                divinityRequestStage.showAndWait();
+            }
+        });
+
 
     }
 
@@ -316,7 +354,6 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     @Override
     public synchronized void completedSetup(String message) {
         cI.completedSetup();
-        URL url = null;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gameLayout.fxml"));
         cI.removeObserver(this);
         try {
@@ -349,4 +386,5 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
         }
         return null;
     }
+
 }

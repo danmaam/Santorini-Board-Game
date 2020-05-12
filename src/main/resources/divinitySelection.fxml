@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0"
+      prefWidth="286.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="it.polimi.ingsw.PSP48.client.GUI.GUI">
+   <children>
+      <ImageView fitHeight="640.0" fitWidth="315.0" layoutX="1.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@santorini_risorse-grafiche-2/Sprite/fg_panel4.png"/>
+         </image>
+      </ImageView>
+      <Pagination fx:id="divinityList" layoutX="23.0" layoutY="24.0" prefHeight="542.0" prefWidth="241.0"/>
+      <Button layoutX="103.0" layoutY="599.0" mnemonicParsing="false" text="Select This!"/>
+      <Text layoutX="100.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select a divinity!"/>
+   </children>
+</Pane>
