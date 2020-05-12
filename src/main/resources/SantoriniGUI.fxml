@@ -28,7 +28,7 @@
         </ImageView>
         <Text layoutX="49.0" layoutY="589.0" strokeType="OUTSIDE" strokeWidth="0.0"
               text="Developed by Daniele Mammone, Rebecca Marelli, Annalaura Massa"/>
-        <Button layoutX="175.0" layoutY="437.0" mnemonicParsing="false" onMouseClicked="#test">
+        <Button layoutX="175.0" layoutY="437.0" mnemonicParsing="false" onMouseClicked="#loginButton">
             <graphic>
                 <ImageView fitHeight="115.0" fitWidth="94.0" pickOnBounds="true" preserveRatio="true">
                     <image>

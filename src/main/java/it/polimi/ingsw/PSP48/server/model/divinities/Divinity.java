@@ -397,7 +397,6 @@ public class Divinity {
      */
 
     public Consumer<GameController> turnBegin(Model gd) {
-
         return GameController::CheckIfCanEndTurnBaseDivinity;
     }
 

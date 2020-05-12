@@ -79,7 +79,7 @@ public class Prometheus extends Divinity {
         }
 
         if (build || dome) return GameController::PrometheusInitialOptionalBuild;
-        else return GameController::CheckIfCanEndTurnBaseDivinity;
+        else return super.turnBegin(gd);
     }
 
     /**

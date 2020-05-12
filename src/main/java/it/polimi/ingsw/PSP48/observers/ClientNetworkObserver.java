@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP48.observers;
 
 import it.polimi.ingsw.PSP48.WorkerValidCells;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public interface ClientNetworkObserver {

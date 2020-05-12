@@ -21,10 +21,12 @@ public class ClientNetworkIncoming implements Runnable {
     private ArrayList<ClientNetworkObserver> observers = new ArrayList<>();
 
     public void addObserver(ClientNetworkObserver n) {
+        System.out.println("registered observer");
         observers.add(n);
     }
 
     public void removeObserver(ClientNetworkObserver n) {
+        System.out.println("removed observer");
         observers.remove(n);
     }
 
@@ -46,10 +48,12 @@ public class ClientNetworkIncoming implements Runnable {
             if (!completeSetup) {
                 ClientSetupMessages result = (ClientSetupMessages) in.readObject();
                 for (ClientNetworkObserver o : observers) result.doAction(o);
+                System.out.println("received object" + result.toString());
             } else {
                 System.out.println("waiting for message");
                 newMessage = (NetworkMessagesToClient) in.readObject();
                 System.out.println("received object" + newMessage.toString());
+                System.out.println("invoking on" + playerView);
                 newMessage.doAction(playerView);
             }
         }
@@ -62,5 +66,10 @@ public class ClientNetworkIncoming implements Runnable {
 
     public void completedSetup() {
         completeSetup = true;
+    }
+
+    public void setPlayerView(ViewInterface playerView) {
+        System.out.println("setting: " + playerView);
+        this.playerView = playerView;
     }
 }

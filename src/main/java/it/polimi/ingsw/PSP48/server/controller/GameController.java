@@ -392,7 +392,7 @@ public class GameController implements ViewObserver {
         }
 
         //se da nessuna delle due position si può muovere e poi costruire il giocatore ha perso, altrimenti devo far selezionare da dove vuole muovere
-
+        //da qua in giù ok
         if (!position1Move && !position2Move) {
             //bisogna eliminare il giocatore dalla partita, e porre il controller in modalità gioco finito nel caso in cui vi siano solo due giocatori ancora in gioco
             if (model.getPlayersInGame().size() == 2) {
@@ -586,4 +586,20 @@ public class GameController implements ViewObserver {
         getPlayerView(model.getCurrentPlayer().getName()).requestMove(move);
     }
 
+    public void currentPlayerCantEndTurn() {
+
+        //bisogna eliminare il giocatore dalla partita, e porre il controller in modalità gioco finito nel caso in cui vi siano solo due giocatori ancora in gioco
+        if (model.getPlayersInGame().size() == 2) {
+            getPlayerView(model.getCurrentPlayer().getName()).endgame("You lose cause you won't be able to end the turn");
+            for (Player p : model.getPlayersInGame()) {
+                if (!p.getName().equals(model.getCurrentPlayer().getName()))
+                    getPlayerView(p.getName()).endgame("You win!");
+            }
+            nextAction = GameController::gameEnd;
+        } else {
+            model.removePlayer(model.getCurrentPlayer().getName());
+            nextAction = GameController::turnChange;
+        }
+        nextAction();
+    }
 }

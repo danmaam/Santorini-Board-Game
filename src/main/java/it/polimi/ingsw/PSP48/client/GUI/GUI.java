@@ -14,6 +14,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -21,6 +22,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -34,7 +36,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-public class GUI extends Application implements Runnable, ViewInterface, ClientNetworkObserver {
+public class GUI extends Application implements ClientNetworkObserver, Runnable, ViewInterface {
     @FXML
     TextField serverIP;
     @FXML
@@ -47,14 +49,22 @@ public class GUI extends Application implements Runnable, ViewInterface, ClientN
     ToggleButton isGameWithDivinities;
     @FXML
     Text errorText;
-    private ClientNetworkOutcoming cA;
-    private Socket server;
+    @FXML
+    Text gameMessage;
+    @FXML
+    GridPane boardPane;
+    @FXML
+    GridPane playersPane;
+    private static ClientNetworkOutcoming cA;
+    private static Socket server;
     private ClientNetworkIncoming cI;
     private Scene scene;
     private Parent root;
     private static Stage primaryStage;
     private Thread cIThread;
     private Thread cAThread;
+    private static ArrayList<ViewObserver> observers = new ArrayList<>();
+
 
     @Override
     public void requestMove(ArrayList<WorkerValidCells> validCellsForMove) {
@@ -93,7 +103,12 @@ public class GUI extends Application implements Runnable, ViewInterface, ClientN
 
     @Override
     public void printMessage(String s) {
-
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                gameMessage.setText(s);
+            }
+        });
     }
 
     @Override
@@ -108,17 +123,19 @@ public class GUI extends Application implements Runnable, ViewInterface, ClientN
 
     @Override
     public void registerObserver(ViewObserver obv) {
-
+        observers.add(obv);
     }
 
     @Override
     public void unregisterObserver(ViewObserver obv) {
-
+        observers.remove(obv);
     }
 
     @Override
     public void notifyObserver(Consumer<ViewObserver> lambda) {
-
+        for (ViewObserver o : observers) {
+            lambda.accept(o);
+        }
     }
 
     @Override
@@ -155,6 +172,18 @@ public class GUI extends Application implements Runnable, ViewInterface, ClientN
 
     @Override
     public void changedPlayerList(ArrayList<String> newPlayerList) {
+        System.out.println("Invoked on " + this);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                gameMessage.setText("Prova");
+                int i = 0;
+                for (String s : newPlayerList) {
+                    ((Text) getNodeFromGridPane(playersPane, 2, i)).setText(s);
+                    i = i + 2;
+                }
+            }
+        });
 
     }
 
@@ -165,6 +194,7 @@ public class GUI extends Application implements Runnable, ViewInterface, ClientN
 
     @Override
     public synchronized void start(Stage stage) throws Exception {
+        System.out.println(this);
         URL url = new File("src/main/resources/SantoriniGUI.fxml").toURI().toURL();
         root = FXMLLoader.load(url);
         scene = new Scene(root, 467, 653);
@@ -177,7 +207,7 @@ public class GUI extends Application implements Runnable, ViewInterface, ClientN
     }
 
 
-    public synchronized void test() throws IOException {
+    public synchronized void loginButton() throws IOException {
 
         if (serverIP.getText().length() == 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -209,8 +239,6 @@ public class GUI extends Application implements Runnable, ViewInterface, ClientN
             alert.showAndWait();
             return;
         }
-
-
         //primaryStage.close();
 
 
@@ -227,8 +255,6 @@ public class GUI extends Application implements Runnable, ViewInterface, ClientN
         cAThread.start();
 
         System.out.println("Correctly connected to the server!");
-
-
     }
 
     public synchronized void showBirthdayInput() {
@@ -290,17 +316,37 @@ public class GUI extends Application implements Runnable, ViewInterface, ClientN
     @Override
     public synchronized void completedSetup(String message) {
         cI.completedSetup();
+        URL url = null;
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gameLayout.fxml"));
+        cI.removeObserver(this);
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        cI.addObserver(loader.getController());
+        cI.setPlayerView(loader.getController());
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                primaryStage.close();
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Connection completed!");
-                alert.setHeaderText("Completed connection");
-                alert.setContentText(message);
-                alert.showAndWait();
+                scene = new Scene(root, 1155, 825);
+                primaryStage.setScene(scene);
+                primaryStage.setTitle("Santorini");
+                primaryStage.show();
             }
         });
+    }
 
+    public void initialize() {
+
+    }
+
+    private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
+        for (Node node : gridPane.getChildren()) {
+            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
+                return node;
+            }
+        }
+        return null;
     }
 }

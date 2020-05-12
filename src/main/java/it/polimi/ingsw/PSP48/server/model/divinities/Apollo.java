@@ -163,10 +163,16 @@ public class Apollo extends Divinity {
 
     private boolean checkIfCanBuildAfterTheMove(int wR, int wC, int mR, int mC, Cell[][] gameBoard, ArrayList<Divinity> otherDiv) {
         //here i must simulate the move and then calculate the valid cells for building and doming
+        boolean canBuild;
         String tempPlayer = gameBoard[mR][mC].getPlayer();
         String currentPlayer = gameBoard[wR][wC].getPlayer();
         gameBoard[mR][mC].setPlayer(currentPlayer);
         gameBoard[wR][wC].setPlayer(tempPlayer);
-        return !getValidCellForBuilding(mC, mR, otherDiv, gameBoard).isEmpty() || !getValidCellsToPutDome(mC, mR, gameBoard, otherDiv).isEmpty();
+        canBuild = !getValidCellForBuilding(mC, mR, otherDiv, gameBoard).isEmpty() || !getValidCellsToPutDome(mC, mR, gameBoard, otherDiv).isEmpty();
+        gameBoard[mR][mC].setPlayer(tempPlayer);
+        gameBoard[wR][wC].setPlayer(currentPlayer);
+        return canBuild;
     }
+
+
 }
