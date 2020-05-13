@@ -341,28 +341,6 @@ public class GameController implements ViewObserver {
     }
 
     /**
-     * method that handles the actions related to the fact that a player loses the game because the turn can't be completed
-     */
-    public void currentPlayerCantEndTurn()
-    {
-        if (model.getPlayersInGame().size()==2)
-        {
-            getPlayerView(model.getCurrentPlayer().getName()).endgame("You lose cause you won't be able to end the turn");
-            for (Player p : model.getPlayersInGame())
-            {
-                if(!p.getName().equals(model.getCurrentPlayer().getName())) getPlayerView(p.getName()).endgame("You win!");
-            }
-            nextAction=GameController::gameEnd;
-        }
-        else
-        {
-            model.removePlayer(model.getCurrentPlayer().getName());
-            nextAction=GameController::turnChange;
-        }
-        nextAction();
-    }
-
-    /**
      * @author Rebecca Marelli
      * method that checks if a player can complete a turn by moving and then building
      */
@@ -608,19 +586,24 @@ public class GameController implements ViewObserver {
         getPlayerView(model.getCurrentPlayer().getName()).requestMove(move);
     }
 
-    public void currentPlayerCantEndTurn() {
-
-        //bisogna eliminare il giocatore dalla partita, e porre il controller in modalità gioco finito nel caso in cui vi siano solo due giocatori ancora in gioco
-        if (model.getPlayersInGame().size() == 2) {
+    /**
+     * method handling the elimination of a player when he loses the game cause he can't complete the turn
+     */
+    public void currentPlayerCantEndTurn()
+    {
+        if (model.getPlayersInGame().size()==2)
+        {
             getPlayerView(model.getCurrentPlayer().getName()).endgame("You lose cause you won't be able to end the turn");
-            for (Player p : model.getPlayersInGame()) {
-                if (!p.getName().equals(model.getCurrentPlayer().getName()))
-                    getPlayerView(p.getName()).endgame("You win!");
+            for (Player p : model.getPlayersInGame())
+            {
+                if(!p.getName().equals(model.getCurrentPlayer().getName())) getPlayerView(p.getName()).endgame("You win!");
             }
-            nextAction = GameController::gameEnd;
-        } else {
+            nextAction=GameController::gameEnd;
+        }
+        else
+        {
             model.removePlayer(model.getCurrentPlayer().getName());
-            nextAction = GameController::turnChange;
+            nextAction=GameController::turnChange;
         }
         nextAction();
     }

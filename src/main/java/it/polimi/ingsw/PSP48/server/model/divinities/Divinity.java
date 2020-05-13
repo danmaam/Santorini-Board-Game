@@ -398,7 +398,7 @@ public class Divinity {
 
     public Consumer<GameController> turnBegin(Model gd)
     {
-        ArrayList<Position> playerPositions, worker1Positions=null, worker2Positions=null;
+        ArrayList<Position> playerPositions, worker1Positions, worker2Positions;
         ArrayList<Divinity> otherDivinities=new ArrayList<>();
         ArrayList<Player> players;
 

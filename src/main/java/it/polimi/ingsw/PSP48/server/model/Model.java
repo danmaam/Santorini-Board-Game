@@ -215,8 +215,29 @@ public class Model {
         currentPlayer = i;
     }
 
-    public void removePlayer(String pName) {
-        playersInGame.remove(getPlayer(pName));
+    public void removePlayer(String pName)
+    {
+        ArrayList<Cell> updatedCells=new ArrayList<>();
+        ArrayList<String> newPlayerList=new ArrayList<>();
+        Cell tempCell;
+
+        for (int i=0; i<5; i++) //we also need to remove the player from the board and then make a list of all the updated cells (we need to clone these cells)
+        {
+            for (int j=0; j<5; j++)
+            {
+                if(boardCell[i][j].getPlayer().equals(pName)) boardCell[i][j].setPlayer(null);
+                tempCell= (Cell) boardCell[i][j].clone();
+                updatedCells.add(tempCell);
+            }
+        }
+        notifyObservers(x->x.changedBoard(updatedCells));
+
+        playersInGame.remove(getPlayer(pName)); //then we remove the player from the player list
+        for (Player p : playersInGame)
+        {
+            newPlayerList.add(p.getName());
+        }
+        notifyObservers(x->x.changedPlayerList(newPlayerList));
         sendPlayerList();
     }
 
