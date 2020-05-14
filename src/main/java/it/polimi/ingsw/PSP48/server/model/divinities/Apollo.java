@@ -35,11 +35,12 @@ public class Apollo extends Divinity {
      * @return a list of cells valid for the move of the worker
      */
     @Override
-    public ArrayList<Position> getValidCellForMove(int WorkerColumn, int WorkerRow, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
+    public ArrayList<Position> getValidCellForMove(int WorkerColumn, int WorkerRow, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame)
+    {
         Cell actualWorkerCell = gameCells[WorkerRow][WorkerColumn];
         ArrayList<Cell> validCells = new ArrayList<>();
 
-        //with the for loop, i'm adding to the arrayList the cell adiacent to the worker
+        //with the for loop, i'm adding to the arrayList the cell adjacent to the worker
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (!(i == 0 && j == 0) && 0 <= WorkerRow + i && WorkerRow + i <= 4 && 0 <= WorkerColumn + j && WorkerColumn + j <= 4) {
@@ -91,7 +92,17 @@ public class Apollo extends Divinity {
                 nV.add(c);
         }
 
-        for (Cell c : nV) validCells.remove(c);
+        //we need to remove from the not valid cells the ones where the player cannot build from, but that can still make the player win if he moves on them
+        for (Cell c : nV)
+        {
+            if (checkIfWinsAfterMove(WorkerRow, WorkerColumn, c.getRow(), c.getColumn(), clonedBoard)) nV.remove(c);
+        }
+
+        //now we can finally remove from the valid cells the ones where the player cannot build from
+        for (Cell cell : nV)
+        {
+            validCells.remove(cell);
+        }
 
         ArrayList<Position> validPositions = new ArrayList<>();
         validCells.forEach((Cell c) -> validPositions.add(new Position(c.getRow(), c.getColumn())));
@@ -174,5 +185,13 @@ public class Apollo extends Divinity {
         return canBuild;
     }
 
+    private boolean checkIfWinsAfterMove(int wR, int wC, int mR, int mC, Cell[][] gameBoard)
+    {
+        boolean wins;
 
+        if (gameBoard[mR][mC].getLevel()==3 && gameBoard[mR][mC].getLevel()>gameBoard[wR][wC].getLevel()) wins=true;
+        else wins=false;
+
+        return wins;
+    }
 }

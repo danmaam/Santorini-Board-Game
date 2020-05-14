@@ -34,7 +34,7 @@ public class Model {
 
     private ArrayList<Divinity> availableDivinities;
     private int currentPlayer = -1; //se siamo in un momento per cui il current player non deve avere un valore possiamo settarlo a -1
-    private final Cell[][] boardCell = new Cell[5][5]; //tramite il costruttore di Cell devo inizializzare le celle, qui sono tutte a null
+    private final Cell[][] boardCell = new Cell[5][5];
     private final int gamePlayerNumber;
     private final boolean gameWithDivinities;
     private int challengerIndex;
@@ -135,7 +135,7 @@ public class Model {
     /**
      * Returns a collection of Divinities, with their description, available to be chosen by players.
      *
-     * @return ArrayList of type DivinitiesWithDescription cainting available divinities to be chosen
+     * @return ArrayList of type DivinitiesWithDescription containing available divinities to be chosen
      */
     public ArrayList<DivinitiesWithDescription> getAvailableDivinities() {
         ArrayList<DivinitiesWithDescription> ret_a = new ArrayList<>();
@@ -148,7 +148,7 @@ public class Model {
      *
      * @return a reference to the current player
      */
-    public Player getCurrentPlayer() //eccezione se il player è null (?)
+    public Player getCurrentPlayer()
     {
         Player neededCurrentPlayer;
 
@@ -175,7 +175,7 @@ public class Model {
      * @param column gives the column of the cell in the board
      * @return a reference to the needed cell
      */
-    public Cell getCell(int row, int column) //eccezione se riceve indici al di fuori della dimensione della matrice
+    public Cell getCell(int row, int column)
     {
         Cell neededCell;
 
@@ -186,7 +186,7 @@ public class Model {
 
     /**
      * @param playerName the name of the player
-     * @return the cells' cordinates of player
+     * @return the cells' coordinates of player
      * @author Daniele Mammone
      */
     public ArrayList<Position> getPlayerPositionsInMap(String playerName) {
@@ -256,7 +256,8 @@ public class Model {
      * @param divinity   The divinity to be associated to the player
      * @author Daniele Mammone
      */
-    public void setPlayerDivinity(String playerName, String divinity) throws IllegalArgumentException {
+    public void setPlayerDivinity(String playerName, String divinity) throws IllegalArgumentException
+    {
         //first i must find the divinity
         Divinity actualDivinity = null;
         if (divinity.equals("Basic")) actualDivinity = new Divinity();
@@ -271,7 +272,7 @@ public class Model {
             if (divinity.equals("Circe")) playerWithCirce = playerName;
             availableDivinities.remove(actualDivinity);
         }
-
+        sendPlayerList();
     }
 
     /**
