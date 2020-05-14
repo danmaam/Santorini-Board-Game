@@ -341,76 +341,6 @@ public class GameController implements ViewObserver {
     }
 
     /**
-     * @author Rebecca Marelli
-     * method that checks if a player can complete a turn by moving and then building
-     */
-    public void CheckIfCanEndTurnBaseDivinity() {
-        System.out.println("checking if can end turn");
-        ArrayList<Position> playerPositions;
-        Position position1, position2;
-        ArrayList<Divinity> otherDivinities = new ArrayList<>();
-        ArrayList<Position> cellsForMove1;
-        ArrayList<Position> cellsForMove2;
-        ArrayList<Position> cellsForBuild1;
-        ArrayList<Position> cellsForBuild2;
-        ArrayList<Position> cellsForDome1;
-        ArrayList<Position> cellsForDome2;
-        boolean position1Move = false;
-        boolean position2Move = false;
-
-        for (Player pl : model.getPlayersInGame()) //inizializzo array contenente le divinità diverse da quelle del mio player, da passare alle funzioni che restituiscono le celle valide
-        {
-            if (!pl.getName().equals(model.getCurrentPlayer().getName())) otherDivinities.add(pl.getDivinity());
-        }
-
-        playerPositions = model.getPlayerPositionsInMap(model.getCurrentPlayer().getName()); //ottenuta la lista con le due posizioni
-
-
-        position1 = playerPositions.get(0); //prendo la prima e mi faccio la lista con le celle adiacenti dove posso muovere
-        cellsForMove1 = model.getCurrentPlayer().getDivinity().getValidCellForMove(position1.getRow(), position1.getColumn(), model.getGameBoard(), otherDivinities);
-        if (playerPositions.size() >= 1) {
-            position2 = playerPositions.get(1); //faccio la stessa cosa con la seconda posizione
-            cellsForMove2 = model.getCurrentPlayer().getDivinity().getValidCellForMove(position2.getRow(), position2.getColumn(), model.getGameBoard(), otherDivinities);
-        } else cellsForMove2 = null;
-
-
-        if (cellsForMove1 != null) {
-            for (Position c : cellsForMove1) //per ogni cella valida per lo spostamento, guardo se si può fare una qualunque costruzione
-            {
-                cellsForBuild1 = model.getCurrentPlayer().getDivinity().getValidCellForBuilding(c.getRow(), c.getColumn(), otherDivinities, model.getGameBoard());
-                cellsForDome1 = model.getCurrentPlayer().getDivinity().getValidCellsToPutDome(c.getRow(), c.getColumn(), model.getGameBoard(), otherDivinities);
-                if (cellsForBuild1 != null || cellsForDome1 != null) position1Move = true;
-            }
-        }
-
-        if (cellsForMove2 != null) {
-            for (Position c : cellsForMove2) {
-                cellsForBuild2 = model.getCurrentPlayer().getDivinity().getValidCellForBuilding(c.getRow(), c.getColumn(), otherDivinities, model.getGameBoard());
-                cellsForDome2 = model.getCurrentPlayer().getDivinity().getValidCellsToPutDome(c.getRow(), c.getColumn(), model.getGameBoard(), otherDivinities);
-                if (cellsForBuild2 != null || cellsForDome2 != null) position2Move = true;
-            }
-        }
-
-        //se da nessuna delle due position si può muovere e poi costruire il giocatore ha perso, altrimenti devo far selezionare da dove vuole muovere
-        //da qua in giù ok
-        if (!position1Move && !position2Move) {
-            //bisogna eliminare il giocatore dalla partita, e porre il controller in modalità gioco finito nel caso in cui vi siano solo due giocatori ancora in gioco
-            if (model.getPlayersInGame().size() == 2) {
-                getPlayerView(model.getCurrentPlayer().getName()).endgame("You lose cause you won't be able to end the turn");
-                for (Player p : model.getPlayersInGame()) {
-                    if (!p.getName().equals(model.getCurrentPlayer().getName()))
-                        getPlayerView(p.getName()).endgame("You win!");
-                }
-                nextAction = GameController::gameEnd;
-            } else {
-                model.removePlayer(model.getCurrentPlayer().getName());
-                nextAction = GameController::turnChange;
-            }
-        } else nextAction = GameController::requestMove;
-        nextAction();
-    }
-
-    /**
      * @author Daniele Mammone
      * Starts the game, so, randomically, chose the "chosen", sets the chosen as last player to chose divinities, and asks the chosen to select a set of divinities
      */
@@ -558,7 +488,8 @@ public class GameController implements ViewObserver {
 
     }
 
-    public void PrometheusInitialOptionalBuild() {
+    public void PrometheusInitialOptionalBuild()
+    {
         ArrayList<WorkerValidCells> build = new ArrayList<>();
         ArrayList<WorkerValidCells> dome = new ArrayList<>();
 

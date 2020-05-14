@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * @author Rebecca Marelli
  */
 public class Model {
-    private ArrayList<Player> playersInGame = new ArrayList<Player>(); //i giocatori sono in ordine fisso secondo l'ordine di gioco
+    private ArrayList<Player> playersInGame = new ArrayList<Player>(); //the player are stored in a certain order, according to the order of their turns
     private Stack<Colour> availableColours = new Stack<Colour>();
 
     public boolean isGameWithDivinities() {
@@ -33,7 +33,7 @@ public class Model {
     private String playerWithCirce = null;
 
     private ArrayList<Divinity> availableDivinities;
-    private int currentPlayer = -1; //se siamo in un momento per cui il current player non deve avere un valore possiamo settarlo a -1
+    private int currentPlayer = -1; //it has this initial value cause there are moments of the game when there isn't a current player
     private final Cell[][] boardCell = new Cell[5][5];
     private final int gamePlayerNumber;
     private final boolean gameWithDivinities;
@@ -152,7 +152,7 @@ public class Model {
     {
         Player neededCurrentPlayer;
 
-        neededCurrentPlayer = this.playersInGame.get(currentPlayer); //ho usato un metodo della classe stessa per restituire il giocatore corrente
+        neededCurrentPlayer = this.playersInGame.get(currentPlayer);
 
         return (neededCurrentPlayer);
     }
