@@ -59,10 +59,10 @@
         </ImageView>
         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="896.0" layoutY="476.0" pickOnBounds="true"
                    preserveRatio="true"/>
-        <Text fx:id="gameMessage" fill="#475cff" layoutX="246.0" layoutY="787.0" strokeType="OUTSIDE" strokeWidth="0.0"
-              text="Welcome!" wrappingWidth="226.2666015625">
+        <Text fx:id="gameMessage" fill="#475cff" layoutX="90.0" layoutY="759.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              text="Welcome!" wrappingWidth="592.2666015625">
             <font>
-                <Font name="Comic Sans MS" size="48.0"/>
+                <Font name="Helvetica" size="20.0"/>
             </font>
         </Text>
         <ImageView fitHeight="113.0" fitWidth="104.0" layoutX="765.0" layoutY="231.0" pickOnBounds="true">
@@ -87,8 +87,8 @@
             </rowConstraints>
             <children>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Testo di sopra" textAlignment="CENTER"
-                      wrappingWidth="167.828857421875" GridPane.columnIndex="2" GridPane.rowIndex="0"
-                      GridPane.halignment="CENTER" GridPane.valignment="CENTER"/>
+                      wrappingWidth="167.828857421875" GridPane.columnIndex="2" GridPane.halignment="CENTER"
+                      GridPane.rowIndex="0" GridPane.valignment="CENTER"/>
                 <ImageView fitHeight="49.0" fitWidth="141.0" pickOnBounds="true" preserveRatio="true"
                            GridPane.columnIndex="2" GridPane.rowIndex="1"/>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Testo di mezzo" wrappingWidth="132.22900390625"
@@ -104,5 +104,6 @@
                 <Image url="@santorini_risorse-grafiche-2/logo-p21321.png"/>
             </image>
         </ImageView>
+        <Pane fx:id="multifunctionalPane" layoutX="764.0" layoutY="98.0" prefHeight="528.0" prefWidth="344.0"/>
     </children>
 </Pane>

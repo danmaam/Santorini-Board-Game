@@ -1,23 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Pagination?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0"
-      prefWidth="286.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="it.polimi.ingsw.PSP48.client.GUI.GUI">
-   <children>
-      <ImageView fitHeight="640.0" fitWidth="315.0" layoutX="1.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@santorini_risorse-grafiche-2/Sprite/fg_panel4.png"/>
-         </image>
-      </ImageView>
-      <Pagination fx:id="divinityList" layoutX="23.0" layoutY="24.0" prefHeight="542.0" prefWidth="241.0"/>
-      <Button layoutX="103.0" layoutY="599.0" mnemonicParsing="false" text="Select This!"/>
-      <Text layoutX="100.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select a divinity!"/>
-   </children>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="528.0"
+      prefWidth="344.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <ImageView fitHeight="530.0" fitWidth="344.0" layoutY="-1.0" pickOnBounds="true">
+            <image>
+                <Image url="@santorini_risorse-grafiche-2/Sprite/bg_panelMid.png"/>
+            </image>
+        </ImageView>
+        <ImageView fx:id="divinityCard" fitHeight="423.0" fitWidth="267.0" layoutX="47.0" layoutY="24.0"
+                   pickOnBounds="true" preserveRatio="true"/>
+        <ImageView fitHeight="537.0" fitWidth="401.0" layoutX="-11.0" layoutY="-30.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@santorini_risorse-grafiche-2/Sprite/Cards/PlayerUIPanel.png"/>
+            </image>
+        </ImageView>
+        <ImageView fitHeight="49.0" fitWidth="135.0" layoutX="120.0" layoutY="302.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@santorini_risorse-grafiche-2/Sprite/Cards/gameGodFrameName1.png"/>
+            </image>
+        </ImageView>
+        <Text fx:id="divinityName" fill="WHITE" layoutX="152.0" layoutY="322.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              text="Divinity Name" textAlignment="CENTER"/>
+        <Text fx:id="divinityDescription" layoutX="122.0" layoutY="374.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              text="Divinity Description" textAlignment="CENTER" wrappingWidth="120.38604736328125">
+            <font>
+                <Font name="System Font" size="14.0"/>
+            </font>
+        </Text>
+        <ImageView fx:id="prev" fitHeight="38.0" fitWidth="102.0" layoutX="6.0" layoutY="500.0"
+                   onMouseClicked="#prevDivinity" onMousePressed="#clickedPrev" onMouseReleased="#releasedPrev"
+                   pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@santorini_risorse-grafiche-2/Sprite/Buttons/btn_coral.png"/>
+            </image>
+        </ImageView>
+        <Text fx:id="prevName" fill="WHITE" layoutX="11.0" layoutY="515.0" onMouseClicked="#prevDivinity"
+              onMousePressed="#clickedPrev" onMouseReleased="#releasedPrev" strokeType="OUTSIDE" strokeWidth="0.0"
+              text="Prev" wrappingWidth="93.11783599853516"/>
+        <ImageView fx:id="next" fitHeight="38.0" fitWidth="102.0" layoutX="236.0" layoutY="500.0"
+                   onMouseClicked="#nextDivinity" onMousePressed="#clickedNext" onMouseReleased="#releasedNext"
+                   pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@santorini_risorse-grafiche-2/Sprite/Buttons/btn_blue.png"/>
+            </image>
+        </ImageView>
+        <Text fx:id="nextName" fill="WHITE" layoutX="242.0" layoutY="515.0" onMouseClicked="#nextDivinity"
+              onMousePressed="#clickedNext" onMouseReleased="#releasedNext" strokeType="OUTSIDE" strokeWidth="0.0"
+              text="Next" wrappingWidth="90.52212524414062"/>
+        <ImageView fx:id="choose" fitHeight="38.0" fitWidth="102.0" layoutX="121.0" layoutY="500.0"
+                   onMouseClicked="#choose" onMousePressed="#clickedChoose" onMouseReleased="#releasedChoose"
+                   pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@santorini_risorse-grafiche-2/Sprite/Buttons/btn_green.png"/>
+            </image>
+        </ImageView>
+        <Text fill="WHITE" layoutX="128.0" layoutY="515.0" onMouseClicked="#choose" onMousePressed="#clickedChoose"
+              onMouseReleased="#releasedChoose" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose"/>
+        <Text fx:id="infoText" fill="WHITE" layoutX="11.0" layoutY="489.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              text="Text"/>
+    </children>
 </Pane>

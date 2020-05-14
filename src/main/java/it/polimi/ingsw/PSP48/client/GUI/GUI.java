@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP48.client.GUI;
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
 import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
+import it.polimi.ingsw.PSP48.client.GUI.sceneControllers.DivinityChoiceController;
 import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkIncoming;
 import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkOutcoming;
 import it.polimi.ingsw.PSP48.observers.ClientNetworkObserver;
@@ -21,6 +22,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -55,7 +57,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     @FXML
     private GridPane playersPane;
     @FXML
-    private Pagination divinityList;
+    private Pane multifunctionalPane;
     private static ClientNetworkOutcoming cA;
     private static Socket server;
     private ClientNetworkIncoming cI;
@@ -65,6 +67,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     private Thread cIThread;
     private Thread cAThread;
     private static ArrayList<ViewObserver> observers = new ArrayList<>();
+    private static int playersInGame;
 
 
     @Override
@@ -84,7 +87,22 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
 
     @Override
     public void requestDivinitySelection(ArrayList<DivinitiesWithDescription> availableDivinities) {
-
+        final FXMLLoader divinitiesSelectorLoader = new FXMLLoader(getClass().getResource("/divinitySelection.fxml"));
+        final GUI thisController = this;
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Pane selectionPane = null;
+                divinitiesSelectorLoader.setController(new DivinityChoiceController(availableDivinities, 1, thisController));
+                try {
+                    selectionPane = divinitiesSelectorLoader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                gameMessage.setText("Select divinities in game in the selector at your right.");
+                multifunctionalPane.getChildren().add(selectionPane);
+            }
+        });
     }
 
     @Override
@@ -99,44 +117,22 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
 
     @Override
     public void requestChallengerDivinitiesSelection(ArrayList<DivinitiesWithDescription> div, int playerNumber) {
-        ArrayList<String> selectedDivinities;
-        int selected = 0;
-
-
+        final FXMLLoader divinitiesSelectorLoader = new FXMLLoader(getClass().getResource("/divinitySelection.fxml"));
+        final GUI thisController = this;
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                GUI newController;
-                Parent root = null;
-                Stage divinityRequestStage = new Stage();
-                FXMLLoader divinityRequestLoader = new FXMLLoader(getClass().getResource("/divinitySelection.fxml"));
+                Pane selectionPane = null;
+                divinitiesSelectorLoader.setController(new DivinityChoiceController(div, playersInGame, thisController));
                 try {
-                    root = divinityRequestLoader.load();
+                    selectionPane = divinitiesSelectorLoader.load();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                newController = divinityRequestLoader.getController();
-                System.out.println("new controller: " + newController);
-                Scene divinitySelectionRequest = new Scene(root, 315, 640);
-                divinityRequestStage.setScene(divinitySelectionRequest);
-                divinityRequestStage.setResizable(false);
-                divinityRequestStage.initModality(Modality.WINDOW_MODAL);
-                divinityRequestStage.initOwner(primaryStage);
-                //now i must parse the arrived divinities
-
-                newController.divinityList.setMaxPageIndicatorCount(0);
-                ArrayList<String> divinities = new ArrayList<>();
-
-                for (DivinitiesWithDescription d : div) {
-                    divinities.add(d.getName());
-                }
-                newController.divinityList.setPageFactory(n -> new ImageView("santorini_risorse-grafiche-2/Sprite/Cards/Full/" + divinities.get(n) + ".png"));
-
-                divinityRequestStage.showAndWait();
+                gameMessage.setText("Select divinities in game in the selector at your right.");
+                multifunctionalPane.getChildren().add(selectionPane);
             }
         });
-
-
     }
 
     @Override
@@ -242,6 +238,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
         stage.setScene(scene);
         stage.show();
         System.out.println("Initialized stage");
+
     }
 
 
@@ -348,6 +345,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
             LocalDate ld = birthday.getValue();
             gameMode = numberOfPlayers + "ND" + " " + ld.getDayOfMonth() + "-" + ld.getMonthValue() + "-" + ld.getYear();
         }
+        playersInGame = numberOfPlayers;
         cA.setGameMode(gameMode);
     }
 
@@ -363,6 +361,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
         }
         cI.addObserver(loader.getController());
         cI.setPlayerView(loader.getController());
+        ((ViewInterface) loader.getController()).registerObserver(cA);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -374,9 +373,6 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
         });
     }
 
-    public void initialize() {
-
-    }
 
     private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
         for (Node node : gridPane.getChildren()) {
@@ -386,5 +382,30 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
         }
         return null;
     }
+
+    public void sendChallengerDivinities(ArrayList<String> divinities) {
+        notifyObserver((x) -> x.selectAvailableDivinities(divinities));
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                multifunctionalPane.getChildren().clear();
+            }
+        });
+    }
+
+    public void sendPlayerDivinity(String divinity) {
+        notifyObserver((x) -> x.registerPlayerDivinity(divinity));
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                multifunctionalPane.getChildren().clear();
+            }
+        });
+    }
+
+    public void sendFirstPlayerChoice(String playerName) {
+        notifyObserver((x) -> x.selectFirstPlayer(playerName));
+    }
+
 
 }
