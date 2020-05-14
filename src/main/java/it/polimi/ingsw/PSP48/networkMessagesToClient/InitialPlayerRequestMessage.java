@@ -6,14 +6,14 @@ import it.polimi.ingsw.PSP48.server.model.Position;
 import java.util.ArrayList;
 
 public class InitialPlayerRequestMessage extends NetworkMessagesToClient {
-    private ArrayList<Position> validPositions;
+    private ArrayList<String> players;
 
     @Override
     public void doAction(ViewInterface v) {
-        v.requestInitialPositioning(validPositions);
+        v.requestInitialPlayerSelection(players);
     }
 
-    public InitialPlayerRequestMessage(ArrayList<Position> validPositions) {
-        this.validPositions = (ArrayList<Position>) validPositions.clone();
+    public InitialPlayerRequestMessage(ArrayList<String> players) {
+        this.players = (ArrayList<String>) players.clone();
     }
 }

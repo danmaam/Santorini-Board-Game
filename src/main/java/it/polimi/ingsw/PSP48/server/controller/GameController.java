@@ -455,16 +455,28 @@ public class GameController implements ViewObserver {
      * Request the current player to choose his divinity
      */
     public void requestDivinitySelection() {
+        for (Player p : model.getPlayersInGame()) {
+            if (p != model.getCurrentPlayer())
+                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is choosing his divinity!");
+        }
         getPlayerView(model.getCurrentPlayer().getName()).requestDivinitySelection(model.getAvailableDivinities());
     }
 
     public void requestFirstPlayerSelection() {
+        for (Player p : model.getPlayersInGame()) {
+            if (model.getPlayersInGame().indexOf(p) != model.getChallengerIndex())
+                getPlayerView(p.getName()).printMessage("Challenger is choosing the first player!");
+        }
         ArrayList<String> players = new ArrayList<>();
         model.getPlayersInGame().forEach((Player p) -> players.add(p.getName()));
         getPlayerView(model.getPlayersInGame().get(model.getChallengerIndex()).getName()).requestInitialPlayerSelection(players);
     }
 
     public void requestInitialPositioning() {
+        for (Player p : model.getPlayersInGame()) {
+            if (p != model.getCurrentPlayer())
+                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is putting his workers on the board!");
+        }
         System.out.println("requesting initial positioning");
         getPlayerView(model.getCurrentPlayer().getName()).requestInitialPositioning(model.getCurrentPlayer().getDivinity().validCellsForInitialPositioning(model.getGameBoard()));
     }
@@ -495,6 +507,11 @@ public class GameController implements ViewObserver {
      * @author Daniele Mammone
      */
     public void requestChallengerDivinitiesSelection() {
+        //game started: I advice other players
+        for (Player p : model.getPlayersInGame()) {
+            if (model.getPlayersInGame().indexOf(p) != model.getChallengerIndex())
+                getPlayerView(p.getName()).printMessage("Game strated! Challenger is choosing divinities!");
+        }
         //in the model there is a list of available divinities, I send this to the challenger, so he can choose from them
         getPlayerView(model.getPlayersInGame().get(model.getChallengerIndex()).getName()).requestChallengerDivinitiesSelection(model.getAvailableDivinities(), model.getNumberOfPlayers());
     }

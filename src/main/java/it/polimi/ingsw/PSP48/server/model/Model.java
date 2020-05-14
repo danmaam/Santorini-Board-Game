@@ -250,6 +250,7 @@ public class Model {
             if (divinity.equals("Circe")) playerWithCirce = playerName;
             availableDivinities.remove(actualDivinity);
         }
+        sendPlayerList();
 
     }
 

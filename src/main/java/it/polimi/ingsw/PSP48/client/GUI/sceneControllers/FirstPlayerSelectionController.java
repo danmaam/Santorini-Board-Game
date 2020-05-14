@@ -14,10 +14,12 @@ public class FirstPlayerSelectionController {
     private GridPane playerSelection;
     private int playersInGame;
     private GUI outerController;
+    private ArrayList<String> players;
 
-    public FirstPlayerSelectionController(GridPane playerSelection, GUI outerController) {
-        this.playerSelection = playerSelection;
+    public FirstPlayerSelectionController(int playersInGame, GUI outerController, ArrayList<String> players) {
         this.outerController = outerController;
+        this.playersInGame = playersInGame;
+        this.players = players;
     }
 
     public void initialize() {
@@ -31,10 +33,10 @@ public class FirstPlayerSelectionController {
             }
         }
         for (Node n : playerSelection.getChildren()) {
-            n.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            n.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
-                    System.out.println("Pressed player " + playerSelection.getColumnIndex(n));
+                    outerController.sendFirstPlayerChoice(players.get(GridPane.getRowIndex(n)));
                 }
             });
         }
@@ -48,6 +50,4 @@ public class FirstPlayerSelectionController {
         }
         return null;
     }
-
-
 }

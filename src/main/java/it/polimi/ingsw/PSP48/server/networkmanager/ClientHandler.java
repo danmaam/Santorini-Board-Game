@@ -104,7 +104,7 @@ public class ClientHandler implements Runnable {
     public void requestInitialPlayerSelection(ArrayList<String> players) {
         System.out.println("Sending request for initial player selection");
         synchronized (toDOLOCK) {
-            nextObject = new requestForMoveAction(players);
+            nextObject = new InitialPlayerRequestMessage(players);
             toDO = nextAction.requestAction;
             toDOLOCK.notifyAll();
         }
