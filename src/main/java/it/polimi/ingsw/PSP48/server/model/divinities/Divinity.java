@@ -398,9 +398,10 @@ public class Divinity {
 
     public Consumer<GameController> turnBegin(Model gd)
     {
-        ArrayList<Position> playerPositions, worker1Positions, worker2Positions;
+        ArrayList<Position> playerPositions, workerPositions;
         ArrayList<Divinity> otherDivinities=new ArrayList<>();
         ArrayList<Player> players;
+        boolean canComplete=false;
 
         playerPositions=gd.getPlayerPositionsInMap(gd.getCurrentPlayer().getName()); //we need to get the positions of the current player on the map
         players=gd.getPlayersInGame();
@@ -413,11 +414,14 @@ public class Divinity {
             }
         }
 
-        worker1Positions=this.getValidCellForMove(playerPositions.get(0).getColumn(), playerPositions.get(0).getRow(), gd.getGameBoard(), otherDivinities);
-        worker2Positions=this.getValidCellForMove(playerPositions.get(1).getColumn(), playerPositions.get(1).getRow(), gd.getGameBoard(), otherDivinities);
+        for (Position p : playerPositions)
+        {
+            workerPositions=this.getValidCellForMove(p.getColumn(), p.getRow(), gd.getGameBoard(), otherDivinities);
+            if (workerPositions!=null) canComplete=true;
+        }
 
         //if the player can move at least one of the two workers, the turn can be completed (the player can certainly build in the cell he moved from)
-        if (worker1Positions==null && worker2Positions==null) return(GameController::currentPlayerCantEndTurn);
+        if (canComplete==false) return(GameController::currentPlayerCantEndTurn);
         else return(GameController::requestMove);
     }
 
