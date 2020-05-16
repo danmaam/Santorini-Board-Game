@@ -330,6 +330,8 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
 
         boolean inputSet = false;
         String workerCoordinate;
+
+
         if (validForBuild.size() > 1 || validForDome.size() > 1 || !(validForBuild.get(0).getwR() == validForDome.get(0).getwR() && validForBuild.get(0).getwC() == validForDome.get(0).getwC())) {
             do {
                 this.printBoard();
@@ -849,7 +851,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
 
     public boolean containsWorker(ArrayList<WorkerValidCells> arr, int row, int column) {
         for (WorkerValidCells v : arr) {
-            if (v.getwR() == row && v.getwC() == column) return true;
+            if (v.getwR() == row && v.getwC() == column && !v.getValidPositions().isEmpty()) return true;
         }
         return false;
     }
