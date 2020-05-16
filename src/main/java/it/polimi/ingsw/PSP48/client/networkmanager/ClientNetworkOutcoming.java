@@ -112,7 +112,10 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
 
             if (nextAction == null)
                 continue;
-            else if (nextAction == action.close_inputstream) return;
+            else if (nextAction == action.close_inputstream) {
+                server.close();
+                return;
+            }
 
             switch (nextAction) {
                 case send_nickname:
