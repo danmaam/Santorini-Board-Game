@@ -25,37 +25,6 @@ public class Apollo extends Divinity {
         return "Apollo";
     }
 
-    /**
-     * re implements the turn begin method of a base divinity, since it needs a different implementation of the method that retrieves the valid cells for move
-     *
-     * @param gd contains the game board, used to make all the checks
-     * @return a game controller method, based on the possibility or not to end the turn
-     */
-    @Override
-    public Consumer<GameController> turnBegin(Model gd) {
-        ArrayList<Position> playerPositions, worker1Positions, worker2Positions;
-        ArrayList<Divinity> otherDivinities = new ArrayList<>();
-        ArrayList<Player> players;
-
-        System.out.println("Apollo");
-
-        playerPositions = gd.getPlayerPositionsInMap(gd.getCurrentPlayer().getName()); //we need to get the positions of the current player on the map
-        players = gd.getPlayersInGame();
-
-        for (Player p : players) //we need to create the list of other divinities in the game, needed by the function that checks the valid cells for the move action
-        {
-            if (!p.getDivinity().getName().equals(this.getName())) {
-                otherDivinities.add(p.getDivinity());
-            }
-        }
-
-        worker1Positions = this.getValidCellForMove(playerPositions.get(0).getColumn(), playerPositions.get(0).getRow(), gd.getGameBoard(), otherDivinities);
-        worker2Positions = this.getValidCellForMove(playerPositions.get(1).getColumn(), playerPositions.get(1).getRow(), gd.getGameBoard(), otherDivinities);
-
-        //if the player can move at least one of the two workers, the turn can be completed (the player can certainly build in the cell he moved from)
-        if (worker1Positions == null && worker2Positions == null) return (GameController::currentPlayerCantEndTurn);
-        else return (GameController::requestMove);
-    }
 
     /**
      * re-implements getValidCellForMove since also occupied Cells are valid
@@ -214,7 +183,8 @@ public class Apollo extends Divinity {
         return canBuild;
     }
 
-    private boolean checkIfWinsAfterMove(int wR, int wC, int mR, int mC, Cell[][] gameBoard) {
+    private boolean checkIfWinsAfterMove(int wR, int wC, int mR, int mC, Cell[][] gameBoard)
+    {
         boolean wins;
 
         if (gameBoard[mR][mC].getLevel() == 3 && gameBoard[mR][mC].getLevel() > gameBoard[wR][wC].getLevel())

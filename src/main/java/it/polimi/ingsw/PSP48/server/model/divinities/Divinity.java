@@ -414,7 +414,7 @@ public class Divinity {
 
         for (Position p : playerPositions) {
             workerPositions = this.getValidCellForMove(p.getColumn(), p.getRow(), gd.getGameBoard(), otherDivinities);
-            if (workerPositions != null) canComplete = true;
+            if (!workerPositions.isEmpty()) canComplete = true;
         }
 
         //if the player can move at least one of the two workers, the turn can be completed (the player can certainly build in the cell he moved from)
