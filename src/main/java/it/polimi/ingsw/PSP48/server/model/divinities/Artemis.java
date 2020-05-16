@@ -32,7 +32,7 @@ public class Artemis extends Divinity {
     public Consumer<GameController> turnBegin(Model gd) {
         oldColumnMove = -1;
         oldRowMove = -1;
-        return GameController::CheckIfCanEndTurnBaseDivinity;
+        return (super.turnBegin(gd));
     }
 
     /**
@@ -70,7 +70,7 @@ public class Artemis extends Divinity {
         if (oldRowMove == -1 && oldColumnMove == -1) nextAction = GameController::requestOptionalMove;
         else {
             nextAction = GameController::requestBuildDome;
-            //the player doen't want to do the optional move, or the controller requests the next action since the optional move isn't possible
+            //the player doesn't want to do the optional move, or the controller requests the next action since the optional move isn't possible
             if (moveColumn == -1 && moveRow == -1) return nextAction;
         }
         if (oldRowMove != -1 && oldColumnMove != -1 && oldRowMove == moveRow && oldColumnMove == moveColumn)

@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * @author Rebecca Marelli
  */
 public class Model {
-    private ArrayList<Player> playersInGame = new ArrayList<Player>(); //i giocatori sono in ordine fisso secondo l'ordine di gioco
+    private ArrayList<Player> playersInGame = new ArrayList<Player>(); //the player are stored in a certain order, according to the order of their turns
     private Stack<Colour> availableColours = new Stack<Colour>();
 
     public boolean isGameWithDivinities() {
@@ -33,8 +33,8 @@ public class Model {
     private String playerWithCirce = null;
 
     private ArrayList<Divinity> availableDivinities;
-    private int currentPlayer = -1; //se siamo in un momento per cui il current player non deve avere un valore possiamo settarlo a -1
-    private final Cell[][] boardCell = new Cell[5][5]; //tramite il costruttore di Cell devo inizializzare le celle, qui sono tutte a null
+    private int currentPlayer = -1; //it has this initial value cause there are moments of the game when there isn't a current player
+    private final Cell[][] boardCell = new Cell[5][5];
     private final int gamePlayerNumber;
     private final boolean gameWithDivinities;
     private int challengerIndex;
@@ -135,7 +135,7 @@ public class Model {
     /**
      * Returns a collection of Divinities, with their description, available to be chosen by players.
      *
-     * @return ArrayList of type DivinitiesWithDescription cainting available divinities to be chosen
+     * @return ArrayList of type DivinitiesWithDescription containing available divinities to be chosen
      */
     public ArrayList<DivinitiesWithDescription> getAvailableDivinities() {
         ArrayList<DivinitiesWithDescription> ret_a = new ArrayList<>();
@@ -148,11 +148,10 @@ public class Model {
      *
      * @return a reference to the current player
      */
-    public Player getCurrentPlayer() //eccezione se il player è null (?)
-    {
+    public Player getCurrentPlayer() {
         Player neededCurrentPlayer;
 
-        neededCurrentPlayer = this.playersInGame.get(currentPlayer); //ho usato un metodo della classe stessa per restituire il giocatore corrente
+        neededCurrentPlayer = this.playersInGame.get(currentPlayer);
 
         return (neededCurrentPlayer);
     }
@@ -175,8 +174,7 @@ public class Model {
      * @param column gives the column of the cell in the board
      * @return a reference to the needed cell
      */
-    public Cell getCell(int row, int column) //eccezione se riceve indici al di fuori della dimensione della matrice
-    {
+    public Cell getCell(int row, int column) {
         Cell neededCell;
 
         neededCell = this.boardCell[row][column];
@@ -186,7 +184,7 @@ public class Model {
 
     /**
      * @param playerName the name of the player
-     * @return the cells' cordinates of player
+     * @return the cells' coordinates of player
      * @author Daniele Mammone
      */
     public ArrayList<Position> getPlayerPositionsInMap(String playerName) {
@@ -216,7 +214,25 @@ public class Model {
     }
 
     public void removePlayer(String pName) {
-        playersInGame.remove(getPlayer(pName));
+        ArrayList<Cell> updatedCells = new ArrayList<>();
+        ArrayList<String> newPlayerList = new ArrayList<>();
+        Cell tempCell;
+
+        for (int i = 0; i < 5; i++) //we also need to remove the player from the board and then make a list of all the updated cells (we need to clone these cells)
+        {
+            for (int j = 0; j < 5; j++) {
+                if (boardCell[i][j].getPlayer().equals(pName)) boardCell[i][j].setPlayer(null);
+                tempCell = (Cell) boardCell[i][j].clone();
+                updatedCells.add(tempCell);
+            }
+        }
+        notifyObservers(x -> x.changedBoard(updatedCells));
+
+        playersInGame.remove(getPlayer(pName)); //then we remove the player from the player list
+        for (Player p : playersInGame) {
+            newPlayerList.add(p.getName());
+        }
+        notifyObservers(x -> x.changedPlayerList(newPlayerList));
         sendPlayerList();
     }
 
@@ -251,7 +267,6 @@ public class Model {
             availableDivinities.remove(actualDivinity);
         }
         sendPlayerList();
-
     }
 
     /**

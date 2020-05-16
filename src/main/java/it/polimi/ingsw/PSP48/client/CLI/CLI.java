@@ -226,22 +226,18 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
         if (validCellsForMove.size() > 1) //if the player can only move one worker, the cells of that worker have already been highlighted
         {
             for (WorkerValidCells c : validCellsForMove) {
-                if (c.getwR() == workerRow && c.getwC() == workerColumn) {
-                    tempList = c.getValidPositions();
-                    break;
-                }
+                resetBoard(c.getValidPositions()); //we reset the colour of all the cells of the workers
             }
-            for (WorkerValidCells cell : validCellsForMove) {
-                if (cell.getwR() != workerRow || cell.getwC() != workerColumn) {
+            for (WorkerValidCells cell : validCellsForMove) //after that, we highlight again the cells, but only the ones belonging to the chosen worker
+            {
+                if (cell.getwR() == workerRow && cell.getwC() == workerColumn) {
                     for (Position p : cell.getValidPositions()) {
-                        if (!tempList.contains(p)) {
-                            this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.white);
-                        }
+                        this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.red);
                     }
+                    break; //after finding the correct worker and highlighting his cells, we can interrupt our search
                 }
             }
         }
-
 
         WorkerValidCells validCellsMove = null;
 
@@ -291,7 +287,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
     public void requestDomeOrBuild(ArrayList<WorkerValidCells> validForBuild, ArrayList<WorkerValidCells> validForDome) {
         int workerRow = -1, workerColumn = -1;
         int chosenRow = -1, chosenColumn = -1;
-        ArrayList<Position> tempPositionsBuild = new ArrayList<>();
+        ArrayList<Position> tempPositionsBuild;
         ArrayList<Position> tempPositionsDome = new ArrayList<>();
 
         for (WorkerValidCells c1 : validForBuild) //we highlight the cells of the worker that can only build or that can build and put a dome
@@ -357,6 +353,62 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
 
 
         //now we get the workers that haven't been chosen and colour their cells back to white, only if those cells do not belong to the chosen worker too
+        for (WorkerValidCells c : validForBuild) {
+            resetBoard(c.getValidPositions()); //we reset the colour of all the cells, then we proceed to only highlight the ones of the chosen worker
+        }
+        for (WorkerValidCells c : validForDome) {
+            resetBoard(c.getValidPositions());
+        }
+
+        for (WorkerValidCells c1 : validForBuild) //we first need to look for the chosen worker in both lists
+        {
+            if (c1.getwR() == workerRow && c1.getwC() == workerColumn) {
+                tempPositionsBuild = c1.getValidPositions();
+                for (WorkerValidCells c2 : validForDome) {
+                    if (c2.getwR() == workerRow && c2.getwC() == workerColumn) {
+                        tempPositionsDome = c2.getValidPositions();
+                        break;
+                    }
+                }
+                for (Position p1 : tempPositionsBuild) {
+                    this.getCellOnBoard(p1.getRow(), p1.getColumn()).setCellColour(ColoursForPrinting.red);
+                }
+                for (Position p2 : tempPositionsDome) {
+                    if (this.getCellOnBoard(p2.getRow(), p2.getColumn()).getCellColour() == ColoursForPrinting.red)
+                        this.getCellOnBoard(p2.getRow(), p2.getColumn()).setCellColour(ColoursForPrinting.green);
+                    else this.getCellOnBoard(p2.getRow(), p2.getColumn()).setCellColour(ColoursForPrinting.yellow);
+                }
+
+                break;
+            }
+        }
+
+        bothActions = false;
+        for (WorkerValidCells c1 : validForDome) //the worker might only be able to do the dome, so we have to make this check to highlight the cells correctly
+        {
+            if (c1.getwR() == workerRow && c1.getwC() == workerColumn) {
+                tempPositionsDome = c1.getValidPositions();
+                for (WorkerValidCells c2 : validForBuild) {
+                    if (c2.getwR() == workerRow && c2.getwC() == workerColumn) {
+                        bothActions = true;
+                        break;
+                    }
+                }
+                if (!bothActions) {
+                    for (Position p : tempPositionsDome) {
+                        this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.yellow);
+                    }
+                    break;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        //now we ask the player the action he wants to make and check if it is compatible with the chosen worker
+        String chosenAction = null;
+        String cellCoordinate;
+
         WorkerValidCells validCellsBuild = null;
         WorkerValidCells validCellsDome = null;
         for (WorkerValidCells c : validForBuild) //with these two loops we are looking for the chosen worker in the two lists
@@ -373,32 +425,6 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
                 break;
             }
         }
-        ArrayList<Position> positionsToBuild;
-        ArrayList<Position> positionsToDome;
-        positionsToBuild = validCellsBuild.getValidPositions(); //we get the valid positions of the chosen worker, which have to remain highlighted
-        positionsToDome = validCellsDome.getValidPositions();
-
-
-        for (WorkerValidCells c : validForBuild) {
-            if (c.getwR() != workerRow || c.getwC() != workerColumn) {
-                for (Position po : c.getValidPositions()) {
-                    if (!positionsToBuild.contains(po) && !positionsToDome.contains(po))
-                        this.getCellOnBoard(po.getRow(), po.getColumn()).setCellColour(ColoursForPrinting.white);
-                }
-            }
-        }
-        for (WorkerValidCells c : validForDome) {
-            if (c.getwR() != workerRow || c.getwC() != workerColumn) {
-                for (Position po : c.getValidPositions()) {
-                    if (!positionsToBuild.contains(po) && !positionsToDome.contains(po))
-                        this.getCellOnBoard(po.getRow(), po.getColumn()).setCellColour(ColoursForPrinting.white);
-                }
-            }
-        }
-
-        //now we ask the player the action he wants to make and check if it is compatible with the chosen worker
-        String chosenAction = null;
-        String cellCoordinate;
 
         do {
             this.printBoard();
@@ -457,8 +483,8 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
         } else if (build) whatToDO = action.build;
         else if (dome) whatToDO = action.dome;
 
-        this.resetBoard(positionsToBuild);
-        this.resetBoard(positionsToDome);
+        this.resetBoard(validCellsBuild.getValidPositions());
+        this.resetBoard(validCellsDome.getValidPositions());
         this.printBoard();
 
         MoveCoordinates move = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
@@ -656,6 +682,9 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
             if (chosenAction.equals("skip")) //the player has chosen to skip so we can just notify the server
             {
                 MoveCoordinates chosenCoordinates = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
+                for (WorkerValidCells c : validCellsForMove) {
+                    resetBoard(c.getValidPositions());
+                }
                 this.notifyObserver(x -> {
                     x.move(chosenCoordinates);
                 });
@@ -731,6 +760,12 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
             if (chosenAction.equals("skip")) //the player has chosen to skip so we can just notify the server
             {
                 MoveCoordinates chosenCoordinates = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
+                for (WorkerValidCells c1 : build) {
+                    resetBoard(c1.getValidPositions());
+                }
+                for (WorkerValidCells c2 : dome) {
+                    resetBoard(c2.getValidPositions());
+                }
                 this.notifyObserver(x -> {
                     x.build(chosenCoordinates);
                 });

@@ -27,7 +27,7 @@ public class Athena extends Divinity {
     @Override
     public Consumer<GameController> turnBegin(Model gd) {
         lastTurnLevelUp = false;
-        return GameController::CheckIfCanEndTurnBaseDivinity;
+        return super.turnBegin(gd);
     }
 
     public Consumer<GameController> move(int workerColumn, int workerRow, int moveColumn, int moveRow, Model gd) throws DivinityPowerException, IncorrectLevelException, OccupiedCellException, NotAdjacentCellException, DomedCellException, NoTurnEndException {

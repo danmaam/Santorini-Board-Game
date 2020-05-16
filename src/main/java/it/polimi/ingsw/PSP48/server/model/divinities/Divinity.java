@@ -397,7 +397,29 @@ public class Divinity {
      */
 
     public Consumer<GameController> turnBegin(Model gd) {
-        return GameController::CheckIfCanEndTurnBaseDivinity;
+        ArrayList<Position> playerPositions, workerPositions;
+        ArrayList<Divinity> otherDivinities = new ArrayList<>();
+        ArrayList<Player> players;
+        boolean canComplete = false;
+
+        playerPositions = gd.getPlayerPositionsInMap(gd.getCurrentPlayer().getName()); //we need to get the positions of the current player on the map
+        players = gd.getPlayersInGame();
+
+        for (Player p : players) //we need to create the list of other divinities in the game, needed by the function that checks the valid cells for the move action
+        {
+            if (!p.getDivinity().getName().equals(this.getName())) {
+                otherDivinities.add(p.getDivinity());
+            }
+        }
+
+        for (Position p : playerPositions) {
+            workerPositions = this.getValidCellForMove(p.getColumn(), p.getRow(), gd.getGameBoard(), otherDivinities);
+            if (workerPositions != null) canComplete = true;
+        }
+
+        //if the player can move at least one of the two workers, the turn can be completed (the player can certainly build in the cell he moved from)
+        if (canComplete == false) return (GameController::currentPlayerCantEndTurn);
+        else return (GameController::requestMove);
     }
 
     /**

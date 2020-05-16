@@ -103,7 +103,7 @@ public class Prometheus extends Divinity {
      * @param moveColumn   the column of the board where the worker wants to move
      * @param moveRow      the row of the board where the worker wants to move
      * @param gd           the actual game state
-     * @throws NotAdjacentCellException if the destination cell is not adiacent to the worker
+     * @throws NotAdjacentCellException if the destination cell is not adjacent to the worker
      * @throws IncorrectLevelException  if the destination cell is too high to be reached
      * @throws OccupiedCellException    if the destination cell has another worker on it
      * @throws DomedCellException       if the destination cell has a dome on it
@@ -126,7 +126,7 @@ public class Prometheus extends Divinity {
      * @param buildColumn  the column where the player wants to add a level
      * @param gd           the actual game board state
      * @return the next action of the controller
-     * @throws NotAdjacentCellException     if the cell where the player wants to build is not adiacent to the worker's one
+     * @throws NotAdjacentCellException     if the cell where the player wants to build is not adjacent to the worker's one
      * @throws OccupiedCellException        if the destination cell is occupied by another worker
      * @throws DomedCellException           is the cell is already domed
      * @throws MaximumLevelReachedException if the cell contains a level 3 building
@@ -136,7 +136,7 @@ public class Prometheus extends Divinity {
     @Override
     public Consumer<GameController> build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelReachedException, DivinityPowerException {
         Consumer<GameController> nextAction;
-        if (buildRow == -1 && buildColumn == -1) return GameController::CheckIfCanEndTurnBaseDivinity;
+        if (buildRow == -1 && buildColumn == -1) return super.turnBegin(gd);
         super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
         if (!previousBuild && !doneMove) {
             gd.getCurrentPlayer().setLastWorkerUsed(workerRow, workerColumn);
@@ -153,7 +153,7 @@ public class Prometheus extends Divinity {
      * @param domeColumn   the column where the player wants to add the dome
      * @param gd           the current game board state
      * @return the next action of the controller
-     * @throws NotAdjacentCellException        if the cell where the player wants to add the dome is not adiacent to the worker's one
+     * @throws NotAdjacentCellException        if the cell where the player wants to add the dome is not adjacent to the worker's one
      * @throws OccupiedCellException           if the destination cell is occupied by another worker
      * @throws DomedCellException              is the cell is already domed
      * @throws MaximumLevelNotReachedException if the cell doesn't contain a level 3 building
@@ -163,7 +163,7 @@ public class Prometheus extends Divinity {
     @Override
     public Consumer<GameController> dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
         Consumer<GameController> nextAction;
-        if (domeRow == -1 && domeColumn == -1) return GameController::CheckIfCanEndTurnBaseDivinity;
+        if (domeRow == -1 && domeColumn == -1) return super.turnBegin(gd);
         super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
         if (!previousBuild && !doneMove) {
             nextAction = GameController::PrometheusMovePostOptionalBuild;
