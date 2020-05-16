@@ -676,7 +676,8 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
      * @param validCellsForMove is the list of cells where the player can choose to make another optional move
      */
     @Override
-    public void requestOptionalMove(ArrayList<WorkerValidCells> validCellsForMove) {
+    public void requestOptionalMove(ArrayList<WorkerValidCells> validCellsForMove)
+    {
         ArrayList<Position> tempList;
         int workerRow = -1, workerColumn = -1;
         int chosenRow = -1, chosenColumn = -1;
@@ -703,6 +704,10 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
             if (chosenAction.equals("skip")) //the player has chosen to skip so we can just notify the server
             {
                 MoveCoordinates chosenCoordinates = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
+                for (WorkerValidCells c : validCellsForMove)
+                {
+                    resetBoard(c.getValidPositions());
+                }
                 this.notifyObserver(x -> {
                     x.move(chosenCoordinates);
                 });
@@ -724,7 +729,8 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
      * @param dome  is the list of valid cells for the dome operations
      */
     @Override
-    public void requestOptionalBuild(ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome) {
+    public void requestOptionalBuild(ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome)
+    {
         int workerRow = -1, workerColumn = -1;
         int chosenRow = -1, chosenColumn = -1;
         ArrayList<Position> tempPositionsBuild = new ArrayList<>();
@@ -778,6 +784,14 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
             if (chosenAction.equals("skip")) //the player has chosen to skip so we can just notify the server
             {
                 MoveCoordinates chosenCoordinates = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
+                for (WorkerValidCells c1 : build)
+                {
+                    resetBoard(c1.getValidPositions());
+                }
+                for (WorkerValidCells c2 : dome)
+                {
+                    resetBoard(c2.getValidPositions());
+                }
                 this.notifyObserver(x -> {
                     x.build(chosenCoordinates);
                 });

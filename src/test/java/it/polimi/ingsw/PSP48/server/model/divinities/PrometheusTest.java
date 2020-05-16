@@ -28,6 +28,9 @@ public class PrometheusTest
         game_database.getPlayer("Paperino").setTempDivinity(null);
         game_database.setNextPlayer("Pippo");
         game_database.getCell(4, 4).setPlayer(game_database.getCurrentPlayer().getName());
+        game_database.getCell(1,3).setPlayer(game_database.getCurrentPlayer().getName());
+        game_database.getCell(2, 3).setActualLevel(2);
+        game_database.getCell(1,4).setActualLevel(2);
         game_database.getCell(3, 3).setActualLevel(1);
         game_database.getCell(4, 3).setActualLevel(3);
         game_database.getCell(3, 4).setActualLevel(2);
@@ -49,6 +52,24 @@ public class PrometheusTest
     {
         game_database.getCurrentPlayer().getDivinity().build(4, 4, 3, 4, game_database);
         assertEquals(new ArrayList<Position>(), game_database.getCurrentPlayer().getDivinity().getValidCellForMove(4, 4, game_database.getGameBoard(), new ArrayList<>()));
+    }
+
+    @Test
+    public void validMoveCellsWithoutBuilding()
+    {
+        ArrayList<Position> moveCells=new ArrayList<>();
+        ArrayList<Divinity> otherDiv= new ArrayList<>();
+
+        moveCells.add(new Position(0,2));
+        moveCells.add(new Position(0,3));
+        moveCells.add(new Position(0,4));
+        moveCells.add(new Position (1,2));
+        moveCells.add(new Position(2,2));
+        moveCells.add(new Position(2,4));
+
+        otherDiv.add(new Divinity());
+
+        assertEquals(moveCells, game_database.getCurrentPlayer().getDivinity().getValidCellForMove(3,1, game_database.getGameBoard(), otherDiv));
     }
 
     @Test(expected = DivinityPowerException.class)
