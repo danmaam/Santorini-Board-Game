@@ -1,35 +1,34 @@
-package it.polimi.ingsw.PSP48.model.divinities;
+package it.polimi.ingsw.PSP48.server.model.divinities;
 
-import it.polimi.ingsw.PSP48.server.model.*;
-import it.polimi.ingsw.PSP48.server.model.divinities.Artemis;
-import it.polimi.ingsw.PSP48.server.model.divinities.Divinity;
+import it.polimi.ingsw.PSP48.server.model.Colour;
+import it.polimi.ingsw.PSP48.server.model.Model;
+import it.polimi.ingsw.PSP48.server.model.Player;
+import it.polimi.ingsw.PSP48.server.model.Position;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ArtemisTest {
-    GameData game_database = new GameData();
-    Player player1 = new Player("Pippo", new Birthday(21, 02, 1998));
-    Player player2 = new Player("Paperino", new Birthday(10, 03, 2010));
-    Divinity baseDivinity = new Divinity();
-    Cell oldCell = new Cell(2, 2);
-    Cell newCell = new Cell(1, 2);
+    Model game_database = new Model(2, true);
+    Player player1 = new Player("Pippo", new GregorianCalendar(1998, Calendar.FEBRUARY, 21), true, Colour.BLUE);
+    Player player2 = new Player("Paperino", new GregorianCalendar(2010, Calendar.MARCH, 10), true, Colour.WHITE);
 
     @Before
     public void testSetUp() {
-        player1.setColour(Colour.BLUE);
-        player2.setColour(Colour.WHITE);
         player1.setDivinity(new Artemis());
         player2.setDivinity(new Divinity());
         player1.setTempDivinity(null);
         player2.setTempDivinity(null);
-        game_database.addPlayer(player1);
-        game_database.addPlayer(player2);
-        game_database.setCurrentPlayer(0);
+        game_database.getPlayersInGame().add(player1);
+        game_database.getPlayersInGame().add(player2);
+        game_database.setNextPlayer(0);
         game_database.getCell(1, 1).setPlayer(player1.getName());
 
         game_database.getCell(0, 0).addDome();
@@ -44,23 +43,23 @@ public class ArtemisTest {
     }
 
     @Test(expected = DivinityPowerException.class)
-    public void validCellsTest() throws DomedCellException, OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdiacentCellException, NotEmptyCellException {
+    public void validCellsTest() throws DomedCellException, OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, NoTurnEndException {
         player1.getDivinity().turnBegin(game_database);
-        ArrayList<Cell> valid = new ArrayList<>();
-        valid.add(game_database.getCell(0, 2));
-        valid.add(game_database.getCell(1, 2));
+        ArrayList<Position> valid = new ArrayList<>();
+        valid.add(new Position(0, 2));
+        valid.add(new Position(1, 2));
         assertEquals(valid, player1.getDivinity().getValidCellForMove(1, 1, game_database.getGameBoard(), new ArrayList<Divinity>()));
         player1.getDivinity().move(1, 1, 2, 1, game_database);
         valid = new ArrayList<>();
-        valid.add(game_database.getCell(0, 2));
-        valid.add(game_database.getCell(2, 3));
-        valid.add(game_database.getCell(1, 3));
-        valid.add(game_database.getCell(0, 3));
+        valid.add(new Position(0, 2));
+        valid.add(new Position(2, 3));
+        valid.add(new Position(1, 3));
+        valid.add(new Position(0, 3));
+
 
         assertTrue(valid.containsAll(player1.getDivinity().getValidCellForMove(2, 1, game_database.getGameBoard(), new ArrayList<>())));
         assertTrue(valid.size() == player1.getDivinity().getValidCellForMove(2, 1, game_database.getGameBoard(), new ArrayList<>()).size());
 
         player1.getDivinity().move(2, 1, 1, 1, game_database);
     }
-
 }
