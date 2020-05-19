@@ -1,10 +1,14 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
+import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Model;
 import it.polimi.ingsw.PSP48.server.model.Position;
+import it.polimi.ingsw.PSP48.server.model.exceptions.DivinityPowerException;
+import it.polimi.ingsw.PSP48.server.model.exceptions.OccupiedCellException;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Eros extends Divinity {
@@ -83,4 +87,27 @@ public class Eros extends Divinity {
         return super.winCondition(gd) || divinityWinCondition;
     }
 
+    @Override
+    public Consumer<GameController> putWorkerOnBoard(Position p, Model gd) throws OccupiedCellException, DivinityPowerException {
+        if (!(p.getRow() == 0 || p.getRow() == 4 || p.getColumn() == 0 || p.getColumn() == 4)) {
+            throw new DivinityPowerException("Can't put the worker on this cell due to divinity power");
+        }
+
+        if (previousRow != -1 || previousColumn != -1) {
+            if (previousRow == -1) {
+                if (p.getColumn() != 4 - previousColumn) throw new DivinityPowerException("");
+            } else {
+                if (previousColumn == -1) {
+                    if (p.getRow() != 4 - previousRow) throw new DivinityPowerException("");
+                } else {
+                    if (p.getRow() != 4 - previousRow && p.getColumn() != 4 - previousColumn)
+                        throw new DivinityPowerException("");
+                }
+            }
+        }
+        Consumer<GameController> nextAction = super.putWorkerOnBoard(p, gd);
+        previousRow=p.getRow();
+        previousColumn=p.getColumn();
+        return nextAction;
+    }
 }

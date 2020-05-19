@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
 import it.polimi.ingsw.PSP48.server.model.*;
+import it.polimi.ingsw.PSP48.server.model.exceptions.DivinityPowerException;
 import it.polimi.ingsw.PSP48.server.model.exceptions.OccupiedCellException;
 import org.junit.Before;
 
@@ -47,7 +48,7 @@ public class DivinityPositioningTest {
         assertEquals(validCell, player3.getDivinity().validCellsForInitialPositioning(game_database.getGameBoard()));
     }
     @org.junit.Test
-    public void correctPositioningCell() throws OccupiedCellException {
+    public void correctPositioningCell() throws OccupiedCellException, DivinityPowerException {
         player3.getDivinity().putWorkerOnBoard(new Position (0, 2), game_database);
         Cell newCell = new Cell(0, 2);
         newCell.setPlayer(player3.getName());
@@ -55,7 +56,7 @@ public class DivinityPositioningTest {
     }
 
     @org.junit.Test(expected = OccupiedCellException.class)
-    public void positioningCell_occupiedCell_throwsException() throws OccupiedCellException{
+    public void positioningCell_occupiedCell_throwsException() throws OccupiedCellException, DivinityPowerException {
         player3.getDivinity().putWorkerOnBoard(new Position(0,0), game_database);
     }
 }

@@ -459,7 +459,7 @@ public class Divinity {
         return validPositions;
     }
 
-    public Consumer<GameController> putWorkerOnBoard(Position p, Model gd) throws OccupiedCellException {
+    public Consumer<GameController> putWorkerOnBoard(Position p, Model gd) throws OccupiedCellException, DivinityPowerException {
         //check if the cell is occupied
         if (gd.getCell(p.getRow(), p.getColumn()).getPlayer() != null)
             throw new OccupiedCellException("trying to put worker on an occupied cell");

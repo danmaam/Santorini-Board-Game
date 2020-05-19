@@ -180,6 +180,11 @@ public class GameController implements ViewObserver {
             getPlayerView(model.getCurrentPlayer().getName()).printMessage("Can't put worker here, occupied cell. Retry operation");
             this.requestInitialPositioning();
         }
+        catch (DivinityPowerException e){
+            System.out.println("Positioning on a wrong cell due to divinity power");
+            getPlayerView(model.getCurrentPlayer().getName()).printMessage("Can't put worker here, cell not available due to divinity power. Retry operation");
+            this.requestInitialPositioning();
+        }
     }
 
 
