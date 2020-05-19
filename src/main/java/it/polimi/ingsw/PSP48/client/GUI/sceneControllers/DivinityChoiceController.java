@@ -33,7 +33,7 @@ public class DivinityChoiceController {
     private Text infoText;
 
     private int currentDivinity = 0;
-    private GUI outerController;
+    private GameBoardController outerController;
 
     private ArrayList<DivinitiesWithDescription> divinities;
     private final ArrayList<String> chosenDivinities = new ArrayList<>();
@@ -41,7 +41,7 @@ public class DivinityChoiceController {
     private Boolean free = false;
 
 
-    public DivinityChoiceController(ArrayList<DivinitiesWithDescription> divinityList, int numberToBeChosen, GUI outerController) {
+    public DivinityChoiceController(ArrayList<DivinitiesWithDescription> divinityList, int numberToBeChosen, GameBoardController outerController) {
         this.divinities = divinityList;
         this.numberToBeChosen = numberToBeChosen;
         this.outerController = outerController;

@@ -12,11 +12,11 @@ import java.util.ArrayList;
 public class FirstPlayerSelectionController {
     @FXML
     private GridPane playerSelection;
-    private int playersInGame;
-    private GUI outerController;
-    private ArrayList<String> players;
+    private final int playersInGame;
+    private final GameBoardController outerController;
+    private final ArrayList<String> players;
 
-    public FirstPlayerSelectionController(int playersInGame, GUI outerController, ArrayList<String> players) {
+    public FirstPlayerSelectionController(int playersInGame, GameBoardController outerController, ArrayList<String> players) {
         this.outerController = outerController;
         this.playersInGame = playersInGame;
         this.players = players;

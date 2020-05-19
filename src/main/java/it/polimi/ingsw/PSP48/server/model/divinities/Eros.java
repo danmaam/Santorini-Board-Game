@@ -106,8 +106,8 @@ public class Eros extends Divinity {
             }
         }
         Consumer<GameController> nextAction = super.putWorkerOnBoard(p, gd);
-        previousRow=p.getRow();
-        previousColumn=p.getColumn();
+        if (p.getRow() == 0 || p.getRow() == 4) previousRow = p.getRow();
+        if (p.getColumn() == 0 || p.getColumn() == 4) previousColumn = p.getColumn();
         return nextAction;
     }
 }

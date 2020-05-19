@@ -12,7 +12,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="653.0"
       prefWidth="467.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="it.polimi.ingsw.PSP48.client.GUI.GUI">
+      fx:controller="it.polimi.ingsw.PSP48.client.GUI.LoginScreenController">
     <children>
         <ImageView fitHeight="653.0" fitWidth="603.0" layoutX="-3.0" layoutY="1.0" pickOnBounds="true"
                    preserveRatio="true">
