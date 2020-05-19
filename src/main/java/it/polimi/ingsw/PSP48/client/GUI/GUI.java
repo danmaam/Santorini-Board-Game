@@ -5,6 +5,7 @@ import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
 import it.polimi.ingsw.PSP48.client.GUI.sceneControllers.DivinityChoiceController;
 import it.polimi.ingsw.PSP48.client.GUI.sceneControllers.FirstPlayerSelectionController;
+import it.polimi.ingsw.PSP48.client.GUI.sceneControllers.PositioningController;
 import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkIncoming;
 import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkOutcoming;
 import it.polimi.ingsw.PSP48.observers.ClientNetworkObserver;
@@ -147,9 +148,28 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
         });
     }
 
+    /**
+     * method handling the choice of the positions of the workers on the board
+     * @param validCells is the list of valid positions to put the worker on the board
+     */
     @Override
-    public void requestInitialPositioning(ArrayList<Position> validCells) {
-
+    public void requestInitialPositioning(ArrayList<Position> validCells)
+    {
+        final FXMLLoader positioningLoader=new FXMLLoader(getClass().getResource("/gameLayout.fxml"));
+        final GUI controller = this; //outer controller to communicate with the scene controller
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Pane positioningPane=null;
+                positioningLoader.setController(new PositioningController(validCells, controller));
+                try {
+                    positioningPane = positioningLoader.load();
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
+                multifunctionalPane.getChildren().add(positioningPane);
+            }
+        });
     }
 
     @Override
@@ -488,5 +508,18 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
         });
     }
 
-
+    /**
+     * method called by the initial positioning scene controller, to notify the server about the player choice
+     * @param initialPosition is the position chosen by the player
+     */
+    public void sendInitialPositioningChoice(Position initialPosition)
+    {
+        notifyObserver(x->x.putWorkerOnTable(initialPosition));
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                multifunctionalPane.getChildren().clear();
+            }
+        });
+    }
 }
