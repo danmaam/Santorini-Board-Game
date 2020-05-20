@@ -353,6 +353,7 @@ public class GameController implements ViewObserver {
         System.out.println("starting game");
         //i must choose randomically the challenger, than request him to choose divinities
         int i = new Random().nextInt(model.getNumberOfPlayers());
+
         for (Player p : model.getPlayersInGame()) {
             getPlayerView(p.getName()).printMessage("Game started!");
         }

@@ -1,26 +1,23 @@
 package it.polimi.ingsw.PSP48.client.networkmanager;
 
+import it.polimi.ingsw.PSP48.PingMessage;
 import it.polimi.ingsw.PSP48.networkMessagesToServer.*;
-import it.polimi.ingsw.PSP48.networkMessagesToServer.NetworkMessagesToServer;
-import it.polimi.ingsw.PSP48.observers.ClientNetworkObserver;
 import it.polimi.ingsw.PSP48.observers.ViewObserver;
 import it.polimi.ingsw.PSP48.server.MoveCoordinates;
 import it.polimi.ingsw.PSP48.server.model.Position;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class ClientNetworkOutcoming implements Runnable, ViewObserver {
-    private Socket server;
+    private final Socket server;
     private ObjectOutputStream outputStm;
 
 
-    public NetworkMessagesToServer o;
+    private NetworkMessagesToServer o;
 
     public ClientNetworkOutcoming(Socket s) {
         this.server = s;
@@ -81,7 +78,7 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
     }
 
     private enum action {
-        send_nickname, send_gamemode, send_gameAction, close_inputstream
+        send_nickname, send_gamemode, send_gameAction, close_inputstream, replyPing
     }
 
 
@@ -108,6 +105,7 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
             try {
                 wait();
             } catch (InterruptedException e) {
+                e.printStackTrace();
             }
 
             if (nextAction == null)
@@ -127,17 +125,20 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
                 case send_gameAction:
                     sendGameAction();
                     break;
+                case replyPing:
+                    sendPingMessage();
+                    break;
 
             }
         }
     }
 
-    private synchronized void sendPlayerNickname() throws IOException, ClassNotFoundException {
+    private synchronized void sendPlayerNickname() throws IOException {
         System.out.println("sending nickname");
         outputStm.writeObject(nextMessage);
     }
 
-    private synchronized void sendGameMode() throws IOException, ClassNotFoundException {
+    private synchronized void sendGameMode() throws IOException {
         System.out.println("sending game mode");
         outputStm.writeObject(nextMessage);
     }
@@ -156,7 +157,7 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
         notifyAll();
     }
 
-    public synchronized void sendGameAction() throws IOException, ClassNotFoundException {
+    public synchronized void sendGameAction() throws IOException {
         System.out.println("sending game action");
         outputStm.writeObject(o);
     }
@@ -164,6 +165,15 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
     public synchronized void shutDown() {
         nextAction = action.close_inputstream;
         notifyAll();
+    }
+
+    public synchronized void replyPing() {
+        nextAction = action.replyPing;
+        notifyAll();
+    }
+
+    public synchronized void sendPingMessage() throws IOException {
+        outputStm.writeObject(new PingMessage());
     }
 
 

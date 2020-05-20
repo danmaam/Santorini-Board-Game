@@ -40,6 +40,7 @@ public class Server {
 
                 VirtualView playerVirtualView = new VirtualView(cH, incomingMessagesHandler);
                 incomingMessagesHandler.registerObserver(playerVirtualView);
+                incomingMessagesHandler.setUploader(cH);
                 Thread listenerThread = new Thread(incomingMessagesHandler);
                 listenerThread.start();
                 th.start();

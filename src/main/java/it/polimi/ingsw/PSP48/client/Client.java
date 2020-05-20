@@ -15,5 +15,4 @@ public class Client {
             cli.run();
         } else System.out.println("Invalid parameter. Aborting.");
     }
-
 }

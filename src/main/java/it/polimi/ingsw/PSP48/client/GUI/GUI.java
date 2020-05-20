@@ -17,6 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -39,6 +40,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     private int playersInGame;
     private LoginScreenController loginController;
     private GameBoardController boardController;
+    private Scene board = null;
 
 
     @Override
@@ -55,6 +57,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     public void endgame(String messageOfEndGame) {
         Platform.runLater(() -> {
             cA.shutDown();
+            cI.shutdown();
             primaryStage.close();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("End of game");
@@ -67,6 +70,19 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
 
     @Override
     public void requestDivinitySelection(ArrayList<DivinitiesWithDescription> availableDivinities) {
+
+        /*
+        synchronized (lock) {
+            while (!loadedBoard) {
+                try {
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+*/
+
         boardController.requestDivinitySelection(availableDivinities);
     }
 
@@ -97,11 +113,38 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
 
     @Override
     public void requestChallengerDivinitiesSelection(ArrayList<DivinitiesWithDescription> div, int playerNumber) {
+        /*
+        synchronized (lock) {
+            while (!loadedBoard) {
+
+                try {
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+
+         */
         boardController.requestChallengerDivinitiesSelection(div, playerNumber);
     }
 
     @Override
     public void printMessage(String s) {
+        /*
+        synchronized (lock) {
+            while (!loadedBoard) {
+                try {
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+
+         */
         boardController.printMessage(s);
     }
 
@@ -134,9 +177,6 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     }
 
 
-
-
-
     @Override
     public void changedBoard(ArrayList<Cell> newCells) {
 
@@ -144,6 +184,25 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
 
     @Override
     public void changedPlayerList(ArrayList<String> newPlayerList) {
+        /*
+        synchronized (lock) {
+            while (!loadedBoard) {
+                try {
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        */
+
+        System.out.println("Changed player list runnable");
+        /*
+        for (String s : newPlayerList) {
+            System.out.println(s);
+        }
+
+         */
         boardController.changedPlayerList(newPlayerList);
     }
 
@@ -154,7 +213,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     }
 
     @Override
-    public synchronized void start(Stage stage) throws Exception {
+    public void start(Stage stage) throws Exception {
         System.out.println(this);
         FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/SantoriniGUI.fxml"));
         loginController = new LoginScreenController(this);
@@ -162,6 +221,18 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
         root = loginLoader.load();
         scene = new Scene(root, 467, 653);
         primaryStage = stage;
+
+        FXMLLoader controllerLoader = new FXMLLoader(getClass().getResource("/gameLayout.fxml"));
+        boardController = new GameBoardController(this);
+        controllerLoader.setController(boardController);
+        Pane boardRoot = null;
+        try {
+            boardRoot = controllerLoader.load();
+            board = new Scene(boardRoot, 1155, 825);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         stage.setTitle("Santorini Log-In");
         stage.setResizable(false);
         stage.setScene(scene);
@@ -170,27 +241,21 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     }
 
     @Override
-    public synchronized void completedSetup(String message) {
+    public void completedSetup(String message) {
         cI.completedSetup();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gameLayout.fxml"));
-        boardController = new GameBoardController(this);
-        loader.setController(boardController);
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         primaryStage.setOnCloseRequest((e) -> manageWindowClose());
         Platform.runLater(() -> {
-            scene = new Scene(root, 1155, 825);
-            primaryStage.setScene(scene);
+            primaryStage.setScene(board);
             primaryStage.setTitle("Santorini");
             primaryStage.show();
         });
+
     }
 
     public void manageWindowClose() {
         cA.shutDown();
+        cI.shutdown();
         try {
             server.close();
         } catch (IOException e) {
@@ -238,6 +303,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
         this.registerObserver(cA);
 
         cI = new ClientNetworkIncoming(this, server);
+        cI.setOutHandler(cA);
         cI.addObserver(this);
         cIThread = new Thread(cI);
 
@@ -251,11 +317,11 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
         server = s;
     }
 
-    public synchronized void requestGameModeSend(String message) {
+    public void requestGameModeSend(String message) {
         loginController.requestGameModeSend(message);
     }
 
-    public synchronized void nicknameResult(String result) {
+    public void nicknameResult(String result) {
         Platform.runLater(() -> loginController.nicknameResult(result));
     }
 
@@ -264,7 +330,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
 
     }
 
-    public synchronized void requestNicknameSend(String message) {
+    public void requestNicknameSend(String message) {
         Platform.runLater(() -> loginController.requestNicknameSend(message));
     }
 

@@ -18,6 +18,8 @@ import it.polimi.ingsw.PSP48.setupMessagesToClient.nicknameRequest;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 /**
@@ -38,6 +40,7 @@ public class VirtualView implements ViewInterface, ServerNetworkObserver {
     public void notifyObserver(Consumer<ViewObserver> lambda) {
         for (ViewObserver obv : observers) lambda.accept(obv);
     }
+
 
     private String playerName;
     ClientHandler playerHandler;
@@ -164,10 +167,12 @@ public class VirtualView implements ViewInterface, ServerNetworkObserver {
             nextMessage = new nicknameRequest("Invalid nickname. Retry");
         }
         playerHandler.setUpMessage(nextMessage);
+
     }
 
     @Override
     public void processGameMode(String gameMode) {
+
         int playerNumber = 0;
         Calendar c = null;
         String nextMessage = null;
@@ -215,6 +220,7 @@ public class VirtualView implements ViewInterface, ServerNetworkObserver {
         } else {
             playerHandler.setUpMessage(new GameModeRequest("Invalid game mode. Please retry."));
         }
+
     }
 
     @Override

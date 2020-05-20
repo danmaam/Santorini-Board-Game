@@ -1,7 +1,9 @@
 package it.polimi.ingsw.PSP48.server.networkmanager;
 
+import it.polimi.ingsw.PSP48.PingMessage;
 import it.polimi.ingsw.PSP48.networkMessagesToServer.NetworkMessagesToServer;
 import it.polimi.ingsw.PSP48.observers.ServerNetworkObserver;
+import javafx.concurrent.ScheduledService;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -9,19 +11,23 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class ClientHandlerListener implements Runnable {
 
-    private NetworkMessagesToServer nextMessage;
+    private Object nextMessage;
 
     private boolean setNickname = false;
     private boolean setGameMode = false;
     private boolean setClosed = false;
-    private String setUp;
 
-    private Socket clientSocket;
+    private final Socket clientSocket;
+    private ClientHandler out;
 
-    private ArrayList<ServerNetworkObserver> observers = new ArrayList<>();
+    private final ArrayList<ServerNetworkObserver> observers = new ArrayList<>();
 
     public void registerObserver(ServerNetworkObserver obv) {
         observers.add(obv);
@@ -31,10 +37,12 @@ public class ClientHandlerListener implements Runnable {
         observers.remove(obv);
     }
 
+    private ExecutorService executors = Executors.newSingleThreadExecutor();
+    private ScheduledExecutorService pingExecutor = Executors.newScheduledThreadPool(1);
+
     public void notifyObservers() {
-        System.out.println("received message " + nextMessage.toString());
         for (ServerNetworkObserver nO : observers) {
-            nextMessage.doThings(nO);
+            ((NetworkMessagesToServer) nextMessage).doThings(nO);
         }
     }
 
@@ -45,7 +53,7 @@ public class ClientHandlerListener implements Runnable {
     @Override
     public void run() {
         try {
-            clientSocket.setSoTimeout(999999 * 1000);
+            clientSocket.setSoTimeout(9999 * 1000);
         } catch (SocketException e) {
             e.printStackTrace();
         }
@@ -72,7 +80,7 @@ public class ClientHandlerListener implements Runnable {
                 for (ServerNetworkObserver o : observers) {
                     o.destroyGame();
                 }
-            } else return;
+            }
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -82,18 +90,19 @@ public class ClientHandlerListener implements Runnable {
     public synchronized void waitForMessages() throws IOException, ClassNotFoundException {
         ObjectInputStream input = new ObjectInputStream(clientSocket.getInputStream());
         while (true) {
-            if (!setNickname) {
-                setUp = (String) input.readObject();
-                for (ServerNetworkObserver o : observers) o.processNickname(setUp);
-            } else if (!setGameMode) {
-                setUp = (String) input.readObject();
-                for (ServerNetworkObserver o : observers) o.processGameMode(setUp);
-            } else {
-                System.out.println("waiting for messages");
-                nextMessage = (NetworkMessagesToServer) input.readObject();
-                System.out.println("received message");
-                notifyObservers();
-            }
+            nextMessage = input.readObject();
+            if (nextMessage instanceof String) {
+                if (!setNickname) {
+                    for (ServerNetworkObserver o : observers)
+                        executors.submit(() -> o.processNickname((String) nextMessage));
+                } else if (!setGameMode) {
+                    for (ServerNetworkObserver o : observers)
+                        executors.submit(() -> o.processGameMode((String) nextMessage));
+                }
+            } else if (nextMessage instanceof NetworkMessagesToServer) {
+                executors.submit(this::notifyObservers);
+            } else if (nextMessage instanceof PingMessage)
+                pingExecutor.schedule(() -> out.replyPing(), 5, TimeUnit.SECONDS);
         }
     }
 
@@ -106,6 +115,14 @@ public class ClientHandlerListener implements Runnable {
     }
 
     public void setClosed() {
+        executors.shutdown();
+        pingExecutor.shutdown();
         setClosed = true;
     }
+
+    public void setUploader(ClientHandler h) {
+        out = h;
+    }
+
+
 }

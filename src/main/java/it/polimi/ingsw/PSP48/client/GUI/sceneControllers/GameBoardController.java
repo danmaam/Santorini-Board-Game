@@ -108,10 +108,11 @@ public class GameBoardController {
     }
 
     public void changedPlayerList(ArrayList<String> newPlayerList) {
-        System.out.println("Invoked on " + this);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                System.out.println("Changed player list run later");
+                System.out.println("updating players list");
                 if (view.getPlayersInGame() == 2) {
                     thirdPlayerBg.setVisible(false);
                     thirdPlayerCard.setVisible(false);

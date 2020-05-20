@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP48.server.networkmanager;
 
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
+import it.polimi.ingsw.PSP48.PingMessage;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
 import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkIncoming;
 import it.polimi.ingsw.PSP48.networkMessagesToClient.*;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 public class ClientHandler implements Runnable {
 
     private enum nextAction {
-        requestAction, setupmessage, closegame;
+        requestAction, setupmessage, closegame, replyPing;
     }
 
     private nextAction toDO = null;
@@ -60,6 +61,7 @@ public class ClientHandler implements Runnable {
     private void handleGamePhases() throws IOException {
         output = new ObjectOutputStream(client.getOutputStream());
         System.out.println("Connected to " + client.getInetAddress());
+        output.writeObject(new PingMessage());
 
         setUpMessage(new nicknameRequest("Please choose a nickname without dots and press enter"));
 
@@ -87,6 +89,10 @@ public class ClientHandler implements Runnable {
                         incomingMessagesHandler.setClosed();
                         client.close();
                         return;
+                    case replyPing:
+                        output.writeObject(new PingMessage());
+                        toDO = null;
+                        break;
                 }
             }
         }
@@ -194,7 +200,7 @@ public class ClientHandler implements Runnable {
     }
 
     public void setUpMessage(ClientSetupMessages message) {
-        System.out.println("Sending a setup message");
+        System.out.println("Sending " + message.toString());
         synchronized (toDOLOCK) {
             setUpMessage = message;
             toDO = nextAction.setupmessage;
@@ -206,6 +212,14 @@ public class ClientHandler implements Runnable {
         synchronized (toDOLOCK) {
             nextObject = new EndGameMessage(message);
             toDO = nextAction.closegame;
+            toDOLOCK.notifyAll();
+        }
+    }
+
+    public void replyPing() {
+        synchronized (toDOLOCK) {
+
+            toDO = nextAction.replyPing;
             toDOLOCK.notifyAll();
         }
     }

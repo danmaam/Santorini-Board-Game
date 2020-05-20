@@ -133,16 +133,25 @@ public class DivinityChoiceController {
     public void choose() {
         String chosenDivinity = divinityName.getText();
         chosenDivinities.add(chosenDivinity);
-        if (currentDivinity == 0) {
-            nextDivinity();
-        } else if (currentDivinity == divinities.size()) {
-            prevDivinity();
-        } else nextDivinity();
-        divinities.remove(chosenDivinity);
+        DivinitiesWithDescription toBeRemoved = null;
+        for (DivinitiesWithDescription d : divinities) {
+            if (d.getName().equals(chosenDivinity)) {
+                toBeRemoved = d;
+                break;
+            }
+        }
+        if (toBeRemoved != null) divinities.remove(toBeRemoved);
+
+
         if (chosenDivinities.size() == numberToBeChosen) {
             if (numberToBeChosen > 1) outerController.sendChallengerDivinities(chosenDivinities);
             else outerController.sendPlayerDivinity(chosenDivinity);
         } else {
+            if (currentDivinity == 0) {
+                nextDivinity();
+            } else if (currentDivinity == divinities.size()) {
+                prevDivinity();
+            } else nextDivinity();
             infoText.setText("Remaining " + (numberToBeChosen - chosenDivinities.size()) + " divinities to be chosen");
         }
     }
