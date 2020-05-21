@@ -173,6 +173,7 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
     }
 
     public synchronized void sendPingMessage() throws IOException {
+        System.out.println("Replying to ping");
         outputStm.writeObject(new PingMessage());
     }
 

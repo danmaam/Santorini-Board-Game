@@ -31,11 +31,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     private ClientNetworkOutcoming cA;
     private Socket server;
     private ClientNetworkIncoming cI;
-    private Scene scene;
-    private Parent root;
     private static Stage primaryStage;
-    private Thread cIThread;
-    private Thread cAThread;
     private final ArrayList<ViewObserver> observers = new ArrayList<>();
     private int playersInGame;
     private LoginScreenController loginController;
@@ -83,12 +79,12 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
         }
 */
 
-        boardController.requestDivinitySelection(availableDivinities);
+        Platform.runLater(() -> boardController.requestDivinitySelection(availableDivinities));
     }
 
     @Override
     public void requestInitialPlayerSelection(ArrayList<String> players) {
-        boardController.requestInitialPlayerSelection(players);
+        Platform.runLater(() -> boardController.requestInitialPlayerSelection(players));
     }
 
     /**
@@ -127,7 +123,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
         }
 
          */
-        boardController.requestChallengerDivinitiesSelection(div);
+        Platform.runLater(() -> boardController.requestChallengerDivinitiesSelection(div));
     }
 
     @Override
@@ -145,7 +141,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
         }
 
          */
-        boardController.printMessage(s);
+        Platform.runLater(() -> boardController.printMessage(s));
     }
 
     @Override
@@ -203,7 +199,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
         }
 
          */
-        boardController.changedPlayerList(newPlayerList);
+        Platform.runLater(() -> boardController.changedPlayerList(newPlayerList));
     }
 
 
@@ -218,14 +214,14 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
         FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/SantoriniGUI.fxml"));
         loginController = new LoginScreenController(this);
         loginLoader.setController(loginController);
-        root = loginLoader.load();
-        scene = new Scene(root, 467, 653);
+        Parent root = loginLoader.load();
+        Scene scene = new Scene(root, 467, 653);
         primaryStage = stage;
 
         FXMLLoader controllerLoader = new FXMLLoader(getClass().getResource("/gameLayout.fxml"));
         boardController = new GameBoardController(this);
         controllerLoader.setController(boardController);
-        Pane boardRoot = null;
+        Pane boardRoot;
         try {
             boardRoot = controllerLoader.load();
             board = new Scene(boardRoot, 1155, 825);
@@ -242,10 +238,9 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
 
     @Override
     public void completedSetup(String message) {
-        cI.completedSetup();
 
-        primaryStage.setOnCloseRequest((e) -> manageWindowClose());
         Platform.runLater(() -> {
+            primaryStage.setOnCloseRequest((e) -> manageWindowClose());
             primaryStage.setScene(board);
             primaryStage.setTitle("Santorini");
             primaryStage.show();
@@ -273,8 +268,8 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     }
 
     public void stopNetwork() {
-        if (cIThread != null) cIThread.stop();
-        if (cAThread != null) cAThread.stop();
+        if (cI != null) cI.shutdown();
+        if (cA != null) cA.shutDown();
 
         try {
             server.close();
@@ -298,23 +293,19 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
         //primaryStage.close();
 
         cA = new ClientNetworkOutcoming(server);
-        cAThread = new Thread(cA);
+        Thread cAThread = new Thread(cA);
 
         this.registerObserver(cA);
 
         cI = new ClientNetworkIncoming(this, server);
         cI.setOutHandler(cA);
         cI.addObserver(this);
-        cIThread = new Thread(cI);
+        Thread cIThread = new Thread(cI);
 
         cIThread.start();
         cAThread.start();
 
         System.out.println("Correctly connected to the server!");
-    }
-
-    public void setSocket(Socket s) {
-        server = s;
     }
 
     public void requestGameModeSend(String message) {

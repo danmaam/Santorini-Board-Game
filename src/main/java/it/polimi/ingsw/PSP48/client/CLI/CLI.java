@@ -847,7 +847,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
 
     @Override
     public void completedSetup(String message) {
-        cI.completedSetup();
+
     }
 
     public boolean containsWorker(ArrayList<WorkerValidCells> arr, int row, int column) {

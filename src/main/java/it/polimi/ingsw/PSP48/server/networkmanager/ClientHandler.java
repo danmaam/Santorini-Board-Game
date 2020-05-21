@@ -73,10 +73,12 @@ public class ClientHandler implements Runnable {
                     case requestAction:
                         output.writeObject(nextObject);
                         toDO = null;
+                        toDOLOCK.notifyAll();
                         break;
                     case setupmessage:
                         output.writeObject(setUpMessage);
                         toDO = null;
+                        toDOLOCK.notifyAll();
                         break;
                     case closegame:
                         incomingMessagesHandler.setClosed();
@@ -86,15 +88,22 @@ public class ClientHandler implements Runnable {
                     case replyPing:
                         output.writeObject(new PingMessage());
                         toDO = null;
+                        toDOLOCK.notifyAll();
                         break;
                 }
             }
         }
     }
 
-
     public void requestMessageSend(String lambda) {
         synchronized (toDOLOCK) {
+            while (toDO != null) {
+                try {
+                    toDOLOCK.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             toDO = nextAction.requestAction;
             nextObject = new requestMessagePrint(lambda);
             toDOLOCK.notifyAll();
@@ -104,6 +113,13 @@ public class ClientHandler implements Runnable {
     public void requestInitialPlayerSelection(ArrayList<String> players) {
         System.out.println("Sending request for initial player selection");
         synchronized (toDOLOCK) {
+            while (toDO != null) {
+                try {
+                    toDOLOCK.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             nextObject = new InitialPlayerRequestMessage(players);
             toDO = nextAction.requestAction;
             toDOLOCK.notifyAll();
@@ -113,6 +129,13 @@ public class ClientHandler implements Runnable {
     public void requestInitialPositioning(ArrayList<Position> validCells) {
         System.out.println("Sending request for Initial Positioning");
         synchronized (toDOLOCK) {
+            while (toDO != null) {
+                try {
+                    toDOLOCK.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             System.out.println("requesting initial positioning");
             nextObject = new PositioningRequest(validCells);
             toDO = nextAction.requestAction;
@@ -123,6 +146,13 @@ public class ClientHandler implements Runnable {
 
     public void requestChallengerDivinitiesSelection(ArrayList<DivinitiesWithDescription> div, int playerNumber) {
         synchronized (toDOLOCK) {
+            while (toDO != null) {
+                try {
+                    toDOLOCK.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             System.out.println("instantiating divinity list message, and requesting it's send");
             nextObject = new ChallengerDivinitiesSelectionRequest(div, playerNumber);
             toDO = nextAction.requestAction;
@@ -133,6 +163,13 @@ public class ClientHandler implements Runnable {
     public void requestOptionalMove(ArrayList<WorkerValidCells> validCellsForMove) {
         System.out.println("sending an optional move request");
         synchronized (toDOLOCK) {
+            while (toDO != null) {
+                try {
+                    toDOLOCK.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             nextObject = new OptionalMoveRequest(validCellsForMove);
             toDO = nextAction.requestAction;
             toDOLOCK.notifyAll();
@@ -141,6 +178,13 @@ public class ClientHandler implements Runnable {
 
     public void requestOptionalBuild(ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome) {
         synchronized (toDOLOCK) {
+            while (toDO != null) {
+                try {
+                    toDOLOCK.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             nextObject = new RequestOpionalBuild(build, dome);
             toDO = nextAction.requestAction;
             toDOLOCK.notifyAll();
@@ -150,6 +194,13 @@ public class ClientHandler implements Runnable {
     public void changedBoard(ArrayList<Cell> newCells) {
         System.out.println("Sending changed board");
         synchronized (toDOLOCK) {
+            while (toDO != null) {
+                try {
+                    toDOLOCK.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             nextObject = new ChangedBoard(newCells);
             toDO = nextAction.requestAction;
             toDOLOCK.notifyAll();
@@ -158,6 +209,13 @@ public class ClientHandler implements Runnable {
 
     public void changedPlayerList(ArrayList<String> newPlayerList) {
         synchronized (toDOLOCK) {
+            while (toDO != null) {
+                try {
+                    toDOLOCK.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             System.out.println("sending new player list");
             nextObject = new UpdatedPlayerList(newPlayerList);
             toDO = nextAction.requestAction;
@@ -168,6 +226,13 @@ public class ClientHandler implements Runnable {
     public void requestMove(ArrayList<WorkerValidCells> validCellsForMove) {
         System.out.println("Sending move request");
         synchronized (toDOLOCK) {
+            while (toDO != null) {
+                try {
+                    toDOLOCK.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             nextObject = new RequestMove(validCellsForMove);
             toDO = nextAction.requestAction;
             toDOLOCK.notifyAll();
@@ -177,6 +242,13 @@ public class ClientHandler implements Runnable {
     public synchronized void requestBuild(ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome) {
         System.out.println("Sending build request");
         synchronized (toDOLOCK) {
+            while (toDO != null) {
+                try {
+                    toDOLOCK.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             nextObject = new RequestBuild(build, dome);
             toDO = nextAction.requestAction;
             toDOLOCK.notifyAll();
@@ -187,6 +259,13 @@ public class ClientHandler implements Runnable {
     public void requestDivinitySelection(ArrayList<DivinitiesWithDescription> availableDivinities) {
         System.out.println("Sending request for divinity selection");
         synchronized (toDOLOCK) {
+            while (toDO != null) {
+                try {
+                    toDOLOCK.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             nextObject = new DivinitySelectionRequest(availableDivinities);
             toDO = nextAction.requestAction;
             toDOLOCK.notifyAll();
@@ -196,6 +275,13 @@ public class ClientHandler implements Runnable {
     public void setUpMessage(ClientSetupMessages message) {
         System.out.println("Sending " + message.toString());
         synchronized (toDOLOCK) {
+            while (toDO != null) {
+                try {
+                    toDOLOCK.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             setUpMessage = message;
             toDO = nextAction.setupmessage;
             toDOLOCK.notifyAll();
@@ -204,6 +290,13 @@ public class ClientHandler implements Runnable {
 
     public void gameEndMessage(String message) {
         synchronized (toDOLOCK) {
+            while (toDO != null) {
+                try {
+                    toDOLOCK.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             nextObject = new EndGameMessage(message);
             toDO = nextAction.closegame;
             toDOLOCK.notifyAll();
@@ -212,7 +305,13 @@ public class ClientHandler implements Runnable {
 
     public void replyPing() {
         synchronized (toDOLOCK) {
-
+            while (toDO != null) {
+                try {
+                    toDOLOCK.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             toDO = nextAction.replyPing;
             toDOLOCK.notifyAll();
         }
