@@ -25,8 +25,6 @@ public class GameBoardController {
     private final GUI view;
 
     @FXML
-    private Text errorText;
-    @FXML
     private Text gameMessage;
     @FXML
     private GridPane boardPane;
@@ -45,51 +43,33 @@ public class GameBoardController {
         if (availableDivinities.size() == 1)
             view.notifyObserver((x) -> x.registerPlayerDivinity(availableDivinities.get(0).getName()));
         else {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    Pane selectionPane = null;
-                    divinitiesSelectorLoader.setController(new DivinityChoiceController(availableDivinities, 1, thisController));
-                    try {
-                        selectionPane = divinitiesSelectorLoader.load();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    gameMessage.setText("Select your divinity in the selector at your right.");
-                    multifunctionalPane.getChildren().add(selectionPane);
+            Platform.runLater(() -> {
+                Pane selectionPane = null;
+                divinitiesSelectorLoader.setController(new DivinityChoiceController(availableDivinities, 1, thisController));
+                try {
+                    selectionPane = divinitiesSelectorLoader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+                gameMessage.setText("Select your divinity in the selector at your right.");
+                multifunctionalPane.getChildren().add(selectionPane);
             });
         }
     }
 
     public void sendChallengerDivinities(ArrayList<String> divinities) {
         view.notifyObserver((x) -> x.selectAvailableDivinities(divinities));
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                multifunctionalPane.getChildren().clear();
-            }
-        });
+        Platform.runLater(() -> multifunctionalPane.getChildren().clear());
     }
 
     public void sendPlayerDivinity(String divinity) {
         view.notifyObserver((x) -> x.registerPlayerDivinity(divinity));
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                multifunctionalPane.getChildren().clear();
-            }
-        });
+        Platform.runLater(() -> multifunctionalPane.getChildren().clear());
     }
 
     public void sendFirstPlayerChoice(String playerName) {
         view.notifyObserver((x) -> x.selectFirstPlayer(playerName));
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                multifunctionalPane.getChildren().clear();
-            }
-        });
+        Platform.runLater(() -> multifunctionalPane.getChildren().clear());
     }
 
     /**
@@ -116,7 +96,7 @@ public class GameBoardController {
                 if (view.getPlayersInGame() == 2) {
                     thirdPlayerBg.setVisible(false);
                     thirdPlayerCard.setVisible(false);
-                    ((Text) getNodeFromGridPane(playersPane, 2, 4)).setVisible(false);
+                    getNodeFromGridPane(playersPane, 2, 4).setVisible(false);
                 }
                 //first of all, I need to reset all text fields and images
                 for (int i = 0; i < 5; i = i + 2) {
@@ -162,30 +142,22 @@ public class GameBoardController {
     }
 
     public void printMessage(String s) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                gameMessage.setText(s);
-            }
-        });
+        Platform.runLater(() -> gameMessage.setText(s));
     }
 
-    public void requestChallengerDivinitiesSelection(ArrayList<DivinitiesWithDescription> div, int playerNumber) {
+    public void requestChallengerDivinitiesSelection(ArrayList<DivinitiesWithDescription> div) {
         final FXMLLoader divinitiesSelectorLoader = new FXMLLoader(getClass().getResource("/divinitySelection.fxml"));
         final GameBoardController thisController = this;
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                Pane selectionPane = null;
-                divinitiesSelectorLoader.setController(new DivinityChoiceController(div, view.getPlayersInGame(), thisController));
-                try {
-                    selectionPane = divinitiesSelectorLoader.load();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                gameMessage.setText("Select divinities in game in the selector at your right.");
-                multifunctionalPane.getChildren().add(selectionPane);
+        Platform.runLater(() -> {
+            Pane selectionPane = null;
+            divinitiesSelectorLoader.setController(new DivinityChoiceController(div, view.getPlayersInGame(), thisController));
+            try {
+                selectionPane = divinitiesSelectorLoader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            gameMessage.setText("Select divinities in game in the selector at your right.");
+            multifunctionalPane.getChildren().add(selectionPane);
         });
     }
 
@@ -193,19 +165,16 @@ public class GameBoardController {
     public void requestInitialPlayerSelection(ArrayList<String> players) {
         final FXMLLoader divinitiesSelectorLoader = new FXMLLoader(getClass().getResource("/firstPlayerSelection.fxml"));
         final GameBoardController thisController = this;
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                Pane selectionPane = null;
-                divinitiesSelectorLoader.setController(new FirstPlayerSelectionController(players.size(), thisController, players));
-                try {
-                    selectionPane = divinitiesSelectorLoader.load();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                gameMessage.setText("Select the first player");
-                multifunctionalPane.getChildren().add(selectionPane);
+        Platform.runLater(() -> {
+            Pane selectionPane = null;
+            divinitiesSelectorLoader.setController(new FirstPlayerSelectionController(players.size(), thisController, players));
+            try {
+                selectionPane = divinitiesSelectorLoader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            gameMessage.setText("Select the first player");
+            multifunctionalPane.getChildren().add(selectionPane);
         });
     }
 

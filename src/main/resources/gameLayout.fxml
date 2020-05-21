@@ -10,8 +10,7 @@
 <?import javafx.scene.text.Text?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="825.0"
-      prefWidth="1155.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="it.polimi.ingsw.PSP48.client.GUI.GUI">
+      prefWidth="1155.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <GridPane fx:id="boardPane" layoutX="118.0" layoutY="128.0" prefHeight="485.0" prefWidth="483.0">
             <columnConstraints>

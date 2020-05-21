@@ -127,7 +127,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
         }
 
          */
-        boardController.requestChallengerDivinitiesSelection(div, playerNumber);
+        boardController.requestChallengerDivinitiesSelection(div);
     }
 
     @Override

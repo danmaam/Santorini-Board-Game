@@ -221,9 +221,11 @@ public class Model {
         for (int i = 0; i < 5; i++) //we also need to remove the player from the board and then make a list of all the updated cells (we need to clone these cells)
         {
             for (int j = 0; j < 5; j++) {
-                if (boardCell[i][j].getPlayer().equals(pName)) boardCell[i][j].setPlayer(null);
-                tempCell = (Cell) boardCell[i][j].clone();
-                updatedCells.add(tempCell);
+                if (boardCell[i][j].getPlayer().equals(pName)) {
+                    boardCell[i][j].setPlayer(null);
+                    updatedCells.add((Cell) boardCell[i][j].clone());
+                }
+
             }
         }
         notifyObservers(x -> x.changedBoard(updatedCells));

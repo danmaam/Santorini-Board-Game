@@ -19,11 +19,11 @@ import java.util.function.Consumer;
  */
 
 public class GameController implements ViewObserver {
-    private Model model;
+    private final Model model;
     private Consumer<GameController> nextAction;
-    private int roomID;
+    private final int roomID;
 
-    private HashMap<String, ViewInterface> playersViews = new HashMap<>();
+    private final HashMap<String, ViewInterface> playersViews = new HashMap<>();
 
     public void associateViewWithPlayer(String name, ViewInterface view) {
         playersViews.put(name, view);
@@ -46,7 +46,6 @@ public class GameController implements ViewObserver {
     @Override
     public void addPlayer(String name, Calendar birthday) {
         System.out.println("adding player");
-        Calendar c = Calendar.getInstance();
         model.addPlayer(name, model.getNextColour(), birthday);
 
         if (model.getPlayersInGame().size() == model.getGamePlayerNumber()) {
@@ -179,8 +178,7 @@ public class GameController implements ViewObserver {
             System.out.println("Positioning on occupied cell");
             getPlayerView(model.getCurrentPlayer().getName()).printMessage("Can't put worker here, occupied cell. Retry operation");
             this.requestInitialPositioning();
-        }
-        catch (DivinityPowerException e){
+        } catch (DivinityPowerException e) {
             System.out.println("Positioning on a wrong cell due to divinity power");
             getPlayerView(model.getCurrentPlayer().getName()).printMessage("Can't put worker here, cell not available due to divinity power. Retry operation");
             this.requestInitialPositioning();
@@ -197,7 +195,6 @@ public class GameController implements ViewObserver {
     @Override
     public void registerPlayerDivinity(String divinity) {
         System.out.println("associating player divinity");
-        Divinity a = null;
         model.setPlayerDivinity(model.getCurrentPlayer().getName(), divinity);
         //if the current player is the chosen, all divinities has benn selected, and the game must start
         if (model.getPlayersInGame().indexOf(model.getCurrentPlayer()) == model.getChallengerIndex())
@@ -302,7 +299,6 @@ public class GameController implements ViewObserver {
 
     public void gameEnd() {
         Server.destroyGameRoom(roomID, null);
-        return;
     }
 
 
