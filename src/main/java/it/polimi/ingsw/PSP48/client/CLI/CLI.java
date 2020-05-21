@@ -498,6 +498,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
     public void endgame(String messageOfEndGame) {
         System.out.println(messageOfEndGame);
         cA.shutDown();
+        cI.shutdown();
     }
 
 

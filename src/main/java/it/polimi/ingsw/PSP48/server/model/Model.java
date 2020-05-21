@@ -1,9 +1,8 @@
 package it.polimi.ingsw.PSP48.server.model;
 
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
-import it.polimi.ingsw.PSP48.server.Server;
-import it.polimi.ingsw.PSP48.server.model.divinities.*;
 import it.polimi.ingsw.PSP48.observers.ModelObserver;
+import it.polimi.ingsw.PSP48.server.model.divinities.*;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,8 +18,8 @@ import java.util.stream.Collectors;
  * @author Rebecca Marelli
  */
 public class Model {
-    private ArrayList<Player> playersInGame = new ArrayList<Player>(); //the player are stored in a certain order, according to the order of their turns
-    private Stack<Colour> availableColours = new Stack<Colour>();
+    private final ArrayList<Player> playersInGame = new ArrayList<>(); //the player are stored in a certain order, according to the order of their turns
+    private final Stack<Colour> availableColours = new Stack<>();
 
     public boolean isGameWithDivinities() {
         return gameWithDivinities;
@@ -75,6 +74,9 @@ public class Model {
                 boardCell[i][j] = new Cell(i, j);
             }
         }
+
+        //ONLY FOR DEBUGGING
+
         gamePlayerNumber = number;
         gameWithDivinities = divinities;
 
@@ -82,7 +84,7 @@ public class Model {
 
     //OBSERVER METHODS
 
-    private ArrayList<ModelObserver> observers = new ArrayList<ModelObserver>();
+    private final ArrayList<ModelObserver> observers = new ArrayList<>();
 
     public void registerObserver(ModelObserver obv) {
         observers.add(obv);
@@ -161,7 +163,7 @@ public class Model {
      * since players are stored in playersInGame according to their turns, we just need to increase by one the int parameter currentPlayer
      */
     public void setNextPlayer() {
-        if (this.currentPlayer == -1 || this.currentPlayer == (getNumberOfPlayers() - 1)) {
+        if (this.currentPlayer == -1 || this.currentPlayer >= (getNumberOfPlayers() - 1)) {
             this.currentPlayer = 0;
         } else this.currentPlayer++;
 
@@ -188,7 +190,7 @@ public class Model {
      * @author Daniele Mammone
      */
     public ArrayList<Position> getPlayerPositionsInMap(String playerName) {
-        ArrayList<Position> returnArray = new ArrayList<Position>();
+        ArrayList<Position> returnArray = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 if (boardCell[i][j].getPlayer() != null && boardCell[i][j].getPlayer().equals(playerName))
@@ -216,12 +218,11 @@ public class Model {
     public void removePlayer(String pName) {
         ArrayList<Cell> updatedCells = new ArrayList<>();
         ArrayList<String> newPlayerList = new ArrayList<>();
-        Cell tempCell;
 
         for (int i = 0; i < 5; i++) //we also need to remove the player from the board and then make a list of all the updated cells (we need to clone these cells)
         {
             for (int j = 0; j < 5; j++) {
-                if (boardCell[i][j].getPlayer().equals(pName)) {
+                if (boardCell[i][j].getPlayer() != null && boardCell[i][j].getPlayer().equals(pName)) {
                     boardCell[i][j].setPlayer(null);
                     updatedCells.add((Cell) boardCell[i][j].clone());
                 }
@@ -266,7 +267,7 @@ public class Model {
         else {
             this.getPlayer(playerName).setDivinity(actualDivinity);
             if (divinity.equals("Circe")) playerWithCirce = playerName;
-            availableDivinities.remove(actualDivinity);
+            if (isGameWithDivinities()) availableDivinities.remove(actualDivinity);
         }
         sendPlayerList();
     }
@@ -325,9 +326,4 @@ public class Model {
         notifyObservers(x -> x.changedPlayerList(newPlayerString));
     }
 
-    public void flushPlayerList() {
-        for (Player p : playersInGame) {
-            Server.removeNickname(p.getName());
-        }
-    }
 }

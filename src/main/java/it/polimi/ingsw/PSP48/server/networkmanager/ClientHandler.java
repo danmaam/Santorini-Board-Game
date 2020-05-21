@@ -3,12 +3,9 @@ package it.polimi.ingsw.PSP48.server.networkmanager;
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
 import it.polimi.ingsw.PSP48.PingMessage;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
-import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkIncoming;
 import it.polimi.ingsw.PSP48.networkMessagesToClient.*;
-import it.polimi.ingsw.PSP48.server.Server;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Position;
-import it.polimi.ingsw.PSP48.server.virtualview.VirtualView;
 import it.polimi.ingsw.PSP48.setupMessagesToClient.ClientSetupMessages;
 import it.polimi.ingsw.PSP48.setupMessagesToClient.nicknameRequest;
 
@@ -23,11 +20,11 @@ import java.util.ArrayList;
 public class ClientHandler implements Runnable {
 
     private enum nextAction {
-        requestAction, setupmessage, closegame, replyPing;
+        requestAction, setupmessage, closegame, replyPing
     }
 
     private nextAction toDO = null;
-    Object toDOLOCK = new Object();
+    final Object toDOLOCK = new Object();
 
     public ClientHandler(Socket client, ClientHandlerListener i) {
         this.client = client;
@@ -36,11 +33,9 @@ public class ClientHandler implements Runnable {
 
     ObjectOutputStream output;
 
-    private ClientHandlerListener incomingMessagesHandler;
-    private String playerDatas = null;
+    private final ClientHandlerListener incomingMessagesHandler;
     private ClientSetupMessages setUpMessage;
     private NetworkMessagesToClient nextObject;
-    private Thread listenerThread;
 
 
     private final Socket client;
@@ -51,11 +46,10 @@ public class ClientHandler implements Runnable {
         try {
             handleGamePhases();
         } catch (IOException e) {
-
+            e.printStackTrace();
         }
 
         System.out.println("Disconnected from " + client.getInetAddress());
-        if (playerDatas != null) Server.removeNickname(playerDatas);
     }
 
     private void handleGamePhases() throws IOException {
@@ -85,8 +79,8 @@ public class ClientHandler implements Runnable {
                         toDO = null;
                         break;
                     case closegame:
-                        output.writeObject(nextObject);
                         incomingMessagesHandler.setClosed();
+                        output.writeObject(nextObject);
                         client.close();
                         return;
                     case replyPing:

@@ -34,12 +34,10 @@ public class ClientNetworkIncoming implements Runnable {
     private ArrayList<ClientNetworkObserver> observers = new ArrayList<>();
 
     public void addObserver(ClientNetworkObserver n) {
-        System.out.println("registered observer");
         observers.add(n);
     }
 
     public void removeObserver(ClientNetworkObserver n) {
-        System.out.println("removed observer");
         observers.remove(n);
     }
 
@@ -69,7 +67,6 @@ public class ClientNetworkIncoming implements Runnable {
             }
             newMessage = in.readObject();
             if (newMessage instanceof NetworkMessagesToClient) {
-                System.out.println("Arrived " + newMessage.toString());
                 completedTreadInvocation = false;
                 threadExecutor.submit(() -> {
                     final NetworkMessagesToClient functionParameter = (NetworkMessagesToClient) newMessage;

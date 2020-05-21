@@ -91,6 +91,8 @@ public class Server {
         if (tbd != null) {
             tbd.notifyAllPlayersOfDisconnection(disconnectedPlayer);
             roomsOnTheServer.remove(tbd);
+        } else {
+            Server.removeNickname(disconnectedPlayer);
         }
         //notified all the players,
 
