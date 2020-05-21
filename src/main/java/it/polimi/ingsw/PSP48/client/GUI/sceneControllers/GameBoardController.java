@@ -4,11 +4,13 @@ import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
 import it.polimi.ingsw.PSP48.client.GUI.GUI;
 import it.polimi.ingsw.PSP48.server.model.Position;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -72,19 +74,43 @@ public class GameBoardController {
         Platform.runLater(() -> multifunctionalPane.getChildren().clear());
     }
 
+    public void requestInitialPositioning(ArrayList<Position> validCells)
+    {
+        ArrayList<ImageView> imagesList= new ArrayList<>();
+
+        //we need to show the choice message to the player
+        gameMessage.setText("Click on the cell where you want to position");
+
+        //we need to associate the image of a highlighted cell to each node of the grid pane
+        Image illuminatedCell = new Image("santorini_risorse-grafiche-2/Texture2D/Toggle_Checkmark.png");
+        for (Position p : validCells)
+        {
+            ImageView colouredCell= new ImageView(illuminatedCell);
+            imagesList.add(colouredCell);
+            GridPane.setRowIndex(colouredCell, p.getRow());
+            GridPane.setColumnIndex(colouredCell, p.getColumn());
+            boardPane.getChildren().add(colouredCell);
+            Node tempNode=getNodeFromGridPane(boardPane, p.getColumn(), p.getRow()); //we also establish a mouse event for the correct nodes
+            tempNode.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    for (ImageView i : imagesList)
+                    {
+                        boardPane.getChildren().remove(i);
+                    }
+                    sendInitialPositioningChoice(new Position(p.getRow(), p.getColumn()));
+                }
+            });
+        }
+    }
+
     /**
      * method called by the initial positioning scene controller, to notify the server about the player choice
-     *
      * @param initialPosition is the position chosen by the player
      */
-    public void sendInitialPositioningChoice(Position initialPosition) {
+    public void sendInitialPositioningChoice(Position initialPosition)
+    {
         view.notifyObserver(x -> x.putWorkerOnTable(initialPosition));
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                multifunctionalPane.getChildren().clear();
-            }
-        });
     }
 
     public void changedPlayerList(ArrayList<String> newPlayerList) {

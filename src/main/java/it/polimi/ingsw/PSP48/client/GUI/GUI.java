@@ -93,22 +93,12 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
 
     /**
      * method handling the choice of the positions of the workers on the board
-     *
      * @param validCells is the list of valid positions to put the worker on the board
      */
     @Override
-    public void requestInitialPositioning(ArrayList<Position> validCells) {
-        /*
-        //received valid cells, they must be activated
-        //i load the image containing the background for the valid cells
-        Image illuminatedCell = new Image("santorini_risorse-grafiche-2/Texture2D/Toggle_Checkmark.png");
-        //i must enable all the cells
-        for (Position p : validCells) {
-            ImageView colouredCell = new ImageView(illuminatedCell);
-
-        }
-
-         */
+    public void requestInitialPositioning(ArrayList<Position> validCells)
+    {
+        boardController.requestInitialPositioning(validCells); //we call the right controller to handle the actions
     }
 
     @Override
