@@ -80,20 +80,24 @@ public class Server {
 
     public static synchronized void destroyGameRoom(int roomID, String disconnectedPlayer) {
         //i must find the game room
-        GameRoom tbd = null;
-        for (GameRoom g : roomsOnTheServer) {
-            if (g.getGameRoomID() == roomID) {
-                tbd = g;
+        if (roomID != -1) {
+            //it must be different -1, since we must handle disconnection
+            GameRoom tbd = null;
+            for (GameRoom g : roomsOnTheServer) {
+                if (g.getGameRoomID() == roomID) {
+                    tbd = g;
+                }
+            }
+            //found the game room, notify all the players to shutdown connection
+            //but it may occur that the player disconnects before entering in a game room
+            if (tbd != null) {
+                tbd.notifyAllPlayersOfDisconnection(disconnectedPlayer);
+                roomsOnTheServer.remove(tbd);
+            } else {
+                Server.removeNickname(disconnectedPlayer);
             }
         }
-        //found the game room, notify all the players to shutdown connection
-        //but it may occur that the player disconnects before entering in a game room
-        if (tbd != null) {
-            tbd.notifyAllPlayersOfDisconnection(disconnectedPlayer);
-            roomsOnTheServer.remove(tbd);
-        } else {
-            Server.removeNickname(disconnectedPlayer);
-        }
+
         //notified all the players,
 
     }

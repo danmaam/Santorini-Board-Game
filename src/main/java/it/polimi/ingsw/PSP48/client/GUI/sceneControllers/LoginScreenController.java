@@ -51,38 +51,16 @@ public class LoginScreenController {
 
     public synchronized void nicknameResult(String result) {
         System.out.println(result);
-        if (result.equals("Invalid nickname. Retry")) {
-            View.stopNetwork();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Login Error");
-            alert.setHeaderText("Invalid nickname");
-            alert.setContentText("Nickname already in use or invalid. \n Retry");
-            alert.showAndWait();
-            return;
-        }
-        notifyAll();
+
     }
 
 
     public void requestNicknameSend(String message) {
-        if (message.equals("Invalid nickname. Retry")) {
-            View.stopNetwork();
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Login Error");
-            alert.setHeaderText("Invalid nickname");
-            alert.setContentText("Nickname already in use or invalid. \n Retry");
-            alert.showAndWait();
-
-        } else {
             String nickname = playerNickname.getText();
             View.getUploader().requestNicknameSend(nickname);
-        }
     }
 
     public synchronized void loginButton() throws IOException {
-        ClientNetworkIncoming cA;
-        ClientNetworkOutcoming cI;
         if (serverIP.getText().length() == 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -105,7 +83,6 @@ public class LoginScreenController {
         String IP = serverIP.getText();
 
         View.startNetwork(IP);
-        System.out.println("Correctly connected to the server!");
     }
 
 

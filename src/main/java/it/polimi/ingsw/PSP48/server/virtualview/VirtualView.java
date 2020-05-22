@@ -45,7 +45,7 @@ public class VirtualView implements ViewInterface, ServerNetworkObserver {
     private String playerName;
     ClientHandler playerHandler;
     ClientHandlerListener playerListener;
-    private int roomID;
+    private int roomID = -1;
 
     public void setRoomID(int roomID) {
         this.roomID = roomID;

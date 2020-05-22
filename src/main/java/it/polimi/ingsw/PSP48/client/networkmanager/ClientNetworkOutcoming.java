@@ -89,7 +89,6 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
     public void run() {
         try {
             outputStm = new ObjectOutputStream(server.getOutputStream());
-            System.out.println("starting message handler");
             handleServerConnection();
         } catch (IOException e) {
             System.out.println("server has died");
@@ -99,7 +98,6 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
     }
 
     public synchronized void handleServerConnection() throws IOException, ClassNotFoundException {
-        System.out.println("handling messages");
         while (true) {
             nextAction = null;
             try {
@@ -134,31 +132,26 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
     }
 
     private synchronized void sendPlayerNickname() throws IOException {
-        System.out.println("sending nickname");
         outputStm.writeObject(nextMessage);
     }
 
     private synchronized void sendGameMode() throws IOException {
-        System.out.println("sending game mode");
         outputStm.writeObject(nextMessage);
     }
 
     public synchronized void requestNicknameSend(String nickname) {
-        System.out.println("sending nickname");
         nextAction = action.send_nickname;
         this.nextMessage = nickname;
         notifyAll();
     }
 
     public synchronized void setGameMode(String n) {
-        System.out.println("sending game mode");
         nextAction = action.send_gamemode;
         nextMessage = n;
         notifyAll();
     }
 
     public synchronized void sendGameAction() throws IOException {
-        System.out.println("sending game action");
         outputStm.writeObject(o);
     }
 
@@ -173,7 +166,6 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
     }
 
     public synchronized void sendPingMessage() throws IOException {
-        System.out.println("Replying to ping");
         outputStm.writeObject(new PingMessage());
     }
 

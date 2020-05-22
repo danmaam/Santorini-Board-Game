@@ -94,7 +94,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     @Override
     public void requestInitialPositioning(ArrayList<Position> validCells)
     {
-        boardController.requestInitialPositioning(validCells); //we call the right controller to handle the actions
+        Platform.runLater(() -> boardController.requestInitialPositioning(validCells)); //we call the right controller to handle the actions
     }
 
     @Override
@@ -165,7 +165,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
 
     @Override
     public void changedBoard(ArrayList<Cell> newCells) {
-
+        Platform.runLater(() -> boardController.changedBoard(newCells));
     }
 
     @Override
@@ -262,14 +262,14 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
         if (cA != null) cA.shutDown();
 
         try {
-            server.close();
+            if (server != null) server.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void startNetwork(String IP) {
-
+        boolean connected = true;
         try {
             server = new Socket(IP, 7777);
         } catch (IOException e) {
@@ -278,6 +278,8 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
             alert.setHeaderText("Login Error");
             alert.setContentText("Can't connect to the server");
             alert.showAndWait();
+            server = null;
+            connected = false;
             return;
         }
         //primaryStage.close();
@@ -312,7 +314,19 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     }
 
     public void requestNicknameSend(String message) {
-        Platform.runLater(() -> loginController.requestNicknameSend(message));
+        if (!message.equals("Invalid nickname. Retry")) {
+            Platform.runLater(() -> loginController.requestNicknameSend(message));
+        } else {
+            Platform.runLater(() -> {
+                stopNetwork();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Login Error");
+                alert.setHeaderText("Invalid nickname");
+                alert.setContentText("Nickname already in use or invalid. \n Retry");
+                alert.showAndWait();
+
+            });
+        }
     }
 
     public int getPlayersInGame() {

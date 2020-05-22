@@ -48,7 +48,6 @@ public class ClientNetworkIncoming implements Runnable {
     public synchronized void retrieveMessage() throws IOException, ClassNotFoundException {
         while (true) {
             Object newMessage = in.readObject();
-            System.out.println("Received: " + newMessage);
             if (newMessage instanceof NetworkMessagesToClient) {
                 ((NetworkMessagesToClient) newMessage).doAction(playerView);
             } else if (newMessage instanceof ClientSetupMessages) {
