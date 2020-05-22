@@ -47,6 +47,25 @@ public class GameBoardController {
     @FXML
     private Pane leftPane;
 
+
+    @FXML
+    private Text firstPlayerName;
+    @FXML
+    private Text secondPlayerName;
+    @FXML
+    private Text thirdPlayerName;
+
+    @FXML
+    private ImageView firstPlayerDivinity;
+    @FXML
+    private ImageView secondPlayerDivinity;
+    @FXML
+    private ImageView thirdPlayerDivinity;
+
+    private final ArrayList<ImageView> playersDivinity = new ArrayList<>();
+    private final ArrayList<Text> playersName = new ArrayList<>();
+
+
     private enum FSM_STATUS {
         positioning, worker_selection_move, worker_selection_build, sendmove, sendbuild
     }
@@ -122,6 +141,10 @@ public class GameBoardController {
             choiceImage.setOpacity(0.4);
             choiceImage.setFitWidth(95);
             choiceImage.setFitHeight(95);
+
+            choiceImage.fitHeightProperty().bind(boardPane.heightProperty().divide(7));
+            choiceImage.fitWidthProperty().bind(boardPane.widthProperty().divide(7));
+
             GridPane.setHalignment(choiceImage, HPos.CENTER);
             GridPane.setValignment(choiceImage, VPos.CENTER);
             choiceImage.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
@@ -151,13 +174,17 @@ public class GameBoardController {
         if (view.getPlayersInGame() == 2) {
             thirdPlayerBg.setVisible(false);
             thirdPlayerCard.setVisible(false);
-            getNodeFromGridPane(playersPane, 2, 4).setVisible(false);
+            thirdPlayerName.setVisible(false);
         }
         //first of all, I need to reset all text fields and images
-        for (int i = 0; i < 5; i = i + 2) {
-            ((Text) getNodeFromGridPane(playersPane, 2, i)).setText("Waiting for Players");
-            ((ImageView) getNodeFromGridPane(playersPane, 0, 4)).setImage(null);
-        }
+        playersName.forEach(x -> x.setText("Waiting for players"));
+        playersDivinity.forEach(x -> x.setImage(null));
+
+        firstPlayerName.setText("Waiting for Players");
+        secondPlayerName.setText("Waiting for Players");
+        thirdPlayerName.setText("Waiting for Players");
+
+
         int i = 0;
         for (String s : newPlayerList) {
             //first I need to parse the arrived strings
@@ -165,31 +192,34 @@ public class GameBoardController {
             String colour = s.split("\\.")[1];
             String divinity = s.split("\\.")[2];
             //now i need to set divinity image
+            ImageView currentDivinity = playersDivinity.get(i);
+            Text currentName = playersName.get(i);
             if (!divinity.equals("Divinity Not Chosen") && !divinity.equals("Base Divinity")) {
-                ((ImageView) getNodeFromGridPane(playersPane, 0, i)).setImage(new Image("/santorini_risorse-grafiche-2/Sprite/Cards/Full/" + divinity + ".png"));
+                currentDivinity.setImage(new Image("/santorini_risorse-grafiche-2/Sprite/Cards/Full/" + divinity + ".png"));
             }
-            ((Text) getNodeFromGridPane(playersPane, 2, i)).setText(name + "\n" + divinity);
+            currentName.setText(name + "\n" + divinity);
             switch (colour) {
                 case "GREY":
-                    ((Text) getNodeFromGridPane(playersPane, 2, i)).setFill(Color.GREY);
+                    currentName.setFill(Color.GREY);
                     break;
                 case "BLUE":
-                    ((Text) getNodeFromGridPane(playersPane, 2, i)).setFill(Color.BLUE);
+                    currentName.setFill(Color.BLUE);
                     break;
                 case "WHITE":
-                    ((Text) getNodeFromGridPane(playersPane, 2, i)).setFill(Color.WHITE);
+                    currentName.setFill(Color.WHITE);
                     break;
             }
-            i = i + 2;
+            i++;
         }
 
 
     }
 
-    private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
+    private Node getNodeFromGridPane(GridPane gridPane, int col, int row, boolean image) {
         for (Node node : gridPane.getChildren()) {
             if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
-                return node;
+                if (image && node instanceof ImageView) return node;
+                else if (node instanceof Text) return node;
             }
         }
         return null;
@@ -249,6 +279,7 @@ public class GameBoardController {
                 break;
         }
     }
+
 
     public void changedBoard(ArrayList<Cell> newCells) {
         //must reset all the new cells, and and recreate these cells with the new informations
@@ -330,13 +361,20 @@ public class GameBoardController {
     }
 
     public void resizeElements(double widht, double depth) {
-        boardPane.setPrefWidth(0.59 * depth);
-        boardPane.setPrefHeight(0.85 * widht);
+        boardPane.setPrefWidth(0.390625 * depth);
+        boardPane.setPrefHeight(0.7 * widht);
     }
 
     public void initialize() {
-        boardPane.setAlignment(Pos.CENTER);
-    }
+        playersDivinity.add(firstPlayerDivinity);
+        playersDivinity.add(secondPlayerDivinity);
+        playersDivinity.add(thirdPlayerDivinity);
 
+        playersName.add(firstPlayerName);
+        playersName.add(secondPlayerName);
+        playersName.add(thirdPlayerName);
+        boardPane.setAlignment(Pos.CENTER);
+
+    }
 
 }

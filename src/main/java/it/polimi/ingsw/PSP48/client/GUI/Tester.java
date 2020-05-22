@@ -32,6 +32,7 @@ public class Tester extends GUI {
     private GameBoardController boardController;
     private Scene board = null;
 
+
     @Override
     public void start(Stage stage) throws Exception {
         System.out.println(this);
@@ -48,28 +49,45 @@ public class Tester extends GUI {
         Pane boardRoot;
         try {
             boardRoot = controllerLoader.load();
-            board = new Scene(boardRoot, 1155, 825);
+            board = new Scene(boardRoot, 1280, 720);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         stage.setTitle("Santorini Log-In");
-        //stage.setResizable(false);
-
 
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) -> {
+
+
+
             boardController.resizeElements(stage.getHeight(), stage.getWidth());
+
+           stage.minWidthProperty().bind(board.heightProperty().multiply(16).divide(9));
+           stage.minHeightProperty().bind(board.widthProperty().divide(16).multiply(9));
+
+
+
+           stage.minHeightProperty().unbind();
+           stage.minWidthProperty().unbind();
+
+           //stage.setMinWidth(1280);
+           //stage.setMinHeight(720);
+
+
+
         };
+
+
+        primaryStage.setScene(board);
+
+
+
+        primaryStage.setTitle("Santorini");
+        primaryStage.show();
 
 
         stage.widthProperty().addListener(stageSizeListener);
         stage.heightProperty().addListener(stageSizeListener);
-
-        stage.minHeightProperty().bind(stage.widthProperty().multiply(0.7));
-
-        primaryStage.setScene(board);
-        primaryStage.setTitle("Santorini");
-        primaryStage.show();
 
         ArrayList<String> playerList = new ArrayList<>();
         playerList.add("pippo.BLUE.Divinity Not Chosen");

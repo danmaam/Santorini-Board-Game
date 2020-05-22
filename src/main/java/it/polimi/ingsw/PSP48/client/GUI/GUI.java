@@ -13,6 +13,7 @@ import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Position;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -214,7 +215,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
         Pane boardRoot;
         try {
             boardRoot = controllerLoader.load();
-            board = new Scene(boardRoot, 1155, 825);
+            board = new Scene(boardRoot, 1280, 720);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -230,9 +231,16 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     public void completedSetup(String message) {
 
         Platform.runLater(() -> {
+            ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) -> {
+                boardController.resizeElements(primaryStage.getHeight(), primaryStage.getWidth());
+            };
             primaryStage.setOnCloseRequest((e) -> manageWindowClose());
             primaryStage.setScene(board);
             primaryStage.setTitle("Santorini");
+            primaryStage.widthProperty().addListener(stageSizeListener);
+            primaryStage.heightProperty().addListener(stageSizeListener);
+            primaryStage.minWidthProperty().bind(board.heightProperty().multiply(16).divide(9));
+            primaryStage.minHeightProperty().bind(board.widthProperty().divide(16).multiply(9));
             primaryStage.show();
         });
 
