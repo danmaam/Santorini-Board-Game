@@ -9,20 +9,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="825.0"
-      prefWidth="1155.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0"
+      prefWidth="1280.0"
+      style="-fx-background-image: url(&quot;panebg.png&quot;); -fx-background-size: 100% 100% 100% 100%; -fx-background-repeat: no-repeat;"
+      xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <ImageView fitHeight="825.0" fitWidth="1155.0" pickOnBounds="true">
-            <image>
-                <Image url="@santorini_risorse-grafiche-2/Sprite/bg_panelMid.png"/>
-            </image>
-        </ImageView>
-        <ImageView fitHeight="713.0" fitWidth="797.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true"
-                   preserveRatio="true">
-            <image>
-                <Image url="@IMG_0505.PNG"/>
-            </image>
-        </ImageView>
         <ImageView fitHeight="713.0" fitWidth="434.0" layoutX="720.0" layoutY="7.0" pickOnBounds="true">
             <image>
                 <Image url="@santorini_risorse-grafiche-2/Sprite/clp_bg.png"/>
@@ -124,20 +115,30 @@
             </children>
         </GridPane>
         <Pane fx:id="multifunctionalPane" layoutX="764.0" layoutY="98.0" prefHeight="528.0" prefWidth="344.0"/>
-        <GridPane fx:id="boardPane" layoutX="118.0" layoutY="128.0" prefHeight="485.0" prefWidth="483.0">
+        <ImageView fitHeight="704.0" fitWidth="688.0" pickOnBounds="true" preserveRatio="true" visible="false">
+            <image>
+                <Image url="@onlyboard.png"/>
+            </image>
+        </ImageView>
+        <GridPane id="boardGridPane" fx:id="boardPane" layoutX="14.0" layoutY="19.0" prefHeight="500.0"
+                  prefWidth="500.0" stylesheets="@cssStyle.css">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="94.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="106.0" minWidth="10.0" prefWidth="101.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="107.0" minWidth="10.0" prefWidth="99.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="104.0" minWidth="10.0" prefWidth="100.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="93.0" minWidth="10.0" prefWidth="90.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="28.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="186.0" minWidth="10.0" prefWidth="77.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="218.0" minWidth="10.0" prefWidth="97.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="288.0" minWidth="10.0" prefWidth="98.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="198.0" minWidth="0.0" prefWidth="95.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="226.0" minWidth="10.0" prefWidth="84.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="157.0" minWidth="10.0" prefWidth="27.0"/>
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints maxHeight="102.0" minHeight="10.0" prefHeight="85.0" vgrow="SOMETIMES"/>
-                <RowConstraints maxHeight="108.0" minHeight="0.0" prefHeight="100.0" vgrow="SOMETIMES"/>
-                <RowConstraints maxHeight="117.0" minHeight="10.0" prefHeight="99.0" vgrow="SOMETIMES"/>
-                <RowConstraints maxHeight="144.0" minHeight="10.0" prefHeight="99.0" vgrow="SOMETIMES"/>
-                <RowConstraints maxHeight="103.0" minHeight="10.0" prefHeight="102.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="142.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="161.0" minHeight="10.0" prefHeight="85.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="147.0" minHeight="0.0" prefHeight="92.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="137.0" minHeight="10.0" prefHeight="95.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="213.0" minHeight="0.0" prefHeight="95.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="227.0" minHeight="10.0" prefHeight="94.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="234.0" minHeight="10.0" prefHeight="17.0" vgrow="SOMETIMES"/>
             </rowConstraints>
         </GridPane>
     </children>

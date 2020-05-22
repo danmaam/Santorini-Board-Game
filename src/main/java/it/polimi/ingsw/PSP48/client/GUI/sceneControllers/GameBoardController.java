@@ -44,6 +44,8 @@ public class GameBoardController {
     private ImageView thirdPlayerCard;
     @FXML
     private ImageView thirdPlayerBg;
+    @FXML
+    private Pane leftPane;
 
     private enum FSM_STATUS {
         positioning, worker_selection_move, worker_selection_build, sendmove, sendbuild
@@ -63,7 +65,7 @@ public class GameBoardController {
     private final EventHandler<MouseEvent> handleOperation = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
-            nextPosition = new Position(GridPane.getRowIndex((Node) mouseEvent.getSource()), GridPane.getColumnIndex(((Node) mouseEvent.getSource())));
+            nextPosition = new Position(GridPane.getRowIndex((Node) mouseEvent.getSource()) - 1, GridPane.getColumnIndex(((Node) mouseEvent.getSource())) - 1);
             nextActionFSM();
         }
     };
@@ -124,9 +126,7 @@ public class GameBoardController {
             GridPane.setValignment(choiceImage, VPos.CENTER);
             choiceImage.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
 
-            boardPane.add(choiceImage, p.getColumn(), p.getRow());
-
-            Node temp = getNodeFromGridPane(boardPane, p.getColumn(), p.getRow());
+            boardPane.add(choiceImage, 1 + p.getColumn(), 1 + p.getRow());
 
 
         }
@@ -238,7 +238,7 @@ public class GameBoardController {
                 //first of all, i must restore the initial board situation
 
                 for (Node n : boardPane.getChildren()) {
-                    if (positionValid.contains(new Position(GridPane.getRowIndex(n), GridPane.getColumnIndex(n))) && ((ImageView) n).getImage() == isSelectionImage) {
+                    if (positionValid.contains(new Position(GridPane.getRowIndex(n) - 1, GridPane.getColumnIndex(n) - 1)) && ((ImageView) n).getImage() == isSelectionImage) {
                         n.removeEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
                         tbr.add(n);
                     }
@@ -274,18 +274,22 @@ public class GameBoardController {
                 ImageView building = new ImageView(levelToBeCharged);
                 building.setFitWidth(95);
                 building.setFitHeight(95);
+                building.fitHeightProperty().bind(boardPane.heightProperty().divide(7));
+                building.fitWidthProperty().bind(boardPane.widthProperty().divide(7));
                 GridPane.setValignment(building, VPos.CENTER);
                 GridPane.setHalignment(building, HPos.CENTER);
-                boardPane.add(building, c.getColumn(), c.getRow());
+                boardPane.add(building, 1 + c.getColumn(), 1 + c.getRow());
             }
 
             if (c.isDomed()) {
                 ImageView dome = new ImageView("/buildings/dome.png");
                 dome.setFitHeight(75);
                 dome.setFitWidth(75);
+                dome.fitHeightProperty().bind(boardPane.heightProperty().divide(7));
+                dome.fitWidthProperty().bind(boardPane.widthProperty().divide(7));
                 GridPane.setValignment(dome, VPos.CENTER);
                 GridPane.setHalignment(dome, HPos.CENTER);
-                boardPane.add(dome, c.getColumn(), c.getRow());
+                boardPane.add(dome, 1 + c.getColumn(), 1 + c.getRow());
             }
 
             if (c.getPlayer() != null) {
@@ -306,10 +310,12 @@ public class GameBoardController {
                     ImageView toBeAdded = new ImageView(worker);
                     toBeAdded.setFitHeight(75);
                     toBeAdded.setFitWidth(75);
+                    toBeAdded.fitHeightProperty().bind(boardPane.heightProperty().divide(7));
+                    toBeAdded.fitWidthProperty().bind(boardPane.widthProperty().divide(7));
                     toBeAdded.setVisible(true);
                     GridPane.setValignment(toBeAdded, VPos.CENTER);
                     GridPane.setHalignment(toBeAdded, HPos.CENTER);
-                    boardPane.add(toBeAdded, c.getColumn(), c.getRow());
+                    boardPane.add(toBeAdded, 1 + c.getColumn(), 1 + c.getRow());
                 }
             }
         }
@@ -321,6 +327,15 @@ public class GameBoardController {
             if (s.split("\\.")[0].equals(playerName)) return s.split("\\.")[1];
         }
         return null;
+    }
+
+    public void resizeElements(double widht, double depth) {
+        boardPane.setPrefWidth(0.59 * depth);
+        boardPane.setPrefHeight(0.85 * widht);
+    }
+
+    public void initialize() {
+        boardPane.setAlignment(Pos.CENTER);
     }
 
 

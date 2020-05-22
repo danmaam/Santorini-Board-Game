@@ -220,7 +220,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
         }
 
         stage.setTitle("Santorini Log-In");
-        stage.setResizable(false);
+        //stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
         System.out.println("Initialized stage");
