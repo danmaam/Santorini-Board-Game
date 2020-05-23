@@ -21,25 +21,46 @@ import java.util.function.Consumer;
 
 /**
  * concrete class that represents all the interactions with the client
- *
  * @author Rebecca Marelli, Annalaura Massa, Daniele Mammone
  */
-public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
+public class CLI implements Runnable, ViewInterface, ClientNetworkObserver
+{
     ExecutorService threadExecutor = Executors.newSingleThreadExecutor();
 
-    private static final CellForPrinting[][] gameBoard = new CellForPrinting[5][5]; //class attributes
+    /**
+     * private attribute of the CLI class that represents the board of the game and its content
+     */
+    private static final CellForPrinting[][] gameBoard = new CellForPrinting[5][5];
+    /**
+     * private attribute of the CLI class that contains all the players of a match
+     */
     private ArrayList<Player> playerList = new ArrayList<Player>();
-
+    /**
+     * private attribute of the CLI class containing all the observers to notify
+     */
     private ArrayList<ViewObserver> observers = new ArrayList<ViewObserver>();
 
+
+    /**
+     * method used to register a new observer that we'll need to notify
+     * @param obv is the observer of the client that we are going to register
+     */
     public void registerObserver(ViewObserver obv) {
         observers.add(obv);
     }
 
+    /**
+     * method used to remove an already existing observer from the list of view observers
+     * @param obv is the observer we need to remove
+     */
     public void unregisterObserver(ViewObserver obv) {
         observers.remove(obv);
     }
 
+    /**
+     * method used to notify a change in the client status to its observers (and so to the server)
+     * @param lambda is the lambda function we use to notify the observer
+     */
     public void notifyObserver(Consumer<ViewObserver> lambda) {
         for (ViewObserver obv : observers) lambda.accept(obv);
     }
@@ -61,6 +82,10 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
         }
     }
 
+    /**
+     * method giving access to the game board contained in the class
+     * @return a reference to the board
+     */
     public CellForPrinting[][] getGameBoard() {
         return (gameBoard);
     }
@@ -156,6 +181,10 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
         });
     }
 
+    /**
+     * method used to update the player list in the client, whenever it is changed
+     * @param newPlayerList is the updated player list
+     */
     @Override
     public void changedPlayerList(ArrayList<String> newPlayerList) {
         threadExecutor.submit(() -> {
@@ -510,6 +539,10 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
 
     }
 
+    /**
+     * method printing a message to the client notifying the end of a match
+     * @param messageOfEndGame is the message we need to print
+     */
     @Override
     public void endgame(String messageOfEndGame) {
         System.out.println(messageOfEndGame);
@@ -631,7 +664,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
     }
 
     /**
-     * method used to request a player to pick the divinities for other players
+     * method used to request to a player the selection of the divinities for all players
      *
      * @param div          the list of the available divinities
      * @param playerNumber the number of the players in the game
@@ -674,6 +707,10 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
 
     }
 
+    /**
+     * method printing a certain message for a player during the game
+     * @param s is the string containing the message we need to print
+     */
     @Override
     public void printMessage(String s) {
         threadExecutor.submit(() -> System.out.println(s));
@@ -851,16 +888,28 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
     }
 
 
+    /**
+     * method showing to a player the nickname he has chosen to login with, together with the assigned colour
+     * @param result is what we show to the client
+     */
     @Override
     public synchronized void nicknameResult(String result) {
         threadExecutor.submit(() -> System.out.println(result));
     }
 
+    /**
+     * method showing the result of the game mode selection
+     * @param result is the result we show to the client
+     */
     @Override
     public synchronized void gameModeResult(String result) {
         threadExecutor.submit(() -> System.out.println(result));
     }
 
+    /**
+     * method requesting to a player to write a nickname in order to login and play
+     * @param message is the message we print to make our request
+     */
     @Override
     public void requestNicknameSend(String message) {
         threadExecutor.submit(() -> {
@@ -872,6 +921,10 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
 
     }
 
+    /**
+     * method sending the request to select a game mode, showing all the possible choices
+     * @param message contains the request we make
+     */
     @Override
     public void requestGameModeSend(String message) {
         threadExecutor.submit(() -> {
@@ -892,6 +945,13 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
 
     }
 
+    /**
+     * method used in the functions handling the game board, to see if a certain selected position is among the valid ones
+     * @param arr is the list containing the valid worker positions
+     * @param row is the row selected by the player for the worker to use
+     * @param column is the column selected by the player for the worker to use
+     * @return true if the worker is valid, else false
+     */
     public boolean containsWorker(ArrayList<WorkerValidCells> arr, int row, int column) {
         for (WorkerValidCells v : arr) {
             if (v.getwR() == row && v.getwC() == column && !v.getValidPositions().isEmpty()) return true;
@@ -899,6 +959,9 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
         return false;
     }
 
+    /**
+     * attribute used to handle the building operations on the board
+     */
     private enum action {
         build, dome;
     }

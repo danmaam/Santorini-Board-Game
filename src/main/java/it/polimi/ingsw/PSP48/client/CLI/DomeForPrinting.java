@@ -20,25 +20,37 @@ public class DomeForPrinting
         this.domeColour=initialDomeColour;
     }
 
+    /**
+     * getter of the dome symbol, used to print a cell and its content
+     * @return the string containing the symbol
+     */
     public String getDomeSymbol()
     {
         return(this.domeSymbol);
     }
 
+    /**
+     * getter of the dome colour, for printing purposes
+     * @return the colour attribute of a dome object
+     */
     public ColoursForPrinting getDomeColour()
     {
         return(this.domeColour);
     }
 
+    /**
+     * method used to change the colour of a dome
+     * @param newDomeColour is the updated colour
+     */
     public void setDomeColour(ColoursForPrinting newDomeColour)
     {
         this.domeColour=newDomeColour;
     }
 
-    @Override
     /**
      * method converting this object into a string for its printing
      */
+    @Override
     public String toString()
     {
         return(this.domeColour + domeSymbol + ColoursForPrinting.reset); //after we return the symbol in the right colour, we need to reset the colour of the terminal

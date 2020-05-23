@@ -26,11 +26,19 @@ public enum ColoursForPrinting {
         this.colour = initialColour;
     }
 
+    /**
+     * getter of a colour code
+     * @return the sting containing the ansi code of the colour
+     */
     public String getColour()
     {
         return(this.colour);
     }
 
+    /**
+     * method used to change colour
+     * @param changedColour is a new string we use for the colour
+     */
     public void setColour(String changedColour) //we need this method because some elements might change colour during the game, for example to highlight them to the player
     {
         this.colour=changedColour;

@@ -27,11 +27,19 @@ public class CellForPrinting
         this.cellColour=initialCellColour; //when creating a cell, we just need to put the colour and the position (because it's empty and has no other things on it)
     }
 
+    /**
+     * getter of the row of a cell
+     * @return an int attribute, the row of the cell we are using
+     */
     public int getCellRow()
     {
         return(this.cellRow);
     }
 
+    /**
+     * getter of the column of a cell
+     * @return the number of the column
+     */
     public int getCellColumn()
     {
         return(this.cellColumn);
@@ -46,41 +54,73 @@ public class CellForPrinting
         return(this.emptySpaceInCell);
     }
 
+    /**
+     * getter of the colour of a cell, used when we are printing it
+     * @return said colour
+     */
     public ColoursForPrinting getCellColour()
     {
         return(this.cellColour);
     }
 
+    /**
+     * method used to change the colour of a cell, in order to highlight or reset the colour of the board
+     * @param newCellColour is the colour we want to give to the cell
+     */
     public void setCellColour(ColoursForPrinting newCellColour)
     {
         this.cellColour = newCellColour;
     }
 
+    /**
+     * getter of the player that may be on a cell
+     * @return said player
+     */
     public Player getPlayerOnCell()
     {
         return(this.playerOnCell);
     }
 
+    /**
+     * method used to add a player on a cell
+     * @param newPlayer is the player we are assigning to the cell
+     */
     public void setPlayerOnCell(Player newPlayer)
     {
         this.playerOnCell=newPlayer;
     }
 
+    /**
+     * getter of the building attribute of a cell
+     * @return said building
+     */
     public BuildingsForPrinting getBuildings()
     {
         return(this.buildings);
     }
 
+    /**
+     * method creating a building on a certain cell
+     * @param newBuilding is the building we are putting on the cell
+     */
     public void setBuildings(BuildingsForPrinting newBuilding)
     {
         this.buildings=newBuilding;
     }
 
+    /**
+     * getter of the dome attribute of a cell
+     * @return the dome attribute of the cell
+     */
     public DomeForPrinting getDome()
     {
         return(this.dome);
     }
 
+    /**
+     * method used to put a dome on a cell
+     * @param newDome is the dome attribute we are assigning to the cell
+     */
     public void setDome(DomeForPrinting newDome)
     {
         this.dome=newDome;
