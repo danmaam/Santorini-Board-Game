@@ -5,4 +5,18 @@
     -fx-background-position: center center;
 }
 
+#playersPane {
+    -fx-background-image: url("clp_bg.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100% 100% 100% 100%;
+    -fx-background-position: center center;
+}
+
+#mainPane {
+    -fx-background-image: url("panebg.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100% 100% 100% 100%;
+    -fx-background-position: center center;
+}
+
 

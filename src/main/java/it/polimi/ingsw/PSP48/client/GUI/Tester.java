@@ -58,29 +58,21 @@ public class Tester extends GUI {
 
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) -> {
 
-
-
             boardController.resizeElements(stage.getHeight(), stage.getWidth());
 
-           stage.minWidthProperty().bind(board.heightProperty().multiply(16).divide(9));
-           stage.minHeightProperty().bind(board.widthProperty().divide(16).multiply(9));
 
+            //stage.minHeightProperty().unbind();
+            //stage.minWidthProperty().unbind();
 
-
-           stage.minHeightProperty().unbind();
-           stage.minWidthProperty().unbind();
-
-           //stage.setMinWidth(1280);
-           //stage.setMinHeight(720);
-
-
+            //stage.setMinWidth(1280);
+            //stage.setMinHeight(720);
 
         };
 
-
         primaryStage.setScene(board);
 
-
+        stage.setMinWidth(1280);
+        stage.setMinHeight(720);
 
         primaryStage.setTitle("Santorini");
         primaryStage.show();
@@ -88,6 +80,11 @@ public class Tester extends GUI {
 
         stage.widthProperty().addListener(stageSizeListener);
         stage.heightProperty().addListener(stageSizeListener);
+
+
+        stage.minWidthProperty().bind(board.heightProperty().multiply(16).divide(9));
+        stage.minHeightProperty().bind(board.widthProperty().divide(16).multiply(9));
+
 
         ArrayList<String> playerList = new ArrayList<>();
         playerList.add("pippo.BLUE.Divinity Not Chosen");

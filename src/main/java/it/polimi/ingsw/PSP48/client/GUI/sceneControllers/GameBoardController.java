@@ -16,10 +16,13 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+
+import java.math.*;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -62,6 +65,9 @@ public class GameBoardController {
     @FXML
     private ImageView thirdPlayerDivinity;
 
+    @FXML
+    private BorderPane mainBorderPane;
+
     private final ArrayList<ImageView> playersDivinity = new ArrayList<>();
     private final ArrayList<Text> playersName = new ArrayList<>();
 
@@ -84,7 +90,7 @@ public class GameBoardController {
     private final EventHandler<MouseEvent> handleOperation = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
-            nextPosition = new Position(GridPane.getRowIndex((Node) mouseEvent.getSource()) - 1, GridPane.getColumnIndex(((Node) mouseEvent.getSource())) - 1);
+            nextPosition = new Position((GridPane.getRowIndex((Node) mouseEvent.getSource()) - 1) / 2, (GridPane.getColumnIndex(((Node) mouseEvent.getSource())) - 1) / 2);
             nextActionFSM();
         }
     };
@@ -149,7 +155,7 @@ public class GameBoardController {
             GridPane.setValignment(choiceImage, VPos.CENTER);
             choiceImage.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
 
-            boardPane.add(choiceImage, 1 + p.getColumn(), 1 + p.getRow());
+            boardPane.add(choiceImage, 1 + 2 * p.getColumn(), 1 + 2 * p.getRow());
 
 
         }
@@ -268,7 +274,7 @@ public class GameBoardController {
                 //first of all, i must restore the initial board situation
 
                 for (Node n : boardPane.getChildren()) {
-                    if (positionValid.contains(new Position(GridPane.getRowIndex(n) - 1, GridPane.getColumnIndex(n) - 1)) && ((ImageView) n).getImage() == isSelectionImage) {
+                    if (positionValid.contains(new Position((GridPane.getRowIndex(n) - 1) / 2, (GridPane.getColumnIndex(n) - 1) / 2)) && ((ImageView) n).getImage() == isSelectionImage) {
                         n.removeEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
                         tbr.add(n);
                     }
@@ -284,7 +290,7 @@ public class GameBoardController {
     public void changedBoard(ArrayList<Cell> newCells) {
         //must reset all the new cells, and and recreate these cells with the new informations
         for (Cell c : newCells) {
-            boardPane.getChildren().removeIf(node -> GridPane.getRowIndex(node) == c.getRow() && GridPane.getColumnIndex(node) == c.getColumn());
+            boardPane.getChildren().removeIf(node -> GridPane.getRowIndex(node) == 1 + 2 * c.getRow() && GridPane.getColumnIndex(node) == 1 + 2 * c.getColumn());
             //removed all nodes, i must replace them with the new informations
             Image levelToBeCharged = null;
 
@@ -309,7 +315,7 @@ public class GameBoardController {
                 building.fitWidthProperty().bind(boardPane.widthProperty().divide(7));
                 GridPane.setValignment(building, VPos.CENTER);
                 GridPane.setHalignment(building, HPos.CENTER);
-                boardPane.add(building, 1 + c.getColumn(), 1 + c.getRow());
+                boardPane.add(building, 1 + 2 * c.getColumn(), 1 + 2 * c.getRow());
             }
 
             if (c.isDomed()) {
@@ -320,7 +326,7 @@ public class GameBoardController {
                 dome.fitWidthProperty().bind(boardPane.widthProperty().divide(7));
                 GridPane.setValignment(dome, VPos.CENTER);
                 GridPane.setHalignment(dome, HPos.CENTER);
-                boardPane.add(dome, 1 + c.getColumn(), 1 + c.getRow());
+                boardPane.add(dome, 1 + 2 * c.getColumn(), 1 + 2 * c.getRow());
             }
 
             if (c.getPlayer() != null) {
@@ -346,7 +352,7 @@ public class GameBoardController {
                     toBeAdded.setVisible(true);
                     GridPane.setValignment(toBeAdded, VPos.CENTER);
                     GridPane.setHalignment(toBeAdded, HPos.CENTER);
-                    boardPane.add(toBeAdded, 1 + c.getColumn(), 1 + c.getRow());
+                    boardPane.add(toBeAdded, 1 + 2 * c.getColumn(), 1 + 2 * c.getRow());
                 }
             }
         }
@@ -360,9 +366,12 @@ public class GameBoardController {
         return null;
     }
 
-    public void resizeElements(double widht, double depth) {
-        boardPane.setPrefWidth(0.390625 * depth);
-        boardPane.setPrefHeight(0.7 * widht);
+    public void resizeElements(double height, double width) {
+
+        double scaleH = (600.0) / (720.0);
+        double scaleW = 600.0 / 1280.0;
+        boardPane.setPrefHeight(scaleH * height);
+        boardPane.setPrefWidth(scaleW * width);
     }
 
     public void initialize() {
@@ -374,6 +383,7 @@ public class GameBoardController {
         playersName.add(secondPlayerName);
         playersName.add(thirdPlayerName);
         boardPane.setAlignment(Pos.CENTER);
+
 
     }
 
