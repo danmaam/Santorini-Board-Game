@@ -180,7 +180,7 @@
                                 vgrow="SOMETIMES"/>
             </rowConstraints>
         </GridPane>
-        <Pane fx:id="multifunctionalPane" prefHeight="528.0" prefWidth="344.0" AnchorPane.leftAnchor="900.0"
-              AnchorPane.topAnchor="200.0"/>
+        <Pane fx:id="multifunctionalPane" prefHeight="528.0" prefWidth="344.0" AnchorPane.bottomAnchor="100.0"
+              AnchorPane.leftAnchor="900.0" AnchorPane.topAnchor="200.0"/>
     </children>
 </AnchorPane>
