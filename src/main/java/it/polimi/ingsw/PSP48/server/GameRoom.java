@@ -12,9 +12,9 @@ import java.util.Calendar;
  * A game room. It contains the Controller and the Model of the current game.
  */
 public class GameRoom {
-    private Model model;
-    private GameController controller;
-    private int gameRoomID;
+    private final Model model;
+    private final GameController controller;
+    private final int gameRoomID;
 
     public GameRoom(int playersNumber, boolean AllowedDivinities, int ID) {
         model = new Model(playersNumber, AllowedDivinities);
@@ -74,9 +74,9 @@ public class GameRoom {
     }
 
     public void notifyAllPlayersOfLoser(String loser) {
-        controller.getPlayerView(model.getCurrentPlayer().getName()).endgame("You lose cause you won't be able to end the turn");
+        controller.getPlayerView(loser).endgame("You lose cause you won't be able to end the turn");
         for (Player p : model.getPlayersInGame()) {
-            if (!p.getName().equals(model.getCurrentPlayer().getName()))
+            if (!p.getName().equals(loser))
                 controller.getPlayerView(p.getName()).endgame("You win cause " + model.getCurrentPlayer().getName() + "can't end his turn");
         }
         for (Player p : model.getPlayersInGame()) {

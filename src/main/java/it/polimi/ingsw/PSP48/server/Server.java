@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class Server {
-    private static ArrayList<String> playersConnectedToTheGame = new ArrayList<>();
+    private static final ArrayList<String> playersConnectedToTheGame = new ArrayList<>();
     public final static int TCP_PORT = 7777;
-    private static ArrayList<GameRoom> roomsOnTheServer = new ArrayList<>();
+    private static final ArrayList<GameRoom> roomsOnTheServer = new ArrayList<>();
     private static int nextRoomID = 0;
 
     public static void main(String[] args) {
@@ -57,7 +57,7 @@ public class Server {
     }
 
     public synchronized static void removeNickname(String s) {
-        if (playersConnectedToTheGame.contains(s)) playersConnectedToTheGame.remove(s);
+        playersConnectedToTheGame.remove(s);
     }
 
 

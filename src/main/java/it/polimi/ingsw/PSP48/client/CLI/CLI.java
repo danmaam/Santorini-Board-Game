@@ -545,11 +545,12 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver
      */
     @Override
     public void endgame(String messageOfEndGame) {
-        System.out.println(messageOfEndGame);
-
-        cA.shutDown();
-        cI.shutdown();
-        threadExecutor.shutdown();
+        threadExecutor.submit(() -> {
+            System.out.println(messageOfEndGame);
+            threadExecutor.shutdown();
+            cA.shutDown();
+            cI.shutdown();
+        });
 
     }
 

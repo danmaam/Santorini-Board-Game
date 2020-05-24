@@ -302,21 +302,18 @@ public class GameController implements ViewObserver {
      */
     public void postBuild() {
         boolean win = false;
+        String playerWithChronus = null;
         for (Player p : model.getPlayersInGame()) {
             if (p.getDivinity().getName().equals("Chronus")) {
                 win = p.getDivinity().winCondition(model);
+                playerWithChronus = p.getName();
                 break;
             }
         }
 
-        if (win) {
-            for (Player p : model.getPlayersInGame()) {
-                if (p.getDivinity().getName().equals("Chronus")) getPlayerView(p.getName()).printMessage("You won!");
-                else getPlayerView(p.getName()).printMessage("You lost. Anlaki :(");
-            }
-            nextAction = (GameController::gameEnd);
-        }
-        this.nextAction();
+        if (win && playerWithChronus != null) {
+            Server.destroyGameRoom(roomID, playerWithChronus, EndReason.win);
+        } else this.nextAction();
     }
 
     /**
