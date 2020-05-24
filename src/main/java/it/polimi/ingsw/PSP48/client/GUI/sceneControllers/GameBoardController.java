@@ -68,6 +68,7 @@ public class GameBoardController {
     @FXML
     private BorderPane mainBorderPane;
 
+
     private final ArrayList<ImageView> playersDivinity = new ArrayList<>();
     private final ArrayList<Text> playersName = new ArrayList<>();
 
@@ -111,6 +112,7 @@ public class GameBoardController {
             }
             gameMessage.setText("Select your divinity in the selector at your right.");
             multifunctionalPane.getChildren().add(selectionPane);
+
 
         }
     }
@@ -372,6 +374,16 @@ public class GameBoardController {
         double scaleW = 600.0 / 1280.0;
         boardPane.setPrefHeight(scaleH * height);
         boardPane.setPrefWidth(scaleW * width);
+
+        for (Node n : multifunctionalPane.getChildren()) {
+            ((Pane) n).setPrefHeight(528.0 / 720.0 * height);
+            ((Pane) n).setPrefWidth(344.0 / 1280.0 * width);
+        }
+
+
+        playersPane.setPrefHeight(650.0 / 720.0 * height);
+        playersPane.setPrefWidth(501.0 / 1280.0 * width);
+
     }
 
     public void initialize() {
