@@ -1,0 +1,707 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GameBoardController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP48.client.GUI.sceneControllers</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GameBoardController (it.polimi.ingsw.PSP48.client.GUI.sceneControllers)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameBoardController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 30)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 253)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GameBoardController$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">GameBoardController$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">GameBoardController$FSM_STATUS</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 34)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 259)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.client.GUI.sceneControllers;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP48.WorkerValidCells;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP48.client.GUI.GUI;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP48.server.MoveCoordinates;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Cell;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Position;
+<i>9</i>&nbsp;import javafx.concurrent.Worker;
+<i>10</i>&nbsp;import javafx.event.EventHandler;
+<i>11</i>&nbsp;import javafx.fxml.FXML;
+<i>12</i>&nbsp;import javafx.fxml.FXMLLoader;
+<i>13</i>&nbsp;import javafx.geometry.HPos;
+<i>14</i>&nbsp;import javafx.geometry.Pos;
+<i>15</i>&nbsp;import javafx.geometry.VPos;
+<i>16</i>&nbsp;import javafx.scene.Node;
+<i>17</i>&nbsp;import javafx.scene.image.Image;
+<i>18</i>&nbsp;import javafx.scene.image.ImageView;
+<i>19</i>&nbsp;import javafx.scene.input.MouseEvent;
+<i>20</i>&nbsp;import javafx.scene.layout.BorderPane;
+<i>21</i>&nbsp;import javafx.scene.layout.GridPane;
+<i>22</i>&nbsp;import javafx.scene.layout.Pane;
+<i>23</i>&nbsp;import javafx.scene.paint.Color;
+<i>24</i>&nbsp;import javafx.scene.text.Text;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;import java.math.*;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;import java.io.IOException;
+<i>29</i>&nbsp;import java.lang.reflect.Array;
+<i>30</i>&nbsp;import java.util.ArrayList;
+<i>31</i>&nbsp;
+<b class="nc"><i>32</i>&nbsp;public class GameBoardController {</b>
+<b class="nc"><i>33</i>&nbsp;    public GameBoardController(GUI view) {</b>
+<b class="nc"><i>34</i>&nbsp;        this.view = view;</b>
+<i>35</i>&nbsp;    }
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    private final GUI view;
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    @FXML
+<i>40</i>&nbsp;    private Text gameMessage;
+<i>41</i>&nbsp;    @FXML
+<i>42</i>&nbsp;    private GridPane boardPane;
+<i>43</i>&nbsp;    @FXML
+<i>44</i>&nbsp;    private GridPane playersPane;
+<i>45</i>&nbsp;    @FXML
+<i>46</i>&nbsp;    private Pane multifunctionalPane;
+<i>47</i>&nbsp;    @FXML
+<i>48</i>&nbsp;    private ImageView thirdPlayerCard;
+<i>49</i>&nbsp;    @FXML
+<i>50</i>&nbsp;    private ImageView thirdPlayerBg;
+<i>51</i>&nbsp;    @FXML
+<i>52</i>&nbsp;    private Pane leftPane;
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    @FXML
+<i>56</i>&nbsp;    private Text firstPlayerName;
+<i>57</i>&nbsp;    @FXML
+<i>58</i>&nbsp;    private Text secondPlayerName;
+<i>59</i>&nbsp;    @FXML
+<i>60</i>&nbsp;    private Text thirdPlayerName;
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    @FXML
+<i>63</i>&nbsp;    private ImageView firstPlayerDivinity;
+<i>64</i>&nbsp;    @FXML
+<i>65</i>&nbsp;    private ImageView secondPlayerDivinity;
+<i>66</i>&nbsp;    @FXML
+<i>67</i>&nbsp;    private ImageView thirdPlayerDivinity;
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;    @FXML
+<i>70</i>&nbsp;    private BorderPane mainBorderPane;
+<i>71</i>&nbsp;
+<b class="nc"><i>72</i>&nbsp;    private final ArrayList&lt;ImageView&gt; playersDivinity = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>73</i>&nbsp;    private final ArrayList&lt;Text&gt; playersName = new ArrayList&lt;&gt;();</b>
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;
+<b class="nc"><i>76</i>&nbsp;    private enum FSM_STATUS {</b>
+<b class="nc"><i>77</i>&nbsp;        positioning, worker_selection_move, worker_selection_build, sendmove, sendbuild</b>
+<i>78</i>&nbsp;    }
+<i>79</i>&nbsp;
+<b class="nc"><i>80</i>&nbsp;    private Position nextPosition = null;</b>
+<b class="nc"><i>81</i>&nbsp;    private Position workerPosition=null;</b>
+<i>82</i>&nbsp;    private FSM_STATUS nextState;
+<i>83</i>&nbsp;    private ArrayList&lt;Position&gt; positionValid;
+<i>84</i>&nbsp;    private ArrayList&lt;WorkerValidCells&gt; moveValid;
+<i>85</i>&nbsp;    private ArrayList&lt;WorkerValidCells&gt; buildValid;
+<i>86</i>&nbsp;    private ArrayList&lt;WorkerValidCells&gt; domeValid;
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    private ArrayList&lt;String&gt; playerList;
+<i>89</i>&nbsp;
+<b class="nc"><i>90</i>&nbsp;    private final Image isSelectionImage = new Image(&quot;santorini_risorse-grafiche-2/Texture2D/Whirpool.png&quot;);</b>
+<b class="nc"><i>91</i>&nbsp;    private final Image workerChoiceImage = new Image (&quot;santorini_risorse-grafiche-2/Texture2D/cloud_puff1.png&quot;);</b>
+<i>92</i>&nbsp;
+<b class="nc"><i>93</i>&nbsp;    private final EventHandler&lt;MouseEvent&gt; handleOperation = new EventHandler&lt;MouseEvent&gt;() {</b>
+<i>94</i>&nbsp;        @Override
+<i>95</i>&nbsp;        public void handle(MouseEvent mouseEvent) {
+<b class="nc"><i>96</i>&nbsp;            nextPosition = new Position((GridPane.getRowIndex((Node) mouseEvent.getSource()) - 1) / 2, (GridPane.getColumnIndex(((Node) mouseEvent.getSource())) - 1) / 2);</b>
+<b class="nc"><i>97</i>&nbsp;            nextActionFSM();</b>
+<i>98</i>&nbsp;        }
+<i>99</i>&nbsp;    };
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;    public void requestDivinitySelection(ArrayList&lt;DivinitiesWithDescription&gt; availableDivinities) {
+<b class="nc"><i>103</i>&nbsp;        final FXMLLoader divinitiesSelectorLoader = new FXMLLoader(getClass().getResource(&quot;/divinitySelection.fxml&quot;));</b>
+<b class="nc"><i>104</i>&nbsp;        final GameBoardController thisController = this;</b>
+<b class="nc"><i>105</i>&nbsp;        if (availableDivinities.size() == 1)</b>
+<b class="nc"><i>106</i>&nbsp;            view.notifyObserver((x) -&gt; x.registerPlayerDivinity(availableDivinities.get(0).getName()));</b>
+<i>107</i>&nbsp;        else {
+<b class="nc"><i>108</i>&nbsp;            Pane selectionPane = null;</b>
+<b class="nc"><i>109</i>&nbsp;            divinitiesSelectorLoader.setController(new DivinityChoiceController(availableDivinities, 1, thisController));</b>
+<i>110</i>&nbsp;            try {
+<b class="nc"><i>111</i>&nbsp;                selectionPane = divinitiesSelectorLoader.load();</b>
+<b class="nc"><i>112</i>&nbsp;            } catch (IOException e) {</b>
+<b class="nc"><i>113</i>&nbsp;                e.printStackTrace();</b>
+<b class="nc"><i>114</i>&nbsp;            }</b>
+<b class="nc"><i>115</i>&nbsp;            gameMessage.setText(&quot;Select your divinity in the selector at your right.&quot;);</b>
+<b class="nc"><i>116</i>&nbsp;            multifunctionalPane.getChildren().add(selectionPane);</b>
+<i>117</i>&nbsp;
+<i>118</i>&nbsp;        }
+<i>119</i>&nbsp;    }
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    public void sendChallengerDivinities(ArrayList&lt;String&gt; divinities) {
+<b class="nc"><i>122</i>&nbsp;        view.notifyObserver((x) -&gt; x.selectAvailableDivinities(divinities));</b>
+<b class="nc"><i>123</i>&nbsp;        multifunctionalPane.getChildren().clear();</b>
+<i>124</i>&nbsp;    }
+<i>125</i>&nbsp;
+<i>126</i>&nbsp;    public void sendPlayerDivinity(String divinity) {
+<b class="nc"><i>127</i>&nbsp;        view.notifyObserver((x) -&gt; x.registerPlayerDivinity(divinity));</b>
+<b class="nc"><i>128</i>&nbsp;        multifunctionalPane.getChildren().clear();</b>
+<i>129</i>&nbsp;    }
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;    public void sendFirstPlayerChoice(String playerName) {
+<b class="nc"><i>132</i>&nbsp;        view.notifyObserver((x) -&gt; x.selectFirstPlayer(playerName));</b>
+<b class="nc"><i>133</i>&nbsp;        multifunctionalPane.getChildren().clear();</b>
+<i>134</i>&nbsp;    }
+<i>135</i>&nbsp;
+<i>136</i>&nbsp;    /**
+<i>137</i>&nbsp;     * method implementing the positioning of the workers on the board
+<i>138</i>&nbsp;     * @param validCells is the list of valid positions for the placing of the workers
+<i>139</i>&nbsp;     */
+<i>140</i>&nbsp;    public void requestInitialPositioning(ArrayList&lt;Position&gt; validCells) {
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;        //we need to show the choice message to the player
+<b class="nc"><i>143</i>&nbsp;        gameMessage.setText(&quot;Click on the cell where you want to position&quot;);</b>
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;        //we need to associate the image of a highlighted cell to each node of the grid pane
+<i>146</i>&nbsp;
+<b class="nc"><i>147</i>&nbsp;        nextState = FSM_STATUS.positioning;</b>
+<i>148</i>&nbsp;
+<b class="nc"><i>149</i>&nbsp;        this.positionValid = validCells;</b>
+<b class="nc"><i>150</i>&nbsp;        boardPane.setVisible(true);</b>
+<i>151</i>&nbsp;
+<b class="nc"><i>152</i>&nbsp;        for (Position p : validCells) {</b>
+<b class="nc"><i>153</i>&nbsp;            ImageView choiceImage = new ImageView(isSelectionImage);</b>
+<b class="nc"><i>154</i>&nbsp;            choiceImage.setOpacity(0.4);</b>
+<b class="nc"><i>155</i>&nbsp;            choiceImage.setFitWidth(95);</b>
+<b class="nc"><i>156</i>&nbsp;            choiceImage.setFitHeight(95);</b>
+<i>157</i>&nbsp;
+<b class="nc"><i>158</i>&nbsp;            choiceImage.fitHeightProperty().bind(boardPane.heightProperty().divide(7));</b>
+<b class="nc"><i>159</i>&nbsp;            choiceImage.fitWidthProperty().bind(boardPane.widthProperty().divide(7));</b>
+<i>160</i>&nbsp;
+<b class="nc"><i>161</i>&nbsp;            GridPane.setHalignment(choiceImage, HPos.CENTER);</b>
+<b class="nc"><i>162</i>&nbsp;            GridPane.setValignment(choiceImage, VPos.CENTER);</b>
+<b class="nc"><i>163</i>&nbsp;            choiceImage.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);</b>
+<i>164</i>&nbsp;
+<b class="nc"><i>165</i>&nbsp;            boardPane.add(choiceImage, 1 + 2 * p.getColumn(), 1 + 2 * p.getRow());</b>
+<i>166</i>&nbsp;
+<i>167</i>&nbsp;
+<b class="nc"><i>168</i>&nbsp;        }</b>
+<i>169</i>&nbsp;    }
+<i>170</i>&nbsp;
+<i>171</i>&nbsp;    /**
+<i>172</i>&nbsp;     * method called by the initial positioning scene controller, to notify the server about the player choice
+<i>173</i>&nbsp;     *
+<i>174</i>&nbsp;     * @param initialPosition is the position chosen by the player
+<i>175</i>&nbsp;     */
+<i>176</i>&nbsp;    public void sendInitialPositioningChoice(Position initialPosition)
+<i>177</i>&nbsp;    {
+<b class="nc"><i>178</i>&nbsp;        view.notifyObserver(x -&gt; x.putWorkerOnTable(initialPosition));</b>
+<i>179</i>&nbsp;    }
+<i>180</i>&nbsp;
+<i>181</i>&nbsp;    /**
+<i>182</i>&nbsp;     * method implementing the move action of a player during the match
+<i>183</i>&nbsp;     * @param validCellsForMove is the list of workers that can be moved, together with the positions where they can be moved
+<i>184</i>&nbsp;     */
+<i>185</i>&nbsp;    public void requestMove(ArrayList&lt;WorkerValidCells&gt; validCellsForMove)
+<i>186</i>&nbsp;    {
+<i>187</i>&nbsp;        Node node;
+<i>188</i>&nbsp;
+<b class="nc"><i>189</i>&nbsp;        this.moveValid=validCellsForMove; //we need to copy the input list in order to have it in all of the gui states</b>
+<b class="nc"><i>190</i>&nbsp;        this.nextState=FSM_STATUS.worker_selection_move; //we update the status of the gui</b>
+<i>191</i>&nbsp;
+<b class="nc"><i>192</i>&nbsp;        if (validCellsForMove.size()==1) //we only have one worker so we just need to select the cell where the player wants to move</b>
+<i>193</i>&nbsp;        {
+<b class="nc"><i>194</i>&nbsp;            this.postWorkerChoiceMove(validCellsForMove.get(0));</b>
+<i>195</i>&nbsp;        }
+<i>196</i>&nbsp;        else //the player needs to choose the worker to move
+<i>197</i>&nbsp;        {
+<b class="nc"><i>198</i>&nbsp;            gameMessage.setText(&quot;Click on the worker you want to move&quot;);</b>
+<i>199</i>&nbsp;
+<b class="nc"><i>200</i>&nbsp;            boardPane.setVisible(true);</b>
+<b class="nc"><i>201</i>&nbsp;            for (WorkerValidCells w : validCellsForMove)</b>
+<i>202</i>&nbsp;            {
+<i>203</i>&nbsp;                //we need to assign a mouse clicked event and a highlight to the worker, so he can be chosen
+<b class="nc"><i>204</i>&nbsp;                node=getNodeFromGridPane(boardPane, 1+2*w.getwC(), 1+2*w.getwR(), true);</b>
+<b class="nc"><i>205</i>&nbsp;                node.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);</b>
+<b class="nc"><i>206</i>&nbsp;                ImageView workerImage= new ImageView(workerChoiceImage);</b>
+<b class="nc"><i>207</i>&nbsp;                workerImage.setOpacity(0.4);</b>
+<b class="nc"><i>208</i>&nbsp;                boardPane.add(workerImage, 1+2*w.getwC(), 1+2*w.getwR());</b>
+<b class="nc"><i>209</i>&nbsp;                for (Position p : w.getValidPositions())</b>
+<i>210</i>&nbsp;                {
+<i>211</i>&nbsp;                    //if the position hasn&#39;t already been highlighted, we do this operation
+<i>212</i>&nbsp;                    //if the cell has already been highlighted we don&#39;t need to do anything
+<b class="nc"><i>213</i>&nbsp;                    if (!isAlreadyHighlighted(validCellsForMove, p, w.getwR(), w.getwC()))</b>
+<i>214</i>&nbsp;                    {
+<b class="nc"><i>215</i>&nbsp;                        ImageView cellChoice= new ImageView(isSelectionImage);</b>
+<b class="nc"><i>216</i>&nbsp;                        cellChoice.setOpacity(0.4);</b>
+<b class="nc"><i>217</i>&nbsp;                        cellChoice.setFitWidth(95);</b>
+<b class="nc"><i>218</i>&nbsp;                        cellChoice.setFitHeight(95);</b>
+<b class="nc"><i>219</i>&nbsp;                        cellChoice.fitHeightProperty().bind(boardPane.heightProperty().divide(7));</b>
+<b class="nc"><i>220</i>&nbsp;                        cellChoice.fitWidthProperty().bind(boardPane.widthProperty().divide(7));</b>
+<b class="nc"><i>221</i>&nbsp;                        GridPane.setHalignment(cellChoice, HPos.CENTER);</b>
+<b class="nc"><i>222</i>&nbsp;                        GridPane.setValignment(cellChoice, VPos.CENTER);</b>
+<b class="nc"><i>223</i>&nbsp;                        boardPane.add(cellChoice, 1+2*p.getColumn(), 1+2*p.getRow());</b>
+<i>224</i>&nbsp;                    }
+<b class="nc"><i>225</i>&nbsp;                }</b>
+<b class="nc"><i>226</i>&nbsp;            }</b>
+<i>227</i>&nbsp;        }
+<i>228</i>&nbsp;    }
+<i>229</i>&nbsp;
+<i>230</i>&nbsp;    /**
+<i>231</i>&nbsp;     * support method implementing the part of the move action where the player chooses the cell where to move
+<i>232</i>&nbsp;     * @param chosenWorker is the worker selected to move, with the valid cells where he can be put on
+<i>233</i>&nbsp;     */
+<i>234</i>&nbsp;    public void postWorkerChoiceMove (WorkerValidCells chosenWorker)
+<i>235</i>&nbsp;    {
+<b class="nc"><i>236</i>&nbsp;        this.nextState=FSM_STATUS.sendmove;</b>
+<b class="nc"><i>237</i>&nbsp;        workerPosition= new Position(chosenWorker.getwR(), chosenWorker.getwC());</b>
+<i>238</i>&nbsp;
+<b class="nc"><i>239</i>&nbsp;        gameMessage.setText(&quot;Click on the cell where you want to move your worker&quot;);</b>
+<i>240</i>&nbsp;
+<b class="nc"><i>241</i>&nbsp;        boardPane.setVisible(true);</b>
+<b class="nc"><i>242</i>&nbsp;        for (Position p : chosenWorker.getValidPositions())</b>
+<i>243</i>&nbsp;        {
+<b class="nc"><i>244</i>&nbsp;            ImageView highlight= new ImageView(isSelectionImage);</b>
+<b class="nc"><i>245</i>&nbsp;            highlight.setOpacity(0.4);</b>
+<b class="nc"><i>246</i>&nbsp;            highlight.setFitWidth(95);</b>
+<b class="nc"><i>247</i>&nbsp;            highlight.setFitHeight(95);</b>
+<b class="nc"><i>248</i>&nbsp;            highlight.fitHeightProperty().bind(boardPane.heightProperty().divide(7));</b>
+<b class="nc"><i>249</i>&nbsp;            highlight.fitWidthProperty().bind(boardPane.widthProperty().divide(7));</b>
+<b class="nc"><i>250</i>&nbsp;            GridPane.setHalignment(highlight, HPos.CENTER);</b>
+<b class="nc"><i>251</i>&nbsp;            GridPane.setValignment(highlight, VPos.CENTER);</b>
+<b class="nc"><i>252</i>&nbsp;            highlight.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);</b>
+<b class="nc"><i>253</i>&nbsp;            boardPane.add(highlight, 1+2*p.getColumn(), 1+2*p.getRow());</b>
+<b class="nc"><i>254</i>&nbsp;        }</b>
+<i>255</i>&nbsp;    }
+<i>256</i>&nbsp;
+<i>257</i>&nbsp;    /**
+<i>258</i>&nbsp;     * method that notifies the observers about the worker and the cell chosen to move
+<i>259</i>&nbsp;     * @param moveChoiceCoordinates contains the coordinates of the worker and of the cell
+<i>260</i>&nbsp;     */
+<i>261</i>&nbsp;    public void sendMoveChoice(MoveCoordinates moveChoiceCoordinates)
+<i>262</i>&nbsp;    {
+<b class="nc"><i>263</i>&nbsp;        view.notifyObserver(x-&gt;x.move(moveChoiceCoordinates));</b>
+<i>264</i>&nbsp;    }
+<i>265</i>&nbsp;
+<i>266</i>&nbsp;    /**
+<i>267</i>&nbsp;     * support method to check if a certain position on the board has already been highlighted
+<i>268</i>&nbsp;     * @param listToCheck is the full list of workers with their valid positions
+<i>269</i>&nbsp;     * @param posToCheck is the position we need to check before highlighting it
+<i>270</i>&nbsp;     * @param workerRow is the row of the worker who has the position we are checking in his list
+<i>271</i>&nbsp;     * @param workerColumn is the column of the worker who has the position we are checking in his list
+<i>272</i>&nbsp;     * @return a boolean which is true if the position has already been highlighted
+<i>273</i>&nbsp;     */
+<i>274</i>&nbsp;    public boolean isAlreadyHighlighted(ArrayList&lt;WorkerValidCells&gt; listToCheck, Position posToCheck, int workerRow, int workerColumn)
+<i>275</i>&nbsp;    {
+<b class="nc"><i>276</i>&nbsp;        boolean found=false;</b>
+<b class="nc"><i>277</i>&nbsp;        boolean highlighted=false;</b>
+<i>278</i>&nbsp;
+<b class="nc"><i>279</i>&nbsp;        for (int i = 0; i&lt;listToCheck.size() &amp;&amp; !found; i++)</b>
+<i>280</i>&nbsp;        {
+<b class="nc"><i>281</i>&nbsp;            if (listToCheck.get(i).getwR()==workerRow &amp;&amp; listToCheck.get(i).getwC()==workerColumn)</b>
+<i>282</i>&nbsp;            {
+<b class="nc"><i>283</i>&nbsp;                found=true;</b>
+<i>284</i>&nbsp;            }
+<i>285</i>&nbsp;            else
+<i>286</i>&nbsp;            {
+<b class="nc"><i>287</i>&nbsp;                if (listToCheck.get(i).getValidPositions().contains(posToCheck))</b>
+<i>288</i>&nbsp;                {
+<b class="nc"><i>289</i>&nbsp;                    highlighted=true;</b>
+<b class="nc"><i>290</i>&nbsp;                    break;</b>
+<i>291</i>&nbsp;                }
+<i>292</i>&nbsp;            }
+<i>293</i>&nbsp;        }
+<i>294</i>&nbsp;
+<b class="nc"><i>295</i>&nbsp;        return (highlighted);</b>
+<i>296</i>&nbsp;    }
+<i>297</i>&nbsp;
+<i>298</i>&nbsp;    public void changedPlayerList(ArrayList&lt;String&gt; newPlayerList) {
+<i>299</i>&nbsp;
+<b class="nc"><i>300</i>&nbsp;        playerList = newPlayerList;</b>
+<i>301</i>&nbsp;
+<b class="nc"><i>302</i>&nbsp;        System.out.println(&quot;Changed player list run later&quot;);</b>
+<b class="nc"><i>303</i>&nbsp;        System.out.println(&quot;updating players list&quot;);</b>
+<b class="nc"><i>304</i>&nbsp;        if (view.getPlayersInGame() == 2) {</b>
+<b class="nc"><i>305</i>&nbsp;            thirdPlayerBg.setVisible(false);</b>
+<b class="nc"><i>306</i>&nbsp;            thirdPlayerCard.setVisible(false);</b>
+<b class="nc"><i>307</i>&nbsp;            thirdPlayerName.setVisible(false);</b>
+<i>308</i>&nbsp;        }
+<i>309</i>&nbsp;        //first of all, I need to reset all text fields and images
+<b class="nc"><i>310</i>&nbsp;        playersName.forEach(x -&gt; x.setText(&quot;Waiting for players&quot;));</b>
+<b class="nc"><i>311</i>&nbsp;        playersDivinity.forEach(x -&gt; x.setImage(null));</b>
+<i>312</i>&nbsp;
+<b class="nc"><i>313</i>&nbsp;        firstPlayerName.setText(&quot;Waiting for Players&quot;);</b>
+<b class="nc"><i>314</i>&nbsp;        secondPlayerName.setText(&quot;Waiting for Players&quot;);</b>
+<b class="nc"><i>315</i>&nbsp;        thirdPlayerName.setText(&quot;Waiting for Players&quot;);</b>
+<i>316</i>&nbsp;
+<i>317</i>&nbsp;
+<b class="nc"><i>318</i>&nbsp;        int i = 0;</b>
+<b class="nc"><i>319</i>&nbsp;        for (String s : newPlayerList) {</b>
+<i>320</i>&nbsp;            //first I need to parse the arrived strings
+<b class="nc"><i>321</i>&nbsp;            String name = s.split(&quot;\\.&quot;)[0];</b>
+<b class="nc"><i>322</i>&nbsp;            String colour = s.split(&quot;\\.&quot;)[1];</b>
+<b class="nc"><i>323</i>&nbsp;            String divinity = s.split(&quot;\\.&quot;)[2];</b>
+<i>324</i>&nbsp;            //now i need to set divinity image
+<b class="nc"><i>325</i>&nbsp;            ImageView currentDivinity = playersDivinity.get(i);</b>
+<b class="nc"><i>326</i>&nbsp;            Text currentName = playersName.get(i);</b>
+<b class="nc"><i>327</i>&nbsp;            if (!divinity.equals(&quot;Divinity Not Chosen&quot;) &amp;&amp; !divinity.equals(&quot;Base Divinity&quot;)) {</b>
+<b class="nc"><i>328</i>&nbsp;                currentDivinity.setImage(new Image(&quot;/santorini_risorse-grafiche-2/Sprite/Cards/Full/&quot; + divinity + &quot;.png&quot;));</b>
+<i>329</i>&nbsp;            }
+<b class="nc"><i>330</i>&nbsp;            currentName.setText(name + &quot;\n&quot; + divinity);</b>
+<b class="nc"><i>331</i>&nbsp;            switch (colour) {</b>
+<i>332</i>&nbsp;                case &quot;GREY&quot;:
+<b class="nc"><i>333</i>&nbsp;                    currentName.setFill(Color.GREY);</b>
+<b class="nc"><i>334</i>&nbsp;                    break;</b>
+<i>335</i>&nbsp;                case &quot;BLUE&quot;:
+<b class="nc"><i>336</i>&nbsp;                    currentName.setFill(Color.BLUE);</b>
+<b class="nc"><i>337</i>&nbsp;                    break;</b>
+<i>338</i>&nbsp;                case &quot;WHITE&quot;:
+<b class="nc"><i>339</i>&nbsp;                    currentName.setFill(Color.WHITE);</b>
+<i>340</i>&nbsp;                    break;
+<i>341</i>&nbsp;            }
+<b class="nc"><i>342</i>&nbsp;            i++;</b>
+<b class="nc"><i>343</i>&nbsp;        }</b>
+<i>344</i>&nbsp;
+<i>345</i>&nbsp;
+<i>346</i>&nbsp;    }
+<i>347</i>&nbsp;
+<i>348</i>&nbsp;    private Node getNodeFromGridPane(GridPane gridPane, int col, int row, boolean image) {
+<b class="nc"><i>349</i>&nbsp;        for (Node node : gridPane.getChildren()) {</b>
+<b class="nc"><i>350</i>&nbsp;            if (GridPane.getColumnIndex(node) == col &amp;&amp; GridPane.getRowIndex(node) == row) {</b>
+<b class="nc"><i>351</i>&nbsp;                if (image &amp;&amp; node instanceof ImageView) return node;</b>
+<b class="nc"><i>352</i>&nbsp;                else if (node instanceof Text) return node;</b>
+<i>353</i>&nbsp;            }
+<b class="nc"><i>354</i>&nbsp;        }</b>
+<b class="nc"><i>355</i>&nbsp;        return null;</b>
+<i>356</i>&nbsp;    }
+<i>357</i>&nbsp;
+<i>358</i>&nbsp;    public void printMessage(String s) {
+<b class="nc"><i>359</i>&nbsp;        gameMessage.setText(s);</b>
+<i>360</i>&nbsp;    }
+<i>361</i>&nbsp;
+<i>362</i>&nbsp;    public void requestChallengerDivinitiesSelection(ArrayList&lt;DivinitiesWithDescription&gt; div) {
+<b class="nc"><i>363</i>&nbsp;        final FXMLLoader divinitiesSelectorLoader = new FXMLLoader(getClass().getResource(&quot;/divinitySelection.fxml&quot;));</b>
+<b class="nc"><i>364</i>&nbsp;        final GameBoardController thisController = this;</b>
+<i>365</i>&nbsp;
+<b class="nc"><i>366</i>&nbsp;        Pane selectionPane = null;</b>
+<b class="nc"><i>367</i>&nbsp;        divinitiesSelectorLoader.setController(new DivinityChoiceController(div, view.getPlayersInGame(), thisController));</b>
+<i>368</i>&nbsp;        try {
+<b class="nc"><i>369</i>&nbsp;            selectionPane = divinitiesSelectorLoader.load();</b>
+<b class="nc"><i>370</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>371</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>372</i>&nbsp;        }</b>
+<b class="nc"><i>373</i>&nbsp;        gameMessage.setText(&quot;Select divinities in game in the selector at your right.&quot;);</b>
+<b class="nc"><i>374</i>&nbsp;        multifunctionalPane.getChildren().add(selectionPane);</b>
+<i>375</i>&nbsp;
+<i>376</i>&nbsp;    }
+<i>377</i>&nbsp;
+<i>378</i>&nbsp;
+<i>379</i>&nbsp;    public void requestInitialPlayerSelection(ArrayList&lt;String&gt; players) {
+<b class="nc"><i>380</i>&nbsp;        final FXMLLoader divinitiesSelectorLoader = new FXMLLoader(getClass().getResource(&quot;/firstPlayerSelection.fxml&quot;));</b>
+<b class="nc"><i>381</i>&nbsp;        final GameBoardController thisController = this;</b>
+<b class="nc"><i>382</i>&nbsp;        Pane selectionPane = null;</b>
+<b class="nc"><i>383</i>&nbsp;        divinitiesSelectorLoader.setController(new FirstPlayerSelectionController(players.size(), thisController, players));</b>
+<i>384</i>&nbsp;        try {
+<b class="nc"><i>385</i>&nbsp;            selectionPane = divinitiesSelectorLoader.load();</b>
+<b class="nc"><i>386</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>387</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>388</i>&nbsp;        }</b>
+<b class="nc"><i>389</i>&nbsp;        gameMessage.setText(&quot;Select the first player&quot;);</b>
+<b class="nc"><i>390</i>&nbsp;        multifunctionalPane.getChildren().add(selectionPane);</b>
+<i>391</i>&nbsp;
+<i>392</i>&nbsp;    }
+<i>393</i>&nbsp;
+<i>394</i>&nbsp;    public void nextActionFSM()
+<i>395</i>&nbsp;    {
+<b class="nc"><i>396</i>&nbsp;        switch (nextState)</b>
+<i>397</i>&nbsp;        {
+<i>398</i>&nbsp;            case positioning:
+<b class="nc"><i>399</i>&nbsp;                ArrayList&lt;Node&gt; tbr = new ArrayList&lt;&gt;();</b>
+<i>400</i>&nbsp;                //first of all, i must restore the initial board situation
+<i>401</i>&nbsp;
+<b class="nc"><i>402</i>&nbsp;                for (Node n : boardPane.getChildren()) {</b>
+<b class="nc"><i>403</i>&nbsp;                    if (positionValid.contains(new Position((GridPane.getRowIndex(n) - 1) / 2, (GridPane.getColumnIndex(n) - 1) / 2)) &amp;&amp; ((ImageView) n).getImage() == isSelectionImage) {</b>
+<b class="nc"><i>404</i>&nbsp;                        n.removeEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);</b>
+<b class="nc"><i>405</i>&nbsp;                        tbr.add(n);</b>
+<i>406</i>&nbsp;                    }
+<b class="nc"><i>407</i>&nbsp;                }</b>
+<b class="nc"><i>408</i>&nbsp;                tbr.forEach(x -&gt; boardPane.getChildren().remove(x));</b>
+<i>409</i>&nbsp;                //restored the board situation, I must send the cell
+<b class="nc"><i>410</i>&nbsp;                sendInitialPositioningChoice(nextPosition);</b>
+<b class="nc"><i>411</i>&nbsp;                break;</b>
+<i>412</i>&nbsp;            case worker_selection_move:
+<i>413</i>&nbsp;                Node n;
+<i>414</i>&nbsp;                //we need to remove the mouse events from the worker cells and to remove the highlighting
+<b class="nc"><i>415</i>&nbsp;                for (WorkerValidCells w : moveValid)</b>
+<i>416</i>&nbsp;                {
+<b class="nc"><i>417</i>&nbsp;                    n=getNodeFromGridPane(boardPane, 1+2*w.getwC(), 1+2*w.getwR(), true);</b>
+<b class="nc"><i>418</i>&nbsp;                    n.removeEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);</b>
+<b class="nc"><i>419</i>&nbsp;                    boardPane.getChildren().remove(n);</b>
+<b class="nc"><i>420</i>&nbsp;                    for (Position p : w.getValidPositions())</b>
+<i>421</i>&nbsp;                    {
+<b class="nc"><i>422</i>&nbsp;                        n=getNodeFromGridPane(boardPane, 1+2*p.getColumn(), 1+2*p.getRow(), true);</b>
+<b class="nc"><i>423</i>&nbsp;                        boardPane.getChildren().remove(n);</b>
+<b class="nc"><i>424</i>&nbsp;                    }</b>
+<b class="nc"><i>425</i>&nbsp;                }</b>
+<i>426</i>&nbsp;                //after restoring the board we can proceed with the choice of the cell
+<b class="nc"><i>427</i>&nbsp;                WorkerValidCells workerToSend=null;</b>
+<b class="nc"><i>428</i>&nbsp;                for (WorkerValidCells w1 : moveValid)</b>
+<i>429</i>&nbsp;                {
+<b class="nc"><i>430</i>&nbsp;                    if (w1.getwR()==nextPosition.getRow() &amp;&amp; w1.getwC()==nextPosition.getColumn())</b>
+<i>431</i>&nbsp;                    {
+<b class="nc"><i>432</i>&nbsp;                        workerToSend=w1;</b>
+<b class="nc"><i>433</i>&nbsp;                        break;</b>
+<i>434</i>&nbsp;                    }
+<b class="nc"><i>435</i>&nbsp;                }</b>
+<b class="nc"><i>436</i>&nbsp;                postWorkerChoiceMove(workerToSend);</b>
+<i>437</i>&nbsp;            case sendmove:
+<i>438</i>&nbsp;                // we need to reset the board
+<b class="nc"><i>439</i>&nbsp;                WorkerValidCells temp=null;</b>
+<i>440</i>&nbsp;                Node tempNode;
+<b class="nc"><i>441</i>&nbsp;                for (WorkerValidCells w : moveValid)</b>
+<i>442</i>&nbsp;                {
+<b class="nc"><i>443</i>&nbsp;                    if (w.getwR()==workerPosition.getRow() &amp;&amp; w.getwC()==workerPosition.getColumn())</b>
+<i>444</i>&nbsp;                    {
+<b class="nc"><i>445</i>&nbsp;                        temp=w;</b>
+<b class="nc"><i>446</i>&nbsp;                        break;</b>
+<i>447</i>&nbsp;                    }
+<b class="nc"><i>448</i>&nbsp;                }</b>
+<b class="nc"><i>449</i>&nbsp;                for(Position p : temp.getValidPositions())</b>
+<i>450</i>&nbsp;                {
+<b class="nc"><i>451</i>&nbsp;                    getNodeFromGridPane(boardPane, 1+2*p.getColumn(), 1+2*p.getRow(), true).removeEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);</b>
+<b class="nc"><i>452</i>&nbsp;                    tempNode=getNodeFromGridPane(boardPane, 1+2*p.getColumn(), 1+2*p.getRow(), true);</b>
+<b class="nc"><i>453</i>&nbsp;                    boardPane.getChildren().remove(tempNode);</b>
+<b class="nc"><i>454</i>&nbsp;                }</b>
+<b class="nc"><i>455</i>&nbsp;                this.sendMoveChoice(new MoveCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));</b>
+<i>456</i>&nbsp;        }
+<i>457</i>&nbsp;    }
+<i>458</i>&nbsp;
+<i>459</i>&nbsp;
+<i>460</i>&nbsp;    public void changedBoard(ArrayList&lt;Cell&gt; newCells) {
+<i>461</i>&nbsp;        //must reset all the new cells, and and recreate these cells with the new informations
+<b class="nc"><i>462</i>&nbsp;        for (Cell c : newCells) {</b>
+<b class="nc"><i>463</i>&nbsp;            boardPane.getChildren().removeIf(node -&gt; GridPane.getRowIndex(node) == 1 + 2 * c.getRow() &amp;&amp; GridPane.getColumnIndex(node) == 1 + 2 * c.getColumn());</b>
+<i>464</i>&nbsp;            //removed all nodes, i must replace them with the new informations
+<b class="nc"><i>465</i>&nbsp;            Image levelToBeCharged = null;</b>
+<i>466</i>&nbsp;
+<b class="nc"><i>467</i>&nbsp;            switch (c.getLevel()) {</b>
+<i>468</i>&nbsp;
+<i>469</i>&nbsp;                case 1:
+<b class="nc"><i>470</i>&nbsp;                    levelToBeCharged = new Image(&quot;/buildings/basebuilding.png&quot;);</b>
+<b class="nc"><i>471</i>&nbsp;                    break;</b>
+<i>472</i>&nbsp;                case 2:
+<b class="nc"><i>473</i>&nbsp;                    levelToBeCharged = new Image(&quot;/buildings/secondlevel.png&quot;);</b>
+<b class="nc"><i>474</i>&nbsp;                    break;</b>
+<i>475</i>&nbsp;                case 3:
+<b class="nc"><i>476</i>&nbsp;                    levelToBeCharged = new Image(&quot;/buildings/thirdlevel.png&quot;);</b>
+<i>477</i>&nbsp;                    break;
+<i>478</i>&nbsp;            }
+<i>479</i>&nbsp;
+<b class="nc"><i>480</i>&nbsp;            if (levelToBeCharged != null) {</b>
+<b class="nc"><i>481</i>&nbsp;                ImageView building = new ImageView(levelToBeCharged);</b>
+<b class="nc"><i>482</i>&nbsp;                building.setFitWidth(95);</b>
+<b class="nc"><i>483</i>&nbsp;                building.setFitHeight(95);</b>
+<b class="nc"><i>484</i>&nbsp;                building.fitHeightProperty().bind(boardPane.heightProperty().divide(7));</b>
+<b class="nc"><i>485</i>&nbsp;                building.fitWidthProperty().bind(boardPane.widthProperty().divide(7));</b>
+<b class="nc"><i>486</i>&nbsp;                GridPane.setValignment(building, VPos.CENTER);</b>
+<b class="nc"><i>487</i>&nbsp;                GridPane.setHalignment(building, HPos.CENTER);</b>
+<b class="nc"><i>488</i>&nbsp;                boardPane.add(building, 1 + 2 * c.getColumn(), 1 + 2 * c.getRow());</b>
+<i>489</i>&nbsp;            }
+<i>490</i>&nbsp;
+<b class="nc"><i>491</i>&nbsp;            if (c.isDomed()) {</b>
+<b class="nc"><i>492</i>&nbsp;                ImageView dome = new ImageView(&quot;/buildings/dome.png&quot;);</b>
+<b class="nc"><i>493</i>&nbsp;                dome.setFitHeight(75);</b>
+<b class="nc"><i>494</i>&nbsp;                dome.setFitWidth(75);</b>
+<b class="nc"><i>495</i>&nbsp;                dome.fitHeightProperty().bind(boardPane.heightProperty().divide(7));</b>
+<b class="nc"><i>496</i>&nbsp;                dome.fitWidthProperty().bind(boardPane.widthProperty().divide(7));</b>
+<b class="nc"><i>497</i>&nbsp;                GridPane.setValignment(dome, VPos.CENTER);</b>
+<b class="nc"><i>498</i>&nbsp;                GridPane.setHalignment(dome, HPos.CENTER);</b>
+<b class="nc"><i>499</i>&nbsp;                boardPane.add(dome, 1 + 2 * c.getColumn(), 1 + 2 * c.getRow());</b>
+<i>500</i>&nbsp;            }
+<i>501</i>&nbsp;
+<b class="nc"><i>502</i>&nbsp;            if (c.getPlayer() != null) {</b>
+<b class="nc"><i>503</i>&nbsp;                Image worker = null;</b>
+<b class="nc"><i>504</i>&nbsp;                String colour = getPlayerColour(c.getPlayer());</b>
+<b class="nc"><i>505</i>&nbsp;                switch (colour) {</b>
+<i>506</i>&nbsp;                    case &quot;GRAY&quot;:
+<b class="nc"><i>507</i>&nbsp;                        worker = new Image(&quot;/workers/grey.png&quot;);</b>
+<b class="nc"><i>508</i>&nbsp;                        break;</b>
+<i>509</i>&nbsp;                    case &quot;WHITE&quot;:
+<b class="nc"><i>510</i>&nbsp;                        worker = new Image(&quot;/workers/white.png&quot;);</b>
+<b class="nc"><i>511</i>&nbsp;                        break;</b>
+<i>512</i>&nbsp;                    case &quot;BLUE&quot;:
+<b class="nc"><i>513</i>&nbsp;                        worker = new Image(&quot;/workers/blue.png&quot;);</b>
+<i>514</i>&nbsp;                        break;
+<i>515</i>&nbsp;                }
+<b class="nc"><i>516</i>&nbsp;                if (worker != null) {</b>
+<b class="nc"><i>517</i>&nbsp;                    ImageView toBeAdded = new ImageView(worker);</b>
+<b class="nc"><i>518</i>&nbsp;                    toBeAdded.setFitHeight(75);</b>
+<b class="nc"><i>519</i>&nbsp;                    toBeAdded.setFitWidth(75);</b>
+<b class="nc"><i>520</i>&nbsp;                    toBeAdded.fitHeightProperty().bind(boardPane.heightProperty().divide(7));</b>
+<b class="nc"><i>521</i>&nbsp;                    toBeAdded.fitWidthProperty().bind(boardPane.widthProperty().divide(7));</b>
+<b class="nc"><i>522</i>&nbsp;                    toBeAdded.setVisible(true);</b>
+<b class="nc"><i>523</i>&nbsp;                    GridPane.setValignment(toBeAdded, VPos.CENTER);</b>
+<b class="nc"><i>524</i>&nbsp;                    GridPane.setHalignment(toBeAdded, HPos.CENTER);</b>
+<b class="nc"><i>525</i>&nbsp;                    boardPane.add(toBeAdded, 1 + 2 * c.getColumn(), 1 + 2 * c.getRow());</b>
+<i>526</i>&nbsp;                }
+<i>527</i>&nbsp;            }
+<b class="nc"><i>528</i>&nbsp;        }</b>
+<i>529</i>&nbsp;
+<i>530</i>&nbsp;    }
+<i>531</i>&nbsp;
+<i>532</i>&nbsp;    public String getPlayerColour(String playerName) {
+<b class="nc"><i>533</i>&nbsp;        for (String s : playerList) {</b>
+<b class="nc"><i>534</i>&nbsp;            if (s.split(&quot;\\.&quot;)[0].equals(playerName)) return s.split(&quot;\\.&quot;)[1];</b>
+<b class="nc"><i>535</i>&nbsp;        }</b>
+<b class="nc"><i>536</i>&nbsp;        return null;</b>
+<i>537</i>&nbsp;    }
+<i>538</i>&nbsp;
+<i>539</i>&nbsp;    public void resizeElements(double height, double width) {
+<i>540</i>&nbsp;
+<b class="nc"><i>541</i>&nbsp;        double scaleH = (600.0) / (720.0);</b>
+<b class="nc"><i>542</i>&nbsp;        double scaleW = 600.0 / 1280.0;</b>
+<b class="nc"><i>543</i>&nbsp;        boardPane.setPrefHeight(scaleH * height);</b>
+<b class="nc"><i>544</i>&nbsp;        boardPane.setPrefWidth(scaleW * width);</b>
+<i>545</i>&nbsp;    }
+<i>546</i>&nbsp;
+<i>547</i>&nbsp;    public void initialize() {
+<b class="nc"><i>548</i>&nbsp;        playersDivinity.add(firstPlayerDivinity);</b>
+<b class="nc"><i>549</i>&nbsp;        playersDivinity.add(secondPlayerDivinity);</b>
+<b class="nc"><i>550</i>&nbsp;        playersDivinity.add(thirdPlayerDivinity);</b>
+<i>551</i>&nbsp;
+<b class="nc"><i>552</i>&nbsp;        playersName.add(firstPlayerName);</b>
+<b class="nc"><i>553</i>&nbsp;        playersName.add(secondPlayerName);</b>
+<b class="nc"><i>554</i>&nbsp;        playersName.add(thirdPlayerName);</b>
+<b class="nc"><i>555</i>&nbsp;        boardPane.setAlignment(Pos.CENTER);</b>
+<i>556</i>&nbsp;
+<i>557</i>&nbsp;
+<i>558</i>&nbsp;    }
+<i>559</i>&nbsp;
+<i>560</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-24 20:50</div>
+</div>
+</body>
+</html>

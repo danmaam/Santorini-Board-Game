@@ -88,4 +88,9 @@ public class Artemis extends Divinity {
     public String getName() {
         return "Artemis";
     }
+
+    @Override
+    public String getDescription(){
+        return "Your Worker may move one additional time, but not back to its initial space.";
+    }
 }

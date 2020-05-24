@@ -132,4 +132,8 @@ public class Demeter extends Divinity {
         return nextAction;
     }
 
+    @Override
+    public String getDescription() {
+        return "Your Worker may build one additional time, but not on the same space.";
+    }
 }

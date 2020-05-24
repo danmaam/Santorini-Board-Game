@@ -110,4 +110,9 @@ public class Eros extends Divinity {
         if (p.getColumn() == 0 || p.getColumn() == 4) previousColumn = p.getColumn();
         return nextAction;
     }
+
+    @Override
+    public String getDescription() {
+        return "Place your Workers anywhere along opposite edges of the board. You also win if one of your Workers moves to a space neighboring your other Worker and both are on the first level (or the same level in a 3-player game).";
+    }
 }

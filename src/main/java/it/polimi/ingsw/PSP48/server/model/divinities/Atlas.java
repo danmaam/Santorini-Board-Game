@@ -119,4 +119,9 @@ public class Atlas extends Divinity {
     public String getName() {
         return "Atlas";
     }
+
+    @Override
+    public String getDescription(){
+        return "Your Worker may build a dome at any level.";
+    }
 }

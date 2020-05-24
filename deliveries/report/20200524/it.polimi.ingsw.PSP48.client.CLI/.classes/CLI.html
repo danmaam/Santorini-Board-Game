@@ -1,0 +1,1077 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CLI</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP48.client.CLI</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CLI (it.polimi.ingsw.PSP48.client.CLI)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CLI</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 50)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 482)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">CLI$action</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 51)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 484)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.client.CLI;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP48.ViewInterface;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP48.WorkerValidCells;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkIncoming;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkOutcoming;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ClientNetworkObserver;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ViewObserver;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP48.server.MoveCoordinates;
+<i>11</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Cell;
+<i>12</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Position;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;import java.io.IOException;
+<i>15</i>&nbsp;import java.net.Socket;
+<i>16</i>&nbsp;import java.util.ArrayList;
+<i>17</i>&nbsp;import java.util.Scanner;
+<i>18</i>&nbsp;import java.util.concurrent.ExecutorService;
+<i>19</i>&nbsp;import java.util.concurrent.Executors;
+<i>20</i>&nbsp;import java.util.function.Consumer;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;/**
+<i>23</i>&nbsp; * concrete class that represents all the interactions with the client
+<i>24</i>&nbsp; * @author Rebecca Marelli, Annalaura Massa, Daniele Mammone
+<i>25</i>&nbsp; */
+<i>26</i>&nbsp;public class CLI implements Runnable, ViewInterface, ClientNetworkObserver
+<i>27</i>&nbsp;{
+<b class="nc"><i>28</i>&nbsp;    ExecutorService threadExecutor = Executors.newSingleThreadExecutor();</b>
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    /**
+<i>31</i>&nbsp;     * private attribute of the CLI class that represents the board of the game and its content
+<i>32</i>&nbsp;     */
+<b class="nc"><i>33</i>&nbsp;    private static final CellForPrinting[][] gameBoard = new CellForPrinting[5][5];</b>
+<i>34</i>&nbsp;    /**
+<i>35</i>&nbsp;     * private attribute of the CLI class that contains all the players of a match
+<i>36</i>&nbsp;     */
+<b class="nc"><i>37</i>&nbsp;    private ArrayList&lt;Player&gt; playerList = new ArrayList&lt;Player&gt;();</b>
+<i>38</i>&nbsp;    /**
+<i>39</i>&nbsp;     * private attribute of the CLI class containing all the observers to notify
+<i>40</i>&nbsp;     */
+<b class="nc"><i>41</i>&nbsp;    private ArrayList&lt;ViewObserver&gt; observers = new ArrayList&lt;ViewObserver&gt;();</b>
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    /**
+<i>45</i>&nbsp;     * method used to register a new observer that we&#39;ll need to notify
+<i>46</i>&nbsp;     * @param obv is the observer of the client that we are going to register
+<i>47</i>&nbsp;     */
+<i>48</i>&nbsp;    public void registerObserver(ViewObserver obv) {
+<b class="nc"><i>49</i>&nbsp;        observers.add(obv);</b>
+<i>50</i>&nbsp;    }
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    /**
+<i>53</i>&nbsp;     * method used to remove an already existing observer from the list of view observers
+<i>54</i>&nbsp;     * @param obv is the observer we need to remove
+<i>55</i>&nbsp;     */
+<i>56</i>&nbsp;    public void unregisterObserver(ViewObserver obv) {
+<b class="nc"><i>57</i>&nbsp;        observers.remove(obv);</b>
+<i>58</i>&nbsp;    }
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;    /**
+<i>61</i>&nbsp;     * method used to notify a change in the client status to its observers (and so to the server)
+<i>62</i>&nbsp;     * @param lambda is the lambda function we use to notify the observer
+<i>63</i>&nbsp;     */
+<i>64</i>&nbsp;    public void notifyObserver(Consumer&lt;ViewObserver&gt; lambda) {
+<b class="nc"><i>65</i>&nbsp;        for (ViewObserver obv : observers) lambda.accept(obv);</b>
+<i>66</i>&nbsp;    }
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    private Socket server;
+<i>69</i>&nbsp;    private ClientNetworkOutcoming cA;
+<i>70</i>&nbsp;    private ClientNetworkIncoming cI;
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    /**
+<i>73</i>&nbsp;     * class constructor initialising the cells of the board
+<i>74</i>&nbsp;     *
+<i>75</i>&nbsp;     * @param colour is the colour we assign to the cells
+<i>76</i>&nbsp;     */
+<b class="nc"><i>77</i>&nbsp;    public CLI(ColoursForPrinting colour) {</b>
+<b class="nc"><i>78</i>&nbsp;        for (int i = 0; i &lt; 5; i++) {</b>
+<b class="nc"><i>79</i>&nbsp;            for (int j = 0; j &lt; 5; j++) {</b>
+<b class="nc"><i>80</i>&nbsp;                gameBoard[i][j] = new CellForPrinting(i, j, colour);</b>
+<i>81</i>&nbsp;            }
+<i>82</i>&nbsp;        }
+<i>83</i>&nbsp;    }
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    /**
+<i>86</i>&nbsp;     * method giving access to the game board contained in the class
+<i>87</i>&nbsp;     * @return a reference to the board
+<i>88</i>&nbsp;     */
+<i>89</i>&nbsp;    public CellForPrinting[][] getGameBoard() {
+<b class="nc"><i>90</i>&nbsp;        return (gameBoard);</b>
+<i>91</i>&nbsp;    }
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;    /**
+<i>94</i>&nbsp;     * method used to retrieve a specific cell on the board
+<i>95</i>&nbsp;     *
+<i>96</i>&nbsp;     * @param row    is the row of the cell we need
+<i>97</i>&nbsp;     * @param column is the column of the cell we need
+<i>98</i>&nbsp;     * @return a reference to the cell once we find it
+<i>99</i>&nbsp;     */
+<i>100</i>&nbsp;    public CellForPrinting getCellOnBoard(int row, int column) {
+<b class="nc"><i>101</i>&nbsp;        return (gameBoard[row][column]);</b>
+<i>102</i>&nbsp;    }
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    /**
+<i>105</i>&nbsp;     * method that scans the board and prints each cell on the screen
+<i>106</i>&nbsp;     */
+<i>107</i>&nbsp;    public void printBoard() {
+<b class="nc"><i>108</i>&nbsp;        System.out.println(&quot;\033[1;1H\033[2J&quot;);</b>
+<b class="nc"><i>109</i>&nbsp;        for (int i = 0; i &lt; 5; i++) {</b>
+<b class="nc"><i>110</i>&nbsp;            for (int j = 0; j &lt; 5; j++) {</b>
+<b class="nc"><i>111</i>&nbsp;                gameBoard[i][j].printCellOnScreen();</b>
+<i>112</i>&nbsp;            }
+<b class="nc"><i>113</i>&nbsp;            System.out.println(&quot;\n&quot;);</b>
+<i>114</i>&nbsp;        }
+<i>115</i>&nbsp;    }
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;    /**
+<i>118</i>&nbsp;     * method used to reset the colour of the board after we finish a move or build action during the turn
+<i>119</i>&nbsp;     *
+<i>120</i>&nbsp;     * @param positionsToReset are the cells we need to reset
+<i>121</i>&nbsp;     */
+<i>122</i>&nbsp;    public void resetBoard(ArrayList&lt;Position&gt; positionsToReset) {
+<b class="nc"><i>123</i>&nbsp;        for (Position p : positionsToReset) {</b>
+<b class="nc"><i>124</i>&nbsp;            this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.white);</b>
+<b class="nc"><i>125</i>&nbsp;        }</b>
+<i>126</i>&nbsp;    }
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;    /**
+<i>129</i>&nbsp;     * Method used to get the list of the players in the game.
+<i>130</i>&nbsp;     *
+<i>131</i>&nbsp;     * @return list of players
+<i>132</i>&nbsp;     */
+<i>133</i>&nbsp;    public ArrayList&lt;Player&gt; getPlayerList() {
+<b class="nc"><i>134</i>&nbsp;        return (this.playerList);</b>
+<i>135</i>&nbsp;    }
+<i>136</i>&nbsp;
+<i>137</i>&nbsp;
+<i>138</i>&nbsp;    /**
+<i>139</i>&nbsp;     * method that is called whenever there is a change on the board and we need to update the cells
+<i>140</i>&nbsp;     *
+<i>141</i>&nbsp;     * @param newCells represents the list of the cells that have been changed during the turn
+<i>142</i>&nbsp;     */
+<i>143</i>&nbsp;    @Override
+<i>144</i>&nbsp;    public void changedBoard(ArrayList&lt;Cell&gt; newCells) //method applying changes to the game board after every action by the player
+<i>145</i>&nbsp;    {
+<b class="nc"><i>146</i>&nbsp;        threadExecutor.submit(() -&gt; {</b>
+<i>147</i>&nbsp;            CellForPrinting tempCell;
+<i>148</i>&nbsp;            ArrayList&lt;Player&gt; list;
+<b class="nc"><i>149</i>&nbsp;            Player tempPlayer = null;</b>
+<i>150</i>&nbsp;
+<b class="nc"><i>151</i>&nbsp;            for (Cell c : newCells) {</b>
+<b class="nc"><i>152</i>&nbsp;                tempCell = this.getCellOnBoard(c.getRow(), c.getColumn()); //retrieved cell from the board on the client side, now we have to update its values</b>
+<i>153</i>&nbsp;
+<i>154</i>&nbsp;                //first we check the dome field of the cell
+<b class="nc"><i>155</i>&nbsp;                if (c.isDomed() &amp;&amp; tempCell.getDome() == null)</b>
+<b class="nc"><i>156</i>&nbsp;                    tempCell.setDome(new DomeForPrinting(ColoursForPrinting.blue));</b>
+<i>157</i>&nbsp;
+<i>158</i>&nbsp;                //then we check the building field of the cell
+<b class="nc"><i>159</i>&nbsp;                if (c.getLevel() == 0) tempCell.setBuildings(null);</b>
+<i>160</i>&nbsp;                else {
+<b class="nc"><i>161</i>&nbsp;                    if (tempCell.getBuildings() == null)</b>
+<b class="nc"><i>162</i>&nbsp;                        tempCell.setBuildings(new BuildingsForPrinting(c.getLevel(), ColoursForPrinting.blue));</b>
+<i>163</i>&nbsp;
+<b class="nc"><i>164</i>&nbsp;                    else tempCell.getBuildings().setLevel(c.getLevel());</b>
+<i>165</i>&nbsp;                }
+<i>166</i>&nbsp;
+<i>167</i>&nbsp;                //lastly, we check the player field of the cell
+<b class="nc"><i>168</i>&nbsp;                if (c.getPlayer() == null) tempCell.setPlayerOnCell(null);</b>
+<i>169</i>&nbsp;                else {
+<b class="nc"><i>170</i>&nbsp;                    list = this.getPlayerList(); //we have to search for the right player in the list, in order to have the parameters to put in the cell</b>
+<b class="nc"><i>171</i>&nbsp;                    for (Player p : list) {</b>
+<b class="nc"><i>172</i>&nbsp;                        if (p.getName().equals(c.getPlayer())) {</b>
+<b class="nc"><i>173</i>&nbsp;                            tempPlayer = p;</b>
+<b class="nc"><i>174</i>&nbsp;                            break;</b>
+<i>175</i>&nbsp;                        }
+<b class="nc"><i>176</i>&nbsp;                    }</b>
+<b class="nc"><i>177</i>&nbsp;                    tempCell.setPlayerOnCell(tempPlayer);</b>
+<i>178</i>&nbsp;                }
+<b class="nc"><i>179</i>&nbsp;            }</b>
+<b class="nc"><i>180</i>&nbsp;            this.printBoard(); //after we modified all the cells we need to println the whole updated board</b>
+<i>181</i>&nbsp;        });
+<i>182</i>&nbsp;    }
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;    /**
+<i>185</i>&nbsp;     * method used to update the player list in the client, whenever it is changed
+<i>186</i>&nbsp;     * @param newPlayerList is the updated player list
+<i>187</i>&nbsp;     */
+<i>188</i>&nbsp;    @Override
+<i>189</i>&nbsp;    public void changedPlayerList(ArrayList&lt;String&gt; newPlayerList) {
+<b class="nc"><i>190</i>&nbsp;        threadExecutor.submit(() -&gt; {</b>
+<b class="nc"><i>191</i>&nbsp;            ArrayList&lt;Player&gt; newList = new ArrayList&lt;Player&gt;();</b>
+<b class="nc"><i>192</i>&nbsp;            char separator = &#39;.&#39;;</b>
+<b class="nc"><i>193</i>&nbsp;            for (String str : newPlayerList) {</b>
+<b class="nc"><i>194</i>&nbsp;                int n = str.indexOf(separator);</b>
+<b class="nc"><i>195</i>&nbsp;                String playerName = str.substring(0, n);</b>
+<b class="nc"><i>196</i>&nbsp;                int k = str.indexOf(separator, n + 1);</b>
+<b class="nc"><i>197</i>&nbsp;                String playerColour = str.substring(n + 1, k);</b>
+<i>198</i>&nbsp;                ColoursForPrinting ansiPlayerColour;
+<b class="nc"><i>199</i>&nbsp;                if (playerColour.equals(&quot;BLUE&quot;)) {</b>
+<b class="nc"><i>200</i>&nbsp;                    ansiPlayerColour = ColoursForPrinting.blue;</b>
+<b class="nc"><i>201</i>&nbsp;                } else if (playerColour.equals(&quot;GRAY&quot;)) {</b>
+<b class="nc"><i>202</i>&nbsp;                    ansiPlayerColour = ColoursForPrinting.gray;</b>
+<i>203</i>&nbsp;                } else {
+<b class="nc"><i>204</i>&nbsp;                    ansiPlayerColour = ColoursForPrinting.white;</b>
+<i>205</i>&nbsp;                }
+<b class="nc"><i>206</i>&nbsp;                String playerDivinity = str.substring(k + 1);</b>
+<b class="nc"><i>207</i>&nbsp;                newList.add(new Player(playerName, ansiPlayerColour, playerDivinity));</b>
+<b class="nc"><i>208</i>&nbsp;            }</b>
+<i>209</i>&nbsp;
+<b class="nc"><i>210</i>&nbsp;            playerList = newList;</b>
+<b class="nc"><i>211</i>&nbsp;            System.out.println(&quot;Players in game:&quot;);</b>
+<b class="nc"><i>212</i>&nbsp;            for (Player p : playerList) {</b>
+<b class="nc"><i>213</i>&nbsp;                System.out.println(p.getName() + &quot; &quot; + p.toString() + &quot; &quot; + p.getDivinity());</b>
+<b class="nc"><i>214</i>&nbsp;            }</b>
+<i>215</i>&nbsp;        });
+<i>216</i>&nbsp;
+<i>217</i>&nbsp;    }
+<i>218</i>&nbsp;
+<i>219</i>&nbsp;
+<i>220</i>&nbsp;    /**
+<i>221</i>&nbsp;     * method used to request a move action to the player, showing the valid options and then taking the choice of the player
+<i>222</i>&nbsp;     *
+<i>223</i>&nbsp;     * @param validCellsForMove contains the positions of both workers and for each of them the valid cells for the move action
+<i>224</i>&nbsp;     */
+<i>225</i>&nbsp;    @Override
+<i>226</i>&nbsp;    public void requestMove(ArrayList&lt;WorkerValidCells&gt; validCellsForMove) {
+<b class="nc"><i>227</i>&nbsp;        threadExecutor.submit(() -&gt; {</b>
+<b class="nc"><i>228</i>&nbsp;            ArrayList&lt;Position&gt; tempList = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>229</i>&nbsp;            int workerRow = -1, workerColumn = -1;</b>
+<b class="nc"><i>230</i>&nbsp;            int chosenRow = -1, chosenColumn = -1;</b>
+<i>231</i>&nbsp;
+<b class="nc"><i>232</i>&nbsp;            for (WorkerValidCells c : validCellsForMove) {</b>
+<b class="nc"><i>233</i>&nbsp;                tempList = c.getValidPositions(); //each time we retrieve the list of valid positions for the move action</b>
+<b class="nc"><i>234</i>&nbsp;                for (Position p : tempList) // for each of the valid positions, we need to highlight the cells on the board</b>
+<i>235</i>&nbsp;                {
+<b class="nc"><i>236</i>&nbsp;                    this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.red);</b>
+<b class="nc"><i>237</i>&nbsp;                }</b>
+<b class="nc"><i>238</i>&nbsp;            }</b>
+<i>239</i>&nbsp;
+<i>240</i>&nbsp;            //first we ask the player which one of his workers he wants to move
+<b class="nc"><i>241</i>&nbsp;            Scanner s = new Scanner(System.in);</b>
+<i>242</i>&nbsp;            String workerCoordinate;
+<b class="nc"><i>243</i>&nbsp;            boolean inputSet = false;</b>
+<b class="nc"><i>244</i>&nbsp;            if (validCellsForMove.size() &gt; 1) {</b>
+<i>245</i>&nbsp;                do {
+<b class="nc"><i>246</i>&nbsp;                    this.printBoard();</b>
+<b class="nc"><i>247</i>&nbsp;                    System.out.println(&quot;Choose the worker you want to move, in the format row,column&quot;);</b>
+<b class="nc"><i>248</i>&nbsp;                    workerCoordinate = s.nextLine();</b>
+<b class="nc"><i>249</i>&nbsp;                    if (workerCoordinate.split(&quot;,&quot;).length == 2) {</b>
+<b class="nc"><i>250</i>&nbsp;                        workerRow = Integer.parseInt(workerCoordinate.split(&quot;,&quot;)[0]) - 1;</b>
+<b class="nc"><i>251</i>&nbsp;                        workerColumn = Integer.parseInt(workerCoordinate.split(&quot;,&quot;)[1]) - 1;</b>
+<b class="nc"><i>252</i>&nbsp;                        if (!containsWorker(validCellsForMove, workerRow, workerColumn)) {</b>
+<b class="nc"><i>253</i>&nbsp;                            System.out.println(&quot;Invalid choice&quot;);</b>
+<b class="nc"><i>254</i>&nbsp;                        } else inputSet = true;</b>
+<i>255</i>&nbsp;                    } else {
+<b class="nc"><i>256</i>&nbsp;                        System.out.println(&quot;Invalid input format&quot;);</b>
+<i>257</i>&nbsp;                    }
+<b class="nc"><i>258</i>&nbsp;                } while (!inputSet);</b>
+<i>259</i>&nbsp;            } else {
+<b class="nc"><i>260</i>&nbsp;                workerRow = validCellsForMove.get(0).getwR();</b>
+<b class="nc"><i>261</i>&nbsp;                workerColumn = validCellsForMove.get(0).getwC();</b>
+<i>262</i>&nbsp;            }
+<i>263</i>&nbsp;
+<i>264</i>&nbsp;            //after we make sure that the player has chosen a valid worker to move, we highlight again the board, but only with the cells of that worker
+<b class="nc"><i>265</i>&nbsp;            if (validCellsForMove.size() &gt; 1) //if the player can only move one worker, the cells of that worker have already been highlighted</b>
+<i>266</i>&nbsp;            {
+<b class="nc"><i>267</i>&nbsp;                for (WorkerValidCells c : validCellsForMove) {</b>
+<b class="nc"><i>268</i>&nbsp;                    resetBoard(c.getValidPositions()); //we reset the colour of all the cells of the workers</b>
+<b class="nc"><i>269</i>&nbsp;                }</b>
+<b class="nc"><i>270</i>&nbsp;                for (WorkerValidCells cell : validCellsForMove) //after that, we highlight again the cells, but only the ones belonging to the chosen worker</b>
+<i>271</i>&nbsp;                {
+<b class="nc"><i>272</i>&nbsp;                    if (cell.getwR() == workerRow &amp;&amp; cell.getwC() == workerColumn) {</b>
+<b class="nc"><i>273</i>&nbsp;                        for (Position p : cell.getValidPositions()) {</b>
+<b class="nc"><i>274</i>&nbsp;                            this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.red);</b>
+<b class="nc"><i>275</i>&nbsp;                        }</b>
+<b class="nc"><i>276</i>&nbsp;                        break; //after finding the correct worker and highlighting his cells, we can interrupt our search</b>
+<i>277</i>&nbsp;                    }
+<b class="nc"><i>278</i>&nbsp;                }</b>
+<i>279</i>&nbsp;            }
+<i>280</i>&nbsp;
+<b class="nc"><i>281</i>&nbsp;            WorkerValidCells validCellsMove = null;</b>
+<i>282</i>&nbsp;
+<b class="nc"><i>283</i>&nbsp;            for (WorkerValidCells c : validCellsForMove) {</b>
+<b class="nc"><i>284</i>&nbsp;                if (c.getwR() == workerRow &amp;&amp; c.getwC() == workerColumn) {</b>
+<b class="nc"><i>285</i>&nbsp;                    validCellsMove = c;</b>
+<b class="nc"><i>286</i>&nbsp;                    break;</b>
+<i>287</i>&nbsp;                }
+<b class="nc"><i>288</i>&nbsp;            }</b>
+<i>289</i>&nbsp;
+<b class="nc"><i>290</i>&nbsp;            inputSet = false;</b>
+<i>291</i>&nbsp;            String cellCoordinate;
+<i>292</i>&nbsp;
+<i>293</i>&nbsp;            do {
+<b class="nc"><i>294</i>&nbsp;                this.printBoard();</b>
+<b class="nc"><i>295</i>&nbsp;                System.out.println(&quot;Choose the cell where you want to move the worker, in the format row,column&quot;);</b>
+<b class="nc"><i>296</i>&nbsp;                cellCoordinate = s.nextLine();</b>
+<b class="nc"><i>297</i>&nbsp;                if (cellCoordinate.split(&quot;,&quot;).length == 2) {</b>
+<b class="nc"><i>298</i>&nbsp;                    chosenRow = Integer.parseInt(cellCoordinate.split(&quot;,&quot;)[0]) - 1;</b>
+<b class="nc"><i>299</i>&nbsp;                    chosenColumn = Integer.parseInt(cellCoordinate.split(&quot;,&quot;)[1]) - 1;</b>
+<b class="nc"><i>300</i>&nbsp;                    if (!validCellsMove.contains(chosenRow, chosenColumn)) {</b>
+<b class="nc"><i>301</i>&nbsp;                        System.out.println(&quot;Invalid choice&quot;);</b>
+<b class="nc"><i>302</i>&nbsp;                    } else inputSet = true;</b>
+<i>303</i>&nbsp;                } else {
+<b class="nc"><i>304</i>&nbsp;                    System.out.println(&quot;Invalid input format&quot;);</b>
+<i>305</i>&nbsp;                }
+<b class="nc"><i>306</i>&nbsp;            } while (!inputSet);</b>
+<i>307</i>&nbsp;
+<i>308</i>&nbsp;            //after checking that the move is valid, we just need to bring the colours of the board to their original state and notify the controller about the choice
+<b class="nc"><i>309</i>&nbsp;            this.resetBoard(validCellsMove.getValidPositions());</b>
+<b class="nc"><i>310</i>&nbsp;            this.printBoard();</b>
+<i>311</i>&nbsp;
+<b class="nc"><i>312</i>&nbsp;            MoveCoordinates chosenCoordinates = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);</b>
+<b class="nc"><i>313</i>&nbsp;            this.notifyObserver(x -&gt; {</b>
+<b class="nc"><i>314</i>&nbsp;                x.move(chosenCoordinates);</b>
+<i>315</i>&nbsp;            });
+<i>316</i>&nbsp;        });
+<i>317</i>&nbsp;
+<i>318</i>&nbsp;    }
+<i>319</i>&nbsp;
+<i>320</i>&nbsp;
+<i>321</i>&nbsp;    /**
+<i>322</i>&nbsp;     * method handling the building actions during the turn
+<i>323</i>&nbsp;     *
+<i>324</i>&nbsp;     * @param validForBuild represents the valid cells for the build action of each worker
+<i>325</i>&nbsp;     * @param validForDome  represents the valid cells to put the dome for each worker
+<i>326</i>&nbsp;     */
+<i>327</i>&nbsp;    @Override
+<i>328</i>&nbsp;    public void requestDomeOrBuild(ArrayList&lt;WorkerValidCells&gt; validForBuild, ArrayList&lt;WorkerValidCells&gt; validForDome) {
+<b class="nc"><i>329</i>&nbsp;        threadExecutor.submit(() -&gt; {</b>
+<b class="nc"><i>330</i>&nbsp;            int workerRow = -1, workerColumn = -1;</b>
+<b class="nc"><i>331</i>&nbsp;            int chosenRow = -1, chosenColumn = -1;</b>
+<i>332</i>&nbsp;            ArrayList&lt;Position&gt; tempPositionsBuild;
+<b class="nc"><i>333</i>&nbsp;            ArrayList&lt;Position&gt; tempPositionsDome = new ArrayList&lt;&gt;();</b>
+<i>334</i>&nbsp;
+<b class="nc"><i>335</i>&nbsp;            for (WorkerValidCells c1 : validForBuild) //we highlight the cells of the worker that can only build or that can build and put a dome</b>
+<i>336</i>&nbsp;            {
+<b class="nc"><i>337</i>&nbsp;                tempPositionsBuild = c1.getValidPositions();</b>
+<b class="nc"><i>338</i>&nbsp;                for (WorkerValidCells c2 : validForDome) {</b>
+<b class="nc"><i>339</i>&nbsp;                    if (c2.getwR() == c1.getwR() &amp;&amp; c2.getwC() == c1.getwC()) {</b>
+<b class="nc"><i>340</i>&nbsp;                        tempPositionsDome = c2.getValidPositions();</b>
+<b class="nc"><i>341</i>&nbsp;                        break;</b>
+<i>342</i>&nbsp;                    }
+<b class="nc"><i>343</i>&nbsp;                }</b>
+<b class="nc"><i>344</i>&nbsp;                for (Position p1 : tempPositionsBuild) {</b>
+<b class="nc"><i>345</i>&nbsp;                    this.getCellOnBoard(p1.getRow(), p1.getColumn()).setCellColour(ColoursForPrinting.red);</b>
+<b class="nc"><i>346</i>&nbsp;                }</b>
+<b class="nc"><i>347</i>&nbsp;                for (Position p2 : tempPositionsDome) {</b>
+<b class="nc"><i>348</i>&nbsp;                    if (this.getCellOnBoard(p2.getRow(), p2.getColumn()).getCellColour() == ColoursForPrinting.red)</b>
+<b class="nc"><i>349</i>&nbsp;                        this.getCellOnBoard(p2.getRow(), p2.getColumn()).setCellColour(ColoursForPrinting.green);</b>
+<b class="nc"><i>350</i>&nbsp;                    else this.getCellOnBoard(p2.getRow(), p2.getColumn()).setCellColour(ColoursForPrinting.yellow);</b>
+<b class="nc"><i>351</i>&nbsp;                }</b>
+<b class="nc"><i>352</i>&nbsp;                tempPositionsDome = null;</b>
+<b class="nc"><i>353</i>&nbsp;            }</b>
+<i>354</i>&nbsp;
+<b class="nc"><i>355</i>&nbsp;            boolean bothActions = false;</b>
+<i>356</i>&nbsp;            //now we have to highlight the cells of the remaining workers, the ones who can only put a dome on a cell
+<b class="nc"><i>357</i>&nbsp;            for (WorkerValidCells w1 : validForDome) {</b>
+<b class="nc"><i>358</i>&nbsp;                for (WorkerValidCells w2 : validForBuild) {</b>
+<b class="nc"><i>359</i>&nbsp;                    if (w2.getwR() == w1.getwR() &amp;&amp; w2.getwC() == w1.getwC()) {</b>
+<b class="nc"><i>360</i>&nbsp;                        bothActions = true;</b>
+<b class="nc"><i>361</i>&nbsp;                        break;</b>
+<i>362</i>&nbsp;                    }
+<b class="nc"><i>363</i>&nbsp;                }</b>
+<b class="nc"><i>364</i>&nbsp;                if (bothActions == false) {</b>
+<b class="nc"><i>365</i>&nbsp;                    for (Position pos1 : w1.getValidPositions()) {</b>
+<b class="nc"><i>366</i>&nbsp;                        this.getCellOnBoard(pos1.getRow(), pos1.getColumn()).setCellColour(ColoursForPrinting.yellow);</b>
+<b class="nc"><i>367</i>&nbsp;                    }</b>
+<i>368</i>&nbsp;                }
+<b class="nc"><i>369</i>&nbsp;            }</b>
+<i>370</i>&nbsp;
+<b class="nc"><i>371</i>&nbsp;            Scanner s = new Scanner(System.in);</b>
+<i>372</i>&nbsp;
+<b class="nc"><i>373</i>&nbsp;            boolean inputSet = false;</b>
+<i>374</i>&nbsp;            String workerCoordinate;
+<i>375</i>&nbsp;
+<i>376</i>&nbsp;
+<b class="nc"><i>377</i>&nbsp;            if (validForBuild.size() &gt; 1 || validForDome.size() &gt; 1 || !(validForBuild.get(0).getwR() == validForDome.get(0).getwR() &amp;&amp; validForBuild.get(0).getwC() == validForDome.get(0).getwC())) {</b>
+<i>378</i>&nbsp;                do {
+<b class="nc"><i>379</i>&nbsp;                    this.printBoard();</b>
+<b class="nc"><i>380</i>&nbsp;                    System.out.println(&quot;Red cells are for building, yellow cells can be domed, green cells can take both actions&quot;);</b>
+<b class="nc"><i>381</i>&nbsp;                    System.out.println(&quot;Choose the worker you want to do the build, in the format row,column&quot;);</b>
+<b class="nc"><i>382</i>&nbsp;                    workerCoordinate = s.nextLine();</b>
+<b class="nc"><i>383</i>&nbsp;                    if (workerCoordinate.split(&quot;,&quot;).length == 2) {</b>
+<b class="nc"><i>384</i>&nbsp;                        workerRow = Integer.parseInt(workerCoordinate.split(&quot;,&quot;)[0]) - 1;</b>
+<b class="nc"><i>385</i>&nbsp;                        workerColumn = Integer.parseInt(workerCoordinate.split(&quot;,&quot;)[1]) - 1;</b>
+<b class="nc"><i>386</i>&nbsp;                        if (!containsWorker(validForBuild, workerRow, workerColumn) &amp;&amp; !containsWorker(validForBuild, workerRow, workerColumn)) {</b>
+<b class="nc"><i>387</i>&nbsp;                            System.out.println(&quot;Invalid choice&quot;);</b>
+<b class="nc"><i>388</i>&nbsp;                        } else inputSet = true;</b>
+<i>389</i>&nbsp;                    } else {
+<b class="nc"><i>390</i>&nbsp;                        System.out.println(&quot;Invalid input format&quot;);</b>
+<i>391</i>&nbsp;                    }
+<b class="nc"><i>392</i>&nbsp;                } while (!inputSet);</b>
+<i>393</i>&nbsp;            } else {
+<b class="nc"><i>394</i>&nbsp;                workerRow = validForBuild.get(0).getwR();</b>
+<b class="nc"><i>395</i>&nbsp;                workerColumn = validForBuild.get(0).getwC();</b>
+<i>396</i>&nbsp;            }
+<i>397</i>&nbsp;
+<i>398</i>&nbsp;
+<i>399</i>&nbsp;            //now we get the workers that haven&#39;t been chosen and colour their cells back to white, only if those cells do not belong to the chosen worker too
+<b class="nc"><i>400</i>&nbsp;            for (WorkerValidCells c : validForBuild) {</b>
+<b class="nc"><i>401</i>&nbsp;                resetBoard(c.getValidPositions()); //we reset the colour of all the cells, then we proceed to only highlight the ones of the chosen worker</b>
+<b class="nc"><i>402</i>&nbsp;            }</b>
+<b class="nc"><i>403</i>&nbsp;            for (WorkerValidCells c : validForDome) {</b>
+<b class="nc"><i>404</i>&nbsp;                resetBoard(c.getValidPositions());</b>
+<b class="nc"><i>405</i>&nbsp;            }</b>
+<i>406</i>&nbsp;
+<b class="nc"><i>407</i>&nbsp;            for (WorkerValidCells c1 : validForBuild) //we first need to look for the chosen worker in both lists</b>
+<i>408</i>&nbsp;            {
+<b class="nc"><i>409</i>&nbsp;                if (c1.getwR() == workerRow &amp;&amp; c1.getwC() == workerColumn) {</b>
+<b class="nc"><i>410</i>&nbsp;                    tempPositionsBuild = c1.getValidPositions();</b>
+<b class="nc"><i>411</i>&nbsp;                    for (WorkerValidCells c2 : validForDome) {</b>
+<b class="nc"><i>412</i>&nbsp;                        if (c2.getwR() == workerRow &amp;&amp; c2.getwC() == workerColumn) {</b>
+<b class="nc"><i>413</i>&nbsp;                            tempPositionsDome = c2.getValidPositions();</b>
+<b class="nc"><i>414</i>&nbsp;                            break;</b>
+<i>415</i>&nbsp;                        }
+<b class="nc"><i>416</i>&nbsp;                    }</b>
+<b class="nc"><i>417</i>&nbsp;                    for (Position p1 : tempPositionsBuild) {</b>
+<b class="nc"><i>418</i>&nbsp;                        this.getCellOnBoard(p1.getRow(), p1.getColumn()).setCellColour(ColoursForPrinting.red);</b>
+<b class="nc"><i>419</i>&nbsp;                    }</b>
+<b class="nc"><i>420</i>&nbsp;                    for (Position p2 : tempPositionsDome) {</b>
+<b class="nc"><i>421</i>&nbsp;                        if (this.getCellOnBoard(p2.getRow(), p2.getColumn()).getCellColour() == ColoursForPrinting.red)</b>
+<b class="nc"><i>422</i>&nbsp;                            this.getCellOnBoard(p2.getRow(), p2.getColumn()).setCellColour(ColoursForPrinting.green);</b>
+<b class="nc"><i>423</i>&nbsp;                        else this.getCellOnBoard(p2.getRow(), p2.getColumn()).setCellColour(ColoursForPrinting.yellow);</b>
+<b class="nc"><i>424</i>&nbsp;                    }</b>
+<i>425</i>&nbsp;
+<b class="nc"><i>426</i>&nbsp;                    break;</b>
+<i>427</i>&nbsp;                }
+<b class="nc"><i>428</i>&nbsp;            }</b>
+<i>429</i>&nbsp;
+<b class="nc"><i>430</i>&nbsp;            bothActions = false;</b>
+<b class="nc"><i>431</i>&nbsp;            for (WorkerValidCells c1 : validForDome) //the worker might only be able to do the dome, so we have to make this check to highlight the cells correctly</b>
+<i>432</i>&nbsp;            {
+<b class="nc"><i>433</i>&nbsp;                if (c1.getwR() == workerRow &amp;&amp; c1.getwC() == workerColumn) {</b>
+<b class="nc"><i>434</i>&nbsp;                    tempPositionsDome = c1.getValidPositions();</b>
+<b class="nc"><i>435</i>&nbsp;                    for (WorkerValidCells c2 : validForBuild) {</b>
+<b class="nc"><i>436</i>&nbsp;                        if (c2.getwR() == workerRow &amp;&amp; c2.getwC() == workerColumn) {</b>
+<b class="nc"><i>437</i>&nbsp;                            bothActions = true;</b>
+<b class="nc"><i>438</i>&nbsp;                            break;</b>
+<i>439</i>&nbsp;                        }
+<b class="nc"><i>440</i>&nbsp;                    }</b>
+<b class="nc"><i>441</i>&nbsp;                    if (!bothActions) {</b>
+<b class="nc"><i>442</i>&nbsp;                        for (Position p : tempPositionsDome) {</b>
+<b class="nc"><i>443</i>&nbsp;                            this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.yellow);</b>
+<b class="nc"><i>444</i>&nbsp;                        }</b>
+<b class="nc"><i>445</i>&nbsp;                        break;</b>
+<i>446</i>&nbsp;                    } else {
+<i>447</i>&nbsp;                        break;
+<i>448</i>&nbsp;                    }
+<i>449</i>&nbsp;                }
+<b class="nc"><i>450</i>&nbsp;            }</b>
+<i>451</i>&nbsp;
+<i>452</i>&nbsp;            //now we ask the player the action he wants to make and check if it is compatible with the chosen worker
+<b class="nc"><i>453</i>&nbsp;            String chosenAction = null;</b>
+<i>454</i>&nbsp;            String cellCoordinate;
+<i>455</i>&nbsp;
+<b class="nc"><i>456</i>&nbsp;            WorkerValidCells validCellsBuild = null;</b>
+<b class="nc"><i>457</i>&nbsp;            WorkerValidCells validCellsDome = null;</b>
+<b class="nc"><i>458</i>&nbsp;            for (WorkerValidCells c : validForBuild) //with these two loops we are looking for the chosen worker in the two lists</b>
+<i>459</i>&nbsp;            {
+<b class="nc"><i>460</i>&nbsp;                if (c.getwR() == workerRow &amp;&amp; c.getwC() == workerColumn) {</b>
+<b class="nc"><i>461</i>&nbsp;                    validCellsBuild = c;</b>
+<b class="nc"><i>462</i>&nbsp;                    break;</b>
+<i>463</i>&nbsp;                }
+<b class="nc"><i>464</i>&nbsp;            }</b>
+<i>465</i>&nbsp;
+<b class="nc"><i>466</i>&nbsp;            for (WorkerValidCells c : validForDome) {</b>
+<b class="nc"><i>467</i>&nbsp;                if (c.getwR() == workerRow &amp;&amp; c.getwC() == workerColumn) {</b>
+<b class="nc"><i>468</i>&nbsp;                    validCellsDome = c;</b>
+<b class="nc"><i>469</i>&nbsp;                    break;</b>
+<i>470</i>&nbsp;                }
+<b class="nc"><i>471</i>&nbsp;            }</b>
+<i>472</i>&nbsp;
+<i>473</i>&nbsp;            do {
+<b class="nc"><i>474</i>&nbsp;                this.printBoard();</b>
+<b class="nc"><i>475</i>&nbsp;                System.out.println(&quot;Red cells are for building, yellow cells can be domed, green cells can take both actions&quot;);</b>
+<b class="nc"><i>476</i>&nbsp;                System.out.println(&quot;Choose the cell where you want to do the build, in the format row,column&quot;);</b>
+<b class="nc"><i>477</i>&nbsp;                cellCoordinate = s.nextLine();</b>
+<b class="nc"><i>478</i>&nbsp;                if (cellCoordinate.split(&quot;,&quot;).length == 2) {</b>
+<b class="nc"><i>479</i>&nbsp;                    chosenRow = Integer.parseInt(cellCoordinate.split(&quot;,&quot;)[0]) - 1;</b>
+<b class="nc"><i>480</i>&nbsp;                    chosenColumn = Integer.parseInt(cellCoordinate.split(&quot;,&quot;)[1]) - 1;</b>
+<b class="nc"><i>481</i>&nbsp;                    if (!validCellsBuild.contains(chosenRow, chosenColumn) &amp;&amp; !validCellsDome.contains(chosenRow, chosenColumn)) {</b>
+<b class="nc"><i>482</i>&nbsp;                        System.out.println(&quot;Invalid choice&quot;);</b>
+<b class="nc"><i>483</i>&nbsp;                    } else inputSet = true;</b>
+<i>484</i>&nbsp;                } else {
+<b class="nc"><i>485</i>&nbsp;                    System.out.println(&quot;Invalid input format&quot;);</b>
+<i>486</i>&nbsp;                }
+<b class="nc"><i>487</i>&nbsp;            } while (!inputSet);</b>
+<i>488</i>&nbsp;
+<i>489</i>&nbsp;
+<i>490</i>&nbsp;            //check if he can both dome and build, or only one of them
+<b class="nc"><i>491</i>&nbsp;            boolean build = false;</b>
+<b class="nc"><i>492</i>&nbsp;            boolean dome = false;</b>
+<i>493</i>&nbsp;
+<b class="nc"><i>494</i>&nbsp;            if (validCellsBuild != null) {</b>
+<b class="nc"><i>495</i>&nbsp;                for (Position p : validCellsBuild.getValidPositions()) {</b>
+<b class="nc"><i>496</i>&nbsp;                    if (p.getRow() == chosenRow &amp;&amp; p.getColumn() == chosenColumn) {</b>
+<b class="nc"><i>497</i>&nbsp;                        build = true;</b>
+<b class="nc"><i>498</i>&nbsp;                        break;</b>
+<i>499</i>&nbsp;                    }
+<b class="nc"><i>500</i>&nbsp;                }</b>
+<i>501</i>&nbsp;            }
+<i>502</i>&nbsp;
+<b class="nc"><i>503</i>&nbsp;            if (validCellsBuild != null) {</b>
+<b class="nc"><i>504</i>&nbsp;                for (Position p : validCellsDome.getValidPositions()) {</b>
+<b class="nc"><i>505</i>&nbsp;                    if (p.getRow() == chosenRow &amp;&amp; p.getColumn() == chosenColumn) {</b>
+<b class="nc"><i>506</i>&nbsp;                        dome = true;</b>
+<b class="nc"><i>507</i>&nbsp;                        break;</b>
+<i>508</i>&nbsp;                    }
+<b class="nc"><i>509</i>&nbsp;                }</b>
+<i>510</i>&nbsp;            }
+<i>511</i>&nbsp;
+<i>512</i>&nbsp;            String input;
+<b class="nc"><i>513</i>&nbsp;            action whatToDO = null;</b>
+<b class="nc"><i>514</i>&nbsp;            if (build &amp;&amp; dome) {</b>
+<b class="nc"><i>515</i>&nbsp;                boolean completed = false;</b>
+<i>516</i>&nbsp;                do {
+<b class="nc"><i>517</i>&nbsp;                    System.out.println(&quot;Enter d if you want to dome on the selected cell, or b if you want to build&quot;);</b>
+<b class="nc"><i>518</i>&nbsp;                    input = s.nextLine();</b>
+<b class="nc"><i>519</i>&nbsp;                    if (!input.equals(&quot;d&quot;) &amp;&amp; !input.equals(&quot;b&quot;)) System.out.println(&quot;Invalid input. Retry&quot;);</b>
+<i>520</i>&nbsp;                    else {
+<b class="nc"><i>521</i>&nbsp;                        if (input.equals(&quot;d&quot;)) whatToDO = action.dome;</b>
+<b class="nc"><i>522</i>&nbsp;                        else whatToDO = action.build;</b>
+<b class="nc"><i>523</i>&nbsp;                        completed = true;</b>
+<i>524</i>&nbsp;                    }
+<b class="nc"><i>525</i>&nbsp;                } while (!completed);</b>
+<i>526</i>&nbsp;
+<b class="nc"><i>527</i>&nbsp;            } else if (build) whatToDO = action.build;</b>
+<b class="nc"><i>528</i>&nbsp;            else if (dome) whatToDO = action.dome;</b>
+<i>529</i>&nbsp;
+<b class="nc"><i>530</i>&nbsp;            this.resetBoard(validCellsBuild.getValidPositions());</b>
+<b class="nc"><i>531</i>&nbsp;            this.resetBoard(validCellsDome.getValidPositions());</b>
+<b class="nc"><i>532</i>&nbsp;            this.printBoard();</b>
+<i>533</i>&nbsp;
+<b class="nc"><i>534</i>&nbsp;            MoveCoordinates move = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);</b>
+<b class="nc"><i>535</i>&nbsp;            if (whatToDO == action.build) notifyObserver((x) -&gt; x.build(move));</b>
+<b class="nc"><i>536</i>&nbsp;            else notifyObserver((x) -&gt; x.dome(move));</b>
+<i>537</i>&nbsp;        });
+<i>538</i>&nbsp;
+<i>539</i>&nbsp;
+<i>540</i>&nbsp;    }
+<i>541</i>&nbsp;
+<i>542</i>&nbsp;    /**
+<i>543</i>&nbsp;     * method printing a message to the client notifying the end of a match
+<i>544</i>&nbsp;     * @param messageOfEndGame is the message we need to print
+<i>545</i>&nbsp;     */
+<i>546</i>&nbsp;    @Override
+<i>547</i>&nbsp;    public void endgame(String messageOfEndGame) {
+<b class="nc"><i>548</i>&nbsp;        System.out.println(messageOfEndGame);</b>
+<b class="nc"><i>549</i>&nbsp;        cA.shutDown();</b>
+<b class="nc"><i>550</i>&nbsp;        cI.shutdown();</b>
+<i>551</i>&nbsp;    }
+<i>552</i>&nbsp;
+<i>553</i>&nbsp;
+<i>554</i>&nbsp;    /**
+<i>555</i>&nbsp;     * Method used to request a player to choose a divinity.
+<i>556</i>&nbsp;     *
+<i>557</i>&nbsp;     * @param availableDivinities the list of the available divinities.
+<i>558</i>&nbsp;     */
+<i>559</i>&nbsp;    @Override
+<i>560</i>&nbsp;    public void requestDivinitySelection(ArrayList&lt;DivinitiesWithDescription&gt; availableDivinities) {
+<b class="nc"><i>561</i>&nbsp;        threadExecutor.submit(() -&gt; {</b>
+<i>562</i>&nbsp;            String input;
+<b class="nc"><i>563</i>&nbsp;            Scanner s = new Scanner(System.in);</b>
+<b class="nc"><i>564</i>&nbsp;            boolean validDivinity = false;</b>
+<i>565</i>&nbsp;            do {
+<b class="nc"><i>566</i>&nbsp;                System.out.println(&quot;Choose your divinity out of the following list: &quot;);</b>
+<b class="nc"><i>567</i>&nbsp;                for (DivinitiesWithDescription d : availableDivinities) {</b>
+<b class="nc"><i>568</i>&nbsp;                    System.out.println(d.getName() + &quot;: &quot; + d.getDescription());</b>
+<b class="nc"><i>569</i>&nbsp;                }</b>
+<b class="nc"><i>570</i>&nbsp;                input = s.nextLine();</b>
+<b class="nc"><i>571</i>&nbsp;                for (DivinitiesWithDescription d : availableDivinities) {</b>
+<b class="nc"><i>572</i>&nbsp;                    if (input.equals(d.getName())) {</b>
+<b class="nc"><i>573</i>&nbsp;                        validDivinity = true;</b>
+<b class="nc"><i>574</i>&nbsp;                        availableDivinities.remove(d);</b>
+<b class="nc"><i>575</i>&nbsp;                        break;</b>
+<i>576</i>&nbsp;                    }
+<b class="nc"><i>577</i>&nbsp;                }</b>
+<b class="nc"><i>578</i>&nbsp;                if (!validDivinity) {</b>
+<b class="nc"><i>579</i>&nbsp;                    System.out.println(&quot;Divinity not valid or no more available, please retry.&quot;);</b>
+<i>580</i>&nbsp;                }
+<b class="nc"><i>581</i>&nbsp;            } while (!validDivinity);</b>
+<b class="nc"><i>582</i>&nbsp;            System.out.println(&quot;You selected: &quot; + input);</b>
+<b class="nc"><i>583</i>&nbsp;            String selectedDivinity = input;</b>
+<b class="nc"><i>584</i>&nbsp;            notifyObserver(x -&gt; x.registerPlayerDivinity(selectedDivinity));</b>
+<i>585</i>&nbsp;        });
+<i>586</i>&nbsp;
+<i>587</i>&nbsp;    }
+<i>588</i>&nbsp;
+<i>589</i>&nbsp;    /**
+<i>590</i>&nbsp;     * Method used to request the selection of the initial player
+<i>591</i>&nbsp;     *
+<i>592</i>&nbsp;     * @param players the list of the available players
+<i>593</i>&nbsp;     */
+<i>594</i>&nbsp;    @Override
+<i>595</i>&nbsp;    public void requestInitialPlayerSelection(ArrayList&lt;String&gt; players) {
+<b class="nc"><i>596</i>&nbsp;        threadExecutor.submit(() -&gt; {</b>
+<b class="nc"><i>597</i>&nbsp;            Scanner s = new Scanner(System.in);</b>
+<i>598</i>&nbsp;            String input;
+<b class="nc"><i>599</i>&nbsp;            boolean validName = false;</b>
+<i>600</i>&nbsp;            do {
+<b class="nc"><i>601</i>&nbsp;                System.out.println(&quot;Select a player out of the following: &quot;);</b>
+<b class="nc"><i>602</i>&nbsp;                for (String str : players) {</b>
+<b class="nc"><i>603</i>&nbsp;                    System.out.println(str);</b>
+<b class="nc"><i>604</i>&nbsp;                }</b>
+<b class="nc"><i>605</i>&nbsp;                input = s.nextLine();</b>
+<b class="nc"><i>606</i>&nbsp;                if (players.contains(input)) {</b>
+<b class="nc"><i>607</i>&nbsp;                    validName = true;</b>
+<i>608</i>&nbsp;                } else {
+<b class="nc"><i>609</i>&nbsp;                    System.out.println(&quot;Player not valid, please retry.&quot;);</b>
+<i>610</i>&nbsp;                }
+<b class="nc"><i>611</i>&nbsp;            } while (!validName);</b>
+<b class="nc"><i>612</i>&nbsp;            System.out.println(&quot;You selected: &quot; + input);</b>
+<b class="nc"><i>613</i>&nbsp;            String firstPlayer = input;</b>
+<b class="nc"><i>614</i>&nbsp;            notifyObserver(x -&gt; x.selectFirstPlayer(firstPlayer));</b>
+<i>615</i>&nbsp;        });
+<i>616</i>&nbsp;
+<i>617</i>&nbsp;    }
+<i>618</i>&nbsp;
+<i>619</i>&nbsp;
+<i>620</i>&nbsp;    /**
+<i>621</i>&nbsp;     * method that handles the initial positioning of each worker on the board, showing the valid cells to the players and taking their choices
+<i>622</i>&nbsp;     *
+<i>623</i>&nbsp;     * @param validCells is the list of valid cells for the worker we are currently positioning
+<i>624</i>&nbsp;     */
+<i>625</i>&nbsp;    @Override
+<i>626</i>&nbsp;    public void requestInitialPositioning(ArrayList&lt;Position&gt; validCells) {
+<b class="nc"><i>627</i>&nbsp;        threadExecutor.submit(() -&gt; {</b>
+<b class="nc"><i>628</i>&nbsp;            int chosenRow = -1, chosenColumn = -1;</b>
+<i>629</i>&nbsp;
+<i>630</i>&nbsp;            //first we need to highlight each of the valid cells to the player
+<b class="nc"><i>631</i>&nbsp;            for (Position p : validCells) {</b>
+<b class="nc"><i>632</i>&nbsp;                this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.red);</b>
+<b class="nc"><i>633</i>&nbsp;            }</b>
+<i>634</i>&nbsp;
+<i>635</i>&nbsp;            //after that, we need to ask the player their choice
+<b class="nc"><i>636</i>&nbsp;            Scanner s = new Scanner(System.in);</b>
+<i>637</i>&nbsp;            String workerCoordinate;
+<b class="nc"><i>638</i>&nbsp;            boolean inputSet = false;</b>
+<i>639</i>&nbsp;            do {
+<b class="nc"><i>640</i>&nbsp;                this.printBoard();</b>
+<b class="nc"><i>641</i>&nbsp;                System.out.println(&quot;Choose the cell where you want to put your worker on, in the format row,column&quot;);</b>
+<b class="nc"><i>642</i>&nbsp;                workerCoordinate = s.nextLine();</b>
+<b class="nc"><i>643</i>&nbsp;                if (workerCoordinate.split(&quot;,&quot;).length == 2) {</b>
+<b class="nc"><i>644</i>&nbsp;                    chosenRow = Integer.parseInt(workerCoordinate.split(&quot;,&quot;)[0]) - 1;</b>
+<b class="nc"><i>645</i>&nbsp;                    chosenColumn = Integer.parseInt(workerCoordinate.split(&quot;,&quot;)[1]) - 1;</b>
+<b class="nc"><i>646</i>&nbsp;                    if (!validCells.contains(new Position(chosenRow, chosenColumn))) {</b>
+<b class="nc"><i>647</i>&nbsp;                        System.out.println(&quot;Invalid choice&quot;);</b>
+<b class="nc"><i>648</i>&nbsp;                    } else inputSet = true;</b>
+<i>649</i>&nbsp;                } else {
+<b class="nc"><i>650</i>&nbsp;                    System.out.println(&quot;Invalid input format&quot;);</b>
+<i>651</i>&nbsp;                }
+<b class="nc"><i>652</i>&nbsp;            } while (!inputSet);</b>
+<i>653</i>&nbsp;
+<i>654</i>&nbsp;            //after checking that the player has chosen a valid cell, we need to bring the board back to its original colours and notify the observers
+<b class="nc"><i>655</i>&nbsp;            this.resetBoard(validCells);</b>
+<b class="nc"><i>656</i>&nbsp;            this.printBoard();</b>
+<i>657</i>&nbsp;
+<b class="nc"><i>658</i>&nbsp;            Position notifiedPosition = new Position(chosenRow, chosenColumn);</b>
+<b class="nc"><i>659</i>&nbsp;            this.notifyObserver(x -&gt; {</b>
+<b class="nc"><i>660</i>&nbsp;                x.putWorkerOnTable(notifiedPosition);</b>
+<i>661</i>&nbsp;            });
+<i>662</i>&nbsp;        });
+<i>663</i>&nbsp;
+<i>664</i>&nbsp;    }
+<i>665</i>&nbsp;
+<i>666</i>&nbsp;    /**
+<i>667</i>&nbsp;     * method used to request to a player the selection of the divinities for all players
+<i>668</i>&nbsp;     *
+<i>669</i>&nbsp;     * @param div          the list of the available divinities
+<i>670</i>&nbsp;     * @param playerNumber the number of the players in the game
+<i>671</i>&nbsp;     */
+<i>672</i>&nbsp;    @Override
+<i>673</i>&nbsp;    public void requestChallengerDivinitiesSelection(ArrayList&lt;DivinitiesWithDescription&gt; div, int playerNumber) {
+<b class="nc"><i>674</i>&nbsp;        threadExecutor.submit(() -&gt; {</b>
+<i>675</i>&nbsp;            String input;
+<b class="nc"><i>676</i>&nbsp;            Scanner s = new Scanner(System.in);</b>
+<b class="nc"><i>677</i>&nbsp;            ArrayList&lt;DivinitiesWithDescription&gt; selectedDivinities = new ArrayList&lt;DivinitiesWithDescription&gt;();</b>
+<b class="nc"><i>678</i>&nbsp;            boolean validDivinity = false;</b>
+<b class="nc"><i>679</i>&nbsp;            int n = playerNumber;</b>
+<i>680</i>&nbsp;            do {
+<b class="nc"><i>681</i>&nbsp;                System.out.println(&quot;Choose &quot; + n + &quot;divinities out of the following:&quot;);</b>
+<b class="nc"><i>682</i>&nbsp;                for (DivinitiesWithDescription d : div) {</b>
+<b class="nc"><i>683</i>&nbsp;                    System.out.println(d.getName() + &quot;: &quot; + d.getDescription());</b>
+<b class="nc"><i>684</i>&nbsp;                }</b>
+<b class="nc"><i>685</i>&nbsp;                input = s.nextLine();</b>
+<b class="nc"><i>686</i>&nbsp;                for (DivinitiesWithDescription d : div) {</b>
+<b class="nc"><i>687</i>&nbsp;                    if (input.equals(d.getName())) {</b>
+<b class="nc"><i>688</i>&nbsp;                        validDivinity = true;</b>
+<b class="nc"><i>689</i>&nbsp;                        selectedDivinities.add(d);</b>
+<b class="nc"><i>690</i>&nbsp;                        div.remove(d);</b>
+<b class="nc"><i>691</i>&nbsp;                        n--;</b>
+<b class="nc"><i>692</i>&nbsp;                        break;</b>
+<i>693</i>&nbsp;                    }
+<b class="nc"><i>694</i>&nbsp;                }</b>
+<b class="nc"><i>695</i>&nbsp;                if (!validDivinity) {</b>
+<b class="nc"><i>696</i>&nbsp;                    System.out.println(&quot;Divinity not valid or no more available, please retry.&quot;);</b>
+<i>697</i>&nbsp;                }
+<b class="nc"><i>698</i>&nbsp;            } while (!validDivinity || n &gt; 0);</b>
+<b class="nc"><i>699</i>&nbsp;            System.out.println(&quot;You selected: &quot;);</b>
+<b class="nc"><i>700</i>&nbsp;            for (DivinitiesWithDescription d : selectedDivinities) {</b>
+<b class="nc"><i>701</i>&nbsp;                System.out.println(d.getName() + &quot; &quot;);</b>
+<b class="nc"><i>702</i>&nbsp;            }</b>
+<b class="nc"><i>703</i>&nbsp;            ArrayList&lt;String&gt; selected = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>704</i>&nbsp;            selectedDivinities.forEach(d -&gt; selected.add(d.getName()));</b>
+<b class="nc"><i>705</i>&nbsp;            notifyObserver(x -&gt; x.selectAvailableDivinities(selected));</b>
+<i>706</i>&nbsp;        });
+<i>707</i>&nbsp;
+<i>708</i>&nbsp;    }
+<i>709</i>&nbsp;
+<i>710</i>&nbsp;    /**
+<i>711</i>&nbsp;     * method printing a certain message for a player during the game
+<i>712</i>&nbsp;     * @param s is the string containing the message we need to print
+<i>713</i>&nbsp;     */
+<i>714</i>&nbsp;    @Override
+<i>715</i>&nbsp;    public void printMessage(String s) {
+<b class="nc"><i>716</i>&nbsp;        threadExecutor.submit(() -&gt; System.out.println(s));</b>
+<i>717</i>&nbsp;    }
+<i>718</i>&nbsp;
+<i>719</i>&nbsp;
+<i>720</i>&nbsp;    /**
+<i>721</i>&nbsp;     * method handling the optional move actions of the player
+<i>722</i>&nbsp;     *
+<i>723</i>&nbsp;     * @param validCellsForMove is the list of cells where the player can choose to make another optional move
+<i>724</i>&nbsp;     */
+<i>725</i>&nbsp;    @Override
+<i>726</i>&nbsp;    public void requestOptionalMove(ArrayList&lt;WorkerValidCells&gt; validCellsForMove) {
+<b class="nc"><i>727</i>&nbsp;        threadExecutor.submit(() -&gt; {</b>
+<i>728</i>&nbsp;            ArrayList&lt;Position&gt; tempList;
+<b class="nc"><i>729</i>&nbsp;            int workerRow = -1, workerColumn = -1;</b>
+<b class="nc"><i>730</i>&nbsp;            int chosenRow = -1, chosenColumn = -1;</b>
+<i>731</i>&nbsp;
+<b class="nc"><i>732</i>&nbsp;            for (WorkerValidCells c : validCellsForMove) {</b>
+<b class="nc"><i>733</i>&nbsp;                tempList = c.getValidPositions(); //each time we retrieve the list of valid positions for the move action</b>
+<b class="nc"><i>734</i>&nbsp;                for (Position p : tempList) // for each of the valid positions, we need to highlight the cells on the board</b>
+<i>735</i>&nbsp;                {
+<b class="nc"><i>736</i>&nbsp;                    this.getCellOnBoard(p.getRow(), p.getColumn()).setCellColour(ColoursForPrinting.red);</b>
+<b class="nc"><i>737</i>&nbsp;                }</b>
+<b class="nc"><i>738</i>&nbsp;            }</b>
+<b class="nc"><i>739</i>&nbsp;            this.printBoard();</b>
+<i>740</i>&nbsp;
+<i>741</i>&nbsp;            //after highlighting the cells to the player, we ask him if he wants to move or to skip the action
+<b class="nc"><i>742</i>&nbsp;            String chosenAction = null;</b>
+<b class="nc"><i>743</i>&nbsp;            Scanner s = new Scanner(System.in);</b>
+<b class="nc"><i>744</i>&nbsp;            boolean completed = false;</b>
+<i>745</i>&nbsp;            do {
+<b class="nc"><i>746</i>&nbsp;                System.out.println(&quot;Write skip if you want to skip the optional move action, move if you want to do the optional move: &quot;);</b>
+<b class="nc"><i>747</i>&nbsp;                if (s.hasNext()) {</b>
+<b class="nc"><i>748</i>&nbsp;                    chosenAction = s.nextLine();</b>
+<i>749</i>&nbsp;                }
+<i>750</i>&nbsp;
+<b class="nc"><i>751</i>&nbsp;                if (chosenAction.equals(&quot;skip&quot;)) //the player has chosen to skip so we can just notify the server</b>
+<i>752</i>&nbsp;                {
+<b class="nc"><i>753</i>&nbsp;                    MoveCoordinates chosenCoordinates = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);</b>
+<b class="nc"><i>754</i>&nbsp;                    for (WorkerValidCells c : validCellsForMove) {</b>
+<b class="nc"><i>755</i>&nbsp;                        resetBoard(c.getValidPositions());</b>
+<b class="nc"><i>756</i>&nbsp;                    }</b>
+<b class="nc"><i>757</i>&nbsp;                    this.notifyObserver(x -&gt; {</b>
+<b class="nc"><i>758</i>&nbsp;                        x.move(chosenCoordinates);</b>
+<i>759</i>&nbsp;                    });
+<b class="nc"><i>760</i>&nbsp;                    completed = true;</b>
+<b class="nc"><i>761</i>&nbsp;                } else if (chosenAction.equals(&quot;move&quot;)) {</b>
+<b class="nc"><i>762</i>&nbsp;                    this.requestMove(validCellsForMove);</b>
+<b class="nc"><i>763</i>&nbsp;                    completed = true;</b>
+<i>764</i>&nbsp;                } else {
+<b class="nc"><i>765</i>&nbsp;                    System.out.println(&quot;Invalid choice&quot;);</b>
+<i>766</i>&nbsp;                }
+<b class="nc"><i>767</i>&nbsp;            } while (!completed);</b>
+<i>768</i>&nbsp;        });
+<i>769</i>&nbsp;
+<i>770</i>&nbsp;    }
+<i>771</i>&nbsp;
+<i>772</i>&nbsp;
+<i>773</i>&nbsp;    /**
+<i>774</i>&nbsp;     * method handling the optional construction operations during the turn
+<i>775</i>&nbsp;     *
+<i>776</i>&nbsp;     * @param build is the list of valid cells for the building operations
+<i>777</i>&nbsp;     * @param dome  is the list of valid cells for the dome operations
+<i>778</i>&nbsp;     */
+<i>779</i>&nbsp;    @Override
+<i>780</i>&nbsp;    public void requestOptionalBuild(ArrayList&lt;WorkerValidCells&gt; build, ArrayList&lt;WorkerValidCells&gt; dome) {
+<b class="nc"><i>781</i>&nbsp;        threadExecutor.submit(() -&gt; {</b>
+<b class="nc"><i>782</i>&nbsp;            int workerRow = -1, workerColumn = -1;</b>
+<b class="nc"><i>783</i>&nbsp;            int chosenRow = -1, chosenColumn = -1;</b>
+<b class="nc"><i>784</i>&nbsp;            ArrayList&lt;Position&gt; tempPositionsBuild = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>785</i>&nbsp;            ArrayList&lt;Position&gt; tempPositionsDome = new ArrayList&lt;&gt;();</b>
+<i>786</i>&nbsp;
+<b class="nc"><i>787</i>&nbsp;            for (WorkerValidCells c1 : build) {</b>
+<b class="nc"><i>788</i>&nbsp;                tempPositionsBuild = c1.getValidPositions();</b>
+<b class="nc"><i>789</i>&nbsp;                for (WorkerValidCells c2 : dome) {</b>
+<b class="nc"><i>790</i>&nbsp;                    if (c2.getwR() == c1.getwR() &amp;&amp; c2.getwC() == c1.getwC()) {</b>
+<b class="nc"><i>791</i>&nbsp;                        tempPositionsDome = c2.getValidPositions();</b>
+<b class="nc"><i>792</i>&nbsp;                        break;</b>
+<i>793</i>&nbsp;                    }
+<b class="nc"><i>794</i>&nbsp;                }</b>
+<b class="nc"><i>795</i>&nbsp;                for (Position p1 : tempPositionsBuild) {</b>
+<b class="nc"><i>796</i>&nbsp;                    this.getCellOnBoard(p1.getRow(), p1.getColumn()).setCellColour(ColoursForPrinting.red);</b>
+<b class="nc"><i>797</i>&nbsp;                }</b>
+<b class="nc"><i>798</i>&nbsp;                for (Position p2 : tempPositionsDome) {</b>
+<b class="nc"><i>799</i>&nbsp;                    if (this.getCellOnBoard(p2.getRow(), p2.getColumn()).getCellColour() == ColoursForPrinting.red)</b>
+<b class="nc"><i>800</i>&nbsp;                        this.getCellOnBoard(p2.getRow(), p2.getColumn()).setCellColour(ColoursForPrinting.green);</b>
+<b class="nc"><i>801</i>&nbsp;                    else this.getCellOnBoard(p2.getRow(), p2.getColumn()).setCellColour(ColoursForPrinting.yellow);</b>
+<b class="nc"><i>802</i>&nbsp;                }</b>
+<b class="nc"><i>803</i>&nbsp;                tempPositionsDome = null;</b>
+<b class="nc"><i>804</i>&nbsp;            }</b>
+<i>805</i>&nbsp;
+<b class="nc"><i>806</i>&nbsp;            boolean bothActions = false;</b>
+<b class="nc"><i>807</i>&nbsp;            for (WorkerValidCells w1 : dome) {</b>
+<b class="nc"><i>808</i>&nbsp;                for (WorkerValidCells w2 : build) {</b>
+<b class="nc"><i>809</i>&nbsp;                    if (w2.getwR() == w1.getwR() &amp;&amp; w2.getwC() == w1.getwC()) {</b>
+<b class="nc"><i>810</i>&nbsp;                        bothActions = true;</b>
+<b class="nc"><i>811</i>&nbsp;                        break;</b>
+<i>812</i>&nbsp;                    }
+<b class="nc"><i>813</i>&nbsp;                }</b>
+<b class="nc"><i>814</i>&nbsp;                if (bothActions == false) {</b>
+<b class="nc"><i>815</i>&nbsp;                    for (Position pos1 : w1.getValidPositions()) {</b>
+<b class="nc"><i>816</i>&nbsp;                        this.getCellOnBoard(pos1.getRow(), pos1.getColumn()).setCellColour(ColoursForPrinting.yellow);</b>
+<b class="nc"><i>817</i>&nbsp;                    }</b>
+<i>818</i>&nbsp;                }
+<b class="nc"><i>819</i>&nbsp;            }</b>
+<b class="nc"><i>820</i>&nbsp;            this.printBoard();</b>
+<i>821</i>&nbsp;
+<b class="nc"><i>822</i>&nbsp;            boolean completed = false;</b>
+<i>823</i>&nbsp;
+<i>824</i>&nbsp;            do {
+<b class="nc"><i>825</i>&nbsp;                String chosenAction = null;</b>
+<b class="nc"><i>826</i>&nbsp;                Scanner s = new Scanner(System.in);</b>
+<b class="nc"><i>827</i>&nbsp;                System.out.println(&quot;Write skip if you want to skip the optional construction actions, build if you want to do the build: &quot;);</b>
+<b class="nc"><i>828</i>&nbsp;                if (s.hasNext()) {</b>
+<b class="nc"><i>829</i>&nbsp;                    chosenAction = s.nextLine();</b>
+<i>830</i>&nbsp;                }
+<i>831</i>&nbsp;
+<b class="nc"><i>832</i>&nbsp;                if (chosenAction.equals(&quot;skip&quot;)) //the player has chosen to skip so we can just notify the server</b>
+<i>833</i>&nbsp;                {
+<b class="nc"><i>834</i>&nbsp;                    MoveCoordinates chosenCoordinates = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);</b>
+<b class="nc"><i>835</i>&nbsp;                    for (WorkerValidCells c1 : build) {</b>
+<b class="nc"><i>836</i>&nbsp;                        resetBoard(c1.getValidPositions());</b>
+<b class="nc"><i>837</i>&nbsp;                    }</b>
+<b class="nc"><i>838</i>&nbsp;                    for (WorkerValidCells c2 : dome) {</b>
+<b class="nc"><i>839</i>&nbsp;                        resetBoard(c2.getValidPositions());</b>
+<b class="nc"><i>840</i>&nbsp;                    }</b>
+<b class="nc"><i>841</i>&nbsp;                    this.notifyObserver(x -&gt; {</b>
+<b class="nc"><i>842</i>&nbsp;                        x.build(chosenCoordinates);</b>
+<i>843</i>&nbsp;                    });
+<b class="nc"><i>844</i>&nbsp;                    completed = true;</b>
+<b class="nc"><i>845</i>&nbsp;                } else if (chosenAction.equals(&quot;build&quot;)) {</b>
+<b class="nc"><i>846</i>&nbsp;                    this.requestDomeOrBuild(build, dome);</b>
+<b class="nc"><i>847</i>&nbsp;                    completed = true;</b>
+<i>848</i>&nbsp;                } else {
+<b class="nc"><i>849</i>&nbsp;                    System.out.println(&quot;Invalid choice&quot;);</b>
+<i>850</i>&nbsp;                }
+<b class="nc"><i>851</i>&nbsp;            } while (!completed);</b>
+<i>852</i>&nbsp;        });
+<i>853</i>&nbsp;
+<i>854</i>&nbsp;    }
+<i>855</i>&nbsp;
+<i>856</i>&nbsp;    /**
+<i>857</i>&nbsp;     * @author Daniele Mammone
+<i>858</i>&nbsp;     * Starts The Player Client, and initialize the network connection
+<i>859</i>&nbsp;     */
+<i>860</i>&nbsp;    @Override
+<i>861</i>&nbsp;    public void run() {
+<b class="nc"><i>862</i>&nbsp;        Scanner scanner = new Scanner(System.in);</b>
+<b class="nc"><i>863</i>&nbsp;        System.out.println(&quot;Welcome to Santorini CLI Mode\nPlease insert the Server IP and press ENTER.&quot;);</b>
+<b class="nc"><i>864</i>&nbsp;        String serverIP = scanner.nextLine();</b>
+<i>865</i>&nbsp;
+<i>866</i>&nbsp;
+<i>867</i>&nbsp;        try {
+<b class="nc"><i>868</i>&nbsp;            server = new Socket(serverIP, 7777);</b>
+<b class="nc"><i>869</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>870</i>&nbsp;            System.out.println(&quot;Can&#39;t connect to the Server. Aborting.&quot;);</b>
+<i>871</i>&nbsp;            return;
+<b class="nc"><i>872</i>&nbsp;        }</b>
+<i>873</i>&nbsp;
+<b class="nc"><i>874</i>&nbsp;        cA = new ClientNetworkOutcoming(server);</b>
+<b class="nc"><i>875</i>&nbsp;        Thread cAThread = new Thread(cA);</b>
+<i>876</i>&nbsp;
+<b class="nc"><i>877</i>&nbsp;        this.registerObserver(cA);</b>
+<i>878</i>&nbsp;
+<b class="nc"><i>879</i>&nbsp;        cI = new ClientNetworkIncoming(this, server);</b>
+<b class="nc"><i>880</i>&nbsp;        cI.setOutHandler(cA);</b>
+<b class="nc"><i>881</i>&nbsp;        cI.addObserver(this);</b>
+<b class="nc"><i>882</i>&nbsp;        Thread cIThread = new Thread(cI);</b>
+<i>883</i>&nbsp;
+<b class="nc"><i>884</i>&nbsp;        cIThread.start();</b>
+<b class="nc"><i>885</i>&nbsp;        cAThread.start();</b>
+<i>886</i>&nbsp;
+<b class="nc"><i>887</i>&nbsp;        System.out.println(&quot;Connected to the Santorini Server&quot;);</b>
+<i>888</i>&nbsp;    }
+<i>889</i>&nbsp;
+<i>890</i>&nbsp;
+<i>891</i>&nbsp;    /**
+<i>892</i>&nbsp;     * method showing to a player the nickname he has chosen to login with, together with the assigned colour
+<i>893</i>&nbsp;     * @param result is what we show to the client
+<i>894</i>&nbsp;     */
+<i>895</i>&nbsp;    @Override
+<i>896</i>&nbsp;    public synchronized void nicknameResult(String result) {
+<b class="nc"><i>897</i>&nbsp;        threadExecutor.submit(() -&gt; System.out.println(result));</b>
+<i>898</i>&nbsp;    }
+<i>899</i>&nbsp;
+<i>900</i>&nbsp;    /**
+<i>901</i>&nbsp;     * method showing the result of the game mode selection
+<i>902</i>&nbsp;     * @param result is the result we show to the client
+<i>903</i>&nbsp;     */
+<i>904</i>&nbsp;    @Override
+<i>905</i>&nbsp;    public synchronized void gameModeResult(String result) {
+<b class="nc"><i>906</i>&nbsp;        threadExecutor.submit(() -&gt; System.out.println(result));</b>
+<i>907</i>&nbsp;    }
+<i>908</i>&nbsp;
+<i>909</i>&nbsp;    /**
+<i>910</i>&nbsp;     * method requesting to a player to write a nickname in order to login and play
+<i>911</i>&nbsp;     * @param message is the message we print to make our request
+<i>912</i>&nbsp;     */
+<i>913</i>&nbsp;    @Override
+<i>914</i>&nbsp;    public void requestNicknameSend(String message) {
+<b class="nc"><i>915</i>&nbsp;        threadExecutor.submit(() -&gt; {</b>
+<b class="nc"><i>916</i>&nbsp;            Scanner scanner = new Scanner(System.in);</b>
+<b class="nc"><i>917</i>&nbsp;            System.out.println(&quot;Choose a nickname to login&quot;);</b>
+<b class="nc"><i>918</i>&nbsp;            String nextMessage = scanner.nextLine();</b>
+<b class="nc"><i>919</i>&nbsp;            cA.requestNicknameSend(nextMessage);</b>
+<i>920</i>&nbsp;        });
+<i>921</i>&nbsp;
+<i>922</i>&nbsp;    }
+<i>923</i>&nbsp;
+<i>924</i>&nbsp;    /**
+<i>925</i>&nbsp;     * method sending the request to select a game mode, showing all the possible choices
+<i>926</i>&nbsp;     * @param message contains the request we make
+<i>927</i>&nbsp;     */
+<i>928</i>&nbsp;    @Override
+<i>929</i>&nbsp;    public void requestGameModeSend(String message) {
+<b class="nc"><i>930</i>&nbsp;        threadExecutor.submit(() -&gt; {</b>
+<b class="nc"><i>931</i>&nbsp;            Scanner scanner = new Scanner(System.in);</b>
+<b class="nc"><i>932</i>&nbsp;            System.out.println(&quot;Choose a game mode&quot;);</b>
+<b class="nc"><i>933</i>&nbsp;            System.out.println(&quot;2D for two player game with divinities;&quot;);</b>
+<b class="nc"><i>934</i>&nbsp;            System.out.println(&quot;3D for two player game with divinities;&quot;);</b>
+<b class="nc"><i>935</i>&nbsp;            System.out.println(&quot;2ND for two player game without divinities, followed by your birthday in the form dd-mm-aaaa;&quot;);</b>
+<b class="nc"><i>936</i>&nbsp;            System.out.println(&quot;3ND for two player game without divinities, followed by your birthday in the form dd-mm-aaaa;&quot;);</b>
+<b class="nc"><i>937</i>&nbsp;            String nextMessage = scanner.nextLine();</b>
+<b class="nc"><i>938</i>&nbsp;            cA.setGameMode(nextMessage);</b>
+<i>939</i>&nbsp;        });
+<i>940</i>&nbsp;
+<i>941</i>&nbsp;    }
+<i>942</i>&nbsp;
+<i>943</i>&nbsp;    @Override
+<i>944</i>&nbsp;    public void completedSetup(String message) {
+<i>945</i>&nbsp;
+<i>946</i>&nbsp;    }
+<i>947</i>&nbsp;
+<i>948</i>&nbsp;    /**
+<i>949</i>&nbsp;     * method used in the functions handling the game board, to see if a certain selected position is among the valid ones
+<i>950</i>&nbsp;     * @param arr is the list containing the valid worker positions
+<i>951</i>&nbsp;     * @param row is the row selected by the player for the worker to use
+<i>952</i>&nbsp;     * @param column is the column selected by the player for the worker to use
+<i>953</i>&nbsp;     * @return true if the worker is valid, else false
+<i>954</i>&nbsp;     */
+<i>955</i>&nbsp;    public boolean containsWorker(ArrayList&lt;WorkerValidCells&gt; arr, int row, int column) {
+<b class="nc"><i>956</i>&nbsp;        for (WorkerValidCells v : arr) {</b>
+<b class="nc"><i>957</i>&nbsp;            if (v.getwR() == row &amp;&amp; v.getwC() == column &amp;&amp; !v.getValidPositions().isEmpty()) return true;</b>
+<b class="nc"><i>958</i>&nbsp;        }</b>
+<b class="nc"><i>959</i>&nbsp;        return false;</b>
+<i>960</i>&nbsp;    }
+<i>961</i>&nbsp;
+<i>962</i>&nbsp;    /**
+<i>963</i>&nbsp;     * attribute used to handle the building operations on the board
+<i>964</i>&nbsp;     */
+<b class="nc"><i>965</i>&nbsp;    private enum action {</b>
+<b class="nc"><i>966</i>&nbsp;        build, dome;</b>
+<i>967</i>&nbsp;    }
+<i>968</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-24 20:50</div>
+</div>
+</body>
+</html>

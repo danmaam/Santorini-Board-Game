@@ -1,0 +1,412 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Model</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP48.server.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Model (it.polimi.ingsw.PSP48.server.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Model</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    48,3%
+  </span>
+  <span class="absValue">
+    (14/ 29)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    56,2%
+  </span>
+  <span class="absValue">
+    (72/ 128)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.server.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ModelObserver;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.divinities.*;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;import java.util.ArrayList;
+<i>8</i>&nbsp;import java.util.Calendar;
+<i>9</i>&nbsp;import java.util.Stack;
+<i>10</i>&nbsp;import java.util.function.Consumer;
+<i>11</i>&nbsp;import java.util.stream.Collectors;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;/**
+<i>14</i>&nbsp; * class used to contain all the data of a certain game, like the players and their workers, the current player and the status of the game
+<i>15</i>&nbsp; * there is a list of chosen divinities because players first choose a number of divinities according to how many are playing and then each of them chooses his/her divinity from the smaller group they have selected
+<i>16</i>&nbsp; * the list of available divinities is used when players are still selecting the smaller group of divinities and they need to know what they can still choose
+<i>17</i>&nbsp; *
+<i>18</i>&nbsp; * @author Rebecca Marelli
+<i>19</i>&nbsp; */
+<i>20</i>&nbsp;public class Model {
+<b class="fc"><i>21</i>&nbsp;    private final ArrayList&lt;Player&gt; playersInGame = new ArrayList&lt;&gt;(); //the player are stored in a certain order, according to the order of their turns</b>
+<b class="fc"><i>22</i>&nbsp;    private final Stack&lt;Colour&gt; availableColours = new Stack&lt;&gt;();</b>
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    public boolean isGameWithDivinities() {
+<b class="nc"><i>25</i>&nbsp;        return gameWithDivinities;</b>
+<i>26</i>&nbsp;    }
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    public int getGamePlayerNumber() {
+<b class="nc"><i>29</i>&nbsp;        return gamePlayerNumber;</b>
+<i>30</i>&nbsp;    }
+<i>31</i>&nbsp;
+<b class="fc"><i>32</i>&nbsp;    private String playerWithCirce = null;</b>
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    private ArrayList&lt;Divinity&gt; availableDivinities;
+<b class="fc"><i>35</i>&nbsp;    private int currentPlayer = -1; //it has this initial value cause there are moments of the game when there isn&#39;t a current player</b>
+<b class="fc"><i>36</i>&nbsp;    private final Cell[][] boardCell = new Cell[5][5];</b>
+<i>37</i>&nbsp;    private final int gamePlayerNumber;
+<i>38</i>&nbsp;    private final boolean gameWithDivinities;
+<i>39</i>&nbsp;    private int challengerIndex;
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    public void setFirstPlayerIndex(int firstPlayerIndex) {
+<b class="nc"><i>42</i>&nbsp;        this.firstPlayerIndex = firstPlayerIndex;</b>
+<b class="nc"><i>43</i>&nbsp;    }</b>
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    private int firstPlayerIndex;
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    public int getFirstPlayerIndex() {
+<b class="nc"><i>48</i>&nbsp;        return firstPlayerIndex;</b>
+<i>49</i>&nbsp;    }
+<i>50</i>&nbsp;
+<b class="fc"><i>51</i>&nbsp;    public Model(int number, boolean divinities) {</b>
+<b class="fc"><i>52</i>&nbsp;        if (divinities) {</b>
+<b class="fc"><i>53</i>&nbsp;            availableDivinities = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>54</i>&nbsp;            if (Apollo.supportedDivinity(number)) availableDivinities.add(new Apollo());</b>
+<b class="fc"><i>55</i>&nbsp;            if (Artemis.supportedDivinity(number)) availableDivinities.add(new Artemis());</b>
+<b class="fc"><i>56</i>&nbsp;            if (Athena.supportedDivinity(number)) availableDivinities.add(new Athena());</b>
+<b class="fc"><i>57</i>&nbsp;            if (Atlas.supportedDivinity(number)) availableDivinities.add(new Atlas());</b>
+<b class="fc"><i>58</i>&nbsp;            if (Chronus.supportedDivinity(number)) availableDivinities.add(new Chronus());</b>
+<b class="fc"><i>59</i>&nbsp;            if (Circe.supportedDivinity(number)) availableDivinities.add(new Circe());</b>
+<b class="fc"><i>60</i>&nbsp;            if (Demeter.supportedDivinity(number)) availableDivinities.add(new Demeter());</b>
+<b class="fc"><i>61</i>&nbsp;            if (Eros.supportedDivinity(number)) availableDivinities.add(new Eros());</b>
+<b class="fc"><i>62</i>&nbsp;            if (Hephaestus.supportedDivinity(number)) availableDivinities.add(new Hephaestus());</b>
+<b class="fc"><i>63</i>&nbsp;            if (Hestia.supportedDivinity(number)) availableDivinities.add(new Hestia());</b>
+<b class="fc"><i>64</i>&nbsp;            if (Minotaur.supportedDivinity(number)) availableDivinities.add(new Minotaur());</b>
+<b class="fc"><i>65</i>&nbsp;            if (Pan.supportedDivinity(number)) availableDivinities.add(new Pan());</b>
+<b class="fc"><i>66</i>&nbsp;            if (Prometheus.supportedDivinity(number)) availableDivinities.add(new Prometheus());</b>
+<b class="fc"><i>67</i>&nbsp;            if (Zeus.supportedDivinity(number)) availableDivinities.add(new Zeus());</b>
+<i>68</i>&nbsp;        }
+<b class="fc"><i>69</i>&nbsp;        availableColours.add(Colour.BLUE);</b>
+<b class="fc"><i>70</i>&nbsp;        availableColours.add(Colour.GRAY);</b>
+<b class="fc"><i>71</i>&nbsp;        availableColours.add(Colour.WHITE);</b>
+<b class="fc"><i>72</i>&nbsp;        for (int i = 0; i &lt; 5; i++) {</b>
+<b class="fc"><i>73</i>&nbsp;            for (int j = 0; j &lt; 5; j++) {</b>
+<b class="fc"><i>74</i>&nbsp;                boardCell[i][j] = new Cell(i, j);</b>
+<i>75</i>&nbsp;            }
+<i>76</i>&nbsp;        }
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;        //ONLY FOR DEBUGGING
+<i>79</i>&nbsp;
+<b class="fc"><i>80</i>&nbsp;        gamePlayerNumber = number;</b>
+<b class="fc"><i>81</i>&nbsp;        gameWithDivinities = divinities;</b>
+<i>82</i>&nbsp;
+<b class="fc"><i>83</i>&nbsp;    }</b>
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    //OBSERVER METHODS
+<i>86</i>&nbsp;
+<b class="fc"><i>87</i>&nbsp;    private final ArrayList&lt;ModelObserver&gt; observers = new ArrayList&lt;&gt;();</b>
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;    public void registerObserver(ModelObserver obv) {
+<b class="nc"><i>90</i>&nbsp;        observers.add(obv);</b>
+<b class="nc"><i>91</i>&nbsp;    }</b>
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;    public void unregisterObserver(ModelObserver obv) {
+<b class="nc"><i>94</i>&nbsp;        observers.remove(obv);</b>
+<b class="nc"><i>95</i>&nbsp;    }</b>
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    public void notifyObservers(Consumer&lt;ModelObserver&gt; lambda) {
+<b class="fc"><i>98</i>&nbsp;        for (ModelObserver o : observers) {</b>
+<b class="nc"><i>99</i>&nbsp;            lambda.accept(o);</b>
+<b class="nc"><i>100</i>&nbsp;        }</b>
+<b class="fc"><i>101</i>&nbsp;    }</b>
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    /**
+<i>105</i>&nbsp;     * method used to obtain how many players are in a certain game (they can be 2 or 3)
+<i>106</i>&nbsp;     *
+<i>107</i>&nbsp;     * @return an int that is the total number of players in the game
+<i>108</i>&nbsp;     */
+<i>109</i>&nbsp;    public int getNumberOfPlayers() {
+<b class="fc"><i>110</i>&nbsp;        return (this.playersInGame.size());</b>
+<i>111</i>&nbsp;    }
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;    /**
+<i>114</i>&nbsp;     * method that retrieves all the players of the game, together with the list of their workers
+<i>115</i>&nbsp;     *
+<i>116</i>&nbsp;     * @return the list of PlayerWorkerConnection elements
+<i>117</i>&nbsp;     */
+<i>118</i>&nbsp;    public ArrayList&lt;Player&gt; getPlayersInGame() {
+<b class="fc"><i>119</i>&nbsp;        return playersInGame;</b>
+<i>120</i>&nbsp;    }
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;    public void addPlayer(String playerName, Colour playerColour, Calendar playerBirthday) {
+<b class="fc"><i>123</i>&nbsp;        playersInGame.add(new Player(playerName, playerBirthday, gameWithDivinities, playerColour));</b>
+<b class="fc"><i>124</i>&nbsp;        sendPlayerList();</b>
+<b class="fc"><i>125</i>&nbsp;    }</b>
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;    /**
+<i>128</i>&nbsp;     * Returns the next available colours, since players&#39; colours are set by the controller when a player connects to the game room.
+<i>129</i>&nbsp;     *
+<i>130</i>&nbsp;     * @return the next available colour
+<i>131</i>&nbsp;     */
+<i>132</i>&nbsp;    public Colour getNextColour() {
+<b class="nc"><i>133</i>&nbsp;        return availableColours.pop();</b>
+<i>134</i>&nbsp;    }
+<i>135</i>&nbsp;
+<i>136</i>&nbsp;
+<i>137</i>&nbsp;    /**
+<i>138</i>&nbsp;     * Returns a collection of Divinities, with their description, available to be chosen by players.
+<i>139</i>&nbsp;     *
+<i>140</i>&nbsp;     * @return ArrayList of type DivinitiesWithDescription containing available divinities to be chosen
+<i>141</i>&nbsp;     */
+<i>142</i>&nbsp;    public ArrayList&lt;DivinitiesWithDescription&gt; getAvailableDivinities() {
+<b class="nc"><i>143</i>&nbsp;        ArrayList&lt;DivinitiesWithDescription&gt; ret_a = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>144</i>&nbsp;        availableDivinities.forEach((Divinity d) -&gt; ret_a.add(new DivinitiesWithDescription(d.getName(), d.getDescription())));</b>
+<b class="nc"><i>145</i>&nbsp;        return ret_a;</b>
+<i>146</i>&nbsp;    }
+<i>147</i>&nbsp;
+<i>148</i>&nbsp;    /**
+<i>149</i>&nbsp;     * method used to retrieve the player of the current turn
+<i>150</i>&nbsp;     *
+<i>151</i>&nbsp;     * @return a reference to the current player
+<i>152</i>&nbsp;     */
+<i>153</i>&nbsp;    public Player getCurrentPlayer() {
+<i>154</i>&nbsp;        Player neededCurrentPlayer;
+<i>155</i>&nbsp;
+<b class="fc"><i>156</i>&nbsp;        neededCurrentPlayer = this.playersInGame.get(currentPlayer);</b>
+<i>157</i>&nbsp;
+<b class="fc"><i>158</i>&nbsp;        return (neededCurrentPlayer);</b>
+<i>159</i>&nbsp;    }
+<i>160</i>&nbsp;
+<i>161</i>&nbsp;    /**
+<i>162</i>&nbsp;     * method used to change the current player at the end of a certain turn
+<i>163</i>&nbsp;     * since players are stored in playersInGame according to their turns, we just need to increase by one the int parameter currentPlayer
+<i>164</i>&nbsp;     */
+<i>165</i>&nbsp;    public void setNextPlayer() {
+<b class="nc"><i>166</i>&nbsp;        if (this.currentPlayer == -1 || this.currentPlayer &gt;= (getNumberOfPlayers() - 1)) {</b>
+<b class="nc"><i>167</i>&nbsp;            this.currentPlayer = 0;</b>
+<b class="nc"><i>168</i>&nbsp;        } else this.currentPlayer++;</b>
+<i>169</i>&nbsp;
+<b class="nc"><i>170</i>&nbsp;    }</b>
+<i>171</i>&nbsp;
+<i>172</i>&nbsp;    /**
+<i>173</i>&nbsp;     * method used to retrieve a certain cell from the board, to then get its state (for example if it is occupied by a worker)
+<i>174</i>&nbsp;     *
+<i>175</i>&nbsp;     * @param row    gives the row of the cell in the board
+<i>176</i>&nbsp;     * @param column gives the column of the cell in the board
+<i>177</i>&nbsp;     * @return a reference to the needed cell
+<i>178</i>&nbsp;     */
+<i>179</i>&nbsp;    public Cell getCell(int row, int column) {
+<i>180</i>&nbsp;        Cell neededCell;
+<i>181</i>&nbsp;
+<b class="fc"><i>182</i>&nbsp;        neededCell = this.boardCell[row][column];</b>
+<i>183</i>&nbsp;
+<b class="fc"><i>184</i>&nbsp;        return (neededCell);</b>
+<i>185</i>&nbsp;    }
+<i>186</i>&nbsp;
+<i>187</i>&nbsp;    /**
+<i>188</i>&nbsp;     * @param playerName the name of the player
+<i>189</i>&nbsp;     * @return the cells&#39; coordinates of player
+<i>190</i>&nbsp;     * @author Daniele Mammone
+<i>191</i>&nbsp;     */
+<i>192</i>&nbsp;    public ArrayList&lt;Position&gt; getPlayerPositionsInMap(String playerName) {
+<b class="fc"><i>193</i>&nbsp;        ArrayList&lt;Position&gt; returnArray = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>194</i>&nbsp;        for (int i = 0; i &lt; 5; i++) {</b>
+<b class="fc"><i>195</i>&nbsp;            for (int j = 0; j &lt; 5; j++) {</b>
+<b class="fc"><i>196</i>&nbsp;                if (boardCell[i][j].getPlayer() != null &amp;&amp; boardCell[i][j].getPlayer().equals(playerName))</b>
+<b class="fc"><i>197</i>&nbsp;                    returnArray.add(new Position(i, j));</b>
+<i>198</i>&nbsp;            }
+<i>199</i>&nbsp;        }
+<b class="fc"><i>200</i>&nbsp;        return returnArray;</b>
+<i>201</i>&nbsp;    }
+<i>202</i>&nbsp;
+<i>203</i>&nbsp;    public Player getPlayer(String playerName) {
+<b class="fc"><i>204</i>&nbsp;        for (Player p : playersInGame) {</b>
+<b class="fc"><i>205</i>&nbsp;            if (p.getName().equals(playerName)) return p;</b>
+<b class="fc"><i>206</i>&nbsp;        }</b>
+<b class="nc"><i>207</i>&nbsp;        return null;</b>
+<i>208</i>&nbsp;    }
+<i>209</i>&nbsp;
+<i>210</i>&nbsp;    public Cell[][] getGameBoard() {
+<b class="fc"><i>211</i>&nbsp;        return boardCell;</b>
+<i>212</i>&nbsp;    }
+<i>213</i>&nbsp;
+<i>214</i>&nbsp;    public void setNextPlayer(int i) {
+<b class="fc"><i>215</i>&nbsp;        currentPlayer = i;</b>
+<b class="fc"><i>216</i>&nbsp;    }</b>
+<i>217</i>&nbsp;
+<i>218</i>&nbsp;    public void removePlayer(String pName) {
+<b class="nc"><i>219</i>&nbsp;        ArrayList&lt;Cell&gt; updatedCells = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>220</i>&nbsp;        ArrayList&lt;String&gt; newPlayerList = new ArrayList&lt;&gt;();</b>
+<i>221</i>&nbsp;
+<b class="nc"><i>222</i>&nbsp;        for (int i = 0; i &lt; 5; i++) //we also need to remove the player from the board and then make a list of all the updated cells (we need to clone these cells)</b>
+<i>223</i>&nbsp;        {
+<b class="nc"><i>224</i>&nbsp;            for (int j = 0; j &lt; 5; j++) {</b>
+<b class="nc"><i>225</i>&nbsp;                if (boardCell[i][j].getPlayer() != null &amp;&amp; boardCell[i][j].getPlayer().equals(pName)) {</b>
+<b class="nc"><i>226</i>&nbsp;                    boardCell[i][j].setPlayer(null);</b>
+<b class="nc"><i>227</i>&nbsp;                    updatedCells.add((Cell) boardCell[i][j].clone());</b>
+<i>228</i>&nbsp;                }
+<i>229</i>&nbsp;
+<i>230</i>&nbsp;            }
+<i>231</i>&nbsp;        }
+<b class="nc"><i>232</i>&nbsp;        notifyObservers(x -&gt; x.changedBoard(updatedCells));</b>
+<i>233</i>&nbsp;
+<b class="nc"><i>234</i>&nbsp;        playersInGame.remove(getPlayer(pName)); //then we remove the player from the player list</b>
+<b class="nc"><i>235</i>&nbsp;        for (Player p : playersInGame) {</b>
+<b class="nc"><i>236</i>&nbsp;            newPlayerList.add(p.getName());</b>
+<b class="nc"><i>237</i>&nbsp;        }</b>
+<b class="nc"><i>238</i>&nbsp;        notifyObservers(x -&gt; x.changedPlayerList(newPlayerList));</b>
+<b class="nc"><i>239</i>&nbsp;        sendPlayerList();</b>
+<b class="nc"><i>240</i>&nbsp;    }</b>
+<i>241</i>&nbsp;
+<i>242</i>&nbsp;    public void setChallengerIndex(int challengerIndex) {
+<b class="nc"><i>243</i>&nbsp;        this.challengerIndex = challengerIndex;</b>
+<b class="nc"><i>244</i>&nbsp;    }</b>
+<i>245</i>&nbsp;
+<i>246</i>&nbsp;    public int getChallengerIndex() {
+<b class="nc"><i>247</i>&nbsp;        return challengerIndex;</b>
+<i>248</i>&nbsp;    }
+<i>249</i>&nbsp;
+<i>250</i>&nbsp;    /**
+<i>251</i>&nbsp;     * Associate the received player with the received Divinity
+<i>252</i>&nbsp;     *
+<i>253</i>&nbsp;     * @param playerName The player name
+<i>254</i>&nbsp;     * @param divinity   The divinity to be associated to the player
+<i>255</i>&nbsp;     * @author Daniele Mammone
+<i>256</i>&nbsp;     */
+<i>257</i>&nbsp;    public void setPlayerDivinity(String playerName, String divinity) throws IllegalArgumentException {
+<i>258</i>&nbsp;        //first i must find the divinity
+<b class="nc"><i>259</i>&nbsp;        Divinity actualDivinity = null;</b>
+<b class="nc"><i>260</i>&nbsp;        if (divinity.equals(&quot;Basic&quot;)) actualDivinity = new Divinity();</b>
+<i>261</i>&nbsp;        else {
+<b class="nc"><i>262</i>&nbsp;            for (Divinity d : availableDivinities) {</b>
+<b class="nc"><i>263</i>&nbsp;                if (d.getName().equals(divinity)) actualDivinity = d;</b>
+<b class="nc"><i>264</i>&nbsp;            }</b>
+<i>265</i>&nbsp;        }
+<b class="nc"><i>266</i>&nbsp;        if (actualDivinity == null) throw new IllegalArgumentException(&quot;Divinity selection not corrected&quot;);</b>
+<i>267</i>&nbsp;        else {
+<b class="nc"><i>268</i>&nbsp;            this.getPlayer(playerName).setDivinity(actualDivinity);</b>
+<b class="nc"><i>269</i>&nbsp;            if (divinity.equals(&quot;Circe&quot;)) playerWithCirce = playerName;</b>
+<b class="nc"><i>270</i>&nbsp;            if (isGameWithDivinities()) availableDivinities.remove(actualDivinity);</b>
+<i>271</i>&nbsp;        }
+<b class="nc"><i>272</i>&nbsp;        sendPlayerList();</b>
+<b class="nc"><i>273</i>&nbsp;    }</b>
+<i>274</i>&nbsp;
+<i>275</i>&nbsp;    /**
+<i>276</i>&nbsp;     * This method deletes from the available divinities the ones that the challenger hasn&#39;t choose.
+<i>277</i>&nbsp;     *
+<i>278</i>&nbsp;     * @param s Divinities chosen by the challenger.
+<i>279</i>&nbsp;     * @author Daniele Mammone
+<i>280</i>&nbsp;     */
+<i>281</i>&nbsp;    public void challengerDivinityChoice(ArrayList&lt;String&gt; s) {
+<b class="nc"><i>282</i>&nbsp;        availableDivinities = availableDivinities.stream().filter((Divinity d) -&gt; s.contains(d.getName())).collect(Collectors.toCollection(ArrayList::new));</b>
+<b class="nc"><i>283</i>&nbsp;    }</b>
+<i>284</i>&nbsp;
+<i>285</i>&nbsp;    /**
+<i>286</i>&nbsp;     * Sets the next player using his name
+<i>287</i>&nbsp;     *
+<i>288</i>&nbsp;     * @param playerName The Player Name
+<i>289</i>&nbsp;     * @author Daniele Mammone
+<i>290</i>&nbsp;     */
+<i>291</i>&nbsp;    public void setNextPlayer(String playerName) {
+<b class="fc"><i>292</i>&nbsp;        for (Player p : playersInGame) {</b>
+<b class="fc"><i>293</i>&nbsp;            if (p.getName().equals(playerName)) {</b>
+<b class="fc"><i>294</i>&nbsp;                currentPlayer = playersInGame.indexOf(p);</b>
+<b class="fc"><i>295</i>&nbsp;                break;</b>
+<i>296</i>&nbsp;            }
+<b class="nc"><i>297</i>&nbsp;        }</b>
+<b class="fc"><i>298</i>&nbsp;    }</b>
+<i>299</i>&nbsp;
+<i>300</i>&nbsp;    public Cell[][] getClonedGameBoard() {
+<b class="fc"><i>301</i>&nbsp;        Cell[][] clonedBoard = new Cell[5][5];</b>
+<b class="fc"><i>302</i>&nbsp;        for (int i = 0; i &lt; 5; i++) {</b>
+<b class="fc"><i>303</i>&nbsp;            for (int j = 0; j &lt; 5; j++) {</b>
+<b class="fc"><i>304</i>&nbsp;                clonedBoard[i][j] = (Cell) boardCell[i][j].clone();</b>
+<i>305</i>&nbsp;            }
+<i>306</i>&nbsp;        }
+<i>307</i>&nbsp;
+<b class="fc"><i>308</i>&nbsp;        return clonedBoard;</b>
+<i>309</i>&nbsp;    }
+<i>310</i>&nbsp;
+<i>311</i>&nbsp;    public String getPlayerWithCirce() {
+<b class="nc"><i>312</i>&nbsp;        return playerWithCirce;</b>
+<i>313</i>&nbsp;    }
+<i>314</i>&nbsp;
+<i>315</i>&nbsp;    public void sendPlayerList() {
+<b class="fc"><i>316</i>&nbsp;        ArrayList&lt;String&gt; newPlayerString = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>317</i>&nbsp;        for (Player p : playersInGame) {</b>
+<b class="fc"><i>318</i>&nbsp;            if (p.getDivinity() == null &amp;&amp; gameWithDivinities) {</b>
+<b class="fc"><i>319</i>&nbsp;                newPlayerString.add(p.getName() + &#39;.&#39; + p.getColour().toString() + &quot;.Divinity Not Chosen&quot;);</b>
+<b class="nc"><i>320</i>&nbsp;            } else if (p.getDivinity() == null &amp;&amp; !gameWithDivinities) {</b>
+<b class="nc"><i>321</i>&nbsp;                newPlayerString.add(p.getName() + &#39;.&#39; + p.getColour().toString() + &quot;.Base Divinity&quot;);</b>
+<i>322</i>&nbsp;            } else {
+<b class="nc"><i>323</i>&nbsp;                newPlayerString.add(p.getName() + &#39;.&#39; + p.getColour().toString() + &quot;.&quot; + p.getDivinity().getName());</b>
+<i>324</i>&nbsp;            }
+<b class="fc"><i>325</i>&nbsp;        }</b>
+<b class="fc"><i>326</i>&nbsp;        notifyObservers(x -&gt; x.changedPlayerList(newPlayerString));</b>
+<b class="fc"><i>327</i>&nbsp;    }</b>
+<i>328</i>&nbsp;
+<i>329</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-24 20:50</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,160 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GUICell</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP48.client.GUI</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GUICell (it.polimi.ingsw.PSP48.client.GUI)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GUICell</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 14)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.client.GUI;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;/**
+<i>4</i>&nbsp; * class that represents a cell of the board in the gui
+<i>5</i>&nbsp; */
+<i>6</i>&nbsp;public class GUICell
+<i>7</i>&nbsp;{
+<i>8</i>&nbsp;    private int row;
+<i>9</i>&nbsp;    private int column;
+<i>10</i>&nbsp;    String player;
+<i>11</i>&nbsp;    boolean highlighting;
+<i>12</i>&nbsp;    int cellLevel;
+<i>13</i>&nbsp;    boolean dome;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    /**
+<i>16</i>&nbsp;     * class constructor initialising cells, it will be used to initialise the board
+<i>17</i>&nbsp;     * @param cellRow is the row of the cell we are creating
+<i>18</i>&nbsp;     * @param cellColumn is the column of the cell we are creating
+<i>19</i>&nbsp;     * @param colouring tells us if the cell has to be highlighted or not, it has a false value in the beginning
+<i>20</i>&nbsp;     */
+<i>21</i>&nbsp;    GUICell(int cellRow, int cellColumn, boolean colouring)
+<b class="nc"><i>22</i>&nbsp;    {</b>
+<b class="nc"><i>23</i>&nbsp;        this.row=cellRow;</b>
+<b class="nc"><i>24</i>&nbsp;        this.column=cellColumn;</b>
+<b class="nc"><i>25</i>&nbsp;        this.highlighting=colouring;</b>
+<i>26</i>&nbsp;    }
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    public int getRow()
+<i>29</i>&nbsp;    {
+<b class="nc"><i>30</i>&nbsp;        return row;</b>
+<i>31</i>&nbsp;    }
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    public int getColumn()
+<i>34</i>&nbsp;    {
+<b class="nc"><i>35</i>&nbsp;        return column;</b>
+<i>36</i>&nbsp;    }
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    public String getPlayer()
+<i>39</i>&nbsp;    {
+<b class="nc"><i>40</i>&nbsp;        return player;</b>
+<i>41</i>&nbsp;    }
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    public int getCellLevel()
+<i>44</i>&nbsp;    {
+<b class="nc"><i>45</i>&nbsp;        return cellLevel;</b>
+<i>46</i>&nbsp;    }
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    public boolean isHighlighted()
+<i>49</i>&nbsp;    {
+<b class="nc"><i>50</i>&nbsp;        return highlighting;</b>
+<i>51</i>&nbsp;    }
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    public boolean isDomed()
+<i>54</i>&nbsp;    {
+<b class="nc"><i>55</i>&nbsp;        return dome;</b>
+<i>56</i>&nbsp;    }
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    public void setPlayer(String newPlayer)
+<i>59</i>&nbsp;    {
+<b class="nc"><i>60</i>&nbsp;        this.player = newPlayer;</b>
+<i>61</i>&nbsp;    }
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    public void setCellLevel(int newLevel)
+<i>64</i>&nbsp;    {
+<b class="nc"><i>65</i>&nbsp;        this.cellLevel = newLevel;</b>
+<i>66</i>&nbsp;    }
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    public void setDome(boolean value)
+<i>69</i>&nbsp;    {
+<b class="nc"><i>70</i>&nbsp;        this.dome = value;</b>
+<i>71</i>&nbsp;    }
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;    public void setHighlighting(boolean highlighting)
+<i>74</i>&nbsp;    {
+<b class="nc"><i>75</i>&nbsp;        this.highlighting = highlighting;</b>
+<i>76</i>&nbsp;    }
+<i>77</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-24 20:50</div>
+</div>
+</body>
+</html>

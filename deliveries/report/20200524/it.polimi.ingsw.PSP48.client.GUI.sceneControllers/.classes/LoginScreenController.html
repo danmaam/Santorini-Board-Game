@@ -1,0 +1,172 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: LoginScreenController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP48.client.GUI.sceneControllers</a> ]
+</div>
+
+<h1>Coverage Summary for Class: LoginScreenController (it.polimi.ingsw.PSP48.client.GUI.sceneControllers)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LoginScreenController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 26)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.client.GUI.sceneControllers;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP48.ViewInterface;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP48.client.GUI.GUI;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkIncoming;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkOutcoming;
+<i>7</i>&nbsp;import javafx.fxml.FXML;
+<i>8</i>&nbsp;import javafx.scene.control.Alert;
+<i>9</i>&nbsp;import javafx.scene.control.DatePicker;
+<i>10</i>&nbsp;import javafx.scene.control.TextField;
+<i>11</i>&nbsp;import javafx.scene.control.ToggleButton;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;import java.io.IOException;
+<i>14</i>&nbsp;import java.net.Socket;
+<i>15</i>&nbsp;import java.time.LocalDate;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;public class LoginScreenController {
+<i>18</i>&nbsp;    ClientNetworkOutcoming clientHandler;
+<i>19</i>&nbsp;    @FXML
+<i>20</i>&nbsp;    private ToggleButton isGameWithDivinities;
+<i>21</i>&nbsp;    @FXML
+<i>22</i>&nbsp;    private ToggleButton isGameWithThreePlayers;
+<i>23</i>&nbsp;    @FXML
+<i>24</i>&nbsp;    private TextField playerNickname;
+<i>25</i>&nbsp;    @FXML
+<i>26</i>&nbsp;    private TextField serverIP;
+<i>27</i>&nbsp;    @FXML
+<i>28</i>&nbsp;    private DatePicker birthday;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    private GUI View;
+<i>31</i>&nbsp;
+<b class="nc"><i>32</i>&nbsp;    public LoginScreenController(GUI view) {</b>
+<b class="nc"><i>33</i>&nbsp;        View = view;</b>
+<i>34</i>&nbsp;    }
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    public synchronized void requestGameModeSend(String message) {
+<i>38</i>&nbsp;        int numberOfPlayers;
+<b class="nc"><i>39</i>&nbsp;        if (isGameWithThreePlayers.isSelected()) numberOfPlayers = 3;</b>
+<b class="nc"><i>40</i>&nbsp;        else numberOfPlayers = 2;</b>
+<i>41</i>&nbsp;        String gameMode;
+<b class="nc"><i>42</i>&nbsp;        if (!isGameWithDivinities.isSelected()) gameMode = numberOfPlayers + &quot;D&quot;;</b>
+<i>43</i>&nbsp;        else {
+<b class="nc"><i>44</i>&nbsp;            LocalDate ld = birthday.getValue();</b>
+<b class="nc"><i>45</i>&nbsp;            gameMode = numberOfPlayers + &quot;ND&quot; + &quot; &quot; + ld.getDayOfMonth() + &quot;-&quot; + ld.getMonthValue() + &quot;-&quot; + ld.getYear();</b>
+<i>46</i>&nbsp;        }
+<b class="nc"><i>47</i>&nbsp;        View.setNumberOfPlayers(numberOfPlayers);</b>
+<b class="nc"><i>48</i>&nbsp;        View.getUploader().setGameMode(gameMode);</b>
+<i>49</i>&nbsp;    }
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    public synchronized void nicknameResult(String result) {
+<b class="nc"><i>53</i>&nbsp;        System.out.println(result);</b>
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    public void requestNicknameSend(String message) {
+<b class="nc"><i>59</i>&nbsp;            String nickname = playerNickname.getText();</b>
+<b class="nc"><i>60</i>&nbsp;            View.getUploader().requestNicknameSend(nickname);</b>
+<i>61</i>&nbsp;    }
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    public synchronized void loginButton() throws IOException {
+<b class="nc"><i>64</i>&nbsp;        if (serverIP.getText().length() == 0) {</b>
+<b class="nc"><i>65</i>&nbsp;            Alert alert = new Alert(Alert.AlertType.ERROR);</b>
+<b class="nc"><i>66</i>&nbsp;            alert.setTitle(&quot;Error&quot;);</b>
+<b class="nc"><i>67</i>&nbsp;            alert.setHeaderText(&quot;Login Error&quot;);</b>
+<b class="nc"><i>68</i>&nbsp;            alert.setContentText(&quot;Missing Server IP. Insert a valid IP server.&quot;);</b>
+<b class="nc"><i>69</i>&nbsp;            alert.showAndWait();</b>
+<i>70</i>&nbsp;            return;
+<i>71</i>&nbsp;        }
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;
+<b class="nc"><i>74</i>&nbsp;        if (playerNickname.getText().length() == 0 || playerNickname.getText().contains(&quot;.&quot;)) {</b>
+<b class="nc"><i>75</i>&nbsp;            Alert alert = new Alert(Alert.AlertType.ERROR);</b>
+<b class="nc"><i>76</i>&nbsp;            alert.setTitle(&quot;Error&quot;);</b>
+<b class="nc"><i>77</i>&nbsp;            alert.setHeaderText(&quot;Login Error&quot;);</b>
+<b class="nc"><i>78</i>&nbsp;            alert.setContentText(&quot;Insert a valid nickname&quot;);</b>
+<b class="nc"><i>79</i>&nbsp;            alert.showAndWait();</b>
+<i>80</i>&nbsp;            return;
+<i>81</i>&nbsp;        }
+<i>82</i>&nbsp;
+<b class="nc"><i>83</i>&nbsp;        String IP = serverIP.getText();</b>
+<i>84</i>&nbsp;
+<b class="nc"><i>85</i>&nbsp;        View.startNetwork(IP);</b>
+<i>86</i>&nbsp;    }
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-24 20:50</div>
+</div>
+</body>
+</html>

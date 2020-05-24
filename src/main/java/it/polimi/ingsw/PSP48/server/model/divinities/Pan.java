@@ -30,4 +30,8 @@ public class Pan extends Divinity {
         return "Pan";
     }
 
+    @Override
+    public String getDescription() {
+        return "You also win if your Worker moves down two or more levels.";
+    }
 }

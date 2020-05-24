@@ -59,4 +59,9 @@ public class Circe extends Divinity {
         }
         return GameController::requestMove;
     }
+
+    @Override
+    public String getDescription() {
+        return "If an opponent's Workers do not neighbor each other, you alone have use of their power until your next turn.";
+    }
 }

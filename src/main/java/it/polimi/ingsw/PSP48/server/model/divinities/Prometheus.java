@@ -199,5 +199,8 @@ public class Prometheus extends Divinity {
         return can;
     }
 
-
+    @Override
+    public String getDescription() {
+        return "If your Worker does not move up, it may build both before and after moving.";
+    }
 }

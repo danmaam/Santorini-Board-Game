@@ -34,4 +34,9 @@ public class Chronus extends Divinity {
     public String getName() {
         return "Chronus";
     }
+
+    @Override
+    public String getDescription(){
+        return "You also win when there are at least five Complete Towers on the board.";
+    }
 }
