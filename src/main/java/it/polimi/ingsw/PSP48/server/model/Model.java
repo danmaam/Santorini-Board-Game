@@ -77,6 +77,9 @@ public class Model {
 
         //ONLY FOR DEBUGGING
 
+        boardCell[0][0].setActualLevel(2);
+        boardCell[0][1].setActualLevel(3);
+
         gamePlayerNumber = number;
         gameWithDivinities = divinities;
 

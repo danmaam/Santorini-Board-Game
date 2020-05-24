@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP48.server.controller;
 
+import it.polimi.ingsw.PSP48.EndReason;
 import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
 import it.polimi.ingsw.PSP48.server.MoveCoordinates;
@@ -286,19 +287,13 @@ public class GameController implements ViewObserver {
     public void postMove() {
         boolean endGame = model.getCurrentPlayer().getDivinity().winCondition(model);
         if (endGame) {
-            ArrayList<String> players = new ArrayList<>();
-            playersViews.forEach((k, v) -> players.add(k));
-            for (String p : players) {
-                if (p.equals(model.getCurrentPlayer().getName())) getPlayerView(p).printMessage("You win!");
-                else getPlayerView(p).printMessage("You lost, anlaki :(");
-            }
             nextAction = (GameController::gameEnd);
         }
         this.nextAction();
     }
 
     public void gameEnd() {
-        Server.destroyGameRoom(roomID, null);
+        Server.destroyGameRoom(roomID, model.getCurrentPlayer().getName(), EndReason.win);
     }
 
 
@@ -367,7 +362,7 @@ public class GameController implements ViewObserver {
         for (Player p : model.getPlayersInGame()) {
             getPlayerView(p.getName()).printMessage("Game started. Waiting for your turn to put your workers on the board");
         }
-        /*
+
         Player firstPlayer = model.getPlayersInGame().get(0);
         for (Player p : model.getPlayersInGame()) {
             if (p.getBirthday().compareTo(firstPlayer.getBirthday()) < 0) firstPlayer = p;
@@ -376,9 +371,7 @@ public class GameController implements ViewObserver {
         model.setNextPlayer(model.getPlayersInGame().indexOf(firstPlayer));
         model.setFirstPlayerIndex(model.getPlayersInGame().indexOf(firstPlayer));
 
-         */
-        model.setNextPlayer(model.getPlayersInGame().get(2).getName());
-        model.setFirstPlayerIndex(2);
+
         //set the first player, i must set the base divinity for every player
         for (Player p : model.getPlayersInGame()) {
             model.setPlayerDivinity(p.getName(), "Basic");
@@ -545,18 +538,16 @@ public class GameController implements ViewObserver {
      */
     public void currentPlayerCantEndTurn() {
         if (model.getPlayersInGame().size() == 2) {
-            getPlayerView(model.getCurrentPlayer().getName()).endgame("You lose cause you won't be able to end the turn");
-            for (Player p : model.getPlayersInGame()) {
-                if (!p.getName().equals(model.getCurrentPlayer().getName()))
-                    getPlayerView(p.getName()).endgame("You win cause " + model.getCurrentPlayer().getName() + "can't end his turn");
-            }
-            nextAction = GameController::gameEnd;
+
+            Server.destroyGameRoom(roomID, model.getCurrentPlayer().getName(), EndReason.lose);
+            return;
         } else {
             getPlayerView(model.getCurrentPlayer().getName()).endgame("You lose cause you won't be able to end the turn");
             for (Player p : model.getPlayersInGame()) {
                 if (!p.getName().equals(model.getCurrentPlayer().getName()))
                     getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + "lost cause he can't end his turn");
             }
+            Server.removeNickname(model.getCurrentPlayer().getName());
             model.removePlayer(model.getCurrentPlayer().getName());
             nextAction = GameController::turnChange;
         }

@@ -115,8 +115,6 @@ public class ClientHandlerListener implements Runnable {
     }
 
     public void setClosed() {
-        executors.shutdown();
-        pingExecutor.shutdown();
         setClosed = true;
     }
 

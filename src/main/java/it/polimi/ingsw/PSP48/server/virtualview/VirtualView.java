@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP48.server.virtualview;
 
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
+import it.polimi.ingsw.PSP48.EndReason;
 import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
 import it.polimi.ingsw.PSP48.observers.ViewObserver;
@@ -225,7 +226,7 @@ public class VirtualView implements ViewInterface, ServerNetworkObserver {
 
     @Override
     public void destroyGame() {
-        Server.destroyGameRoom(roomID, playerName);
+        Server.destroyGameRoom(roomID, playerName, EndReason.disconnection);
     }
 
     public void disconnectFromServer() {

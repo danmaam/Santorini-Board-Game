@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP48.server;
 
+import it.polimi.ingsw.PSP48.EndReason;
 import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.server.networkmanager.ClientHandler;
 import it.polimi.ingsw.PSP48.server.networkmanager.ClientHandlerListener;
@@ -70,6 +71,7 @@ public class Server {
                 break;
             }
         }
+
         if (!added) {
             GameRoom newGameRoom = new GameRoom(playerNumber, allowedDivinities, nextRoomID);
             roomsOnTheServer.add(newGameRoom);
@@ -78,7 +80,7 @@ public class Server {
         }
     }
 
-    public static synchronized void destroyGameRoom(int roomID, String disconnectedPlayer) {
+    public static synchronized void destroyGameRoom(int roomID, String incriminatedPlayer, EndReason reason) {
         //i must find the game room
         if (roomID != -1) {
             //it must be different -1, since we must handle disconnection
@@ -86,19 +88,23 @@ public class Server {
             for (GameRoom g : roomsOnTheServer) {
                 if (g.getGameRoomID() == roomID) {
                     tbd = g;
+                    break;
                 }
             }
             //found the game room, notify all the players to shutdown connection
             //but it may occur that the player disconnects before entering in a game room
-            if (tbd != null) {
-                tbd.notifyAllPlayersOfDisconnection(disconnectedPlayer);
-                roomsOnTheServer.remove(tbd);
-            } else {
-                Server.removeNickname(disconnectedPlayer);
+            switch (reason) {
+                case disconnection:
+                    tbd.notifyAllPlayersOfDisconnection(incriminatedPlayer);
+                    break;
+                case win:
+                    tbd.notifyAllPlayersOfWinner(incriminatedPlayer);
+                    break;
+                case lose:
+                    tbd.notifyAllPlayersOfLoser(incriminatedPlayer);
+                    break;
             }
-        }
-
-        //notified all the players,
-
+            roomsOnTheServer.remove(tbd);
+        } else Server.removeNickname(incriminatedPlayer);
     }
 }

@@ -169,5 +169,4 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
         outputStm.writeObject(new PingMessage());
     }
 
-
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP48.client.GUI;
 
+import it.polimi.ingsw.PSP48.WorkerValidCells;
 import it.polimi.ingsw.PSP48.client.GUI.sceneControllers.GameBoardController;
 import it.polimi.ingsw.PSP48.client.GUI.sceneControllers.LoginScreenController;
 import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkIncoming;
@@ -109,6 +110,18 @@ public class Tester extends GUI {
         pos.add(new Position(4, 4));
         pos.add(new Position(0, 3));
 
-        boardController.requestInitialPositioning(pos);
+        //boardController.requestInitialPositioning(pos);
+
+        ArrayList<WorkerValidCells> move = new ArrayList<>();
+        ArrayList<Position> positions = new ArrayList<>();
+        positions.add(new Position(2, 2));
+        move.add(new WorkerValidCells(positions, 1, 1));
+
+        ArrayList<Position> pos2 = new ArrayList<>();
+        pos2.add(new Position(4, 4));
+
+        move.add(new WorkerValidCells(pos2, 3, 3));
+
+        boardController.requestMove(move);
     }
 }

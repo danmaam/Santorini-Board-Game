@@ -83,7 +83,8 @@ public class ClientHandler implements Runnable {
                     case closegame:
                         incomingMessagesHandler.setClosed();
                         output.writeObject(nextObject);
-                        client.close();
+                        toDO = null;
+                        toDOLOCK.notifyAll();
                         return;
                     case replyPing:
                         output.writeObject(new PingMessage());
