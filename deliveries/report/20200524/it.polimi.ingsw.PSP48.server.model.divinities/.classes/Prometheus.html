@@ -1,0 +1,289 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Prometheus</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP48.server.model.divinities</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Prometheus (it.polimi.ingsw.PSP48.server.model.divinities)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Prometheus</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90%
+  </span>
+  <span class="absValue">
+    (9/ 10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88,8%
+  </span>
+  <span class="absValue">
+    (71/ 80)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.server.model.divinities;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP48.WorkerValidCells;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP48.server.controller.GameController;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Cell;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Model;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Player;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Position;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.exceptions.*;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;import java.util.ArrayList;
+<i>12</i>&nbsp;import java.util.function.Consumer;
+<i>13</i>&nbsp;import java.util.stream.Collectors;
+<i>14</i>&nbsp;
+<b class="fc"><i>15</i>&nbsp;public class Prometheus extends Divinity {</b>
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    public static Boolean supportedDivinity(int pNum) {
+<b class="fc"><i>18</i>&nbsp;        switch (pNum) {</b>
+<i>19</i>&nbsp;            case 2:
+<b class="fc"><i>20</i>&nbsp;                return true;</b>
+<i>21</i>&nbsp;            case 3:
+<b class="nc"><i>22</i>&nbsp;                return true;</b>
+<i>23</i>&nbsp;        }
+<b class="nc"><i>24</i>&nbsp;        return false;</b>
+<i>25</i>&nbsp;    }
+<i>26</i>&nbsp;
+<b class="fc"><i>27</i>&nbsp;    boolean previousBuild = false;</b>
+<b class="fc"><i>28</i>&nbsp;    boolean doneMove = false;</b>
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    /**
+<i>32</i>&nbsp;     * don&#39;t do anything since without a divinity there isn&#39;t a modifier
+<i>33</i>&nbsp;     *
+<i>34</i>&nbsp;     * @param gd the model
+<i>35</i>&nbsp;     */
+<i>36</i>&nbsp;    @Override
+<i>37</i>&nbsp;    public Consumer&lt;GameController&gt; turnBegin(Model gd) {
+<b class="fc"><i>38</i>&nbsp;        previousBuild = false;</b>
+<b class="fc"><i>39</i>&nbsp;        doneMove = false;</b>
+<i>40</i>&nbsp;        //for building and doming, i must check if the first optional building allows to complete the turn, so that the player can move
+<b class="fc"><i>41</i>&nbsp;        ArrayList&lt;Position&gt; workers = gd.getPlayerPositionsInMap(gd.getCurrentPlayer().getName());</b>
+<i>42</i>&nbsp;
+<b class="fc"><i>43</i>&nbsp;        boolean build = false;</b>
+<b class="fc"><i>44</i>&nbsp;        boolean dome = false;</b>
+<i>45</i>&nbsp;
+<b class="fc"><i>46</i>&nbsp;        ArrayList&lt;Divinity&gt; otherDivinities = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>47</i>&nbsp;        for (Player p : gd.getPlayersInGame()) {</b>
+<b class="fc"><i>48</i>&nbsp;            if (!p.getName().equals(gd.getCurrentPlayer().getName())) otherDivinities.add(p.getDivinity());</b>
+<b class="fc"><i>49</i>&nbsp;        }</b>
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;        //for each worker, checks if he can end the turn
+<b class="fc"><i>52</i>&nbsp;        ArrayList&lt;WorkerValidCells&gt; buildCells = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>53</i>&nbsp;        ArrayList&lt;WorkerValidCells&gt; domeCells = new ArrayList&lt;&gt;();</b>
+<i>54</i>&nbsp;
+<b class="fc"><i>55</i>&nbsp;        for (Position w : workers) {</b>
+<b class="fc"><i>56</i>&nbsp;            buildCells.add(new WorkerValidCells(getValidCellForBuilding(w.getColumn(), w.getRow(), otherDivinities, gd.getClonedGameBoard()), w.getRow(), w.getColumn()));</b>
+<b class="fc"><i>57</i>&nbsp;            domeCells.add(new WorkerValidCells(getValidCellsToPutDome(w.getColumn(), w.getRow(), gd.getClonedGameBoard(), otherDivinities), w.getRow(), w.getColumn()));</b>
+<b class="fc"><i>58</i>&nbsp;        }</b>
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;        //now i have for each workers cells where he could build or put dome; now i must check if building or doming before the move allows the player to complete the turn
+<b class="fc"><i>61</i>&nbsp;        for (WorkerValidCells c : buildCells) {</b>
+<b class="fc"><i>62</i>&nbsp;            for (Position p : c.getValidPositions()) {</b>
+<b class="fc"><i>63</i>&nbsp;                if (simulateBuildingCheckIfCanMoveAfterWards(c.getwR(), c.getwC(), p.getRow(), p.getColumn(), gd.getClonedGameBoard(), false, otherDivinities)) {</b>
+<b class="fc"><i>64</i>&nbsp;                    build = true;</b>
+<b class="fc"><i>65</i>&nbsp;                    break;</b>
+<i>66</i>&nbsp;                }
+<b class="fc"><i>67</i>&nbsp;            }</b>
+<b class="fc"><i>68</i>&nbsp;            if (build) break;</b>
+<b class="fc"><i>69</i>&nbsp;        }</b>
+<i>70</i>&nbsp;
+<b class="fc"><i>71</i>&nbsp;        if (!build) for (WorkerValidCells c : domeCells) {</b>
+<b class="fc"><i>72</i>&nbsp;            for (Position p : c.getValidPositions()) {</b>
+<b class="fc"><i>73</i>&nbsp;                if (simulateBuildingCheckIfCanMoveAfterWards(c.getwR(), c.getwC(), p.getRow(), p.getColumn(), gd.getClonedGameBoard(), true, otherDivinities)) {</b>
+<b class="fc"><i>74</i>&nbsp;                    dome = true;</b>
+<b class="fc"><i>75</i>&nbsp;                    break;</b>
+<i>76</i>&nbsp;                }
+<b class="fc"><i>77</i>&nbsp;            }</b>
+<b class="fc"><i>78</i>&nbsp;            if (dome) break;</b>
+<b class="fc"><i>79</i>&nbsp;        }</b>
+<i>80</i>&nbsp;
+<b class="fc"><i>81</i>&nbsp;        if (build || dome) return GameController::PrometheusInitialOptionalBuild;</b>
+<b class="fc"><i>82</i>&nbsp;        else return super.turnBegin(gd);</b>
+<i>83</i>&nbsp;    }
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    /**
+<i>86</i>&nbsp;     * @param WorkerColumn          the column where the worker is
+<i>87</i>&nbsp;     * @param WorkerRow             the row where the worker is
+<i>88</i>&nbsp;     * @param gameCells             the actual board state
+<i>89</i>&nbsp;     * @param otherDivinitiesInGame the other divinities in game
+<i>90</i>&nbsp;     * @return a list of cells valid for the move of the worker
+<i>91</i>&nbsp;     * @author Daniele Mammone
+<i>92</i>&nbsp;     */
+<i>93</i>&nbsp;    @Override
+<i>94</i>&nbsp;    public ArrayList&lt;Position&gt; getValidCellForMove(int WorkerColumn, int WorkerRow, Cell[][] gameCells, ArrayList&lt;Divinity&gt; otherDivinitiesInGame) {
+<b class="fc"><i>95</i>&nbsp;        return super.getValidCellForMove(WorkerColumn, WorkerRow, gameCells, otherDivinitiesInGame).stream()</b>
+<b class="fc"><i>96</i>&nbsp;                .filter(cell -&gt; !previousBuild || !(gameCells[cell.getRow()][cell.getColumn()].getLevel() &gt; gameCells[WorkerRow][WorkerColumn].getLevel()))</b>
+<b class="fc"><i>97</i>&nbsp;                .collect(Collectors.toCollection(ArrayList::new));</b>
+<i>98</i>&nbsp;    }
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    /**
+<i>101</i>&nbsp;     * @param WorkerColumn the column of the cell where the worker is
+<i>102</i>&nbsp;     * @param WorkerRow    the row of the cell where the worker is
+<i>103</i>&nbsp;     * @param moveColumn   the column of the board where the worker wants to move
+<i>104</i>&nbsp;     * @param moveRow      the row of the board where the worker wants to move
+<i>105</i>&nbsp;     * @param gd           the actual game state
+<i>106</i>&nbsp;     * @throws NotAdjacentCellException if the destination cell is not adjacent to the worker
+<i>107</i>&nbsp;     * @throws IncorrectLevelException  if the destination cell is too high to be reached
+<i>108</i>&nbsp;     * @throws OccupiedCellException    if the destination cell has another worker on it
+<i>109</i>&nbsp;     * @throws DomedCellException       if the destination cell has a dome on it
+<i>110</i>&nbsp;     * @author Daniele Mammone
+<i>111</i>&nbsp;     */
+<i>112</i>&nbsp;    @Override
+<i>113</i>&nbsp;    public Consumer&lt;GameController&gt; move(int WorkerColumn, int WorkerRow, int moveColumn, int moveRow, Model gd) throws NotAdjacentCellException, IncorrectLevelException, OccupiedCellException, DomedCellException, DivinityPowerException, NoTurnEndException {
+<i>114</i>&nbsp;        //i must check if i&#39;m not growing up level if i built before
+<b class="fc"><i>115</i>&nbsp;        if (previousBuild &amp;&amp; gd.getCell(moveRow, moveColumn).getLevel() &gt; gd.getCell(WorkerRow, WorkerColumn).getLevel())</b>
+<b class="fc"><i>116</i>&nbsp;            throw new DivinityPowerException(&quot;trying to level up after previous building&quot;);</b>
+<b class="fc"><i>117</i>&nbsp;        super.move(WorkerColumn, WorkerRow, moveColumn, moveRow, gd);</b>
+<b class="fc"><i>118</i>&nbsp;        doneMove = true;</b>
+<b class="fc"><i>119</i>&nbsp;        return GameController::requestBuildDome;</b>
+<i>120</i>&nbsp;    }
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;    /**
+<i>123</i>&nbsp;     * @param workerRow    the row where the worker is
+<i>124</i>&nbsp;     * @param workerColumn the column where the worker is
+<i>125</i>&nbsp;     * @param buildRow     the row where the player wants to add a level
+<i>126</i>&nbsp;     * @param buildColumn  the column where the player wants to add a level
+<i>127</i>&nbsp;     * @param gd           the actual game board state
+<i>128</i>&nbsp;     * @return the next action of the controller
+<i>129</i>&nbsp;     * @throws NotAdjacentCellException     if the cell where the player wants to build is not adjacent to the worker&#39;s one
+<i>130</i>&nbsp;     * @throws OccupiedCellException        if the destination cell is occupied by another worker
+<i>131</i>&nbsp;     * @throws DomedCellException           is the cell is already domed
+<i>132</i>&nbsp;     * @throws MaximumLevelReachedException if the cell contains a level 3 building
+<i>133</i>&nbsp;     * @throws DivinityPowerException       if another divinity blocks the increment of the level
+<i>134</i>&nbsp;     * @author Daniele Mammone
+<i>135</i>&nbsp;     */
+<i>136</i>&nbsp;    @Override
+<i>137</i>&nbsp;    public Consumer&lt;GameController&gt; build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelReachedException, DivinityPowerException {
+<i>138</i>&nbsp;        Consumer&lt;GameController&gt; nextAction;
+<b class="fc"><i>139</i>&nbsp;        if (buildRow == -1 &amp;&amp; buildColumn == -1) return super.turnBegin(gd);</b>
+<b class="fc"><i>140</i>&nbsp;        super.build(workerRow, workerColumn, buildRow, buildColumn, gd);</b>
+<b class="fc"><i>141</i>&nbsp;        if (!previousBuild &amp;&amp; !doneMove) {</b>
+<b class="fc"><i>142</i>&nbsp;            gd.getCurrentPlayer().setLastWorkerUsed(workerRow, workerColumn);</b>
+<b class="fc"><i>143</i>&nbsp;            nextAction = GameController::PrometheusMovePostOptionalBuild;</b>
+<b class="nc"><i>144</i>&nbsp;        } else nextAction = GameController::turnEnd;</b>
+<b class="fc"><i>145</i>&nbsp;        previousBuild = true;</b>
+<b class="fc"><i>146</i>&nbsp;        return nextAction;</b>
+<i>147</i>&nbsp;    }
+<i>148</i>&nbsp;
+<i>149</i>&nbsp;    /**
+<i>150</i>&nbsp;     * @param workerRow    the row where the worker is
+<i>151</i>&nbsp;     * @param workerColumn the column where the worker is
+<i>152</i>&nbsp;     * @param domeRow      the row where the player wants to add the dome
+<i>153</i>&nbsp;     * @param domeColumn   the column where the player wants to add the dome
+<i>154</i>&nbsp;     * @param gd           the current game board state
+<i>155</i>&nbsp;     * @return the next action of the controller
+<i>156</i>&nbsp;     * @throws NotAdjacentCellException        if the cell where the player wants to add the dome is not adjacent to the worker&#39;s one
+<i>157</i>&nbsp;     * @throws OccupiedCellException           if the destination cell is occupied by another worker
+<i>158</i>&nbsp;     * @throws DomedCellException              is the cell is already domed
+<i>159</i>&nbsp;     * @throws MaximumLevelNotReachedException if the cell doesn&#39;t contain a level 3 building
+<i>160</i>&nbsp;     * @throws DivinityPowerException          if another divinity blocks the adding of the dome
+<i>161</i>&nbsp;     * @author Daniele Mammone
+<i>162</i>&nbsp;     */
+<i>163</i>&nbsp;    @Override
+<i>164</i>&nbsp;    public Consumer&lt;GameController&gt; dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
+<i>165</i>&nbsp;        Consumer&lt;GameController&gt; nextAction;
+<b class="fc"><i>166</i>&nbsp;        if (domeRow == -1 &amp;&amp; domeColumn == -1) return super.turnBegin(gd);</b>
+<b class="fc"><i>167</i>&nbsp;        super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);</b>
+<b class="fc"><i>168</i>&nbsp;        if (!previousBuild &amp;&amp; !doneMove) {</b>
+<b class="fc"><i>169</i>&nbsp;            nextAction = GameController::PrometheusMovePostOptionalBuild;</b>
+<b class="fc"><i>170</i>&nbsp;            gd.getCurrentPlayer().setLastWorkerUsed(workerRow, workerColumn);</b>
+<b class="nc"><i>171</i>&nbsp;        } else nextAction = GameController::turnEnd;</b>
+<b class="fc"><i>172</i>&nbsp;        previousBuild = true;</b>
+<b class="fc"><i>173</i>&nbsp;        return nextAction;</b>
+<i>174</i>&nbsp;    }
+<i>175</i>&nbsp;
+<i>176</i>&nbsp;    @Override
+<i>177</i>&nbsp;    public String getName() {
+<b class="fc"><i>178</i>&nbsp;        return &quot;Prometheus&quot;;</b>
+<i>179</i>&nbsp;    }
+<i>180</i>&nbsp;
+<i>181</i>&nbsp;    private boolean simulateBuildingCheckIfCanMoveAfterWards(int wR, int wC, int mR, int mC, Cell[][] gameBoard, boolean dome, ArrayList&lt;Divinity&gt; otherDiv) {
+<i>182</i>&nbsp;        //arrived here, the cell is valid, i simulate the move
+<b class="fc"><i>183</i>&nbsp;        if (!dome) try {</b>
+<b class="fc"><i>184</i>&nbsp;            gameBoard[mR][mC].addLevel();</b>
+<b class="fc"><i>185</i>&nbsp;            previousBuild = true;</b>
+<b class="nc"><i>186</i>&nbsp;        } catch (Exception e) {</b>
+<b class="nc"><i>187</i>&nbsp;            System.out.println(&quot;Fatal error&quot;);</b>
+<b class="fc"><i>188</i>&nbsp;        }</b>
+<i>189</i>&nbsp;
+<i>190</i>&nbsp;        else try {
+<b class="fc"><i>191</i>&nbsp;            gameBoard[mR][mC].addDome();</b>
+<b class="fc"><i>192</i>&nbsp;            previousBuild = true;</b>
+<b class="nc"><i>193</i>&nbsp;        } catch (Exception e) {</b>
+<b class="nc"><i>194</i>&nbsp;            System.out.println(&quot;Fatal error&quot;);</b>
+<b class="fc"><i>195</i>&nbsp;        }</b>
+<i>196</i>&nbsp;
+<b class="fc"><i>197</i>&nbsp;        Boolean can = !getValidCellForMove(wC, wR, gameBoard, otherDiv).isEmpty();</b>
+<b class="fc"><i>198</i>&nbsp;        previousBuild = false;</b>
+<b class="fc"><i>199</i>&nbsp;        return can;</b>
+<i>200</i>&nbsp;    }
+<i>201</i>&nbsp;
+<i>202</i>&nbsp;    @Override
+<i>203</i>&nbsp;    public String getDescription() {
+<b class="nc"><i>204</i>&nbsp;        return &quot;If your Worker does not move up, it may build both before and after moving.&quot;;</b>
+<i>205</i>&nbsp;    }
+<i>206</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-24 20:50</div>
+</div>
+</body>
+</html>

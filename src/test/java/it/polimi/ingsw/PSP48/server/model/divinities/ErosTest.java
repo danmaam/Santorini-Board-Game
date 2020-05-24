@@ -542,9 +542,4 @@ public class ErosTest {
 
         assertTrue(player1.getDivinity().winCondition(game_database));
     }
-
-    @Test
-    public void winCondition_winsWithNormalRules() {
-
-    }
 }

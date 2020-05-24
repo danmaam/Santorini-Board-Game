@@ -49,4 +49,9 @@ public class Athena extends Divinity {
     public String getName() {
         return "Athena";
     }
+
+    @Override
+    public String getDescription() {
+        return "If one of your Workers moved up on your last turn, opponent Workers cannot move up this turn.";
+    }
 }

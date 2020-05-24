@@ -88,4 +88,9 @@ public class Zeus extends Divinity {
     public String getName() {
         return "Zeus";
     }
+
+    @Override
+    public String getDescription() {
+        return "Your Worker may build a block under itself.";
+    }
 }

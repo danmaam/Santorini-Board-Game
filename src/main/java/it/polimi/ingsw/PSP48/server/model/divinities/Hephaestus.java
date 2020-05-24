@@ -118,4 +118,9 @@ public class Hephaestus extends Divinity {
     public String getName() {
         return name;
     }
+
+    @Override
+    public String getDescription() {
+        return "Your Worker may build one additional block (not dome) on top of your first block.";
+    }
 }

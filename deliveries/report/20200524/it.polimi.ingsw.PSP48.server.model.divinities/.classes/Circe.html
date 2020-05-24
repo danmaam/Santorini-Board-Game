@@ -1,0 +1,150 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Circe</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP48.server.model.divinities</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Circe (it.polimi.ingsw.PSP48.server.model.divinities)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Circe</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (4/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85%
+  </span>
+  <span class="absValue">
+    (17/ 20)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.server.model.divinities;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP48.server.controller.GameController;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Model;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Player;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Position;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;import java.util.ArrayList;
+<i>9</i>&nbsp;import java.util.function.Consumer;
+<i>10</i>&nbsp;import java.util.stream.Collectors;
+<i>11</i>&nbsp;
+<b class="fc"><i>12</i>&nbsp;public class Circe extends Divinity {</b>
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    public static Boolean supportedDivinity(int pNum) {
+<b class="fc"><i>15</i>&nbsp;        switch (pNum) {</b>
+<i>16</i>&nbsp;            case 2:
+<b class="fc"><i>17</i>&nbsp;                return true;</b>
+<i>18</i>&nbsp;            case 3:
+<b class="nc"><i>19</i>&nbsp;                return false;</b>
+<i>20</i>&nbsp;        }
+<b class="nc"><i>21</i>&nbsp;        return false;</b>
+<i>22</i>&nbsp;    }
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    @Override
+<i>25</i>&nbsp;    public String getName() {
+<b class="fc"><i>26</i>&nbsp;        return &quot;Circe&quot;;</b>
+<i>27</i>&nbsp;    }
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    /**
+<i>31</i>&nbsp;     * stole other player divinity if the the other player&#39;s workers are not adjacent
+<i>32</i>&nbsp;     *
+<i>33</i>&nbsp;     * @param gd the game state
+<i>34</i>&nbsp;     * @author Daniele Mammone
+<i>35</i>&nbsp;     */
+<i>36</i>&nbsp;    @Override
+<i>37</i>&nbsp;    public Consumer&lt;GameController&gt; turnBegin(Model gd) {
+<i>38</i>&nbsp;        //first, i must rollback the divinities of the players
+<b class="fc"><i>39</i>&nbsp;        for (Player p : gd.getPlayersInGame()) {</b>
+<b class="fc"><i>40</i>&nbsp;            if (p.getTempDivinity() != null) p.restoreTempDivinity();</b>
+<b class="fc"><i>41</i>&nbsp;        }</b>
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;        // i remove the other player from the list of players
+<b class="fc"><i>44</i>&nbsp;        String otherPlayer = gd.getPlayersInGame().stream().filter(p -&gt; !(p.getName().equals(gd.getCurrentPlayer().getName()))).collect(Collectors.toCollection(ArrayList::new)).get(0).getName();</b>
+<i>45</i>&nbsp;        //for debug reason
+<b class="fc"><i>46</i>&nbsp;        System.out.println(&quot;Other player: &quot; + otherPlayer);</b>
+<i>47</i>&nbsp;        // there must be present the two workers to apply the power, and there are gods that deletes workers from the board
+<i>48</i>&nbsp;        //now i must find the player&#39;s workers on the board
+<b class="fc"><i>49</i>&nbsp;        ArrayList&lt;Position&gt; workersPosition = gd.getPlayerPositionsInMap(otherPlayer);</b>
+<b class="fc"><i>50</i>&nbsp;        if (workersPosition.size() &gt; 1) {</b>
+<i>51</i>&nbsp;            //found the two workers, i must check if them are adjacent or not
+<b class="fc"><i>52</i>&nbsp;            if (!adiacentCellVerifier(workersPosition.get(0).getRow(), workersPosition.get(0).getColumn(), workersPosition.get(1).getRow(), workersPosition.get(1).getColumn())) {</b>
+<i>53</i>&nbsp;                //the workers are not adjacent, so the player stoles the divinity to the other player
+<b class="fc"><i>54</i>&nbsp;                gd.getCurrentPlayer().setTempDivinity(gd.getCurrentPlayer().getDivinity());</b>
+<b class="fc"><i>55</i>&nbsp;                gd.getCurrentPlayer().setDivinity(gd.getPlayer(otherPlayer).getDivinity());</b>
+<b class="fc"><i>56</i>&nbsp;                gd.getPlayer(otherPlayer).setTempDivinity(gd.getPlayer(otherPlayer).getDivinity());</b>
+<b class="fc"><i>57</i>&nbsp;                gd.getPlayer(otherPlayer).setDivinity(new Divinity());</b>
+<i>58</i>&nbsp;            }
+<i>59</i>&nbsp;        }
+<b class="fc"><i>60</i>&nbsp;        return GameController::requestMove;</b>
+<i>61</i>&nbsp;    }
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    @Override
+<i>64</i>&nbsp;    public String getDescription() {
+<b class="nc"><i>65</i>&nbsp;        return &quot;If an opponent&#39;s Workers do not neighbor each other, you alone have use of their power until your next turn.&quot;;</b>
+<i>66</i>&nbsp;    }
+<i>67</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-24 20:50</div>
+</div>
+</body>
+</html>

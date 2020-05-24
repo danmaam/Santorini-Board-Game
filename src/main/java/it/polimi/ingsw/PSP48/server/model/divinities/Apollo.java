@@ -193,4 +193,9 @@ public class Apollo extends Divinity {
 
         return wins;
     }
+
+    @Override
+    public String getDescription() {
+        return "Your Worker may move into an opponent Worker’s space by forcing their Worker to the space yours just vacated.";
+    }
 }

@@ -1,0 +1,427 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GUI</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP48.client.GUI</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GUI (it.polimi.ingsw.PSP48.client.GUI)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GUI</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 31)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 103)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.client.GUI;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP48.ViewInterface;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP48.WorkerValidCells;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP48.client.GUI.sceneControllers.GameBoardController;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP48.client.GUI.sceneControllers.LoginScreenController;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkIncoming;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkOutcoming;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ClientNetworkObserver;
+<i>11</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ViewObserver;
+<i>12</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Cell;
+<i>13</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Position;
+<i>14</i>&nbsp;import javafx.application.Application;
+<i>15</i>&nbsp;import javafx.application.Platform;
+<i>16</i>&nbsp;import javafx.beans.value.ChangeListener;
+<i>17</i>&nbsp;import javafx.fxml.FXMLLoader;
+<i>18</i>&nbsp;import javafx.scene.Parent;
+<i>19</i>&nbsp;import javafx.scene.Scene;
+<i>20</i>&nbsp;import javafx.scene.control.Alert;
+<i>21</i>&nbsp;import javafx.scene.layout.Pane;
+<i>22</i>&nbsp;import javafx.stage.Stage;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;import java.io.IOException;
+<i>25</i>&nbsp;import java.net.Socket;
+<i>26</i>&nbsp;import java.util.ArrayList;
+<i>27</i>&nbsp;import java.util.function.Consumer;
+<i>28</i>&nbsp;
+<b class="nc"><i>29</i>&nbsp;public class GUI extends Application implements ClientNetworkObserver, Runnable, ViewInterface {</b>
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    private ClientNetworkOutcoming cA;
+<i>33</i>&nbsp;    private Socket server;
+<i>34</i>&nbsp;    private ClientNetworkIncoming cI;
+<i>35</i>&nbsp;    private static Stage primaryStage;
+<b class="nc"><i>36</i>&nbsp;    private final ArrayList&lt;ViewObserver&gt; observers = new ArrayList&lt;&gt;();</b>
+<i>37</i>&nbsp;    private int playersInGame;
+<i>38</i>&nbsp;    private LoginScreenController loginController;
+<i>39</i>&nbsp;    private GameBoardController boardController;
+<b class="nc"><i>40</i>&nbsp;    private Scene board = null;</b>
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    @Override
+<i>44</i>&nbsp;    public void requestMove(ArrayList&lt;WorkerValidCells&gt; validCellsForMove)
+<i>45</i>&nbsp;    {
+<b class="nc"><i>46</i>&nbsp;        Platform.runLater(()-&gt;boardController.requestMove(validCellsForMove));</b>
+<i>47</i>&nbsp;    }
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    @Override
+<i>50</i>&nbsp;    public void requestDomeOrBuild(ArrayList&lt;WorkerValidCells&gt; validForBuild, ArrayList&lt;WorkerValidCells&gt; validForDome) {
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    }
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    @Override
+<i>55</i>&nbsp;    public void endgame(String messageOfEndGame) {
+<b class="nc"><i>56</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>57</i>&nbsp;            cA.shutDown();</b>
+<b class="nc"><i>58</i>&nbsp;            cI.shutdown();</b>
+<b class="nc"><i>59</i>&nbsp;            primaryStage.close();</b>
+<b class="nc"><i>60</i>&nbsp;            Alert alert = new Alert(Alert.AlertType.INFORMATION);</b>
+<b class="nc"><i>61</i>&nbsp;            alert.setTitle(&quot;End of game&quot;);</b>
+<b class="nc"><i>62</i>&nbsp;            alert.setHeaderText(&quot;Oh! The game finished!&quot;);</b>
+<b class="nc"><i>63</i>&nbsp;            alert.setContentText(messageOfEndGame);</b>
+<b class="nc"><i>64</i>&nbsp;            alert.showAndWait();</b>
+<i>65</i>&nbsp;        });
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    }
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;    @Override
+<i>70</i>&nbsp;    public void requestDivinitySelection(ArrayList&lt;DivinitiesWithDescription&gt; availableDivinities) {
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;        /*
+<i>73</i>&nbsp;        synchronized (lock) {
+<i>74</i>&nbsp;            while (!loadedBoard) {
+<i>75</i>&nbsp;                try {
+<i>76</i>&nbsp;                    lock.wait();
+<i>77</i>&nbsp;                } catch (InterruptedException e) {
+<i>78</i>&nbsp;                    e.printStackTrace();
+<i>79</i>&nbsp;                }
+<i>80</i>&nbsp;            }
+<i>81</i>&nbsp;        }
+<i>82</i>&nbsp;*/
+<i>83</i>&nbsp;
+<b class="nc"><i>84</i>&nbsp;        Platform.runLater(() -&gt; boardController.requestDivinitySelection(availableDivinities));</b>
+<i>85</i>&nbsp;    }
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;    @Override
+<i>88</i>&nbsp;    public void requestInitialPlayerSelection(ArrayList&lt;String&gt; players) {
+<b class="nc"><i>89</i>&nbsp;        Platform.runLater(() -&gt; boardController.requestInitialPlayerSelection(players));</b>
+<i>90</i>&nbsp;    }
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;    /**
+<i>93</i>&nbsp;     * method handling the choice of the positions of the workers on the board
+<i>94</i>&nbsp;     * @param validCells is the list of valid positions to put the worker on the board
+<i>95</i>&nbsp;     */
+<i>96</i>&nbsp;    @Override
+<i>97</i>&nbsp;    public void requestInitialPositioning(ArrayList&lt;Position&gt; validCells)
+<i>98</i>&nbsp;    {
+<b class="nc"><i>99</i>&nbsp;        Platform.runLater(() -&gt; boardController.requestInitialPositioning(validCells)); //we call the right controller to handle the actions</b>
+<i>100</i>&nbsp;    }
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;    @Override
+<i>103</i>&nbsp;    public void requestChallengerDivinitiesSelection(ArrayList&lt;DivinitiesWithDescription&gt; div, int playerNumber) {
+<i>104</i>&nbsp;        /*
+<i>105</i>&nbsp;        synchronized (lock) {
+<i>106</i>&nbsp;            while (!loadedBoard) {
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;                try {
+<i>109</i>&nbsp;                    lock.wait();
+<i>110</i>&nbsp;                } catch (InterruptedException e) {
+<i>111</i>&nbsp;                    e.printStackTrace();
+<i>112</i>&nbsp;                }
+<i>113</i>&nbsp;            }
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;        }
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;         */
+<b class="nc"><i>118</i>&nbsp;        Platform.runLater(() -&gt; boardController.requestChallengerDivinitiesSelection(div));</b>
+<i>119</i>&nbsp;    }
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    @Override
+<i>122</i>&nbsp;    public void printMessage(String s) {
+<i>123</i>&nbsp;        /*
+<i>124</i>&nbsp;        synchronized (lock) {
+<i>125</i>&nbsp;            while (!loadedBoard) {
+<i>126</i>&nbsp;                try {
+<i>127</i>&nbsp;                    lock.wait();
+<i>128</i>&nbsp;                } catch (InterruptedException e) {
+<i>129</i>&nbsp;                    e.printStackTrace();
+<i>130</i>&nbsp;                }
+<i>131</i>&nbsp;            }
+<i>132</i>&nbsp;
+<i>133</i>&nbsp;        }
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;         */
+<b class="nc"><i>136</i>&nbsp;        Platform.runLater(() -&gt; boardController.printMessage(s));</b>
+<i>137</i>&nbsp;    }
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;    @Override
+<i>140</i>&nbsp;    public void requestOptionalMove(ArrayList&lt;WorkerValidCells&gt; validCellsForMove) {
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;    }
+<i>143</i>&nbsp;
+<i>144</i>&nbsp;    @Override
+<i>145</i>&nbsp;    public void requestOptionalBuild(ArrayList&lt;WorkerValidCells&gt; build, ArrayList&lt;WorkerValidCells&gt; dome) {
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;    }
+<i>148</i>&nbsp;
+<i>149</i>&nbsp;    @Override
+<i>150</i>&nbsp;    public void registerObserver(ViewObserver obv) {
+<b class="nc"><i>151</i>&nbsp;        observers.add(obv);</b>
+<i>152</i>&nbsp;    }
+<i>153</i>&nbsp;
+<i>154</i>&nbsp;
+<i>155</i>&nbsp;    @Override
+<i>156</i>&nbsp;    public void unregisterObserver(ViewObserver obv) {
+<b class="nc"><i>157</i>&nbsp;        observers.remove(obv);</b>
+<i>158</i>&nbsp;    }
+<i>159</i>&nbsp;
+<i>160</i>&nbsp;    @Override
+<i>161</i>&nbsp;    public void notifyObserver(Consumer&lt;ViewObserver&gt; lambda) {
+<b class="nc"><i>162</i>&nbsp;        for (ViewObserver o : observers) {</b>
+<b class="nc"><i>163</i>&nbsp;            lambda.accept(o);</b>
+<b class="nc"><i>164</i>&nbsp;        }</b>
+<i>165</i>&nbsp;    }
+<i>166</i>&nbsp;
+<i>167</i>&nbsp;
+<i>168</i>&nbsp;    @Override
+<i>169</i>&nbsp;    public void changedBoard(ArrayList&lt;Cell&gt; newCells) {
+<b class="nc"><i>170</i>&nbsp;        Platform.runLater(() -&gt; boardController.changedBoard(newCells));</b>
+<i>171</i>&nbsp;    }
+<i>172</i>&nbsp;
+<i>173</i>&nbsp;    @Override
+<i>174</i>&nbsp;    public void changedPlayerList(ArrayList&lt;String&gt; newPlayerList) {
+<i>175</i>&nbsp;        /*
+<i>176</i>&nbsp;        synchronized (lock) {
+<i>177</i>&nbsp;            while (!loadedBoard) {
+<i>178</i>&nbsp;                try {
+<i>179</i>&nbsp;                    lock.wait();
+<i>180</i>&nbsp;                } catch (InterruptedException e) {
+<i>181</i>&nbsp;                    e.printStackTrace();
+<i>182</i>&nbsp;                }
+<i>183</i>&nbsp;            }
+<i>184</i>&nbsp;        }
+<i>185</i>&nbsp;        */
+<i>186</i>&nbsp;
+<b class="nc"><i>187</i>&nbsp;        System.out.println(&quot;Changed player list runnable&quot;);</b>
+<i>188</i>&nbsp;        /*
+<i>189</i>&nbsp;        for (String s : newPlayerList) {
+<i>190</i>&nbsp;            System.out.println(s);
+<i>191</i>&nbsp;        }
+<i>192</i>&nbsp;
+<i>193</i>&nbsp;         */
+<b class="nc"><i>194</i>&nbsp;        Platform.runLater(() -&gt; boardController.changedPlayerList(newPlayerList));</b>
+<i>195</i>&nbsp;    }
+<i>196</i>&nbsp;
+<i>197</i>&nbsp;
+<i>198</i>&nbsp;    @Override
+<i>199</i>&nbsp;    public void run() {
+<i>200</i>&nbsp;
+<i>201</i>&nbsp;    }
+<i>202</i>&nbsp;
+<i>203</i>&nbsp;    @Override
+<i>204</i>&nbsp;    public void start(Stage stage) throws Exception {
+<b class="nc"><i>205</i>&nbsp;        System.out.println(this);</b>
+<b class="nc"><i>206</i>&nbsp;        FXMLLoader loginLoader = new FXMLLoader(getClass().getResource(&quot;/SantoriniGUI.fxml&quot;));</b>
+<b class="nc"><i>207</i>&nbsp;        loginController = new LoginScreenController(this);</b>
+<b class="nc"><i>208</i>&nbsp;        loginLoader.setController(loginController);</b>
+<b class="nc"><i>209</i>&nbsp;        Parent root = loginLoader.load();</b>
+<b class="nc"><i>210</i>&nbsp;        Scene scene = new Scene(root, 467, 653);</b>
+<b class="nc"><i>211</i>&nbsp;        primaryStage = stage;</b>
+<i>212</i>&nbsp;
+<b class="nc"><i>213</i>&nbsp;        FXMLLoader controllerLoader = new FXMLLoader(getClass().getResource(&quot;/gameLayout.fxml&quot;));</b>
+<b class="nc"><i>214</i>&nbsp;        boardController = new GameBoardController(this);</b>
+<b class="nc"><i>215</i>&nbsp;        controllerLoader.setController(boardController);</b>
+<i>216</i>&nbsp;        Pane boardRoot;
+<i>217</i>&nbsp;        try {
+<b class="nc"><i>218</i>&nbsp;            boardRoot = controllerLoader.load();</b>
+<b class="nc"><i>219</i>&nbsp;            board = new Scene(boardRoot, 1280, 720);</b>
+<b class="nc"><i>220</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>221</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>222</i>&nbsp;        }</b>
+<i>223</i>&nbsp;
+<b class="nc"><i>224</i>&nbsp;        stage.setTitle(&quot;Santorini Log-In&quot;);</b>
+<i>225</i>&nbsp;        //stage.setResizable(false);
+<b class="nc"><i>226</i>&nbsp;        stage.setScene(scene);</b>
+<b class="nc"><i>227</i>&nbsp;        stage.show();</b>
+<b class="nc"><i>228</i>&nbsp;        System.out.println(&quot;Initialized stage&quot;);</b>
+<i>229</i>&nbsp;    }
+<i>230</i>&nbsp;
+<i>231</i>&nbsp;    @Override
+<i>232</i>&nbsp;    public void completedSetup(String message) {
+<i>233</i>&nbsp;
+<b class="nc"><i>234</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>235</i>&nbsp;            ChangeListener&lt;Number&gt; stageSizeListener = (observable, oldValue, newValue) -&gt; {</b>
+<b class="nc"><i>236</i>&nbsp;                boardController.resizeElements(primaryStage.getHeight(), primaryStage.getWidth());</b>
+<i>237</i>&nbsp;            };
+<b class="nc"><i>238</i>&nbsp;            primaryStage.setOnCloseRequest((e) -&gt; manageWindowClose());</b>
+<b class="nc"><i>239</i>&nbsp;            primaryStage.setScene(board);</b>
+<b class="nc"><i>240</i>&nbsp;            primaryStage.setTitle(&quot;Santorini&quot;);</b>
+<b class="nc"><i>241</i>&nbsp;            primaryStage.widthProperty().addListener(stageSizeListener);</b>
+<b class="nc"><i>242</i>&nbsp;            primaryStage.heightProperty().addListener(stageSizeListener);</b>
+<b class="nc"><i>243</i>&nbsp;            primaryStage.minWidthProperty().bind(board.heightProperty().multiply(16).divide(9));</b>
+<b class="nc"><i>244</i>&nbsp;            primaryStage.minHeightProperty().bind(board.widthProperty().divide(16).multiply(9));</b>
+<b class="nc"><i>245</i>&nbsp;            primaryStage.show();</b>
+<i>246</i>&nbsp;        });
+<i>247</i>&nbsp;
+<i>248</i>&nbsp;    }
+<i>249</i>&nbsp;
+<i>250</i>&nbsp;    public void manageWindowClose() {
+<b class="nc"><i>251</i>&nbsp;        cA.shutDown();</b>
+<b class="nc"><i>252</i>&nbsp;        cI.shutdown();</b>
+<i>253</i>&nbsp;        try {
+<b class="nc"><i>254</i>&nbsp;            server.close();</b>
+<b class="nc"><i>255</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>256</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>257</i>&nbsp;        }</b>
+<i>258</i>&nbsp;    }
+<i>259</i>&nbsp;
+<i>260</i>&nbsp;
+<i>261</i>&nbsp;    public void setNumberOfPlayers(int number) {
+<b class="nc"><i>262</i>&nbsp;        playersInGame = number;</b>
+<i>263</i>&nbsp;    }
+<i>264</i>&nbsp;
+<i>265</i>&nbsp;    public ClientNetworkOutcoming getUploader() {
+<b class="nc"><i>266</i>&nbsp;        return cA;</b>
+<i>267</i>&nbsp;    }
+<i>268</i>&nbsp;
+<i>269</i>&nbsp;    public void stopNetwork() {
+<b class="nc"><i>270</i>&nbsp;        if (cI != null) cI.shutdown();</b>
+<b class="nc"><i>271</i>&nbsp;        if (cA != null) cA.shutDown();</b>
+<i>272</i>&nbsp;
+<i>273</i>&nbsp;        try {
+<b class="nc"><i>274</i>&nbsp;            if (server != null) server.close();</b>
+<b class="nc"><i>275</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>276</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>277</i>&nbsp;        }</b>
+<i>278</i>&nbsp;    }
+<i>279</i>&nbsp;
+<i>280</i>&nbsp;    public void startNetwork(String IP) {
+<b class="nc"><i>281</i>&nbsp;        boolean connected = true;</b>
+<i>282</i>&nbsp;        try {
+<b class="nc"><i>283</i>&nbsp;            server = new Socket(IP, 7777);</b>
+<b class="nc"><i>284</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>285</i>&nbsp;            Alert alert = new Alert(Alert.AlertType.ERROR);</b>
+<b class="nc"><i>286</i>&nbsp;            alert.setTitle(&quot;Error&quot;);</b>
+<b class="nc"><i>287</i>&nbsp;            alert.setHeaderText(&quot;Login Error&quot;);</b>
+<b class="nc"><i>288</i>&nbsp;            alert.setContentText(&quot;Can&#39;t connect to the server&quot;);</b>
+<b class="nc"><i>289</i>&nbsp;            alert.showAndWait();</b>
+<b class="nc"><i>290</i>&nbsp;            server = null;</b>
+<b class="nc"><i>291</i>&nbsp;            connected = false;</b>
+<i>292</i>&nbsp;            return;
+<b class="nc"><i>293</i>&nbsp;        }</b>
+<i>294</i>&nbsp;        //primaryStage.close();
+<i>295</i>&nbsp;
+<b class="nc"><i>296</i>&nbsp;        cA = new ClientNetworkOutcoming(server);</b>
+<b class="nc"><i>297</i>&nbsp;        Thread cAThread = new Thread(cA);</b>
+<i>298</i>&nbsp;
+<b class="nc"><i>299</i>&nbsp;        this.registerObserver(cA);</b>
+<i>300</i>&nbsp;
+<b class="nc"><i>301</i>&nbsp;        cI = new ClientNetworkIncoming(this, server);</b>
+<b class="nc"><i>302</i>&nbsp;        cI.setOutHandler(cA);</b>
+<b class="nc"><i>303</i>&nbsp;        cI.addObserver(this);</b>
+<b class="nc"><i>304</i>&nbsp;        Thread cIThread = new Thread(cI);</b>
+<i>305</i>&nbsp;
+<b class="nc"><i>306</i>&nbsp;        cIThread.start();</b>
+<b class="nc"><i>307</i>&nbsp;        cAThread.start();</b>
+<i>308</i>&nbsp;
+<b class="nc"><i>309</i>&nbsp;        System.out.println(&quot;Correctly connected to the server!&quot;);</b>
+<i>310</i>&nbsp;    }
+<i>311</i>&nbsp;
+<i>312</i>&nbsp;    public void requestGameModeSend(String message) {
+<b class="nc"><i>313</i>&nbsp;        loginController.requestGameModeSend(message);</b>
+<i>314</i>&nbsp;    }
+<i>315</i>&nbsp;
+<i>316</i>&nbsp;    public void nicknameResult(String result) {
+<b class="nc"><i>317</i>&nbsp;        Platform.runLater(() -&gt; loginController.nicknameResult(result));</b>
+<i>318</i>&nbsp;    }
+<i>319</i>&nbsp;
+<i>320</i>&nbsp;    @Override
+<i>321</i>&nbsp;    public void gameModeResult(String result) {
+<i>322</i>&nbsp;
+<i>323</i>&nbsp;    }
+<i>324</i>&nbsp;
+<i>325</i>&nbsp;    public void requestNicknameSend(String message) {
+<b class="nc"><i>326</i>&nbsp;        if (!message.equals(&quot;Invalid nickname. Retry&quot;)) {</b>
+<b class="nc"><i>327</i>&nbsp;            Platform.runLater(() -&gt; loginController.requestNicknameSend(message));</b>
+<i>328</i>&nbsp;        } else {
+<b class="nc"><i>329</i>&nbsp;            Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>330</i>&nbsp;                stopNetwork();</b>
+<b class="nc"><i>331</i>&nbsp;                Alert alert = new Alert(Alert.AlertType.ERROR);</b>
+<b class="nc"><i>332</i>&nbsp;                alert.setTitle(&quot;Login Error&quot;);</b>
+<b class="nc"><i>333</i>&nbsp;                alert.setHeaderText(&quot;Invalid nickname&quot;);</b>
+<b class="nc"><i>334</i>&nbsp;                alert.setContentText(&quot;Nickname already in use or invalid. \n Retry&quot;);</b>
+<b class="nc"><i>335</i>&nbsp;                alert.showAndWait();</b>
+<i>336</i>&nbsp;
+<i>337</i>&nbsp;            });
+<i>338</i>&nbsp;        }
+<i>339</i>&nbsp;    }
+<i>340</i>&nbsp;
+<i>341</i>&nbsp;    public int getPlayersInGame() {
+<b class="nc"><i>342</i>&nbsp;        return playersInGame;</b>
+<i>343</i>&nbsp;    }
+<i>344</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-24 20:50</div>
+</div>
+</body>
+</html>

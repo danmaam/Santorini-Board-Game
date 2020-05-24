@@ -122,4 +122,9 @@ public class Hestia extends Divinity {
     public String getName() {
         return "Hestia";
     }
+
+    @Override
+    public String getDescription() {
+        return "Your Worker may build one additional time, but this cannot be on a perimeter space.";
+    }
 }

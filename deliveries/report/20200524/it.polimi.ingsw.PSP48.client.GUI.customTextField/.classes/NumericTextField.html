@@ -1,0 +1,100 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: NumericTextField</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP48.client.GUI.customTextField</a> ]
+</div>
+
+<h1>Coverage Summary for Class: NumericTextField (it.polimi.ingsw.PSP48.client.GUI.customTextField)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NumericTextField</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.client.GUI.customTextField;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import javafx.scene.control.TextField;
+<i>4</i>&nbsp;
+<b class="nc"><i>5</i>&nbsp;public class NumericTextField extends TextField {</b>
+<i>6</i>&nbsp;    @Override
+<i>7</i>&nbsp;    public void replaceText(int i, int i1, String s) {
+<b class="nc"><i>8</i>&nbsp;        if (s.matches(&quot;[0-9]&quot;) || s.isEmpty())</b>
+<b class="nc"><i>9</i>&nbsp;            super.replaceText(i, i1, s);</b>
+<i>10</i>&nbsp;    }
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    @Override
+<i>13</i>&nbsp;    public void replaceSelection(String s) {
+<b class="nc"><i>14</i>&nbsp;        if (s.matches(&quot;[0-9]&quot;) || s.isEmpty())</b>
+<b class="nc"><i>15</i>&nbsp;            super.replaceSelection(s);</b>
+<i>16</i>&nbsp;    }
+<i>17</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-24 20:50</div>
+</div>
+</body>
+</html>
