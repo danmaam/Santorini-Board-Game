@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP48.client.GUI.sceneControllers;
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
 import it.polimi.ingsw.PSP48.client.GUI.GUI;
+import it.polimi.ingsw.PSP48.server.MoveCoordinates;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Position;
 import javafx.concurrent.Worker;
@@ -77,6 +78,7 @@ public class GameBoardController {
     }
 
     private Position nextPosition = null;
+    private Position workerPosition=null;
     private FSM_STATUS nextState;
     private ArrayList<Position> positionValid;
     private ArrayList<WorkerValidCells> moveValid;
@@ -86,6 +88,7 @@ public class GameBoardController {
     private ArrayList<String> playerList;
 
     private final Image isSelectionImage = new Image("santorini_risorse-grafiche-2/Texture2D/Whirpool.png");
+    private final Image workerChoiceImage = new Image ("santorini_risorse-grafiche-2/Texture2D/cloud_puff1.png");
 
     private final EventHandler<MouseEvent> handleOperation = new EventHandler<MouseEvent>() {
         @Override
@@ -130,6 +133,10 @@ public class GameBoardController {
         multifunctionalPane.getChildren().clear();
     }
 
+    /**
+     * method implementing the positioning of the workers on the board
+     * @param validCells is the list of valid positions for the placing of the workers
+     */
     public void requestInitialPositioning(ArrayList<Position> validCells) {
 
         //we need to show the choice message to the player
@@ -166,9 +173,126 @@ public class GameBoardController {
      *
      * @param initialPosition is the position chosen by the player
      */
-    public void sendInitialPositioningChoice(Position initialPosition) {
+    public void sendInitialPositioningChoice(Position initialPosition)
+    {
         view.notifyObserver(x -> x.putWorkerOnTable(initialPosition));
+    }
 
+    /**
+     * method implementing the move action of a player during the match
+     * @param validCellsForMove is the list of workers that can be moved, together with the positions where they can be moved
+     */
+    public void requestMove(ArrayList<WorkerValidCells> validCellsForMove)
+    {
+        Node node;
+
+        this.moveValid=validCellsForMove; //we need to copy the input list in order to have it in all of the gui states
+        this.nextState=FSM_STATUS.worker_selection_move; //we update the status of the gui
+
+        if (validCellsForMove.size()==1) //we only have one worker so we just need to select the cell where the player wants to move
+        {
+            this.postWorkerChoiceMove(validCellsForMove.get(0));
+        }
+        else //the player needs to choose the worker to move
+        {
+            gameMessage.setText("Click on the worker you want to move");
+
+            boardPane.setVisible(true);
+            for (WorkerValidCells w : validCellsForMove)
+            {
+                //we need to assign a mouse clicked event and a highlight to the worker, so he can be chosen
+                node=getNodeFromGridPane(boardPane, 1+2*w.getwC(), 1+2*w.getwR(), true);
+                node.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
+                ImageView workerImage= new ImageView(workerChoiceImage);
+                workerImage.setOpacity(0.4);
+                boardPane.add(workerImage, 1+2*w.getwC(), 1+2*w.getwR());
+                for (Position p : w.getValidPositions())
+                {
+                    //if the position hasn't already been highlighted, we do this operation
+                    //if the cell has already been highlighted we don't need to do anything
+                    if (!isAlreadyHighlighted(validCellsForMove, p, w.getwR(), w.getwC()))
+                    {
+                        ImageView cellChoice= new ImageView(isSelectionImage);
+                        cellChoice.setOpacity(0.4);
+                        cellChoice.setFitWidth(95);
+                        cellChoice.setFitHeight(95);
+                        cellChoice.fitHeightProperty().bind(boardPane.heightProperty().divide(7));
+                        cellChoice.fitWidthProperty().bind(boardPane.widthProperty().divide(7));
+                        GridPane.setHalignment(cellChoice, HPos.CENTER);
+                        GridPane.setValignment(cellChoice, VPos.CENTER);
+                        boardPane.add(cellChoice, 1+2*p.getColumn(), 1+2*p.getRow());
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * support method implementing the part of the move action where the player chooses the cell where to move
+     * @param chosenWorker is the worker selected to move, with the valid cells where he can be put on
+     */
+    public void postWorkerChoiceMove (WorkerValidCells chosenWorker)
+    {
+        this.nextState=FSM_STATUS.sendmove;
+        workerPosition= new Position(chosenWorker.getwR(), chosenWorker.getwC());
+
+        gameMessage.setText("Click on the cell where you want to move your worker");
+
+        boardPane.setVisible(true);
+        for (Position p : chosenWorker.getValidPositions())
+        {
+            ImageView highlight= new ImageView(isSelectionImage);
+            highlight.setOpacity(0.4);
+            highlight.setFitWidth(95);
+            highlight.setFitHeight(95);
+            highlight.fitHeightProperty().bind(boardPane.heightProperty().divide(7));
+            highlight.fitWidthProperty().bind(boardPane.widthProperty().divide(7));
+            GridPane.setHalignment(highlight, HPos.CENTER);
+            GridPane.setValignment(highlight, VPos.CENTER);
+            highlight.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
+            boardPane.add(highlight, 1+2*p.getColumn(), 1+2*p.getRow());
+        }
+    }
+
+    /**
+     * method that notifies the observers about the worker and the cell chosen to move
+     * @param moveChoiceCoordinates contains the coordinates of the worker and of the cell
+     */
+    public void sendMoveChoice(MoveCoordinates moveChoiceCoordinates)
+    {
+        view.notifyObserver(x->x.move(moveChoiceCoordinates));
+    }
+
+    /**
+     * support method to check if a certain position on the board has already been highlighted
+     * @param listToCheck is the full list of workers with their valid positions
+     * @param posToCheck is the position we need to check before highlighting it
+     * @param workerRow is the row of the worker who has the position we are checking in his list
+     * @param workerColumn is the column of the worker who has the position we are checking in his list
+     * @return a boolean which is true if the position has already been highlighted
+     */
+    public boolean isAlreadyHighlighted(ArrayList<WorkerValidCells> listToCheck, Position posToCheck, int workerRow, int workerColumn)
+    {
+        boolean found=false;
+        boolean highlighted=false;
+
+        for (int i = 0; i<listToCheck.size() && !found; i++)
+        {
+            if (listToCheck.get(i).getwR()==workerRow && listToCheck.get(i).getwC()==workerColumn)
+            {
+                found=true;
+            }
+            else
+            {
+                if (listToCheck.get(i).getValidPositions().contains(posToCheck))
+                {
+                    highlighted=true;
+                    break;
+                }
+            }
+        }
+
+        return (highlighted);
     }
 
     public void changedPlayerList(ArrayList<String> newPlayerList) {
@@ -267,8 +391,10 @@ public class GameBoardController {
 
     }
 
-    public void nextActionFSM() {
-        switch (nextState) {
+    public void nextActionFSM()
+    {
+        switch (nextState)
+        {
             case positioning:
                 ArrayList<Node> tbr = new ArrayList<>();
                 //first of all, i must restore the initial board situation
@@ -283,6 +409,50 @@ public class GameBoardController {
                 //restored the board situation, I must send the cell
                 sendInitialPositioningChoice(nextPosition);
                 break;
+            case worker_selection_move:
+                Node n;
+                //we need to remove the mouse events from the worker cells and to remove the highlighting
+                for (WorkerValidCells w : moveValid)
+                {
+                    n=getNodeFromGridPane(boardPane, 1+2*w.getwC(), 1+2*w.getwR(), true);
+                    n.removeEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
+                    boardPane.getChildren().remove(n);
+                    for (Position p : w.getValidPositions())
+                    {
+                        n=getNodeFromGridPane(boardPane, 1+2*p.getColumn(), 1+2*p.getRow(), true);
+                        boardPane.getChildren().remove(n);
+                    }
+                }
+                //after restoring the board we can proceed with the choice of the cell
+                WorkerValidCells workerToSend=null;
+                for (WorkerValidCells w1 : moveValid)
+                {
+                    if (w1.getwR()==nextPosition.getRow() && w1.getwC()==nextPosition.getColumn())
+                    {
+                        workerToSend=w1;
+                        break;
+                    }
+                }
+                postWorkerChoiceMove(workerToSend);
+            case sendmove:
+                // we need to reset the board
+                WorkerValidCells temp=null;
+                Node tempNode;
+                for (WorkerValidCells w : moveValid)
+                {
+                    if (w.getwR()==workerPosition.getRow() && w.getwC()==workerPosition.getColumn())
+                    {
+                        temp=w;
+                        break;
+                    }
+                }
+                for(Position p : temp.getValidPositions())
+                {
+                    getNodeFromGridPane(boardPane, 1+2*p.getColumn(), 1+2*p.getRow(), true).removeEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
+                    tempNode=getNodeFromGridPane(boardPane, 1+2*p.getColumn(), 1+2*p.getRow(), true);
+                    boardPane.getChildren().remove(tempNode);
+                }
+                this.sendMoveChoice(new MoveCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
         }
     }
 
