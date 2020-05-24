@@ -18,7 +18,7 @@ public class GameRoom {
 
     public GameRoom(int playersNumber, boolean AllowedDivinities, int ID) {
         model = new Model(playersNumber, AllowedDivinities);
-        controller = new GameController(model, gameRoomID);
+        controller = new GameController(model, ID);
         gameRoomID = ID;
     }
 
