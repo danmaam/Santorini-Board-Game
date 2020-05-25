@@ -90,6 +90,8 @@ public class GameBoardController {
 
     private final Image isSelectionImage = new Image("santorini_risorse-grafiche-2/Texture2D/Whirpool.png");
     private final Image workerChoiceImage = new Image("santorini_risorse-grafiche-2/Texture2D/Cloud_01.png");
+    private final Image domeSelectionImage = new Image("santorini_risorse-grafiche-2/Texture2D/jeff_cloudpoof.png");
+    private final Image buildAndDomeImage = new Image("santorini_risorse-grafiche-2/Texture2D/WindToken.png");
 
     private final EventHandler<MouseEvent> handleOperation = new EventHandler<MouseEvent>() {
         @Override
@@ -296,10 +298,134 @@ public class GameBoardController {
      */
     public void requestDomeOrBuild (ArrayList<WorkerValidCells> validForBuild, ArrayList<WorkerValidCells> validForDome)
     {
+        ArrayList<Position> tempList=null;
 
+        this.nextState=FSM_STATUS.worker_selection_build;
+        this.buildValid=validForBuild;
+        this.domeValid=validForDome;
+
+        if (validForBuild.size() > 1 || validForDome.size() > 1 || !(validForBuild.get(0).getwR() == validForDome.get(0).getwR() && validForBuild.get(0).getwC() == validForDome.get(0).getwC()))
+        {
+            //the player can choose the worker, so we need to highlight the cells
+            gameMessage.setText("Click on the worker you want to use for the building actions");
+            boardPane.setVisible(true);
+            for (WorkerValidCells w1 : validForBuild)
+            {
+                //first of all we get both lists of cells for each worker (there can also be just one)
+                for (WorkerValidCells w2 : validForDome)
+                {
+                    if (w2.getwR()==w1.getwR() && w2.getwC()==w1.getwC())
+                    {
+                        tempList=w2.getValidPositions();
+                        break;
+                    }
+                }
+                //we assign an highlight and a mouse event to the worker
+                ImageView workerImage = new ImageView(workerChoiceImage);
+                workerImage.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
+                workerImage.setOpacity(0.9);
+                workerImage.setFitWidth(95);
+                workerImage.setFitHeight(95);
+                boardPane.add(workerImage, 1 + 2 * w1.getwC(), 1 + 2 * w1.getwR());
+                //then we need to highlight all the cells of the worker
+                boolean buildHighlighted;
+                for (Position p1 : w1.getValidPositions())
+                {
+                    //the worker can only do the build action on a certain cell
+                    if (tempList==null || (tempList!=null && !tempList.contains(p1)))
+                    {
+                        buildHighlighted=isAlreadyHighlighted(validForBuild, p1, w1.getwR(), w1.getwC());
+                        if (!buildHighlighted)
+                        {
+                            ImageView buildChoice = new ImageView(isSelectionImage);
+                            buildChoice.setOpacity(0.4);
+                            buildChoice.setFitWidth(95);
+                            buildChoice.setFitHeight(95);
+                            buildChoice.fitHeightProperty().bind(boardPane.heightProperty().divide(7));
+                            buildChoice.fitWidthProperty().bind(boardPane.widthProperty().divide(7));
+                            GridPane.setHalignment(buildChoice, HPos.CENTER);
+                            GridPane.setValignment(buildChoice, VPos.CENTER);
+                            boardPane.add(buildChoice, 1 + 2 * p1.getColumn(), 1 + 2 * p1.getRow());
+                        }
+                    }
+                    //the worker can both build or put a dome on the cell we are considering
+                    else
+                    {
+                        buildHighlighted=isAlreadyHighlighted(validForBuild, p1, w1.getwR(), w1.getwC());
+                        if (!buildHighlighted)
+                        {
+                            ImageView buildHighlight = new ImageView(buildAndDomeImage);
+                            buildHighlight.setOpacity(0.4);
+                            buildHighlight.setFitWidth(95);
+                            buildHighlight.setFitHeight(95);
+                            boardPane.add(buildHighlight, 1 + 2 * p1.getColumn(), 1 + 2 * p1.getRow());
+                        }
+                    }
+                }
+                tempList=null;
+            }
+
+            //we have to highlight the cells of the workers that can only do the dome action
+            boolean bothActions=false;
+            for (WorkerValidCells w : validForDome)
+            {
+                for (WorkerValidCells w1 : validForBuild)
+                {
+                    if (w1.getwR()==w.getwR() && w1.getwC()==w.getwC())
+                    {
+                        bothActions=true;
+                        break;
+                    }
+                }
+                if (bothActions) break; //we have already highlighted the workers who can do build and dome
+                else
+                {
+                    //we highlight the worker first
+                    ImageView workerHighlight = new ImageView(workerChoiceImage);
+                    workerHighlight.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
+                    workerHighlight.setOpacity(0.9);
+                    workerHighlight.setFitWidth(95);
+                    workerHighlight.setFitHeight(95);
+                    boardPane.add(workerHighlight, 1 + 2 * w.getwC(), 1 + 2 * w.getwR());
+                    //then we need to highlight the valid cells for the dome action
+                    boolean domeHighlighted;
+                    for (Position p : w.getValidPositions())
+                    {
+                        domeHighlighted=isAlreadyHighlighted(validForDome, p, w.getwR(), w.getwC());
+                        if (!domeHighlighted)
+                        {
+                            ImageView domeHighlight = new ImageView(domeSelectionImage);
+                            domeHighlight.setOpacity(0.4);
+                            domeHighlight.setFitWidth(95);
+                            domeHighlight.setFitHeight(95);
+                            boardPane.add(domeHighlight, 1 + 2 * p.getColumn(), 1 + 2 * p.getRow());
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            //the player can't choose the worker so we proceed to next phase
+            this.postWorkerChoiceBuild(validForBuild, validForDome);
+        }
     }
 
-    //public void postWorkerChoiceBuild (WorkerValidCells)
+    /**
+     * method implementing the part of the build action after the player has chosen the worker to use (if there is a choice)
+     * @param buildWorker contains the chosen worker with the list of cells where to build
+     * @param domeWorker contains the chosen worker with the list of cells that can be domed
+     */
+    public void postWorkerChoiceBuild (ArrayList<WorkerValidCells> buildWorker, ArrayList<WorkerValidCells> domeWorker)
+    {
+        this.nextState=FSM_STATUS.sendbuild;
+        if (buildWorker.isEmpty())
+        {
+            workerPosition=new Position(domeWorker.get(0).getwR(), domeWorker.get(0).getwC());
+        }
+        else workerPosition= new Position(buildWorker.get(0).getwR(), buildWorker.get(0).getwC());
+
+    }
 
     /**
      * method used to notify the server about the build action coordinates
