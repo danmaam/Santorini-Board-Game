@@ -54,8 +54,8 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     @Override
     public void endgame(String messageOfEndGame) {
         Platform.runLater(() -> {
-            cA.shutDown();
             cI.shutdown();
+            cA.shutDown();
             primaryStage.close();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("End of game");
@@ -232,9 +232,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     public void completedSetup(String message) {
 
         Platform.runLater(() -> {
-            ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) -> {
-                boardController.resizeElements(primaryStage.getHeight(), primaryStage.getWidth());
-            };
+            ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) -> boardController.resizeElements(primaryStage.getHeight(), primaryStage.getWidth());
             primaryStage.setOnCloseRequest((e) -> manageWindowClose());
             primaryStage.setScene(board);
             primaryStage.setTitle("Santorini");
@@ -278,7 +276,6 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     }
 
     public void startNetwork(String IP) {
-        boolean connected = true;
         try {
             server = new Socket(IP, 7777);
         } catch (IOException e) {
@@ -288,7 +285,6 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
             alert.setContentText("Can't connect to the server");
             alert.showAndWait();
             server = null;
-            connected = false;
             return;
         }
         //primaryStage.close();

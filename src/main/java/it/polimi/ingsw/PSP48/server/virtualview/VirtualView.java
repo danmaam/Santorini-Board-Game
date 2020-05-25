@@ -229,7 +229,5 @@ public class VirtualView implements ViewInterface, ServerNetworkObserver {
         Server.destroyGameRoom(roomID, playerName, EndReason.disconnection);
     }
 
-    public void disconnectFromServer() {
 
-    }
 }

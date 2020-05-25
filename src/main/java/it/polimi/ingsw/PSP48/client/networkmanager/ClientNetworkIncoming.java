@@ -9,6 +9,8 @@ import it.polimi.ingsw.PSP48.setupMessagesToClient.ClientSetupMessages;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -20,6 +22,7 @@ public class ClientNetworkIncoming implements Runnable {
     private final Socket server;
     private ClientNetworkOutcoming o;
 
+    private boolean closed;
 
     ScheduledExecutorService pingScheduler = Executors.newScheduledThreadPool(1);
 
@@ -37,9 +40,15 @@ public class ClientNetworkIncoming implements Runnable {
     public void run() {
         try {
             in = new ObjectInputStream(server.getInputStream());
+            try {
+                server.setSoTimeout(20 * 1000);
+            } catch (SocketException e) {
+                e.printStackTrace();
+            }
             retrieveMessage();
+
         } catch (IOException e) {
-            System.out.println("Disconnected from server");
+            if (!closed) playerView.endgame("Connection to the server lost");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -72,5 +81,6 @@ public class ClientNetworkIncoming implements Runnable {
 
     public void shutdown() {
         pingScheduler.shutdown();
+        closed = true;
     }
 }

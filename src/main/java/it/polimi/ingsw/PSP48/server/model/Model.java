@@ -118,7 +118,9 @@ public class Model {
     }
 
     public void addPlayer(String playerName, Colour playerColour, Calendar playerBirthday) {
-        playersInGame.add(new Player(playerName, playerBirthday, gameWithDivinities, playerColour));
+        Player newP = new Player(playerName, playerBirthday, gameWithDivinities, playerColour);
+        playersInGame.add(newP);
+        if (!gameWithDivinities) newP.setDivinity(new Divinity());
         sendPlayerList();
     }
 

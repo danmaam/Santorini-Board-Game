@@ -341,10 +341,6 @@ public class GameController implements ViewObserver {
         System.out.println("starting game");
         //i must choose randomically the challenger, than request him to choose divinities
         int i = new Random().nextInt(model.getNumberOfPlayers());
-
-        for (Player p : model.getPlayersInGame()) {
-            getPlayerView(p.getName()).printMessage("Game started!");
-        }
         model.setChallengerIndex(i);
         model.setNextPlayer(i);
         //set the challenger, i must ask him to select divinities
@@ -368,11 +364,6 @@ public class GameController implements ViewObserver {
         model.setNextPlayer(model.getPlayersInGame().indexOf(firstPlayer));
         model.setFirstPlayerIndex(model.getPlayersInGame().indexOf(firstPlayer));
 
-
-        //set the first player, i must set the base divinity for every player
-        for (Player p : model.getPlayersInGame()) {
-            model.setPlayerDivinity(p.getName(), "Basic");
-        }
         //set the basic moves on players, i start the game requesting the initial positioning
         this.requestInitialPositioning();
     }
