@@ -47,8 +47,9 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     }
 
     @Override
-    public void requestDomeOrBuild(ArrayList<WorkerValidCells> validForBuild, ArrayList<WorkerValidCells> validForDome) {
-
+    public void requestDomeOrBuild(ArrayList<WorkerValidCells> validForBuild, ArrayList<WorkerValidCells> validForDome)
+    {
+        Platform.runLater(()->boardController.requestDomeOrBuild(validForBuild, validForDome));
     }
 
     @Override

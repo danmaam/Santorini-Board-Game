@@ -289,6 +289,36 @@ public class GameBoardController {
         return (highlighted);
     }
 
+    /**
+     * method handling the building actions during a player's turn
+     * @param validForBuild is the list of workers who can do the build, with their valid cells for this operation
+     * @param validForDome is the list of workers who can do the dome, with their valid cells for this action
+     */
+    public void requestDomeOrBuild (ArrayList<WorkerValidCells> validForBuild, ArrayList<WorkerValidCells> validForDome)
+    {
+
+    }
+
+    //public void postWorkerChoiceBuild (WorkerValidCells)
+
+    /**
+     * method used to notify the server about the build action coordinates
+     * @param buildActionCoordinates contains the chosen worker and the chosen cell to do the build
+     */
+    public void sendBuildChoice (MoveCoordinates buildActionCoordinates)
+    {
+        view.notifyObserver(x->x.build(buildActionCoordinates));
+    }
+
+    /**
+     * method used to notify the client observers about the dome action coordinates
+     * @param domeActionCoordinates contains the worker and the cell to do the dome action
+     */
+    public void sendDomeChoice (MoveCoordinates domeActionCoordinates)
+    {
+        view.notifyObserver(x->x.dome(domeActionCoordinates));
+    }
+
     public void changedPlayerList(ArrayList<String> newPlayerList) {
 
         playerList = newPlayerList;
