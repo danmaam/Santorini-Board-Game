@@ -187,9 +187,8 @@ public class GameBoardController {
      *
      * @param validCellsForMove is the list of workers that can be moved, together with the positions where they can be moved
      */
-    public void requestMove(ArrayList<WorkerValidCells> validCellsForMove) {
-        Node node;
-
+    public void requestMove(ArrayList<WorkerValidCells> validCellsForMove)
+    {
         this.moveValid = validCellsForMove; //we need to copy the input list in order to have it in all of the gui states
         this.nextState = FSM_STATUS.worker_selection_move; //we update the status of the gui
 
@@ -440,6 +439,7 @@ public class GameBoardController {
     {
         ArrayList<Position> domeList=null;
 
+        //we have to change the state of the gui and save the position of the chosen worker
         this.nextState=FSM_STATUS.sendbuild;
         if (buildWorker.isEmpty())
         {
@@ -447,6 +447,9 @@ public class GameBoardController {
         }
         else workerPosition= new Position(buildWorker.get(0).getwR(), buildWorker.get(0).getwC());
 
+        gameMessage.setText("Click on the cell where you want to do the build action");
+
+        //after setting the message for the player, we highlight the cells only belonging to the chosen worker
         for (WorkerValidCells w1 : buildWorker)
         {
             for (WorkerValidCells w2 : domeWorker)
@@ -566,6 +569,172 @@ public class GameBoardController {
     public void sendDomeChoice (MoveCoordinates domeActionCoordinates)
     {
         view.notifyObserver(x->x.dome(domeActionCoordinates));
+    }
+
+    /**
+     * method handling the optional move action during a turn
+     * @param validCellsForMove is the list of valid cells for this action
+     */
+    public void requestOptionalMove (ArrayList<WorkerValidCells> validCellsForMove)
+    {
+        this.moveValid=validCellsForMove;
+        this.nextState=FSM_STATUS.worker_selection_move;
+
+        gameMessage.setText("Click on the skip button if you want to skip the optional move, else click on your worker");
+
+        boardPane.setVisible(true);
+        for (WorkerValidCells w : validCellsForMove)
+        {
+            //we need to assign a mouse clicked event and a highlight to the worker, so he can be chosen
+            ImageView workerImage = new ImageView(workerChoiceImage);
+            workerImage.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
+            workerImage.setOpacity(0.9);
+            workerImage.setFitWidth(95);
+            workerImage.setFitHeight(95);
+            boardPane.add(workerImage, 1 + 2 * w.getwC(), 1 + 2 * w.getwR());
+            for (Position p : w.getValidPositions())
+            {
+                //if the position hasn't already been highlighted, we do this operation
+                //if the cell has already been highlighted we don't need to do anything
+                if (!isAlreadyHighlighted(validCellsForMove, p, w.getwR(), w.getwC()))
+                {
+                    ImageView cellChoice = new ImageView(isSelectionImage);
+                    cellChoice.setOpacity(0.4);
+                    cellChoice.setFitWidth(95);
+                    cellChoice.setFitHeight(95);
+                    cellChoice.fitHeightProperty().bind(boardPane.heightProperty().divide(7));
+                    cellChoice.fitWidthProperty().bind(boardPane.widthProperty().divide(7));
+                    GridPane.setHalignment(cellChoice, HPos.CENTER);
+                    GridPane.setValignment(cellChoice, VPos.CENTER);
+                    boardPane.add(cellChoice, 1 + 2 * p.getColumn(), 1 + 2 * p.getRow());
+                }
+            }
+        }
+    }
+
+    /**
+     * method handling the optional building actions of a player
+     * @param build is the list of valid cells for the build action
+     * @param dome is the list of valid cells for the dome action
+     */
+    public void requestOptionalBuild (ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome)
+    {
+        ArrayList<Position> tempList=null;
+
+        this.buildValid=build;
+        this.domeValid=dome;
+        this.nextState=FSM_STATUS.worker_selection_build;
+
+        gameMessage.setText("Click on the skip button if you want to skip the optional building, else click on your worker");
+
+        boardPane.setVisible(true);
+        for (WorkerValidCells w1 : build)
+        {
+            for (WorkerValidCells w2 : dome)
+            {
+                if (w2.getwR()==w1.getwR() && w2.getwC()==w1.getwC())
+                {
+                    tempList=w2.getValidPositions();
+                    break;
+                }
+            }
+            ImageView workerImage = new ImageView(workerChoiceImage);
+            workerImage.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
+            workerImage.setOpacity(0.9);
+            workerImage.setFitWidth(95);
+            workerImage.setFitHeight(95);
+            boardPane.add(workerImage, 1 + 2 * w1.getwC(), 1 + 2 * w1.getwR());
+
+            boolean buildHighlighted;
+            for (Position p1 : w1.getValidPositions())
+            {
+                if (tempList==null || (tempList!=null && !tempList.contains(p1)))
+                {
+                    buildHighlighted=isAlreadyHighlighted(build, p1, w1.getwR(), w1.getwC());
+                    if (!buildHighlighted)
+                    {
+                        ImageView buildChoice = new ImageView(isSelectionImage);
+                        buildChoice.setOpacity(0.4);
+                        buildChoice.setFitWidth(95);
+                        buildChoice.setFitHeight(95);
+                        buildChoice.fitHeightProperty().bind(boardPane.heightProperty().divide(7));
+                        buildChoice.fitWidthProperty().bind(boardPane.widthProperty().divide(7));
+                        GridPane.setHalignment(buildChoice, HPos.CENTER);
+                        GridPane.setValignment(buildChoice, VPos.CENTER);
+                        boardPane.add(buildChoice, 1 + 2 * p1.getColumn(), 1 + 2 * p1.getRow());
+                    }
+                }
+                else
+                {
+                    buildHighlighted=isAlreadyHighlighted(build, p1, w1.getwR(), w1.getwC());
+                    if (!buildHighlighted)
+                    {
+                        ImageView buildHighlight = new ImageView(buildAndDomeImage);
+                        buildHighlight.setOpacity(0.4);
+                        buildHighlight.setFitWidth(95);
+                        buildHighlight.setFitHeight(95);
+                        boardPane.add(buildHighlight, 1 + 2 * p1.getColumn(), 1 + 2 * p1.getRow());
+                    }
+                }
+            }
+            boolean canDome;
+            if (tempList!=null)
+            {
+                for (Position p2 : tempList)
+                {
+                    if (!w1.getValidPositions().contains(p2))
+                    {
+                        canDome=isAlreadyHighlighted(dome, p2, w1.getwR(), w1.getwC());
+                        if (!canDome)
+                        {
+                            ImageView domeHighlight = new ImageView(domeSelectionImage);
+                            domeHighlight.setOpacity(0.4);
+                            domeHighlight.setFitWidth(95);
+                            domeHighlight.setFitHeight(95);
+                            boardPane.add(domeHighlight, 1 + 2 * p2.getColumn(), 1 + 2 * p2.getRow());
+                        }
+                    }
+                }
+            }
+            tempList=null;
+        }
+
+        boolean bothActions=false;
+        for (WorkerValidCells w : dome)
+        {
+            for (WorkerValidCells w1 : build)
+            {
+                if (w1.getwR()==w.getwR() && w1.getwC()==w.getwC())
+                {
+                    bothActions=true;
+                    break;
+                }
+            }
+            if (bothActions) break;
+            else
+            {
+                ImageView workerHighlight = new ImageView(workerChoiceImage);
+                workerHighlight.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
+                workerHighlight.setOpacity(0.9);
+                workerHighlight.setFitWidth(95);
+                workerHighlight.setFitHeight(95);
+                boardPane.add(workerHighlight, 1 + 2 * w.getwC(), 1 + 2 * w.getwR());
+
+                boolean domeHighlighted;
+                for (Position p : w.getValidPositions())
+                {
+                    domeHighlighted=isAlreadyHighlighted(dome, p, w.getwR(), w.getwC());
+                    if (!domeHighlighted)
+                    {
+                        ImageView domeCell = new ImageView(domeSelectionImage);
+                        domeCell.setOpacity(0.4);
+                        domeCell.setFitWidth(95);
+                        domeCell.setFitHeight(95);
+                        boardPane.add(domeCell, 1 + 2 * p.getColumn(), 1 + 2 * p.getRow());
+                    }
+                }
+            }
+        }
     }
 
     public void changedPlayerList(ArrayList<String> newPlayerList) {
@@ -749,15 +918,57 @@ public class GameBoardController {
                     }
                 }
                 this.postWorkerChoiceBuild(chosenBuildWorker, chosenDomeWorker);
+
+            case sendbuild:
+                //if the player has chosen a cell and cannot choose what action to do, we notify the observers and clear the board
+                //we need to get both lists of positions of the worker to check if he can choose the action
+                ArrayList<Position> buildPositions=null, domePositions=null;
+                for (WorkerValidCells w : buildValid)
+                {
+                    if (w.getwR()==workerPosition.getRow() && w.getwC()==workerPosition.getColumn())
+                    {
+                        buildPositions=w.getValidPositions();
+                        break;
+                    }
+                }
+                for (WorkerValidCells w1 : domeValid)
+                {
+                    if (w1.getwR()==workerPosition.getRow() && w1.getwC()==workerPosition.getColumn())
+                    {
+                        domePositions=w1.getValidPositions();
+                    }
+                }
+
+                if (buildPositions==null || domePositions==null || !buildPositions.contains(nextPosition) || !domePositions.contains(nextPosition))
+                {
+                    //the player can't choose the action so we clear the board and notify the observers
+                    for (Node n : boardPane.getChildren())
+                    {
+                        if (((ImageView)n).getImage()==isSelectionImage ||((ImageView)n).getImage()==buildAndDomeImage || ((ImageView)n).getImage()==domeSelectionImage)
+                        {
+                            n.removeEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
+                            tbr.add(n);
+                        }
+                    }
+                    tbr.forEach(x->boardPane.getChildren().remove(x));
+
+                    //board reset, now we just need to check which observer to notify
+                    if (buildPositions!=null && buildPositions.contains(nextPosition)) this.sendBuildChoice(new MoveCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
+                    else this.sendDomeChoice(new MoveCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
+                }
+                else //the player has chosen a cell that can take both building and doming actions, we have to ask about his choice
+                {
+
+                }
         }
     }
 
 
     public void changedBoard(ArrayList<Cell> newCells) {
-        //must reset all the new cells, and and recreate these cells with the new informations
+        //must reset all the new cells, and and recreate these cells with the new information
         for (Cell c : newCells) {
             boardPane.getChildren().removeIf(node -> GridPane.getRowIndex(node) == 1 + 2 * c.getRow() && GridPane.getColumnIndex(node) == 1 + 2 * c.getColumn());
-            //removed all nodes, i must replace them with the new informations
+            //removed all nodes, i must replace them with the new information
             Image levelToBeCharged = null;
 
             switch (c.getLevel()) {

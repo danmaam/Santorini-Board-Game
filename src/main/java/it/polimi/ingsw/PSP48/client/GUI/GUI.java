@@ -138,13 +138,15 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     }
 
     @Override
-    public void requestOptionalMove(ArrayList<WorkerValidCells> validCellsForMove) {
-
+    public void requestOptionalMove(ArrayList<WorkerValidCells> validCellsForMove)
+    {
+        Platform.runLater(()->boardController.requestOptionalMove(validCellsForMove));
     }
 
     @Override
-    public void requestOptionalBuild(ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome) {
-
+    public void requestOptionalBuild(ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome)
+    {
+        Platform.runLater(()->boardController.requestDomeOrBuild(build, dome));
     }
 
     @Override
