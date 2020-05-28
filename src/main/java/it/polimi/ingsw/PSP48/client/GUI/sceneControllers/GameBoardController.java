@@ -8,6 +8,7 @@ import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Position;
 import javafx.concurrent.Worker;
 import javafx.event.EventHandler;
+import javafx.event.WeakEventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
@@ -92,6 +93,9 @@ public class GameBoardController {
     private final Image workerChoiceImage = new Image("santorini_risorse-grafiche-2/Texture2D/Cloud_01.png");
     private final Image domeSelectionImage = new Image("santorini_risorse-grafiche-2/Texture2D/jeff_cloudpoof.png");
     private final Image buildAndDomeImage = new Image("santorini_risorse-grafiche-2/Texture2D/WindToken.png");
+    private final Image skipButtonImage = new Image("santorini_risorse-grafiche-2/Sprite/Buttons/btn_blue.png");
+    private final Image buildButtonImage = new Image("santorini_risorse-grafiche-2/Sprite/Buttons/btn_coral.png");
+    private final Image domeButtonImage = new Image ("santorini_risorse-grafiche-2/Sprite/Buttons/btn_green.png");
 
     private final EventHandler<MouseEvent> handleOperation = new EventHandler<MouseEvent>() {
         @Override
@@ -101,6 +105,89 @@ public class GameBoardController {
         }
     };
 
+    private final EventHandler<MouseEvent> handleBuild = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            ArrayList<Node> removeButtons = new ArrayList<>();
+
+            for (Node n : multifunctionalPane.getChildren())
+            {
+                if (((ImageView)n).getImage()==buildButtonImage || ((ImageView)n).getImage()==domeButtonImage)
+                {
+                    removeButtons.add(n);
+                }
+            }
+            removeButtons.forEach(x->multifunctionalPane.getChildren().remove(x));
+
+            sendBuildChoice(new MoveCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
+        }
+    };
+
+    private final EventHandler<MouseEvent> handleDome = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            ArrayList<Node> removeButtons = new ArrayList<>();
+
+            for (Node n : multifunctionalPane.getChildren())
+            {
+                if (((ImageView)n).getImage()==buildButtonImage || ((ImageView)n).getImage()==domeButtonImage)
+                {
+                    removeButtons.add(n);
+                }
+            }
+            removeButtons.forEach(x->multifunctionalPane.getChildren().remove(x));
+
+            sendDomeChoice(new MoveCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
+        }
+    };
+
+    private final EventHandler<MouseEvent> handleOptionalMoveSkip = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            ArrayList<Node> removeNodes= new ArrayList<>();
+
+            for (Node n : boardPane.getChildren())
+            {
+                if (((ImageView)n).getImage()==isSelectionImage ||((ImageView)n).getImage()==workerChoiceImage)
+                {
+                    n.removeEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
+                    removeNodes.add(n);
+                }
+            }
+            removeNodes.forEach(x->boardPane.getChildren().remove(x));
+
+            for (Node no : multifunctionalPane.getChildren())
+            {
+                if (((ImageView)no).getImage()==skipButtonImage) multifunctionalPane.getChildren().remove(no);
+            }
+
+            sendMoveChoice(new MoveCoordinates(-1, -1, -1, -1));
+        }
+    };
+
+    private final EventHandler<MouseEvent> handleOptionalBuildSkip = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            ArrayList<Node> removeNodes= new ArrayList<>();
+
+            for (Node n : boardPane.getChildren())
+            {
+                if (((ImageView)n).getImage()==isSelectionImage ||((ImageView)n).getImage()==buildAndDomeImage || ((ImageView)n).getImage()==domeSelectionImage || ((ImageView)n).getImage()==workerChoiceImage)
+                {
+                    n.removeEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
+                    removeNodes.add(n);
+                }
+            }
+            removeNodes.forEach(x->boardPane.getChildren().remove(x));
+
+            for (Node no : multifunctionalPane.getChildren())
+            {
+                if (((ImageView)no).getImage()==skipButtonImage) multifunctionalPane.getChildren().remove(no);
+            }
+
+            sendBuildChoice(new MoveCoordinates(-1, -1, -1, -1));
+        }
+    };
 
     public void requestDivinitySelection(ArrayList<DivinitiesWithDescription> availableDivinities) {
         final FXMLLoader divinitiesSelectorLoader = new FXMLLoader(getClass().getResource("/divinitySelection.fxml"));
@@ -580,12 +667,11 @@ public class GameBoardController {
         this.moveValid=validCellsForMove;
         this.nextState=FSM_STATUS.worker_selection_move;
 
-        gameMessage.setText("Click on the skip button if you want to skip the optional move, else click on your worker");
+        gameMessage.setText("Click on the blue button on the right if you want to skip the optional move, else click on your worker");
 
         boardPane.setVisible(true);
         for (WorkerValidCells w : validCellsForMove)
         {
-            //we need to assign a mouse clicked event and a highlight to the worker, so he can be chosen
             ImageView workerImage = new ImageView(workerChoiceImage);
             workerImage.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
             workerImage.setOpacity(0.9);
@@ -594,8 +680,6 @@ public class GameBoardController {
             boardPane.add(workerImage, 1 + 2 * w.getwC(), 1 + 2 * w.getwR());
             for (Position p : w.getValidPositions())
             {
-                //if the position hasn't already been highlighted, we do this operation
-                //if the cell has already been highlighted we don't need to do anything
                 if (!isAlreadyHighlighted(validCellsForMove, p, w.getwR(), w.getwC()))
                 {
                     ImageView cellChoice = new ImageView(isSelectionImage);
@@ -610,6 +694,10 @@ public class GameBoardController {
                 }
             }
         }
+
+        ImageView skipChoice = new ImageView(skipButtonImage);
+        skipChoice.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOptionalMoveSkip);
+        multifunctionalPane.getChildren().add(skipChoice);
     }
 
     /**
@@ -625,7 +713,7 @@ public class GameBoardController {
         this.domeValid=dome;
         this.nextState=FSM_STATUS.worker_selection_build;
 
-        gameMessage.setText("Click on the skip button if you want to skip the optional building, else click on your worker");
+        gameMessage.setText("Click on the blue button on the right if you want to skip the optional building, else click on your worker");
 
         boardPane.setVisible(true);
         for (WorkerValidCells w1 : build)
@@ -735,6 +823,9 @@ public class GameBoardController {
                 }
             }
         }
+        ImageView skipChoice = new ImageView(skipButtonImage);
+        skipChoice.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOptionalBuildSkip);
+        multifunctionalPane.getChildren().add(skipChoice);
     }
 
     public void changedPlayerList(ArrayList<String> newPlayerList) {
@@ -958,7 +1049,22 @@ public class GameBoardController {
                 }
                 else //the player has chosen a cell that can take both building and doming actions, we have to ask about his choice
                 {
-
+                    //the cell has already been chosen so we remove the mouse events from the board
+                    for (Node n : boardPane.getChildren())
+                    {
+                        if (((ImageView)n).getImage()==isSelectionImage ||((ImageView)n).getImage()==buildAndDomeImage || ((ImageView)n).getImage()==domeSelectionImage)
+                        {
+                            n.removeEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
+                        }
+                    }
+                    //now we have to set the buttons and their handler for the choice of the action
+                    gameMessage.setText("Click on the red button on the right to build, on the green one to put a dome");
+                    ImageView buildBtn= new ImageView(buildButtonImage);
+                    ImageView domeBtn= new ImageView(domeButtonImage);
+                    buildBtn.addEventFilter(MouseEvent.MOUSE_CLICKED, handleBuild);
+                    domeBtn.addEventFilter(MouseEvent.MOUSE_CLICKED, handleDome);
+                    multifunctionalPane.getChildren().add(buildBtn);
+                    multifunctionalPane.getChildren().add(domeBtn);
                 }
         }
     }
