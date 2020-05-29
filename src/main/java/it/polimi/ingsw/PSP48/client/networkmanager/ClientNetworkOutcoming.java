@@ -25,6 +25,13 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
 
     @Override
     public synchronized void move(MoveCoordinates p) {
+        while (nextAction != null) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         nextAction = action.send_gameAction;
         o = new MoveMessage(p);
         notifyAll();
@@ -32,6 +39,13 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
 
     @Override
     public synchronized void build(MoveCoordinates p) {
+        while (nextAction != null) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         nextAction = action.send_gameAction;
         o = new BuildMessage(p);
         notifyAll();
@@ -39,6 +53,13 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
 
     @Override
     public synchronized void dome(MoveCoordinates p) {
+        while (nextAction != null) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         nextAction = action.send_gameAction;
         o = new DomeMessage(p);
         notifyAll();
@@ -46,6 +67,13 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
 
     @Override
     public synchronized void putWorkerOnTable(Position p) {
+        while (nextAction != null) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         nextAction = action.send_gameAction;
         o = new WorkerPositionMessage(p);
         notifyAll();
@@ -53,6 +81,13 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
 
     @Override
     public synchronized void registerPlayerDivinity(String divinity) {
+        while (nextAction != null) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         nextAction = action.send_gameAction;
         o = new PlayerDivinityMessage(divinity);
         notifyAll();
@@ -65,6 +100,13 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
 
     @Override
     public synchronized void selectAvailableDivinities(ArrayList<String> divinities) {
+        while (nextAction != null) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         nextAction = action.send_gameAction;
         o = new ChallengerDivinitiesMessage(divinities);
         notifyAll();
@@ -72,6 +114,13 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
 
     @Override
     public synchronized void selectFirstPlayer(String playerName) {
+        while (nextAction != null) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         nextAction = action.send_gameAction;
         o = new FirstPlayerSelectionMessage(playerName);
         notifyAll();
@@ -82,7 +131,7 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
     }
 
 
-    private action nextAction;
+    private action nextAction = null;
     private String nextMessage;
 
     @Override
@@ -99,7 +148,6 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
 
     public synchronized void handleServerConnection() throws IOException, ClassNotFoundException {
         while (true) {
-            nextAction = null;
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -116,15 +164,23 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
             switch (nextAction) {
                 case send_nickname:
                     sendPlayerNickname();
+                    nextAction = null;
+                    notifyAll();
                     break;
                 case send_gamemode:
                     sendGameMode();
+                    nextAction = null;
+                    notifyAll();
                     break;
                 case send_gameAction:
                     sendGameAction();
+                    nextAction = null;
+                    notifyAll();
                     break;
                 case replyPing:
                     sendPingMessage();
+                    nextAction = null;
+                    notifyAll();
                     break;
 
             }
@@ -168,5 +224,4 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
     public synchronized void sendPingMessage() throws IOException {
         outputStm.writeObject(new PingMessage());
     }
-
 }
