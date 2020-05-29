@@ -24,6 +24,7 @@ public class Demeter extends Divinity {
 
     private int oldRowBuild = -1;
     private int oldColumnBuild = -1;
+    private boolean prevBuild = false;
 
 
     /**
@@ -35,6 +36,7 @@ public class Demeter extends Divinity {
     public Consumer<GameController> turnBegin(Model gd) {
         oldRowBuild = -1;
         oldColumnBuild = -1;
+        prevBuild = false;
         return GameController::requestMove;
     }
 
@@ -85,20 +87,22 @@ public class Demeter extends Divinity {
      */
     @Override
     public Consumer<GameController> build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws DivinityPowerException, MaximumLevelReachedException, OccupiedCellException, NotAdjacentCellException, DomedCellException {
-        Consumer<GameController> nextAction;
-        if (oldRowBuild != -1 && oldColumnBuild != -1 && oldRowBuild == buildRow && oldColumnBuild == buildColumn)
-            throw new DivinityPowerException("feffe");
-        if (oldRowBuild == -1 && oldColumnBuild == -1) nextAction = GameController::requestOptionalBuilding;
-        else {
-            nextAction = GameController::turnChange;
-            if (buildRow == -1 && buildColumn == -1) {
-                return nextAction;
+
+        if (!prevBuild) {
+            super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
+            oldRowBuild = buildRow;
+            oldColumnBuild = buildColumn;
+            prevBuild = true;
+            return GameController::requestOptionalBuilding;
+        } else {
+            if (workerRow == -1 && workerColumn == -1) return GameController::turnChange;
+            else if (buildRow == oldRowBuild && buildColumn == oldColumnBuild)
+                throw new DivinityPowerException("NO!");
+            else {
+                super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
+                return GameController::turnChange;
             }
         }
-        super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
-        oldColumnBuild = buildColumn;
-        oldRowBuild = buildRow;
-        return nextAction;
     }
 
     @Override
@@ -121,15 +125,32 @@ public class Demeter extends Divinity {
      */
     @Override
     public Consumer<GameController> dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
-        Consumer<GameController> nextAction;
-        if (oldRowBuild != -1 && oldColumnBuild != -1 && oldRowBuild == domeRow && oldColumnBuild == domeColumn)
-            throw new DivinityPowerException("feffe");
-        if (oldRowBuild == -1 && oldColumnBuild == -1) nextAction = GameController::requestOptionalBuilding;
-        else nextAction = GameController::turnChange;
-        super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
-        oldRowBuild = domeRow;
-        oldColumnBuild = domeColumn;
-        return nextAction;
+        if (!prevBuild) {
+            try {
+                super.build(workerRow, workerColumn, domeRow, domeColumn, gd);
+
+            } catch (MaximumLevelReachedException e) {
+                System.out.println("kek");
+            }
+
+            oldRowBuild = domeRow;
+            oldColumnBuild = domeColumn;
+            prevBuild = true;
+            return GameController::requestOptionalBuilding;
+        } else {
+            if (workerRow == -1 && workerColumn == -1) return GameController::turnChange;
+            else if (domeRow == oldRowBuild && domeColumn == oldColumnBuild)
+                throw new DivinityPowerException("NO!");
+            else {
+                try {
+                    super.build(workerRow, workerColumn, domeRow, domeColumn, gd);
+
+                } catch (MaximumLevelReachedException e) {
+                    System.out.println("kek");
+                }
+                return GameController::turnChange;
+            }
+        }
     }
 
     @Override

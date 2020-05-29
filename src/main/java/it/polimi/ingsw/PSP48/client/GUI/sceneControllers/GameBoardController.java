@@ -731,125 +731,11 @@ public class GameBoardController {
      */
     public void requestOptionalBuild (ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome)
     {
-        ArrayList<Position> tempList=null;
 
-        this.buildValid=build;
-        this.domeValid=dome;
-        this.nextState=FSM_STATUS.worker_selection_build;
-
-        gameMessage.setText("Click on the blue button on the right if you want to skip the optional building, else click on your worker");
-
-        boardPane.setVisible(true);
-        for (WorkerValidCells w1 : build)
-        {
-            for (WorkerValidCells w2 : dome)
-            {
-                if (w2.getwR()==w1.getwR() && w2.getwC()==w1.getwC())
-                {
-                    tempList=w2.getValidPositions();
-                    break;
-                }
-            }
-            ImageView workerImage = new ImageView(workerChoiceImage);
-            workerImage.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
-            workerImage.setOpacity(0.9);
-            workerImage.setFitWidth(95);
-            workerImage.setFitHeight(95);
-            boardPane.add(workerImage, 1 + 2 * w1.getwC(), 1 + 2 * w1.getwR());
-
-            boolean buildHighlighted;
-            for (Position p1 : w1.getValidPositions())
-            {
-                if (tempList==null || (tempList!=null && !tempList.contains(p1)))
-                {
-                    buildHighlighted=isAlreadyHighlighted(build, p1, w1.getwR(), w1.getwC());
-                    if (!buildHighlighted)
-                    {
-                        ImageView buildChoice = new ImageView(isSelectionImage);
-                        buildChoice.setOpacity(0.4);
-                        buildChoice.setFitWidth(95);
-                        buildChoice.setFitHeight(95);
-                        buildChoice.fitHeightProperty().bind(boardPane.heightProperty().divide(7));
-                        buildChoice.fitWidthProperty().bind(boardPane.widthProperty().divide(7));
-                        GridPane.setHalignment(buildChoice, HPos.CENTER);
-                        GridPane.setValignment(buildChoice, VPos.CENTER);
-                        boardPane.add(buildChoice, 1 + 2 * p1.getColumn(), 1 + 2 * p1.getRow());
-                    }
-                }
-                else
-                {
-                    buildHighlighted=isAlreadyHighlighted(build, p1, w1.getwR(), w1.getwC());
-                    if (!buildHighlighted)
-                    {
-                        ImageView buildHighlight = new ImageView(buildAndDomeImage);
-                        buildHighlight.setOpacity(0.4);
-                        buildHighlight.setFitWidth(95);
-                        buildHighlight.setFitHeight(95);
-                        boardPane.add(buildHighlight, 1 + 2 * p1.getColumn(), 1 + 2 * p1.getRow());
-                    }
-                }
-            }
-            boolean canDome;
-            if (tempList!=null)
-            {
-                for (Position p2 : tempList)
-                {
-                    if (!w1.getValidPositions().contains(p2))
-                    {
-                        canDome=isAlreadyHighlighted(dome, p2, w1.getwR(), w1.getwC());
-                        if (!canDome)
-                        {
-                            ImageView domeHighlight = new ImageView(domeSelectionImage);
-                            domeHighlight.setOpacity(0.4);
-                            domeHighlight.setFitWidth(95);
-                            domeHighlight.setFitHeight(95);
-                            boardPane.add(domeHighlight, 1 + 2 * p2.getColumn(), 1 + 2 * p2.getRow());
-                        }
-                    }
-                }
-            }
-            tempList=null;
-        }
-
-        boolean bothActions=false;
-        for (WorkerValidCells w : dome)
-        {
-            for (WorkerValidCells w1 : build)
-            {
-                if (w1.getwR()==w.getwR() && w1.getwC()==w.getwC())
-                {
-                    bothActions=true;
-                    break;
-                }
-            }
-            if (bothActions) break;
-            else
-            {
-                ImageView workerHighlight = new ImageView(workerChoiceImage);
-                workerHighlight.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
-                workerHighlight.setOpacity(0.9);
-                workerHighlight.setFitWidth(95);
-                workerHighlight.setFitHeight(95);
-                boardPane.add(workerHighlight, 1 + 2 * w.getwC(), 1 + 2 * w.getwR());
-
-                boolean domeHighlighted;
-                for (Position p : w.getValidPositions())
-                {
-                    domeHighlighted=isAlreadyHighlighted(dome, p, w.getwR(), w.getwC());
-                    if (!domeHighlighted)
-                    {
-                        ImageView domeCell = new ImageView(domeSelectionImage);
-                        domeCell.setOpacity(0.4);
-                        domeCell.setFitWidth(95);
-                        domeCell.setFitHeight(95);
-                        boardPane.add(domeCell, 1 + 2 * p.getColumn(), 1 + 2 * p.getRow());
-                    }
-                }
-            }
-        }
         ImageView skipChoice = new ImageView(skipButtonImage);
         skipChoice.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOptionalBuildSkip);
         multifunctionalPane.getChildren().add(skipChoice);
+        requestDomeOrBuild(build, dome);
     }
 
     public void changedPlayerList(ArrayList<String> newPlayerList) {
@@ -962,8 +848,10 @@ public class GameBoardController {
                 }
                 tbr.forEach(x -> boardPane.getChildren().remove(x));
                 //restored the board situation, I must send the cell
+                multifunctionalPane.getChildren().clear();
                 sendInitialPositioningChoice(nextPosition);
                 break;
+
 
             case worker_selection_move:
                 //we need to remove the mouse events from the worker cells and to remove the highlighting
@@ -991,6 +879,7 @@ public class GameBoardController {
                         break;
                     }
                 }
+                multifunctionalPane.getChildren().clear();
                 postWorkerChoiceMove(workerToSend);
                 break;
 
@@ -1005,6 +894,7 @@ public class GameBoardController {
                 tbr.forEach(x -> boardPane.getChildren().remove(x));
 
                 //restored the board situation, I must send the cell
+                multifunctionalPane.getChildren().clear();
                 this.sendMoveChoice(new MoveCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
                 break;
 
@@ -1020,12 +910,7 @@ public class GameBoardController {
                 }
                 tbr.forEach(x->boardPane.getChildren().remove(x));
 
-                for (Node n : multifunctionalPane.getChildren())
-                {
-                    if (((ImageView)n).getImage()==skipButtonImage) tbr.add(n);
-
-                }
-                tbr.forEach(x->multifunctionalPane.getChildren().remove(x));
+                multifunctionalPane.getChildren().clear();
 
                 //now we need to call the method for the choice of the cell
                 ArrayList<WorkerValidCells> chosenBuildWorker= new ArrayList<>();
@@ -1045,6 +930,7 @@ public class GameBoardController {
                     }
                 }
                 this.postWorkerChoiceBuild(chosenBuildWorker, chosenDomeWorker);
+                break;
 
             case sendbuild:
                 //if the player has chosen a cell and cannot choose what action to do, we notify the observers and clear the board
@@ -1097,16 +983,18 @@ public class GameBoardController {
                             }
                         }
                     }
-                    tbr.forEach(x->boardPane.getChildren().remove(x));
+                    tbr.forEach(x -> boardPane.getChildren().remove(x));
                     //now we have to set the buttons and their handler for the choice of the action
                     gameMessage.setText("Click on the red button on the right to build, on the green one to put a dome");
-                    ImageView buildBtn= new ImageView(buildButtonImage);
-                    ImageView domeBtn= new ImageView(domeButtonImage);
+                    ImageView buildBtn = new ImageView(buildButtonImage);
+                    ImageView domeBtn = new ImageView(domeButtonImage);
                     buildBtn.addEventFilter(MouseEvent.MOUSE_CLICKED, handleBuild);
                     domeBtn.addEventFilter(MouseEvent.MOUSE_CLICKED, handleDome);
                     multifunctionalPane.getChildren().add(buildBtn);
                     multifunctionalPane.getChildren().add(domeBtn);
                 }
+                multifunctionalPane.getChildren().clear();
+                break;
         }
     }
 
