@@ -44,7 +44,7 @@
         <ToggleButton fx:id="isGameWithThreePlayers" layoutX="241.0" layoutY="228.0" mnemonicParsing="false"
                       text="Three players" toggleGroup="$playersSelection"/>
         <ToggleButton fx:id="isGameWithDivinities" layoutX="197.0" layoutY="270.0" mnemonicParsing="false"
-                      text="Divinities"/>
+                      onMouseClicked="#divinitiesButton" selected="true" text="Divinities"/>
         <DatePicker fx:id="birthday" disable="true" layoutX="141.0" layoutY="314.0"
                     promptText="Enter here your birthday"/>
         <TextField fx:id="serverIP" layoutX="154.0" layoutY="355.0" promptText="Insert Here Server Ip"/>

@@ -536,6 +536,7 @@ public class GameController implements ViewObserver {
                     getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + "lost cause he can't end his turn");
             }
             Server.removeNickname(model.getCurrentPlayer().getName());
+            model.unregisterObserver(getPlayerView(model.getCurrentPlayer().getName()));
             model.removePlayer(model.getCurrentPlayer().getName());
             nextAction = GameController::turnChange;
         }

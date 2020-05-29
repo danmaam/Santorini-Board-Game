@@ -75,6 +75,14 @@ public class Model {
             }
         }
 
+        boardCell[0][1].addDome();
+        boardCell[1][0].addDome();
+        boardCell[1][1].addDome();
+
+        boardCell[4][3].addDome();
+        boardCell[3][4].addDome();
+        boardCell[3][3].addDome();
+
         gamePlayerNumber = number;
         gameWithDivinities = divinities;
 

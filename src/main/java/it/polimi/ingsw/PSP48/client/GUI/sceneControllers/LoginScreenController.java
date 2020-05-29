@@ -39,7 +39,7 @@ public class LoginScreenController {
         if (isGameWithThreePlayers.isSelected()) numberOfPlayers = 3;
         else numberOfPlayers = 2;
         String gameMode;
-        if (!isGameWithDivinities.isSelected()) gameMode = numberOfPlayers + "D";
+        if (isGameWithDivinities.isSelected()) gameMode = numberOfPlayers + "D";
         else {
             LocalDate ld = birthday.getValue();
             gameMode = numberOfPlayers + "ND" + " " + ld.getDayOfMonth() + "-" + ld.getMonthValue() + "-" + ld.getYear();
@@ -83,6 +83,11 @@ public class LoginScreenController {
         String IP = serverIP.getText();
 
         View.startNetwork(IP);
+    }
+
+    public void divinitiesButton() {
+        birthday.setDisable(!birthday.isDisable());
+        birthday.setValue(LocalDate.now());
     }
 
 
