@@ -7,8 +7,16 @@ import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
+/**
+ * Class that represents advanced god Zeus
+ */
 public class Zeus extends Divinity {
 
+    /**
+     * Method that checks if the divinity can be used in a game with a certain number of players
+     * @param pNum the number of players
+     * @return true if the game is played by two or three players
+     */
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
             case 2:
@@ -84,11 +92,19 @@ public class Zeus extends Divinity {
         return GameController::turnChange;
     }
 
+    /**
+     * Getter of name
+     * @return the divinity's name
+     */
     @Override
     public String getName() {
         return "Zeus";
     }
 
+    /**
+     * Getter of the divinity's description
+     * @return the description of how the divinity's power affects the game
+     */
     @Override
     public String getDescription() {
         return "Your Worker may build a block under itself.";

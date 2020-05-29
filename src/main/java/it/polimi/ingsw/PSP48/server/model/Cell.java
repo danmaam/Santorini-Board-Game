@@ -9,7 +9,7 @@ import java.util.Objects;
  * Class used to represent a cell in the board game; each cell is identified by a column and a row.
  * The actualLevel attribute represents the level (first, second or third floor) of the building on the cell.
  * If zero, it means that there are no buildings on the cell.
- * Also, a bulding can have a dome over the third floor; isDomed checks if there is a dome on the cell.
+ * Also, a building can have a dome over the third floor; isDomed checks if there is a dome on the cell.
  * worker contains the reference to the worker placed on the cell of the board game; it can be set using setWorker.
  */
 public class Cell implements Cloneable, Serializable {
@@ -21,7 +21,6 @@ public class Cell implements Cloneable, Serializable {
 
     /**
      * Class constructor
-     *
      * @param row    index of the row of the cell.
      * @param column index of the column of the cell.
      */
@@ -30,6 +29,14 @@ public class Cell implements Cloneable, Serializable {
         this.column = column;
     }
 
+    /**
+     * Class constructor
+     * @param row     index of the row of the cell.
+     * @param column  index of the column of the cell.
+     * @param level   level of the building on the cell.
+     * @param player  name of the player on the cell.
+     * @param domed   if the cell has a dome or not.
+     */
     public Cell(int row, int column, int level, String player, Boolean domed) {
         this.row = row;
         this.column = column;
@@ -40,7 +47,6 @@ public class Cell implements Cloneable, Serializable {
 
     /**
      * Getter of column
-     *
      * @return the column number
      */
     public int getColumn() {
@@ -98,18 +104,26 @@ public class Cell implements Cloneable, Serializable {
 
     /**
      * method that can change the player that is placed on the cell of the board game
-     *
      * @param newPlayer the player you want to place on the cell
      */
     public void setPlayer(String newPlayer) {
         this.player = newPlayer;
     }
 
+    /**
+     * Method used to deep copy a cell
+     * @return a cloned cell
+     */
     @Override
     public Object clone() {
         return new Cell(row, column, actualLevel, player, domed);
     }
 
+    /**
+     * Method used to compare two cells
+     * @param o the object to compare
+     * @return true if the cells are equal
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -122,11 +136,13 @@ public class Cell implements Cloneable, Serializable {
                 Objects.equals(player, cell.player);
     }
 
-
+    /**
+     * Method used to set the level of the building set on the cell
+     * @param l the level of the building on the cell.
+     */
     public void setActualLevel(int l) {
         actualLevel = l;
     }
-
 }
 
 

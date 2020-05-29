@@ -10,8 +10,16 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+/**
+ * Class that represents advanced god Hestia
+ */
 public class Hestia extends Divinity {
 
+    /**
+     * Method that checks if the divinity can be used in a game with a certain number of players
+     * @param pNum the number of players
+     * @return true if the game is played by two or three players
+     */
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
             case 2:
@@ -37,6 +45,7 @@ public class Hestia extends Divinity {
     }
 
     /**
+     * Gets the cells where a worker can build; redefined since Hestia allows an additional build, but not on a perimetric cell
      * @param WorkerColumn          the column where the worker is
      * @param WorkerRow             the row where the worker is
      * @param otherDivinitiesInGame the other divinities in game
@@ -52,6 +61,7 @@ public class Hestia extends Divinity {
     }
 
     /**
+     * Gets the cells where a worker can put a dome; redefined since Hestia allows an additional build or dome, but not on a perimetric cell
      * @param workerColumn     the column where the worker is
      * @param workerRow        the row where the worker is
      * @param gameCells        the actual state of the board
@@ -67,6 +77,7 @@ public class Hestia extends Divinity {
     }
 
     /**
+     * Redefined since Hestia allows an additional build or dome, but not on a perimetric cell
      * @param workerRow    the row where the worker is
      * @param workerColumn the column where the worker is
      * @param buildRow     the row where the player wants to add a level
@@ -93,6 +104,7 @@ public class Hestia extends Divinity {
     }
 
     /**
+     * Redefined since Hestia allows an additional build or dome, but not on a perimetric cell
      * @param workerRow    the row where the worker is
      * @param workerColumn the column where the worker is
      * @param domeRow      the row where the player wants to add the dome
@@ -118,11 +130,19 @@ public class Hestia extends Divinity {
         return nextAction;
     }
 
+    /**
+     * Getter of name
+     * @return the divinity's name
+     */
     @Override
     public String getName() {
         return "Hestia";
     }
 
+    /**
+     * Getter of the divinity's description
+     * @return the description of how the divinity's power affects the game
+     */
     @Override
     public String getDescription() {
         return "Your Worker may build one additional time, but this cannot be on a perimeter space.";
