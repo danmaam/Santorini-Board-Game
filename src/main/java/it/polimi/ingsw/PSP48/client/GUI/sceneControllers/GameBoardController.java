@@ -109,6 +109,16 @@ public class GameBoardController {
         @Override
         public void handle(MouseEvent mouseEvent) {
             ArrayList<Node> removeButtons = new ArrayList<>();
+            ArrayList<Node> removeSelectionImage = new ArrayList<>();
+
+            for (Node n : boardPane.getChildren())
+            {
+                if (((ImageView)n).getImage()==isSelectionImage ||((ImageView)n).getImage()==buildAndDomeImage || ((ImageView)n).getImage()==domeSelectionImage)
+                {
+                    removeSelectionImage.add(n);
+                }
+            }
+            removeSelectionImage.forEach(x->boardPane.getChildren().remove(x));
 
             for (Node n : multifunctionalPane.getChildren())
             {
@@ -127,6 +137,16 @@ public class GameBoardController {
         @Override
         public void handle(MouseEvent mouseEvent) {
             ArrayList<Node> removeButtons = new ArrayList<>();
+            ArrayList<Node> removeSelectionImage = new ArrayList<>();
+
+            for (Node n : boardPane.getChildren())
+            {
+                if (((ImageView)n).getImage()==isSelectionImage ||((ImageView)n).getImage()==buildAndDomeImage || ((ImageView)n).getImage()==domeSelectionImage)
+                {
+                    removeSelectionImage.add(n);
+                }
+            }
+            removeSelectionImage.forEach(x->boardPane.getChildren().remove(x));
 
             for (Node n : multifunctionalPane.getChildren())
             {
@@ -145,6 +165,7 @@ public class GameBoardController {
         @Override
         public void handle(MouseEvent mouseEvent) {
             ArrayList<Node> removeNodes= new ArrayList<>();
+            ArrayList<Node> removeFromPane = new ArrayList<>();
 
             for (Node n : boardPane.getChildren())
             {
@@ -158,8 +179,9 @@ public class GameBoardController {
 
             for (Node no : multifunctionalPane.getChildren())
             {
-                if (((ImageView)no).getImage()==skipButtonImage) multifunctionalPane.getChildren().remove(no);
+                if (((ImageView)no).getImage()==skipButtonImage) removeFromPane.add(no);
             }
+            removeFromPane.forEach(x->multifunctionalPane.getChildren().remove(x));
 
             sendMoveChoice(new MoveCoordinates(-1, -1, -1, -1));
         }
@@ -169,6 +191,7 @@ public class GameBoardController {
         @Override
         public void handle(MouseEvent mouseEvent) {
             ArrayList<Node> removeNodes= new ArrayList<>();
+            ArrayList<Node> removeFromPane = new ArrayList<>();
 
             for (Node n : boardPane.getChildren())
             {
@@ -182,8 +205,9 @@ public class GameBoardController {
 
             for (Node no : multifunctionalPane.getChildren())
             {
-                if (((ImageView)no).getImage()==skipButtonImage) multifunctionalPane.getChildren().remove(no);
+                if (((ImageView)no).getImage()==skipButtonImage) removeFromPane.add(no);
             }
+            removeFromPane.forEach(x->multifunctionalPane.getChildren().remove(x));
 
             sendBuildChoice(new MoveCoordinates(-1, -1, -1, -1));
         }
@@ -713,6 +737,7 @@ public class GameBoardController {
         this.domeValid=dome;
         this.nextState=FSM_STATUS.worker_selection_build;
 
+        //System.out.println("optional");
         gameMessage.setText("Click on the blue button on the right if you want to skip the optional building, else click on your worker");
 
         boardPane.setVisible(true);
@@ -929,9 +954,7 @@ public class GameBoardController {
         switch (nextState) {
 
             case positioning:
-
                 //first of all, i must restore the initial board situation
-
                 for (Node n : boardPane.getChildren()) {
                     if (positionValid.contains(new Position((GridPane.getRowIndex(n) - 1) / 2, (GridPane.getColumnIndex(n) - 1) / 2)) && ((ImageView) n).getImage() == isSelectionImage) {
                         n.removeEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
@@ -944,8 +967,6 @@ public class GameBoardController {
                 break;
 
             case worker_selection_move:
-
-
                 //we need to remove the mouse events from the worker cells and to remove the highlighting
                 for (Node n : boardPane.getChildren()) {
                     if (((ImageView) n).getImage() == workerChoiceImage || ((ImageView) n).getImage() == isSelectionImage) {
@@ -953,9 +974,16 @@ public class GameBoardController {
                         tbr.add(n);
                     }
                 }
-                //after restoring the board we can proceed with the choice of the cell
                 tbr.forEach(x -> boardPane.getChildren().remove(x));
 
+                for (Node n : multifunctionalPane.getChildren())
+                {
+                    if (((ImageView)n).getImage()==skipButtonImage) tbr.add(n);
+
+                }
+                tbr.forEach(x->multifunctionalPane.getChildren().remove(x));
+
+                //after restoring the board we can proceed with the choice of the cell
                 WorkerValidCells workerToSend = null;
 
                 for (WorkerValidCells w1 : moveValid) {
@@ -976,6 +1004,7 @@ public class GameBoardController {
                     }
                 }
                 tbr.forEach(x -> boardPane.getChildren().remove(x));
+
                 //restored the board situation, I must send the cell
                 this.sendMoveChoice(new MoveCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
                 break;
@@ -991,6 +1020,14 @@ public class GameBoardController {
                     }
                 }
                 tbr.forEach(x->boardPane.getChildren().remove(x));
+
+                for (Node n : multifunctionalPane.getChildren())
+                {
+                    if (((ImageView)n).getImage()==skipButtonImage) tbr.add(n);
+
+                }
+                tbr.forEach(x->multifunctionalPane.getChildren().remove(x));
+
                 //now we need to call the method for the choice of the cell
                 ArrayList<WorkerValidCells> chosenBuildWorker= new ArrayList<>();
                 ArrayList<WorkerValidCells> chosenDomeWorker= new ArrayList<>();
@@ -1055,8 +1092,13 @@ public class GameBoardController {
                         if (((ImageView)n).getImage()==isSelectionImage ||((ImageView)n).getImage()==buildAndDomeImage || ((ImageView)n).getImage()==domeSelectionImage)
                         {
                             n.removeEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
+                            if((1+2*nextPosition.getRow())!=GridPane.getRowIndex(n) || (1+2*nextPosition.getColumn())!=GridPane.getColumnIndex(n))
+                            {
+                                tbr.add(n);
+                            }
                         }
                     }
+                    tbr.forEach(x->boardPane.getChildren().remove(x));
                     //now we have to set the buttons and their handler for the choice of the action
                     gameMessage.setText("Click on the red button on the right to build, on the green one to put a dome");
                     ImageView buildBtn= new ImageView(buildButtonImage);
@@ -1068,7 +1110,6 @@ public class GameBoardController {
                 }
         }
     }
-
 
     public void changedBoard(ArrayList<Cell> newCells) {
         //must reset all the new cells, and and recreate these cells with the new information
