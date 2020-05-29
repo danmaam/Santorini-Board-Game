@@ -16,6 +16,8 @@ public class Hephaestus extends Divinity {
     private int prevBuildRow = -1;
     private int prevBuildColumn = -1;
 
+    private boolean prevBuild = false;
+
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
             case 2:
@@ -61,15 +63,21 @@ public class Hephaestus extends Divinity {
      */
     @Override
     public Consumer<GameController> build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws DivinityPowerException, MaximumLevelReachedException, OccupiedCellException, NotAdjacentCellException, DomedCellException {
-        Consumer<GameController> nextAction;
-        if (prevBuildRow != -1 && prevBuildColumn != -1 && !(buildRow == prevBuildRow && buildColumn == prevBuildColumn))
-            throw new DivinityPowerException("Trying to perform the second build on a different cell from the first");
-        if (prevBuildRow == -1 && prevBuildColumn == -1) nextAction = GameController::requestOptionalBuilding;
-        else nextAction = GameController::turnChange;
-        super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
-        prevBuildColumn = buildColumn;
-        prevBuildRow = buildRow;
-        return nextAction;
+        if (!prevBuild) {
+            super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
+            prevBuildRow = buildRow;
+            prevBuildColumn = buildColumn;
+            prevBuild = true;
+            return GameController::requestOptionalBuilding;
+        } else {
+            if (workerRow == -1 && workerColumn == -1) return GameController::turnChange;
+            else if (buildRow != prevBuildRow && buildColumn != prevBuildColumn)
+                throw new DivinityPowerException("NO!");
+            else {
+                super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
+                return GameController::turnChange;
+            }
+        }
     }
 
     /**
@@ -87,33 +95,6 @@ public class Hephaestus extends Divinity {
         else return new ArrayList<>();
     }
 
-    /**
-     * @param workerRow    the row where the worker is
-     * @param workerColumn the column where the worker is
-     * @param domeRow      the row where the player wants to add the dome
-     * @param domeColumn   the column where the player wants to add the dome
-     * @param gd           the game status
-     * @return the next action og the controller
-     * @throws NotAdjacentCellException        if the cell where the player wants to add the dome is not adiacent to the worker's one
-     * @throws OccupiedCellException           if the destination cell is occupied by another worker
-     * @throws DomedCellException              is the cell is already domed
-     * @throws MaximumLevelNotReachedException if the cell doesn't contain a level 3 building
-     * @throws DivinityPowerException          if another divinity blocks the adding of the dome
-     * @author Daniele Mammone
-     */
-    @Override
-    public Consumer<GameController> dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws DivinityPowerException, OccupiedCellException, MaximumLevelNotReachedException, NotAdjacentCellException, DomedCellException {
-        Consumer<GameController> nextAction;
-        if (prevBuildRow != -1 && prevBuildColumn != -1)
-            throw new DivinityPowerException("Impossibile aggiungere qua cupola");
-        if (prevBuildRow == -1 && prevBuildColumn == -1) nextAction = GameController::requestOptionalBuilding;
-        else nextAction = GameController::turnChange;
-        super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
-        prevBuildRow = domeRow;
-        prevBuildColumn = domeColumn;
-        return nextAction;
-    }
-
     @Override
     public String getName() {
         return name;
@@ -122,5 +103,13 @@ public class Hephaestus extends Divinity {
     @Override
     public String getDescription() {
         return "Your Worker may build one additional block (not dome) on top of your first block.";
+    }
+
+    @Override
+    public Consumer<GameController> turnBegin(Model gd) {
+        prevBuildRow = -1;
+        prevBuildColumn = -1;
+        prevBuild = false;
+        return super.turnBegin(gd);
     }
 }
