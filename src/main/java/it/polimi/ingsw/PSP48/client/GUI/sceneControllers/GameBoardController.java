@@ -882,7 +882,7 @@ public class GameBoardController {
             //now i need to set divinity image
             ImageView currentDivinity = playersDivinity.get(i);
             Text currentName = playersName.get(i);
-            if (!divinity.equals("Basic")) {
+            if (!divinity.equals("Basic") && !divinity.equals("Divinity Not Chosen")) {
                 currentDivinity.setImage(new Image("/santorini_risorse-grafiche-2/Sprite/Cards/Full/" + divinity + ".png"));
             }
             currentName.setText(name + "\n" + divinity);
