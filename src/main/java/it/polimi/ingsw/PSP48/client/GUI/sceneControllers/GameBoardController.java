@@ -737,7 +737,6 @@ public class GameBoardController {
         this.domeValid=dome;
         this.nextState=FSM_STATUS.worker_selection_build;
 
-        //System.out.println("optional");
         gameMessage.setText("Click on the blue button on the right if you want to skip the optional building, else click on your worker");
 
         boardPane.setVisible(true);
