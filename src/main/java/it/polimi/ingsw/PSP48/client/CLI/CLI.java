@@ -764,6 +764,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
                     for (WorkerValidCells c : validCellsForMove) {
                         resetBoard(c.getValidPositions());
                     }
+                    this.printBoard();
                     this.notifyObserver(x -> {
                         x.move(chosenCoordinates);
                     });
@@ -848,6 +849,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
                     for (WorkerValidCells c2 : dome) {
                         resetBoard(c2.getValidPositions());
                     }
+                    this.printBoard();
                     this.notifyObserver(x ->
                             x.build(chosenCoordinates)
                     );
