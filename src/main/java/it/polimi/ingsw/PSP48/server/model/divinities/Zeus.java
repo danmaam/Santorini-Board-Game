@@ -61,9 +61,10 @@ public class Zeus extends Divinity {
             NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelReachedException, DivinityPowerException {
         //first check: the two cells must be adiacent
         if (!(adiacentCellVerifier(workerRow, workerColumn, buildRow, buildColumn))) {
-            if (workerRow == buildRow && workerColumn == buildColumn && gd.getCell(workerRow, workerColumn).getLevel() == 3)
+            if (!(buildColumn == workerColumn && buildRow == workerRow))
+                throw new NotAdjacentCellException("Celle non adiacenti");
+            else if (gd.getCell(workerRow, workerColumn).getLevel() == 3)
                 throw new MaximumLevelReachedException("Livello massimo già raggiunto");
-            else throw new NotAdjacentCellException("Celle non adiacenti");
         }
         //second check: the cell must be empty of workers
         if (!(gd.getCell(buildRow, buildColumn).getPlayer() == null)) throw new OccupiedCellException("Cella occupata");

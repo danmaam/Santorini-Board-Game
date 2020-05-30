@@ -41,7 +41,7 @@ public class ClientNetworkIncoming implements Runnable {
         try {
             in = new ObjectInputStream(server.getInputStream());
             try {
-                server.setSoTimeout(20 * 1000);
+                server.setSoTimeout(15 * 1000);
             } catch (SocketException e) {
                 e.printStackTrace();
             }
