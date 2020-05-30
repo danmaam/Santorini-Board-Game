@@ -64,11 +64,13 @@ public class Minotaur extends Divinity {
 
         for (Cell c : validCells) {
             direction nextDir = getDirection(c.getRow(), c.getColumn(), WorkerRow, WorkerColumn);
+            Position nextPos = getNextPosition(WorkerRow, WorkerColumn, nextDir);
             Position pushingPosition = getNextPosition(c.getRow(), c.getColumn(), nextDir);
-            if (!(0 <= pushingPosition.getRow() && pushingPosition.getRow() <= 4) ||
+            if ((!(0 <= pushingPosition.getRow() && pushingPosition.getRow() <= 4) ||
                     !(0 <= pushingPosition.getColumn() && pushingPosition.getColumn() <= 4) ||
                     gameCells[pushingPosition.getRow()][pushingPosition.getColumn()].getPlayer() != null ||
-                    gameCells[pushingPosition.getRow()][pushingPosition.getColumn()].isDomed()) nV.add(c);
+                    gameCells[pushingPosition.getRow()][pushingPosition.getColumn()].isDomed())
+                    && gameCells[nextPos.getRow()][nextPos.getColumn()].getPlayer()!=null) nV.add(c);
         }
 
         for (Cell c : nV) validCells.remove(c);
@@ -80,7 +82,7 @@ public class Minotaur extends Divinity {
 
         for (Cell c : validCells) {
             for (Divinity d : otherDivinitiesInGame) {
-                if (!d.getName().equals(this.getName()) && !d.othersMove(new MovePosition(WorkerRow, WorkerColumn, c.getRow(), c.getColumn(), 0))) {
+                if (!d.getName().equals(this.getName()) && !d.othersMove(new MovePosition(WorkerRow, WorkerColumn, c.getRow(), c.getColumn(), c.getLevel()-gameCells[WorkerRow][WorkerColumn].getLevel()))) {
                     nV.add(c);
                     break;
                 }
