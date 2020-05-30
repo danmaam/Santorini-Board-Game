@@ -530,6 +530,7 @@ public class GameController implements ViewObserver {
             Server.destroyGameRoom(roomID, model.getCurrentPlayer().getName(), EndReason.lose);
             return;
         } else {
+            model.setNumberOfPlayer(model.getGamePlayerNumber() - 1);
             getPlayerView(model.getCurrentPlayer().getName()).endgame("You lose cause you won't be able to end the turn");
             for (Player p : model.getPlayersInGame()) {
                 if (!p.getName().equals(model.getCurrentPlayer().getName()))

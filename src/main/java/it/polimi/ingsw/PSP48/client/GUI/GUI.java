@@ -175,25 +175,6 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
 
     @Override
     public void changedPlayerList(ArrayList<String> newPlayerList) {
-        /*
-        synchronized (lock) {
-            while (!loadedBoard) {
-                try {
-                    lock.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        */
-
-        System.out.println("Changed player list runnable");
-        /*
-        for (String s : newPlayerList) {
-            System.out.println(s);
-        }
-
-         */
         Platform.runLater(() -> boardController.changedPlayerList(newPlayerList));
     }
 

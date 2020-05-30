@@ -34,7 +34,7 @@ public class Model {
     private ArrayList<Divinity> availableDivinities;
     private int currentPlayer = -1; //it has this initial value cause there are moments of the game when there isn't a current player
     private final Cell[][] boardCell = new Cell[5][5];
-    private final int gamePlayerNumber;
+    private int gamePlayerNumber;
     private final boolean gameWithDivinities;
     private int challengerIndex;
 
@@ -324,6 +324,10 @@ public class Model {
             }
         }
         notifyObservers(x -> x.changedPlayerList(newPlayerString));
+    }
+
+    public void setNumberOfPlayer(int number) {
+        gamePlayerNumber = number;
     }
 
 }

@@ -74,6 +74,8 @@ public class GameBoardController {
     private final ArrayList<ImageView> playersDivinity = new ArrayList<>();
     private final ArrayList<Text> playersName = new ArrayList<>();
 
+    private boolean startedGame = false;
+
 
     private enum FSM_STATUS {
         positioning, worker_selection_move, worker_selection_build, sendmove, sendbuild
@@ -214,6 +216,7 @@ public class GameBoardController {
     };
 
     public void requestDivinitySelection(ArrayList<DivinitiesWithDescription> availableDivinities) {
+        startedGame = true;
         final FXMLLoader divinitiesSelectorLoader = new FXMLLoader(getClass().getResource("/divinitySelection.fxml"));
         final GameBoardController thisController = this;
         if (availableDivinities.size() == 1)
@@ -254,7 +257,7 @@ public class GameBoardController {
      * @param validCells is the list of valid positions for the placing of the workers
      */
     public void requestInitialPositioning(ArrayList<Position> validCells) {
-
+        startedGame = true;
         //we need to show the choice message to the player
         gameMessage.setText("Click on the cell where you want to position");
 
@@ -784,6 +787,12 @@ public class GameBoardController {
             }
             i++;
         }
+        if (i == 1 && startedGame) {
+            thirdPlayerName.setVisible(false);
+            thirdPlayerBg.setVisible(false);
+            thirdPlayerCard.setVisible(false);
+            thirdPlayerDivinity.setVisible(false);
+        }
 
 
     }
@@ -803,6 +812,7 @@ public class GameBoardController {
     }
 
     public void requestChallengerDivinitiesSelection(ArrayList<DivinitiesWithDescription> div) {
+        startedGame = true;
         final FXMLLoader divinitiesSelectorLoader = new FXMLLoader(getClass().getResource("/divinitySelection.fxml"));
         final GameBoardController thisController = this;
 
