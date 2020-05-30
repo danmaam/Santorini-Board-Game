@@ -126,13 +126,7 @@ public class Demeter extends Divinity {
     @Override
     public Consumer<GameController> dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
         if (!prevBuild) {
-            try {
-                super.build(workerRow, workerColumn, domeRow, domeColumn, gd);
-
-            } catch (MaximumLevelReachedException e) {
-                System.out.println("kek");
-            }
-
+            super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
             oldRowBuild = domeRow;
             oldColumnBuild = domeColumn;
             prevBuild = true;
@@ -142,12 +136,7 @@ public class Demeter extends Divinity {
             else if (domeRow == oldRowBuild && domeColumn == oldColumnBuild)
                 throw new DivinityPowerException("NO!");
             else {
-                try {
-                    super.build(workerRow, workerColumn, domeRow, domeColumn, gd);
-
-                } catch (MaximumLevelReachedException e) {
-                    System.out.println("kek");
-                }
+                super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
                 return GameController::turnChange;
             }
         }

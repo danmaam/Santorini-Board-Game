@@ -93,14 +93,16 @@ public class Hestia extends Divinity {
      */
     @Override
     public Consumer<GameController> build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelReachedException, DivinityPowerException {
-        Consumer<GameController> nextAction;
-        if (alreadyBuilt && (buildRow == 4 || buildColumn == 0 || buildColumn == 4 || buildRow == 0))
-            throw new DivinityPowerException("Trying to make the second construction on a perimetral cell");
-        if (!alreadyBuilt) nextAction = GameController::requestOptionalBuilding;
-        else nextAction = GameController::turnChange;
-        super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
-        if (!alreadyBuilt) alreadyBuilt = true;
-        return nextAction;
+        if (!alreadyBuilt) {
+            super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
+            alreadyBuilt = true;
+            return GameController::requestOptionalBuilding;
+        } else {
+            if (buildRow == 4 || buildColumn == 0 || buildColumn == 4 || buildRow == 0)
+                throw new DivinityPowerException("Trying to make the second construction on a perimetral cell");
+            super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
+            return GameController::turnChange;
+        }
     }
 
     /**
@@ -120,14 +122,16 @@ public class Hestia extends Divinity {
      */
     @Override
     public Consumer<GameController> dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
-        Consumer<GameController> nextAction;
-        if (alreadyBuilt && (domeColumn == 4 || domeRow == 4 || domeColumn == 0 || domeRow == 0))
-            throw new DivinityPowerException("trying to perform the second build on a perimetral cell");
-        if (!alreadyBuilt) nextAction = GameController::requestOptionalBuilding;
-        else nextAction = GameController::turnChange;
-        super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
-        if (!alreadyBuilt) alreadyBuilt = true;
-        return nextAction;
+        if (!alreadyBuilt) {
+            super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
+            alreadyBuilt = true;
+            return GameController::requestOptionalBuilding;
+        } else {
+            if (domeRow == 4 || domeColumn == 0 || domeColumn == 4 || domeRow == 0)
+                throw new DivinityPowerException("Trying to make the second construction on a perimetral cell");
+            super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
+            return GameController::turnChange;
+        }
     }
 
     /**
