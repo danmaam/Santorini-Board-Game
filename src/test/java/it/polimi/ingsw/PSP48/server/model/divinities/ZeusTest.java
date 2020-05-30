@@ -86,10 +86,16 @@ public class ZeusTest {
     public void buildOnDomedCell_exceptionThrown() throws MaximumLevelReachedException, DivinityPowerException, OccupiedCellException, NotAdjacentCellException, DomedCellException {
         player1.getDivinity().build(4, 4, 3, 4, game_database);
     }
-    
+
     @Test
     public void correctBuilding() throws MaximumLevelReachedException, DivinityPowerException, OccupiedCellException, NotAdjacentCellException, DomedCellException {
         player1.getDivinity().build(4, 4, 3, 3, game_database);
         assertEquals(2, game_database.getCell(3, 3).getLevel());
+    }
+
+    @Test
+    public void correctBuildingUnderWorkerItself() throws MaximumLevelReachedException, OccupiedCellException, NotAdjacentCellException, DomedCellException, DivinityPowerException {
+        player1.getDivinity().build(4, 4, 4, 4, game_database);
+        assertEquals(1, game_database.getCell(3, 3).getLevel());
     }
 }

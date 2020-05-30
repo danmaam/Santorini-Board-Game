@@ -67,7 +67,8 @@ public class Zeus extends Divinity {
                 throw new MaximumLevelReachedException("Livello massimo già raggiunto");
         }
         //second check: the cell must be empty of workers
-        if (!(gd.getCell(buildRow, buildColumn).getPlayer() == null)) throw new OccupiedCellException("Cella occupata");
+        if (!(gd.getCell(buildRow, buildColumn).getPlayer() == null) && !gd.getCell(buildRow, buildColumn).getPlayer().equals(gd.getCurrentPlayer().getName()))
+            throw new OccupiedCellException("Cella occupata");
         //third check: the cell must not be domed
         if (gd.getCell(buildRow, buildColumn).isDomed())
             throw new DomedCellException("Stai cercando di costruire su una cella con cupola");
