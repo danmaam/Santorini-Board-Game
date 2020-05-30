@@ -828,7 +828,6 @@ public class GameBoardController {
 
     }
 
-
     public void requestInitialPlayerSelection(ArrayList<String> players) {
         final FXMLLoader divinitiesSelectorLoader = new FXMLLoader(getClass().getResource("/firstPlayerSelection.fxml"));
         final GameBoardController thisController = this;
@@ -879,6 +878,7 @@ public class GameBoardController {
 
                 }
                 tbr.forEach(x->multifunctionalPane.getChildren().remove(x));
+                multifunctionalPane.getChildren().clear();
 
                 //after restoring the board we can proceed with the choice of the cell
                 WorkerValidCells workerToSend = null;
@@ -889,7 +889,6 @@ public class GameBoardController {
                         break;
                     }
                 }
-                multifunctionalPane.getChildren().clear();
                 postWorkerChoiceMove(workerToSend);
                 break;
 
@@ -902,9 +901,9 @@ public class GameBoardController {
                     }
                 }
                 tbr.forEach(x -> boardPane.getChildren().remove(x));
+                multifunctionalPane.getChildren().clear();
 
                 //restored the board situation, I must send the cell
-                multifunctionalPane.getChildren().clear();
                 this.sendMoveChoice(new MoveCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
                 break;
 
@@ -919,7 +918,6 @@ public class GameBoardController {
                     }
                 }
                 tbr.forEach(x->boardPane.getChildren().remove(x));
-
                 multifunctionalPane.getChildren().clear();
 
                 //now we need to call the method for the choice of the cell
@@ -974,7 +972,7 @@ public class GameBoardController {
                         }
                     }
                     tbr.forEach(x->boardPane.getChildren().remove(x));
-
+                    multifunctionalPane.getChildren().clear();
                     //board reset, now we just need to check which observer to notify
                     if (buildPositions!=null && buildPositions.contains(nextPosition)) this.sendBuildChoice(new MoveCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
                     else this.sendDomeChoice(new MoveCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
@@ -994,6 +992,7 @@ public class GameBoardController {
                         }
                     }
                     tbr.forEach(x -> boardPane.getChildren().remove(x));
+                    multifunctionalPane.getChildren().clear();
                     //now we have to set the buttons and their handler for the choice of the action
                     gameMessage.setText("Click on the red button on the right to build, on the green one to put a dome");
                     ImageView buildBtn = new ImageView(buildButtonImage);
@@ -1003,7 +1002,6 @@ public class GameBoardController {
                     multifunctionalPane.getChildren().add(buildBtn);
                     multifunctionalPane.getChildren().add(domeBtn);
                 }
-                multifunctionalPane.getChildren().clear();
                 break;
         }
     }
