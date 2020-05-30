@@ -100,6 +100,7 @@ public class Hestia extends Divinity {
         } else {
             if (buildRow == 4 || buildColumn == 0 || buildColumn == 4 || buildRow == 0)
                 throw new DivinityPowerException("Trying to make the second construction on a perimetral cell");
+            else if (buildRow == -1 && buildColumn == -1) return GameController::turnChange;
             super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
             return GameController::turnChange;
         }
@@ -129,7 +130,7 @@ public class Hestia extends Divinity {
         } else {
             if (domeRow == 4 || domeColumn == 0 || domeColumn == 4 || domeRow == 0)
                 throw new DivinityPowerException("Trying to make the second construction on a perimetral cell");
-            else if (workerRow == -1 && workerColumn == -1) return GameController::turnChange;
+            else if (domeRow == -1 && domeColumn == -1) return GameController::turnChange;
             super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
             return GameController::turnChange;
         }
