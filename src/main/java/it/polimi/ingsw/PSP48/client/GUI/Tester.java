@@ -50,47 +50,25 @@ public class Tester extends GUI {
         Pane boardRoot;
         try {
             boardRoot = controllerLoader.load();
-            board = new Scene(boardRoot, 1280, 720);
+            board = new Scene(boardRoot, 1075, 823);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         stage.setTitle("Santorini Log-In");
 
-        ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) -> {
-
-            boardController.resizeElements(stage.getHeight(), stage.getWidth());
-
-
-            //stage.minHeightProperty().unbind();
-            //stage.minWidthProperty().unbind();
-
-            //stage.setMinWidth(1280);
-            //stage.setMinHeight(720);
-
-        };
 
         primaryStage.setScene(board);
 
-        stage.setMinWidth(1280);
-        stage.setMinHeight(720);
 
         primaryStage.setTitle("Santorini");
         primaryStage.show();
 
 
-        stage.widthProperty().addListener(stageSizeListener);
-        stage.heightProperty().addListener(stageSizeListener);
-
-
-        stage.minWidthProperty().bind(board.heightProperty().multiply(16).divide(9));
-        stage.minHeightProperty().bind(board.widthProperty().divide(16).multiply(9));
-
-
         ArrayList<String> playerList = new ArrayList<>();
-        playerList.add("pippo.BLUE.Divinity Not Chosen");
-        playerList.add("paperino.WHITE.Divinity Not Chosen");
-        playerList.add("pluto.GREY.Divinity Not Chosen");
+        playerList.add("pippo.BLUE.Minotaur");
+        playerList.add("paperino.WHITE.Apollo");
+        playerList.add("pluto.GREY.Athena");
         boardController.changedPlayerList(playerList);
 
         ArrayList<Cell> newCells = new ArrayList<>();
@@ -122,6 +100,10 @@ public class Tester extends GUI {
 
         move.add(new WorkerValidCells(pos2, 3, 3));
 
-        boardController.requestMove(move);
+        ArrayList<String> p = new ArrayList<>();
+        p.add("pippo");
+        p.add("paperino");
+        p.add("pluto");
+        boardController.requestOptionalBuild(new ArrayList<WorkerValidCells>(), new ArrayList<>());
     }
 }

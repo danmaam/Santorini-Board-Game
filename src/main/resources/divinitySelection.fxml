@@ -28,12 +28,12 @@
                 <Image url="@santorini_risorse-grafiche-2/Sprite/Cards/gameGodFrameName1.png"/>
             </image>
         </ImageView>
-        <Text fx:id="divinityName" fill="WHITE" layoutX="152.0" layoutY="322.0" strokeType="OUTSIDE" strokeWidth="0.0"
+        <Text fx:id="divinityName" fill="WHITE" layoutX="152.0" layoutY="325.0" strokeType="OUTSIDE" strokeWidth="0.0"
               text="Divinity Name" textAlignment="CENTER"/>
-        <Text fx:id="divinityDescription" layoutX="122.0" layoutY="374.0" strokeType="OUTSIDE" strokeWidth="0.0"
-              text="Divinity Description" textAlignment="CENTER" wrappingWidth="120.38604736328125">
+        <Text fx:id="divinityDescription" layoutX="57.0" layoutY="359.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              text="Divinity Description" textAlignment="CENTER" wrappingWidth="249.88604736328125">
             <font>
-                <Font name="System Font" size="14.0"/>
+                <Font name="MinionPro-Regular" size="14.0"/>
             </font>
         </Text>
         <ImageView fx:id="prev" fitHeight="38.0" fitWidth="102.0" layoutX="6.0" layoutY="500.0"
@@ -65,7 +65,7 @@
         </ImageView>
         <Text fill="WHITE" layoutX="128.0" layoutY="515.0" onMouseClicked="#choose" onMousePressed="#clickedChoose"
               onMouseReleased="#releasedChoose" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose"/>
-        <Text fx:id="infoText" fill="WHITE" layoutX="11.0" layoutY="489.0" strokeType="OUTSIDE" strokeWidth="0.0"
+        <Text fx:id="infoText" fill="WHITE" layoutX="35.0" layoutY="490.0" strokeType="OUTSIDE" strokeWidth="0.0"
               text="Text"/>
     </children>
 </Pane>

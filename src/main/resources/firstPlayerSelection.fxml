@@ -10,35 +10,36 @@
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="528.0"
       prefWidth="344.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <GridPane fx:id="playerSelection" layoutX="316.0" layoutY="15.0" prefHeight="383.0" prefWidth="10.0">
+        <GridPane fx:id="playerSelection" layoutX="321.0" layoutY="6.0" prefHeight="388.0" prefWidth="15.0">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints maxHeight="111.0" minHeight="10.0" prefHeight="111.0" vgrow="SOMETIMES"/>
-                <RowConstraints maxHeight="135.5" minHeight="10.0" prefHeight="135.5" vgrow="SOMETIMES"/>
-                <RowConstraints maxHeight="159.0" minHeight="10.0" prefHeight="136.5" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="117.00000762939453" minHeight="10.0" prefHeight="114.33333587646484"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="135.5" minHeight="10.0" prefHeight="123.66666412353516" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="159.0" minHeight="10.0" prefHeight="118.0" vgrow="SOMETIMES"/>
             </rowConstraints>
             <children>
-                <ImageView fitHeight="70.0" fitWidth="101.0" pickOnBounds="true" preserveRatio="true" rotate="90.0"
+                <ImageView fitHeight="34.0" fitWidth="102.0" pickOnBounds="true" preserveRatio="true" rotate="90.0"
                            GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1"
                            GridPane.valignment="CENTER">
                     <image>
-                        <Image url="@santorini_risorse-grafiche-2/Sprite/Buttons/btn_green_pressed.png"/>
+                        <Image url="@santorini_risorse-grafiche-2/Sprite/Buttons/btn_green.png"/>
                     </image>
                 </ImageView>
-                <ImageView fitHeight="26.0" fitWidth="101.0" pickOnBounds="true" preserveRatio="true" rotate="90.0"
+                <ImageView fitHeight="34.0" fitWidth="102.0" pickOnBounds="true" preserveRatio="true" rotate="90.0"
                            GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0"
                            GridPane.valignment="CENTER">
                     <image>
-                        <Image url="@santorini_risorse-grafiche-2/Sprite/Buttons/btn_green_pressed.png"/>
+                        <Image url="@santorini_risorse-grafiche-2/Sprite/Buttons/btn_green.png"/>
                     </image>
                 </ImageView>
-                <ImageView fitHeight="70.0" fitWidth="99.0" pickOnBounds="true" preserveRatio="true" rotate="90.0"
+                <ImageView fitHeight="34.0" fitWidth="102.0" pickOnBounds="true" preserveRatio="true" rotate="90.0"
                            GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="2"
                            GridPane.valignment="CENTER">
                     <image>
-                        <Image url="@santorini_risorse-grafiche-2/Sprite/Buttons/btn_green_pressed.png"/>
+                        <Image url="@santorini_risorse-grafiche-2/Sprite/Buttons/btn_green.png"/>
                     </image>
                 </ImageView>
             </children>

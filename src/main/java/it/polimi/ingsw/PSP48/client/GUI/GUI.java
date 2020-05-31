@@ -200,13 +200,13 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
         Pane boardRoot;
         try {
             boardRoot = controllerLoader.load();
-            board = new Scene(boardRoot, 1280, 720);
+            board = new Scene(boardRoot, 1075, 823);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         stage.setTitle("Santorini Log-In");
-        //stage.setResizable(false);
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
         System.out.println("Initialized stage");
@@ -216,14 +216,9 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     public void completedSetup(String message) {
 
         Platform.runLater(() -> {
-            ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) -> boardController.resizeElements(primaryStage.getHeight(), primaryStage.getWidth());
             primaryStage.setOnCloseRequest((e) -> manageWindowClose());
             primaryStage.setScene(board);
             primaryStage.setTitle("Santorini");
-            primaryStage.widthProperty().addListener(stageSizeListener);
-            primaryStage.heightProperty().addListener(stageSizeListener);
-            primaryStage.minWidthProperty().bind(board.heightProperty().multiply(16).divide(9));
-            primaryStage.minHeightProperty().bind(board.widthProperty().divide(16).multiply(9));
             primaryStage.show();
         });
 

@@ -12,6 +12,7 @@ import javafx.event.WeakEventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
@@ -21,6 +22,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
@@ -44,7 +46,7 @@ public class GameBoardController {
     @FXML
     private GridPane playersPane;
     @FXML
-    private Pane multifunctionalPane;
+    private StackPane multifunctionalPane;
     @FXML
     private ImageView thirdPlayerCard;
     @FXML
@@ -95,7 +97,7 @@ public class GameBoardController {
     private final Image workerChoiceImage = new Image("santorini_risorse-grafiche-2/Texture2D/Cloud_01.png");
     private final Image domeSelectionImage = new Image("santorini_risorse-grafiche-2/Texture2D/jeff_cloudpoof.png");
     private final Image buildAndDomeImage = new Image("santorini_risorse-grafiche-2/Texture2D/WindToken.png");
-    private final Image skipButtonImage = new Image("santorini_risorse-grafiche-2/Sprite/Buttons/btn_blue.png");
+    private final Image skipButtonImage = new Image("santorini_risorse-grafiche-2/Sprite/Buttons/skip.png");
     private final Image buildButtonImage = new Image("santorini_risorse-grafiche-2/Sprite/Buttons/btn_coral.png");
     private final Image domeButtonImage = new Image ("santorini_risorse-grafiche-2/Sprite/Buttons/btn_green.png");
 
@@ -205,11 +207,7 @@ public class GameBoardController {
             }
             removeNodes.forEach(x->boardPane.getChildren().remove(x));
 
-            for (Node no : multifunctionalPane.getChildren())
-            {
-                if (((ImageView)no).getImage()==skipButtonImage) removeFromPane.add(no);
-            }
-            removeFromPane.forEach(x->multifunctionalPane.getChildren().remove(x));
+            multifunctionalPane.getChildren().clear();
 
             sendBuildChoice(new MoveCoordinates(-1, -1, -1, -1));
         }
@@ -732,12 +730,20 @@ public class GameBoardController {
      * @param build is the list of valid cells for the build action
      * @param dome is the list of valid cells for the dome action
      */
-    public void requestOptionalBuild (ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome)
-    {
+    public void requestOptionalBuild (ArrayList<WorkerValidCells> build, ArrayList<WorkerValidCells> dome) {
 
         ImageView skipChoice = new ImageView(skipButtonImage);
         skipChoice.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOptionalBuildSkip);
+        StackPane.setAlignment(skipChoice, Pos.BOTTOM_CENTER);
+        StackPane.setMargin(skipChoice, new Insets(450, 0, 0, 60));
+
+        skipChoice.addEventFilter(MouseEvent.MOUSE_PRESSED, ((e) -> ((ImageView) e.getSource()).setImage(new Image("santorini_risorse-grafiche-2/Sprite/Buttons/skip_pressed.png"))));
+        skipChoice.addEventFilter(MouseEvent.MOUSE_RELEASED, ((e) -> ((ImageView) e.getSource()).setImage(new Image("santorini_risorse-grafiche-2/Sprite/Buttons/skip.png"))));
+
         multifunctionalPane.getChildren().add(skipChoice);
+        skipChoice.setFitHeight(60);
+        skipChoice.setFitWidth(237);
+
         requestDomeOrBuild(build, dome);
     }
 
@@ -1085,23 +1091,6 @@ public class GameBoardController {
         return null;
     }
 
-    public void resizeElements(double height, double width) {
-
-        double scaleH = (600.0) / (720.0);
-        double scaleW = 600.0 / 1280.0;
-        boardPane.setPrefHeight(scaleH * height);
-        boardPane.setPrefWidth(scaleW * width);
-
-        for (Node n : multifunctionalPane.getChildren()) {
-            ((Pane) n).setPrefHeight(528.0 / 720.0 * height);
-            ((Pane) n).setPrefWidth(344.0 / 1280.0 * width);
-        }
-
-
-        playersPane.setPrefHeight(650.0 / 720.0 * height);
-        playersPane.setPrefWidth(501.0 / 1280.0 * width);
-
-    }
 
     public void initialize() {
         playersDivinity.add(firstPlayerDivinity);

@@ -1,123 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="mainPane" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0"
+<AnchorPane id="mainPane" minHeight="823.0" minWidth="1075.0" prefHeight="823.0" prefWidth="1075.0"
             stylesheets="@cssStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="1280.0" prefHeight="720.0"
-              prefWidth="1290.0">
-            <children>
-                <Text fx:id="gameMessage" fill="#475cff" layoutX="83.0" layoutY="690.0" strokeType="OUTSIDE"
-                      strokeWidth="0.0" text="Welcome!" wrappingWidth="592.2666015625">
-                    <font>
-                        <Font name="Helvetica" size="20.0"/>
-                    </font>
-                </Text>
-                <ImageView fitHeight="65.0" fitWidth="227.0" layoutX="811.0" layoutY="627.0" pickOnBounds="true"
-                           preserveRatio="true">
-                    <image>
-                        <Image url="@santorini_risorse-grafiche-2/logo-p21321.png"/>
-                    </image>
-                </ImageView>
-                <GridPane id="playersPane" fx:id="playersPane" layoutX="778.0" layoutY="44.0" prefHeight="654.0"
-                          prefWidth="440.0">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.28619384765625" minWidth="10.0"
-                                           prefWidth="51.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.28619384765625" minWidth="10.0"
-                                           prefWidth="92.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="229.0" minWidth="3.0" prefWidth="26.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="236.0" minWidth="10.0" prefWidth="215.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="102.48040771484375" minWidth="10.0"
-                                           prefWidth="40.0"/>
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints maxHeight="134.0" minHeight="10.0" prefHeight="77.0" vgrow="SOMETIMES"/>
-                        <RowConstraints maxHeight="169.0" minHeight="10.0" prefHeight="125.0" vgrow="SOMETIMES"/>
-                        <RowConstraints maxHeight="187.0" minHeight="10.0" prefHeight="108.0" vgrow="SOMETIMES"/>
-                        <RowConstraints maxHeight="220.0" minHeight="10.0" prefHeight="122.0" vgrow="SOMETIMES"/>
-                        <RowConstraints maxHeight="232.0" minHeight="10.0" prefHeight="222.0" vgrow="SOMETIMES"/>
-                    </rowConstraints>
-                    <children>
-                        <ImageView fitHeight="115.0" fitWidth="99.0" pickOnBounds="true" preserveRatio="true"
-                                   GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1"
-                                   GridPane.valignment="CENTER">
-                            <image>
-                                <Image url="@santorini_risorse-grafiche-2/Sprite/Cards/gameGodFrame.png"/>
-                            </image>
-                        </ImageView>
-                        <ImageView fx:id="thirdPlayerCard" fitHeight="120.0" fitWidth="97.0" pickOnBounds="true"
-                                   preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="LEFT"
-                                   GridPane.rowIndex="3" GridPane.valignment="CENTER">
-                            <image>
-                                <Image url="@santorini_risorse-grafiche-2/Sprite/Cards/gameGodFrame.png"/>
-                            </image>
-                        </ImageView>
-                        <ImageView fitHeight="104.0" fitWidth="200.0" pickOnBounds="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-                            <image>
-                                <Image url="@santorini_risorse-grafiche-2/Sprite/Cards/gameGodFrameName1.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fx:id="thirdPlayerBg" fitHeight="113.0" fitWidth="200.0" pickOnBounds="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
-                            <image>
-                                <Image url="@santorini_risorse-grafiche-2/Sprite/Cards/gameGodFrameName2.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fitHeight="121.0" fitWidth="200.0" pickOnBounds="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-                            <image>
-                                <Image url="@santorini_risorse-grafiche-2/Sprite/Cards/gameGodFrameName2.png" />
-                            </image>
-                        </ImageView>
-                        <Text id="firstPlayerName" fx:id="firstPlayerName" strokeType="OUTSIDE" strokeWidth="0.0" text="Testo di sopra" textAlignment="CENTER" wrappingWidth="167.828857421875" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-                            <font>
-                                <Font size="15.0" />
-                            </font>
-                        </Text>
-                        <ImageView fx:id="firstPlayerDivinity" fitHeight="108.0" fitWidth="70.0" pickOnBounds="true"
-                                   preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="LEFT"
-                                   GridPane.rowIndex="1" GridPane.valignment="CENTER"/>
-                        <Text fx:id="secondPlayerName" strokeType="OUTSIDE" strokeWidth="0.0" text="Testo di mezzo" textAlignment="CENTER" wrappingWidth="132.22900390625" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-                            <font>
-                                <Font size="15.0" />
-                            </font>
-                        </Text>
-                        <Text fx:id="thirdPlayerName" strokeType="OUTSIDE" strokeWidth="0.0" text="Testo di sotto"
-                              textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER"
-                              GridPane.rowIndex="3" GridPane.valignment="CENTER">
-                            <font>
-                                <Font size="15.0"/>
-                            </font>
-                        </Text>
-                        <ImageView fitHeight="107.0" fitWidth="95.0" pickOnBounds="true" GridPane.columnIndex="1"
-                                   GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-                            <image>
-                                <Image url="@santorini_risorse-grafiche-2/Sprite/Cards/gameGodFrame.png"/>
-                            </image>
-                        </ImageView>
-                        <ImageView fx:id="secondPlayerDivinity" fitHeight="102.0" fitWidth="68.0" pickOnBounds="true"
-                                   preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="LEFT"
-                                   GridPane.rowIndex="2" GridPane.valignment="CENTER"/>
-                        <ImageView fx:id="thirdPlayerDivinity" fitHeight="108.0" fitWidth="69.0" pickOnBounds="true"
-                                   preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="LEFT"
-                                   GridPane.rowIndex="3" GridPane.valignment="CENTER"/>
-                    </children>
-                </GridPane>
-                <ImageView fitHeight="704.0" fitWidth="688.0" pickOnBounds="true" preserveRatio="true" visible="false">
-                    <image>
-                        <Image url="@onlyboard.png"/>
-                    </image>
-                </ImageView>
-            </children>
-        </Pane>
         <GridPane id="boardGridPane" fx:id="boardPane" prefHeight="600.0" prefWidth="600.0" stylesheets="@cssStyle.css"
                   AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0">
             <columnConstraints>
@@ -145,20 +41,153 @@
                                    prefWidth="25.0"/>
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints maxHeight="161.0" minHeight="10.0" prefHeight="26.5" valignment="CENTER" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="161.0" minHeight="0.0" prefHeight="97.0" valignment="CENTER" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="161.0" minHeight="10.0" prefHeight="12.0" valignment="CENTER" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="161.0" minHeight="10.0" prefHeight="99.5" valignment="CENTER" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="192.0" minHeight="9.5" prefHeight="10.0" valignment="CENTER" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="142.0" minHeight="10.0" prefHeight="103.5" valignment="CENTER" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="147.0" minHeight="0.0" prefHeight="10.5" valignment="CENTER" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="146.0" minHeight="10.0" prefHeight="102.0" valignment="CENTER" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="213.0" minHeight="0.0" prefHeight="12.0" valignment="CENTER" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="227.0" minHeight="10.0" prefHeight="99.0" valignment="CENTER" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="234.0" minHeight="10.0" prefHeight="26.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="161.0" minHeight="10.0" prefHeight="26.5" valignment="CENTER"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="161.0" minHeight="0.0" prefHeight="97.0" valignment="CENTER"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="161.0" minHeight="10.0" prefHeight="12.0" valignment="CENTER"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="161.0" minHeight="10.0" prefHeight="99.5" valignment="CENTER"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="192.0" minHeight="9.5" prefHeight="10.0" valignment="CENTER"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="142.0" minHeight="10.0" prefHeight="103.5" valignment="CENTER"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="147.0" minHeight="0.0" prefHeight="10.5" valignment="CENTER"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="146.0" minHeight="10.0" prefHeight="102.0" valignment="CENTER"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="213.0" minHeight="0.0" prefHeight="12.0" valignment="CENTER"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="227.0" minHeight="10.0" prefHeight="99.0" valignment="CENTER"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="234.0" minHeight="10.0" prefHeight="26.0" valignment="CENTER"
+                                vgrow="SOMETIMES"/>
             </rowConstraints>
         </GridPane>
-        <Pane fx:id="multifunctionalPane" prefHeight="528.0" prefWidth="344.0" AnchorPane.leftAnchor="840.0"
-              AnchorPane.topAnchor="80.0"/>
+        <GridPane id="playersPane" fx:id="playersPane" prefHeight="707.0" prefWidth="428.0"
+                  AnchorPane.leftAnchor="635.0" AnchorPane.topAnchor="30.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.28619384765625" minWidth="10.0" prefWidth="44.5"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.28619384765625" minWidth="10.0" prefWidth="107.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="241.0" minWidth="10.0" prefWidth="193.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="102.48040771484375" minWidth="10.0" prefWidth="81.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="134.0" minHeight="10.0" prefHeight="91.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="169.0" minHeight="10.0" prefHeight="128.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="187.0" minHeight="10.0" prefHeight="130.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="220.0" minHeight="10.0" prefHeight="129.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="243.0" minHeight="10.0" prefHeight="229.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <children>
+                <ImageView fitHeight="129.0" fitWidth="108.0" pickOnBounds="true" preserveRatio="true"
+                           GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1"
+                           GridPane.valignment="CENTER">
+                    <image>
+                        <Image url="@santorini_risorse-grafiche-2/Sprite/Cards/gameGodFrame.png"/>
+                    </image>
+                </ImageView>
+                <ImageView fx:id="thirdPlayerCard" fitHeight="129.0" fitWidth="108.0" pickOnBounds="true"
+                           preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="LEFT"
+                           GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                    <image>
+                        <Image url="@santorini_risorse-grafiche-2/Sprite/Cards/gameGodFrame.png"/>
+                    </image>
+                </ImageView>
+                <ImageView fitHeight="104.0" fitWidth="200.0" pickOnBounds="true" GridPane.columnIndex="2"
+                           GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                    <image>
+                        <Image url="@santorini_risorse-grafiche-2/Sprite/Cards/gameGodFrameName1.png"/>
+                    </image>
+                </ImageView>
+                <ImageView fx:id="thirdPlayerBg" fitHeight="113.0" fitWidth="200.0" pickOnBounds="true"
+                           GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3"
+                           GridPane.valignment="CENTER">
+                    <image>
+                        <Image url="@santorini_risorse-grafiche-2/Sprite/Cards/gameGodFrameName2.png"/>
+                    </image>
+                </ImageView>
+                <ImageView fitHeight="121.0" fitWidth="200.0" pickOnBounds="true" GridPane.columnIndex="2"
+                           GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                    <image>
+                        <Image url="@santorini_risorse-grafiche-2/Sprite/Cards/gameGodFrameName2.png"/>
+                    </image>
+                </ImageView>
+                <Text id="firstPlayerName" fx:id="firstPlayerName" strokeType="OUTSIDE" strokeWidth="0.0"
+                      text="Testo di sopra" textAlignment="CENTER" wrappingWidth="167.828857421875"
+                      GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1"
+                      GridPane.valignment="CENTER">
+                    <font>
+                        <Font name="LillyBelle" size="12.0"/>
+                    </font>
+                    <GridPane.margin>
+                        <Insets top="-10.0"/>
+                    </GridPane.margin>
+                </Text>
+                <ImageView fx:id="firstPlayerDivinity" fitHeight="111.0" fitWidth="71.0" pickOnBounds="true"
+                           preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="LEFT"
+                           GridPane.rowIndex="1" GridPane.valignment="TOP">
+                    <GridPane.margin>
+                        <Insets left="5.0" top="7.0"/>
+                    </GridPane.margin>
+                </ImageView>
+                <Text fx:id="secondPlayerName" strokeType="OUTSIDE" strokeWidth="0.0" text="Testo di mezzo"
+                      textAlignment="CENTER" wrappingWidth="132.22900390625" GridPane.columnIndex="2"
+                      GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                    <font>
+                        <Font name="LillyBelle" size="12.0"/>
+                    </font>
+                    <GridPane.margin>
+                        <Insets top="-10.0"/>
+                    </GridPane.margin>
+                </Text>
+                <Text fx:id="thirdPlayerName" strokeType="OUTSIDE" strokeWidth="0.0" text="Testo di sotto"
+                      textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3"
+                      GridPane.valignment="CENTER">
+                    <font>
+                        <Font name="LillyBelle" size="12.0"/>
+                    </font>
+                    <GridPane.margin>
+                        <Insets top="-15.0"/>
+                    </GridPane.margin>
+                </Text>
+                <ImageView fitHeight="129.0" fitWidth="108.0" pickOnBounds="true" preserveRatio="true"
+                           GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2"
+                           GridPane.valignment="CENTER">
+                    <image>
+                        <Image url="@santorini_risorse-grafiche-2/Sprite/Cards/gameGodFrame.png"/>
+                    </image>
+                </ImageView>
+                <ImageView fx:id="secondPlayerDivinity" fitHeight="113.0" fitWidth="71.0" pickOnBounds="true"
+                           preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="LEFT"
+                           GridPane.rowIndex="2" GridPane.valignment="TOP">
+                    <GridPane.margin>
+                        <Insets left="5.0" top="7.0"/>
+                    </GridPane.margin>
+                </ImageView>
+                <ImageView fx:id="thirdPlayerDivinity" fitHeight="112.0" fitWidth="71.0" pickOnBounds="true"
+                           preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="LEFT"
+                           GridPane.rowIndex="3" GridPane.valignment="TOP">
+                    <GridPane.margin>
+                        <Insets left="5.0" top="8.0"/>
+                    </GridPane.margin>
+                </ImageView>
+            </children>
+        </GridPane>
+        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="757.0" layoutY="745.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@unnamed.png"/>
+            </image>
+        </ImageView>
+        <Text fx:id="gameMessage" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome!" textAlignment="CENTER"
+              wrappingWidth="578.0" AnchorPane.leftAnchor="45.0" AnchorPane.topAnchor="640.0">
+            <font>
+                <Font name="LillyBelle" size="28.0"/>
+            </font>
+        </Text>
+        <StackPane fx:id="multifunctionalPane" layoutX="676.0" layoutY="122.0" AnchorPane.leftAnchor="676.0"
+                   AnchorPane.topAnchor="122.0"/>
     </children>
 </AnchorPane>

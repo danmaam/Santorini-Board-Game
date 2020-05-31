@@ -505,8 +505,10 @@ public class GameController implements ViewObserver {
         ArrayList<Position> workersPosition = model.getPlayerPositionsInMap(model.getCurrentPlayer().getName());
 
         for (Position p : workersPosition) {
-            build.add(new WorkerValidCells(new ArrayList<>(model.getCurrentPlayer().getDivinity().getValidCellForBuilding(p.getColumn(), p.getRow(), otherDivinities, model.getGameBoard())), p.getRow(), p.getColumn()));
-            dome.add(new WorkerValidCells(new ArrayList<>(model.getCurrentPlayer().getDivinity().getValidCellsToPutDome(p.getColumn(), p.getRow(), model.getGameBoard(), otherDivinities)), p.getRow(), p.getColumn()));
+            WorkerValidCells b = new WorkerValidCells(new ArrayList<>(model.getCurrentPlayer().getDivinity().getValidCellForBuilding(p.getColumn(), p.getRow(), otherDivinities, model.getGameBoard())), p.getRow(), p.getColumn());
+            WorkerValidCells d = new WorkerValidCells(new ArrayList<>(model.getCurrentPlayer().getDivinity().getValidCellsToPutDome(p.getColumn(), p.getRow(), model.getGameBoard(), otherDivinities)), p.getRow(), p.getColumn());
+            if (!b.getValidPositions().isEmpty()) build.add(b);
+            if (!d.getValidPositions().isEmpty()) dome.add(d);
         }
         getPlayerView(model.getCurrentPlayer().getName()).requestOptionalBuild(build, dome);
     }
