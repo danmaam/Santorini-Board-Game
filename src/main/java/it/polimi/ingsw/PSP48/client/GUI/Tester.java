@@ -104,6 +104,7 @@ public class Tester extends GUI {
         p.add("pippo");
         p.add("paperino");
         p.add("pluto");
-        boardController.requestOptionalBuild(new ArrayList<WorkerValidCells>(), new ArrayList<>());
+
+
     }
 }

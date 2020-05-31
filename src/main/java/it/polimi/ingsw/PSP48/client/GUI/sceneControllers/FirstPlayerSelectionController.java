@@ -4,6 +4,8 @@ import it.polimi.ingsw.PSP48.client.GUI.GUI;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
@@ -39,7 +41,23 @@ public class FirstPlayerSelectionController {
                     outerController.sendFirstPlayerChoice(players.get(GridPane.getRowIndex(n)));
                 }
             });
+
+            n.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    ((ImageView) n).setImage(new Image("/santorini_risorse-grafiche-2/Sprite/Buttons/btn_green_pressed.png"));
+                }
+            });
+
+            n.addEventFilter(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    ((ImageView) n).setImage(new Image("/santorini_risorse-grafiche-2/Sprite/Buttons/btn_green.png"));
+                }
+            });
         }
+
+
     }
 
     private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {

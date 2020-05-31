@@ -98,8 +98,8 @@ public class GameBoardController {
     private final Image domeSelectionImage = new Image("santorini_risorse-grafiche-2/Texture2D/jeff_cloudpoof.png");
     private final Image buildAndDomeImage = new Image("santorini_risorse-grafiche-2/Texture2D/WindToken.png");
     private final Image skipButtonImage = new Image("santorini_risorse-grafiche-2/Sprite/Buttons/skip.png");
-    private final Image buildButtonImage = new Image("santorini_risorse-grafiche-2/Sprite/Buttons/btn_coral.png");
-    private final Image domeButtonImage = new Image ("santorini_risorse-grafiche-2/Sprite/Buttons/btn_green.png");
+    private final Image buildButtonImage = new Image("santorini_risorse-grafiche-2/Sprite/Buttons/build.png");
+    private final Image domeButtonImage = new Image("santorini_risorse-grafiche-2/Sprite/Buttons/dome.png");
 
     private final EventHandler<MouseEvent> handleOperation = new EventHandler<MouseEvent>() {
         @Override
@@ -124,14 +124,7 @@ public class GameBoardController {
             }
             removeSelectionImage.forEach(x->boardPane.getChildren().remove(x));
 
-            for (Node n : multifunctionalPane.getChildren())
-            {
-                if (((ImageView)n).getImage()==buildButtonImage || ((ImageView)n).getImage()==domeButtonImage)
-                {
-                    removeButtons.add(n);
-                }
-            }
-            removeButtons.forEach(x->multifunctionalPane.getChildren().remove(x));
+            multifunctionalPane.getChildren().clear();
 
             sendBuildChoice(new MoveCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
         }
@@ -152,14 +145,7 @@ public class GameBoardController {
             }
             removeSelectionImage.forEach(x->boardPane.getChildren().remove(x));
 
-            for (Node n : multifunctionalPane.getChildren())
-            {
-                if (((ImageView)n).getImage()==buildButtonImage || ((ImageView)n).getImage()==domeButtonImage)
-                {
-                    removeButtons.add(n);
-                }
-            }
-            removeButtons.forEach(x->multifunctionalPane.getChildren().remove(x));
+            multifunctionalPane.getChildren().clear();
 
             sendDomeChoice(new MoveCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
         }
@@ -181,11 +167,7 @@ public class GameBoardController {
             }
             removeNodes.forEach(x->boardPane.getChildren().remove(x));
 
-            for (Node no : multifunctionalPane.getChildren())
-            {
-                if (((ImageView)no).getImage()==skipButtonImage) removeFromPane.add(no);
-            }
-            removeFromPane.forEach(x->multifunctionalPane.getChildren().remove(x));
+            multifunctionalPane.getChildren().clear();
 
             sendMoveChoice(new MoveCoordinates(-1, -1, -1, -1));
         }
@@ -721,6 +703,16 @@ public class GameBoardController {
         }
 
         ImageView skipChoice = new ImageView(skipButtonImage);
+        StackPane.setAlignment(skipChoice, Pos.BOTTOM_CENTER);
+        StackPane.setMargin(skipChoice, new Insets(450, 0, 0, 60));
+
+        skipChoice.addEventFilter(MouseEvent.MOUSE_PRESSED, ((e) -> ((ImageView) e.getSource()).setImage(new Image("santorini_risorse-grafiche-2/Sprite/Buttons/skip_pressed.png"))));
+        skipChoice.addEventFilter(MouseEvent.MOUSE_RELEASED, ((e) -> ((ImageView) e.getSource()).setImage(new Image("santorini_risorse-grafiche-2/Sprite/Buttons/skip.png"))));
+
+        multifunctionalPane.getChildren().add(skipChoice);
+        skipChoice.setFitHeight(60);
+        skipChoice.setFitWidth(237);
+
         skipChoice.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOptionalMoveSkip);
         multifunctionalPane.getChildren().add(skipChoice);
     }
@@ -1005,6 +997,27 @@ public class GameBoardController {
                     ImageView domeBtn = new ImageView(domeButtonImage);
                     buildBtn.addEventFilter(MouseEvent.MOUSE_CLICKED, handleBuild);
                     domeBtn.addEventFilter(MouseEvent.MOUSE_CLICKED, handleDome);
+
+
+                    StackPane.setAlignment(buildBtn, Pos.BOTTOM_CENTER);
+                    StackPane.setMargin(buildBtn, new Insets(455, 0, 0, 60));
+
+                    buildBtn.addEventFilter(MouseEvent.MOUSE_PRESSED, ((e) -> ((ImageView) e.getSource()).setImage(new Image("santorini_risorse-grafiche-2/Sprite/Buttons/build_pressed.png"))));
+                    buildBtn.addEventFilter(MouseEvent.MOUSE_RELEASED, ((e) -> ((ImageView) e.getSource()).setImage(new Image("santorini_risorse-grafiche-2/Sprite/Buttons/build.png"))));
+
+                    buildBtn.setFitHeight(60);
+                    buildBtn.setFitWidth(237);
+
+                    StackPane.setAlignment(domeBtn, Pos.BOTTOM_CENTER);
+                    StackPane.setMargin(domeBtn, new Insets(0, 0, 60, 60));
+
+                    domeBtn.addEventFilter(MouseEvent.MOUSE_PRESSED, ((e) -> ((ImageView) e.getSource()).setImage(new Image("santorini_risorse-grafiche-2/Sprite/Buttons/dome_pressed.png"))));
+                    domeBtn.addEventFilter(MouseEvent.MOUSE_RELEASED, ((e) -> ((ImageView) e.getSource()).setImage(new Image("santorini_risorse-grafiche-2/Sprite/Buttons/dome.png"))));
+
+                    domeBtn.setFitHeight(60);
+                    domeBtn.setFitWidth(237);
+
+
                     multifunctionalPane.getChildren().add(buildBtn);
                     multifunctionalPane.getChildren().add(domeBtn);
                 }
@@ -1119,5 +1132,6 @@ public class GameBoardController {
         }
         return false;
     }
+
 
 }
