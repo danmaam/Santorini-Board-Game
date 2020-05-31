@@ -230,7 +230,7 @@ public class Model {
             }
         }
         notifyObservers(x -> x.changedBoard(updatedCells));
-
+        setNextPlayer(playersInGame.indexOf(getPlayer(pName))-1); //we set the current player index to the player preceding the one to be removed
         playersInGame.remove(getPlayer(pName)); //then we remove the player from the player list
         for (Player p : playersInGame) {
             newPlayerList.add(p.getName());

@@ -269,6 +269,7 @@ public class GameController implements ViewObserver {
         for (Position p : workersPosition) {
             validCells.add(new WorkerValidCells(new ArrayList<>(model.getCurrentPlayer().getDivinity().getValidCellForMove(p.getColumn(), p.getRow(), model.getGameBoard(), otherDivinities)), p.getRow(), p.getColumn()));
         }
+        validCells.removeIf(x-> x.getValidPositions().size()==0); //removes elements that have no valid positions
         getPlayerView(model.getCurrentPlayer().getName()).requestMove(validCells);
     }
 
