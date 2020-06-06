@@ -334,6 +334,7 @@ public class GameController implements ViewObserver {
         this.nextAction();
     }
 
+
     /**
      * @author Daniele Mammone
      * Starts the game, so, randomically, chose the "chosen", sets the chosen as last player to chose divinities, and asks the chosen to select a set of divinities

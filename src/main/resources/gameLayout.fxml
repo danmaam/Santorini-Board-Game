@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -11,11 +12,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="mainPane" minHeight="823.0" minWidth="1075.0" prefHeight="823.0" prefWidth="1075.0"
+<AnchorPane id="mainPane" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0"
             stylesheets="@cssStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <GridPane id="boardGridPane" fx:id="boardPane" prefHeight="600.0" prefWidth="600.0" stylesheets="@cssStyle.css"
-                  AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0">
+                  AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
             <columnConstraints>
                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0"
                                    prefWidth="22.5"/>
@@ -66,7 +67,7 @@
             </rowConstraints>
         </GridPane>
         <GridPane id="playersPane" fx:id="playersPane" prefHeight="707.0" prefWidth="428.0"
-                  AnchorPane.leftAnchor="635.0" AnchorPane.topAnchor="30.0">
+                  AnchorPane.leftAnchor="620.0" AnchorPane.topAnchor="10.0">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.28619384765625" minWidth="10.0" prefWidth="44.5"/>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.28619384765625" minWidth="10.0" prefWidth="107.0"/>
@@ -175,7 +176,7 @@
                 </ImageView>
             </children>
         </GridPane>
-        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="757.0" layoutY="745.0" pickOnBounds="true"
+        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="1057.0" layoutY="630.0" pickOnBounds="true"
                    preserveRatio="true">
             <image>
                 <Image url="@unnamed.png"/>
@@ -187,7 +188,13 @@
                 <Font name="LillyBelle" size="28.0"/>
             </font>
         </Text>
-        <StackPane fx:id="multifunctionalPane" layoutX="676.0" layoutY="122.0" AnchorPane.leftAnchor="676.0"
-                   AnchorPane.topAnchor="122.0"/>
+        <StackPane fx:id="multifunctionalPane" layoutX="661.0" layoutY="101.0" prefHeight="524.0" prefWidth="344.0"
+                   AnchorPane.leftAnchor="661.0" AnchorPane.topAnchor="101.0"/>
+        <ListView fx:id="gameLog" layoutX="1048.0" layoutY="58.0" prefHeight="524.0" prefWidth="222.0"/>
+        <Text layoutX="1088.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Game Messages">
+            <font>
+                <Font name="LillyBelle" size="20.0"/>
+            </font>
+        </Text>
     </children>
 </AnchorPane>

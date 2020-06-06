@@ -180,11 +180,15 @@ public class Prometheus extends Divinity {
 
     private boolean simulateBuildingCheckIfCanMoveAfterWards(int wR, int wC, int mR, int mC, Cell[][] gameBoard, boolean dome, ArrayList<Divinity> otherDiv) {
         //arrived here, the cell is valid, i simulate the move
+        int oldLevel = gameBoard[mR][mC].getLevel();
+        boolean isCellDomed = gameBoard[mR][mC].isDomed();
+        String playerOnCell = gameBoard[mR][mC].getPlayer();
+
         if (!dome) try {
             gameBoard[mR][mC].addLevel();
             previousBuild = true;
         } catch (Exception e) {
-            System.out.println("Fatal error");
+            System.out.println("Can't add level");
         }
 
         else try {
@@ -196,6 +200,7 @@ public class Prometheus extends Divinity {
 
         boolean can = !getValidCellForMove(wC, wR, gameBoard, otherDiv).isEmpty();
         previousBuild = false;
+        gameBoard[mR][mC] = new Cell(mR, mC, oldLevel, playerOnCell, isCellDomed);
         return can;
     }
 
@@ -206,24 +211,13 @@ public class Prometheus extends Divinity {
 
     @Override
     public ArrayList<Position> getValidCellForBuilding(int WorkerColumn, int WorkerRow, ArrayList<Divinity> otherDivinitiesInGame, Cell[][] gameCell) {
-        Cell[][] clonedBoard = new Cell[5][5];
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                clonedBoard[i][j] = (Cell) gameCell[i][j].clone();
-            }
-        }
-        return super.getValidCellForBuilding(WorkerColumn, WorkerRow, otherDivinitiesInGame, gameCell).stream().filter(x -> previousBuild || simulateBuildingCheckIfCanMoveAfterWards(WorkerRow, WorkerColumn, x.getRow(), x.getColumn(), clonedBoard, false, otherDivinitiesInGame)).collect(Collectors.toCollection(ArrayList::new));
+
+        return super.getValidCellForBuilding(WorkerColumn, WorkerRow, otherDivinitiesInGame, gameCell).stream().filter(x -> previousBuild || simulateBuildingCheckIfCanMoveAfterWards(WorkerRow, WorkerColumn, x.getRow(), x.getColumn(), gameCell, false, otherDivinitiesInGame)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
     public ArrayList<Position> getValidCellsToPutDome(int workerColumn, int workerRow, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
-        Cell[][] clonedBoard = new Cell[5][5];
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                clonedBoard[i][j] = (Cell) gameCells[i][j].clone();
-            }
-        }
 
-        return super.getValidCellsToPutDome(workerColumn, workerRow, gameCells, divinitiesInGame).stream().filter(x -> previousBuild || simulateBuildingCheckIfCanMoveAfterWards(workerRow, workerColumn, x.getRow(), x.getColumn(), clonedBoard, true, divinitiesInGame)).collect(Collectors.toCollection(ArrayList::new));
+        return super.getValidCellsToPutDome(workerColumn, workerRow, gameCells, divinitiesInGame).stream().filter(x -> previousBuild || simulateBuildingCheckIfCanMoveAfterWards(workerRow, workerColumn, x.getRow(), x.getColumn(), gameCells, true, divinitiesInGame)).collect(Collectors.toCollection(ArrayList::new));
     }
 }

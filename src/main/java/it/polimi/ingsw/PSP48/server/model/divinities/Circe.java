@@ -42,9 +42,7 @@ public class Circe extends Divinity {
 
         // i remove the other player from the list of players
         String otherPlayer = gd.getPlayersInGame().stream().filter(p -> !(p.getName().equals(gd.getCurrentPlayer().getName()))).collect(Collectors.toCollection(ArrayList::new)).get(0).getName();
-        //for debug reason
-        System.out.println("Other player: " + otherPlayer);
-        // there must be present the two workers to apply the power, and there are gods that deletes workers from the board
+        // there must be present almost two workers to apply the power, and there are gods that deletes workers from the board
         //now i must find the player's workers on the board
         ArrayList<Position> workersPosition = gd.getPlayerPositionsInMap(otherPlayer);
         if (workersPosition.size() > 1) {
@@ -55,8 +53,11 @@ public class Circe extends Divinity {
                 gd.getCurrentPlayer().setDivinity(gd.getPlayer(otherPlayer).getDivinity());
                 gd.getPlayer(otherPlayer).setTempDivinity(gd.getPlayer(otherPlayer).getDivinity());
                 gd.getPlayer(otherPlayer).setDivinity(new Divinity());
+                gd.sendPlayerList();
+                return gd.getCurrentPlayer().getDivinity().turnBegin(gd);
             }
         }
+        gd.sendPlayerList();
         return GameController::requestMove;
     }
 

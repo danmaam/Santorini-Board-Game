@@ -16,6 +16,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -53,6 +54,9 @@ public class GameBoardController {
     private ImageView thirdPlayerBg;
     @FXML
     private Pane leftPane;
+
+    @FXML
+    private ListView gameLog;
 
 
     @FXML
@@ -806,6 +810,7 @@ public class GameBoardController {
     }
 
     public void printMessage(String s) {
+        gameLog.getItems().add(s);
         gameMessage.setText(s);
     }
 
@@ -823,7 +828,6 @@ public class GameBoardController {
         }
         gameMessage.setText("Select divinities in game in the selector at your right.");
         multifunctionalPane.getChildren().add(selectionPane);
-
     }
 
     public void requestInitialPlayerSelection(ArrayList<String> players) {

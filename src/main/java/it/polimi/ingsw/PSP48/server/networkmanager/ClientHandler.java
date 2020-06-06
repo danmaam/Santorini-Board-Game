@@ -71,6 +71,7 @@ public class ClientHandler implements Runnable {
 
                 switch (toDO) {
                     case requestAction:
+                        System.out.println("Sending " + nextObject);
                         output.writeObject(nextObject);
                         toDO = null;
                         toDOLOCK.notifyAll();

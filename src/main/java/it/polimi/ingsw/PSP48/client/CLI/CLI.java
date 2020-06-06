@@ -803,10 +803,10 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
                         break;
                     }
                 }
-                for (Position p1 : tempPositionsBuild) {
+                if (tempPositionsBuild != null) for (Position p1 : tempPositionsBuild) {
                     this.getCellOnBoard(p1.getRow(), p1.getColumn()).setCellColour(ColoursForPrinting.red);
                 }
-                for (Position p2 : tempPositionsDome) {
+                if (tempPositionsDome != null) for (Position p2 : tempPositionsDome) {
                     if (this.getCellOnBoard(p2.getRow(), p2.getColumn()).getCellColour() == ColoursForPrinting.red)
                         this.getCellOnBoard(p2.getRow(), p2.getColumn()).setCellColour(ColoursForPrinting.green);
                     else this.getCellOnBoard(p2.getRow(), p2.getColumn()).setCellColour(ColoursForPrinting.yellow);

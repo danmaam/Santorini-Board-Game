@@ -200,7 +200,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
         Pane boardRoot;
         try {
             boardRoot = controllerLoader.load();
-            board = new Scene(boardRoot, 1075, 823);
+            board = new Scene(boardRoot, 1280, 720);
         } catch (IOException e) {
             e.printStackTrace();
         }
