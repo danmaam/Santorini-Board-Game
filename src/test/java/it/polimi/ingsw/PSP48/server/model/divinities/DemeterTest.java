@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class DemeterTest {
     Model game_database = new Model(2, true);
@@ -93,6 +94,22 @@ public class DemeterTest {
 
         player1.getDivinity().dome(0, 0, 1, 1, game_database);
         player1.getDivinity().dome(0, 0, 1, 1, game_database);
+    }
+
+    @Test
+    public void dome_secondDomeOnOtherCell() throws OccupiedCellException, NotAdjacentCellException, MaximumLevelNotReachedException, DomedCellException, DivinityPowerException {
+        game_database.getCell(1, 0).setActualLevel(3);
+        player1.getDivinity().dome(0, 0, 1, 1, game_database);
+        player1.getDivinity().dome(0, 0, 1, 0, game_database);
+        assertTrue(game_database.getCell(1, 0).isDomed());
+    }
+
+    @Test
+    public void build_secondBuildOnOtherCell() throws OccupiedCellException, NotAdjacentCellException, MaximumLevelNotReachedException, DomedCellException, DivinityPowerException, MaximumLevelReachedException {
+        game_database.getCell(1, 1).setActualLevel(2);
+        player1.getDivinity().build(0, 0, 1, 1, game_database);
+        player1.getDivinity().build(0, 0, 1, 0, game_database);
+        assertTrue(game_database.getCell(1, 0).getLevel() == 2);
     }
 
 

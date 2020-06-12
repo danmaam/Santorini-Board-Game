@@ -43,13 +43,20 @@ public class ArtemisTest {
     }
 
     @Test(expected = DivinityPowerException.class)
+    //Tests:
+    //1) pre move valid cells
+    //2) post move valid cells, doesn't contains the previous cell where he was
+    //3) trows an exception trying to move on his previous cell
+
     public void validCellsTest() throws DomedCellException, OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, NoTurnEndException {
         player1.getDivinity().turnBegin(game_database);
         ArrayList<Position> valid = new ArrayList<>();
         valid.add(new Position(0, 2));
         valid.add(new Position(1, 2));
         assertEquals(valid, player1.getDivinity().getValidCellForMove(1, 1, game_database.getGameBoard(), new ArrayList<Divinity>()));
+
         player1.getDivinity().move(1, 1, 2, 1, game_database);
+
         valid = new ArrayList<>();
         valid.add(new Position(0, 2));
         valid.add(new Position(2, 3));
@@ -58,7 +65,7 @@ public class ArtemisTest {
 
 
         assertTrue(valid.containsAll(player1.getDivinity().getValidCellForMove(2, 1, game_database.getGameBoard(), new ArrayList<>())));
-        assertTrue(valid.size() == player1.getDivinity().getValidCellForMove(2, 1, game_database.getGameBoard(), new ArrayList<>()).size());
+        assertEquals(valid.size(), player1.getDivinity().getValidCellForMove(2, 1, game_database.getGameBoard(), new ArrayList<>()).size());
 
         player1.getDivinity().move(2, 1, 1, 1, game_database);
     }

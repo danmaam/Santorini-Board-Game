@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP48.client.GUI;
 
+import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
 import it.polimi.ingsw.PSP48.client.GUI.sceneControllers.GameBoardController;
 import it.polimi.ingsw.PSP48.client.GUI.sceneControllers.LoginScreenController;
@@ -104,6 +105,17 @@ public class Tester extends GUI {
         p.add("pippo");
         p.add("paperino");
         p.add("pluto");
+
+        ArrayList<DivinitiesWithDescription> d = new ArrayList<>();
+        d.add(new DivinitiesWithDescription("Apollo", "A"));
+        d.add(new DivinitiesWithDescription("Artemis", "A"));
+        d.add(new DivinitiesWithDescription("Zeus", "A"));
+        d.add(new DivinitiesWithDescription("Circe", "A"));
+        d.add(new DivinitiesWithDescription("Prometheus", "A"));
+        d.add(new DivinitiesWithDescription("Atlas", "A"));
+        d.add(new DivinitiesWithDescription("Eros", "A"));
+
+        boardController.requestChallengerDivinitiesSelection(d);
 
 
     }

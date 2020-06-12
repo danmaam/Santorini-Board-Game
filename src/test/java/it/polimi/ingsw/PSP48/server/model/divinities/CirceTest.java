@@ -28,12 +28,14 @@ public class CirceTest {
     }
 
     @Test
-    public void turnBegin_otherPlayerOnlyOneWorkerInGame() {
+    public void turnBegin_otherPlayerOnlyOneWorkerInGame_circeDoesntStoleTheDivinity() {
         game_database.getCell(2, 3).setPlayer(player2.getName());
         game_database.getCell(0, 0).setPlayer(player1.getName());
         game_database.getCell(3, 4).setPlayer(player1.getName());
 
         player1.getDivinity().turnBegin(game_database);
+        assertEquals(player1.getDivinity().getName(), "Circe");
+        assertEquals(player2.getDivinity().getName(), "Apollo");
     }
 
     @Test

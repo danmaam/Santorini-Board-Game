@@ -49,10 +49,11 @@ public class DivinityChoiceController {
 
     public void initialize() {
         //must import first divinity
+        currentDivinity = 0;
         Image card = new Image("santorini_risorse-grafiche-2/Sprite/Cards/Full/" + divinities.get(0).getName() + ".png");
         divinityCard.setImage(card);
         divinityName.setText(divinities.get(0).getName());
-        divinityDescription.setText(divinities.get(0).getName());
+        divinityDescription.setText(divinities.get(0).getDescription());
         if (divinities.size() > 1) nextName.setText(divinities.get(1).getName());
         else {
             nextName.setVisible(false);
@@ -133,27 +134,51 @@ public class DivinityChoiceController {
     public void choose() {
         String chosenDivinity = divinityName.getText();
         chosenDivinities.add(chosenDivinity);
-        DivinitiesWithDescription toBeRemoved = null;
-        for (DivinitiesWithDescription d : divinities) {
-            if (d.getName().equals(chosenDivinity)) {
-                toBeRemoved = d;
-                break;
-            }
-        }
-        if (toBeRemoved != null) divinities.remove(toBeRemoved);
-
+        divinities.remove(currentDivinity);
 
         if (chosenDivinities.size() == numberToBeChosen) {
             if (numberToBeChosen > 1) outerController.sendChallengerDivinities(chosenDivinities);
             else outerController.sendPlayerDivinity(chosenDivinity);
         } else {
             if (currentDivinity == 0) {
-                nextDivinity();
+                firstDivinity();
             } else if (currentDivinity == divinities.size()) {
-                prevDivinity();
+                lastDivinity();
             } else nextDivinity();
             infoText.setText("Remaining " + (numberToBeChosen - chosenDivinities.size()) + " divinities to be chosen");
         }
+
+    }
+
+    public void firstDivinity() {
+        Image card = new Image("santorini_risorse-grafiche-2/Sprite/Cards/Full/" + divinities.get(0).getName() + ".png");
+        divinityCard.setImage(card);
+        divinityName.setText(divinities.get(0).getName());
+        divinityDescription.setText(divinities.get(0).getDescription());
+        if (divinities.size() > 1) nextName.setText(divinities.get(1).getName());
+        else {
+            nextName.setVisible(false);
+            next.setVisible(false);
+        }
+        prevName.setText("");
+        prevName.setVisible(false);
+        prev.setVisible(false);
+    }
+
+    public void lastDivinity() {
+        currentDivinity = divinities.size() - 1;
+        Image card = new Image("santorini_risorse-grafiche-2/Sprite/Cards/Full/" + divinities.get(currentDivinity).getName() + ".png");
+        divinityCard.setImage(card);
+        divinityName.setText(divinities.get(currentDivinity).getName());
+        divinityDescription.setText(divinities.get(currentDivinity).getDescription());
+        if (divinities.size() > 1) prevName.setText(divinities.get(currentDivinity - 1).getName());
+        else {
+            prevName.setVisible(false);
+            prev.setVisible(false);
+        }
+        nextName.setText("");
+        nextName.setVisible(false);
+        nextName.setVisible(false);
     }
 
 

@@ -68,7 +68,8 @@ public class Hephaestus extends Divinity {
             prevBuildRow = buildRow;
             prevBuildColumn = buildColumn;
             prevBuild = true;
-            return GameController::requestOptionalBuilding;
+            if (gd.getCell(buildRow, buildColumn).getLevel() < 3) return GameController::requestOptionalBuilding;
+            else return GameController::turnChange;
         } else {
             if (workerRow == -1 && workerColumn == -1) return GameController::turnChange;
             else if (buildRow != prevBuildRow && buildColumn != prevBuildColumn)
@@ -93,6 +94,12 @@ public class Hephaestus extends Divinity {
         if (prevBuildColumn == -1 && prevBuildRow == -1)
             return super.getValidCellsToPutDome(workerColumn, workerRow, gameCells, divinitiesInGame);
         else return new ArrayList<>();
+    }
+
+    @Override
+    public Consumer<GameController> dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
+        if (prevBuild) throw new DivinityPowerException("Trying to add a dome as the second build!");
+        return super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
     }
 
     @Override

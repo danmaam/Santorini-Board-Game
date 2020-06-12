@@ -29,7 +29,7 @@ public class ApolloTest {
         game_database.setNextPlayer("Pippo");
         game_database.getCell(2, 2).setPlayer(game_database.getCurrentPlayer().getName());
         game_database.getCell(1, 3).setPlayer(game_database.getCurrentPlayer().getName());
-        game_database.getCell(1, 1).setPlayer(game_database.getPlayer("Paperino").getName());
+        game_database.getCell(1, 1).setPlayer("Paperino");
         try {
             game_database.getCell(1, 1).setActualLevel(1);
 
@@ -50,7 +50,7 @@ public class ApolloTest {
         } catch (MaximumLevelReachedException e) {
             e.printStackTrace();
         }
-        game_database.getCell(0, 0).setPlayer(game_database.getPlayer("Paperino").getName());
+        game_database.getCell(0, 0).setPlayer("Paperino");
         try {
             newCell.addLevel();
         } catch (MaximumLevelReachedException e) {
@@ -107,5 +107,67 @@ public class ApolloTest {
         oldCell.setPlayer(null);
         newCell.setPlayer(game_database.getCurrentPlayer().getName());
         game_database.getCurrentPlayer().getDivinity().move(2, 2, 1, 3, game_database);
+    }
+
+    @Test
+    public void validMoveCells_cantBuildAfterMove_doesntContainsCells() {
+        ArrayList<Position> valid;
+        ArrayList<Divinity> div = new ArrayList<>();
+        div.add(new DivinityFalsePower());
+        game_database.getCell(0, 1).addDome();
+        game_database.getCell(0, 2).addDome();
+        game_database.getCell(1, 0).addDome();
+        game_database.getCell(2, 0).addDome();
+        game_database.getCell(0, 0).setActualLevel(3);
+        game_database.getCell(1, 3).setPlayer(null);
+        game_database.getCell(1, 3).setActualLevel(3);
+        valid = game_database.getCurrentPlayer().getDivinity().getValidCellForMove(2, 2, game_database.getGameBoard(), div);
+        assertTrue(valid.isEmpty());
+    }
+
+    @Test(expected = NoTurnEndException.class)
+    public void move_tryToMoveOnACellThatCantEndHisTurn_throwsNoTurnEndExcpetion() throws DomedCellException, OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, NoTurnEndException {
+        ArrayList<Position> valid;
+        ArrayList<Divinity> div = new ArrayList<>();
+        div.add(new DivinityFalsePower());
+        game_database.getCell(0, 1).addDome();
+        game_database.getCell(0, 2).addDome();
+        game_database.getCell(1, 0).addDome();
+        game_database.getCell(2, 0).addDome();
+        game_database.getCell(0, 0).setActualLevel(3);
+        game_database.getCell(1, 3).setPlayer(null);
+        game_database.getCell(1, 3).setActualLevel(3);
+        game_database.getCurrentPlayer().getDivinity().move(2, 2, 1, 1, game_database);
+    }
+
+    @Test
+    public void validMoveCells_cantBuildAfterMoveButWins_containsThisCell() {
+        ArrayList<Position> valid;
+        ArrayList<Divinity> div = new ArrayList<>();
+        div.add(new DivinityFalsePower());
+        game_database.getCell(2, 2).setActualLevel(2);
+        game_database.getCell(1, 1).setActualLevel(3);
+
+        game_database.getCell(0, 1).addDome();
+        game_database.getCell(0, 2).addDome();
+        game_database.getCell(1, 0).addDome();
+        game_database.getCell(2, 0).addDome();
+
+
+        game_database.getCell(0, 0).setActualLevel(3);
+
+        valid = game_database.getCurrentPlayer().getDivinity().getValidCellForMove(2, 2, game_database.getGameBoard(), div);
+        ArrayList<Position> validExcpected = new ArrayList<>();
+
+
+        validExcpected.add(new Position(1, 1));
+        validExcpected.add(new Position(2, 1));
+        validExcpected.add(new Position(2, 3));
+        validExcpected.add(new Position(3, 1));
+
+        valid.forEach(x -> System.out.println(x.getRow() + ", " + x.getColumn()));
+
+        assertEquals(validExcpected.size(), valid.size());
+        assertTrue(valid.containsAll(validExcpected));
     }
 }

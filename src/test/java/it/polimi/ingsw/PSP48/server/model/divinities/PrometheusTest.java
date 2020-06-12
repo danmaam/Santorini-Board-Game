@@ -8,8 +8,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class PrometheusTest {
 
@@ -74,7 +73,6 @@ public class PrometheusTest {
         ArrayList<Divinity> div = new ArrayList<>();
         div.add(p2.getDivinity());
         ArrayList<Position> valid = new ArrayList<>();
-        valid.add(new Position(0, 2));
         p1.getDivinity().turnBegin(model);
         assertEquals(p1.getDivinity().getValidCellForBuilding(1, 0, div, model.getGameBoard()), valid);
     }
@@ -87,7 +85,6 @@ public class PrometheusTest {
         ArrayList<Divinity> div = new ArrayList<>();
         div.add(p2.getDivinity());
         ArrayList<Position> valid = new ArrayList<>();
-        valid.add(new Position(0, 2));
         p1.getDivinity().turnBegin(model);
         assertEquals(p1.getDivinity().getValidCellsToPutDome(1, 0, model.getGameBoard(), div), valid);
     }
@@ -153,4 +150,48 @@ public class PrometheusTest {
         assertEquals(model.getCell(0, 1).getLevel(), model.getCell(0, 2).getLevel());
         assertTrue((model.getCell(0, 1).getPlayer() == null) && (model.getCell(0, 2).getPlayer().equals(p1.getName())));
     }
+
+    @Test
+    public void validCellsOptionalBuild() {
+        model.getCell(0, 2).setActualLevel(0);
+        model.getCell(1, 2).setActualLevel(2);
+        model.getCell(2, 2).setActualLevel(3);
+        model.getCell(0, 1).setActualLevel(0);
+
+        ArrayList<Position> v = new ArrayList<>();
+        v.add(new Position(1, 2));
+        v.add(new Position(1, 2));
+
+        ArrayList<Position> valid = p1.getDivinity().getValidCellForBuilding(1, 0, new ArrayList(), model.getGameBoard());
+
+        assertTrue(valid.containsAll(v));
+        assertEquals(valid.size(), v.size());
+    }
+
+    @Test
+    public void doubleBuild() throws MaximumLevelReachedException, OccupiedCellException, NotAdjacentCellException, DomedCellException, DivinityPowerException, NoTurnEndException, IncorrectLevelException {
+        p2.setDivinity(new Divinity());
+        model.getCurrentPlayer().getDivinity().build(0, 1, 0, 2, model);
+        model.getCurrentPlayer().getDivinity().move(1, 0, 2, 1, model);
+        model.getCurrentPlayer().getDivinity().build(1, 2, 1, 3, model);
+        assertEquals(model.getCell(0, 2).getLevel(), 1);
+        assertEquals(model.getCell(1, 3).getLevel(), 1);
+        assertNull(model.getCell(0, 1).getPlayer());
+        assertEquals(model.getCell(1, 2).getPlayer(), "Sora");
+    }
+
+    @Test
+    public void doubleBuildAndDome() throws MaximumLevelReachedException, OccupiedCellException, NotAdjacentCellException, DomedCellException, DivinityPowerException, NoTurnEndException, IncorrectLevelException, MaximumLevelNotReachedException {
+        p2.setDivinity(new Divinity());
+        model.getCell(1, 3).setActualLevel(3);
+        model.getCurrentPlayer().getDivinity().build(0, 1, 0, 2, model);
+        model.getCurrentPlayer().getDivinity().move(1, 0, 2, 1, model);
+        model.getCurrentPlayer().getDivinity().dome(1, 2, 1, 3, model);
+        assertEquals(model.getCell(0, 2).getLevel(), 1);
+        assertTrue(model.getCell(1, 3).isDomed());
+        assertNull(model.getCell(0, 1).getPlayer());
+        assertEquals(model.getCell(1, 2).getPlayer(), "Sora");
+    }
+
+
 }

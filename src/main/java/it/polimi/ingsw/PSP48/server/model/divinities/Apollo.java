@@ -54,7 +54,7 @@ public class Apollo extends Divinity {
                 //deletes from the valid the cell which are too high or too low to be reached
                 .filter(cell -> cell.getLevel() - actualWorkerCell.getLevel() <= 1)
                 //deletes the domed cells
-                .filter(cell -> cell.getPlayer() == null || (cell.getPlayer() != null && !cell.getPlayer().equals(gameCells[WorkerRow][WorkerColumn].getPlayer())))
+                .filter(cell -> cell.getPlayer() == null || !cell.getPlayer().equals(gameCells[WorkerRow][WorkerColumn].getPlayer()))
                 .filter(cell -> !cell.isDomed())
                 .collect(Collectors.toCollection(ArrayList::new));
 
@@ -78,6 +78,7 @@ public class Apollo extends Divinity {
 
         nV = new ArrayList<>();
 
+
         //i must clone the game-board to simulate the move, and than check the valid cells for building
         Cell[][] clonedBoard = new Cell[5][5];
         for (int i = 0; i < 5; i++) {
@@ -93,14 +94,10 @@ public class Apollo extends Divinity {
         }
 
         //we need to remove from the not valid cells the ones where the player cannot build from, but that can still make the player win if he moves on them
-        for (Cell c : nV) {
-            if (checkIfWinsAfterMove(WorkerRow, WorkerColumn, c.getRow(), c.getColumn(), clonedBoard)) nV.remove(c);
-        }
+        nV.removeIf(c -> checkIfWinsAfterMove(WorkerRow, WorkerColumn, c.getRow(), c.getColumn(), clonedBoard));
 
         //now we can finally remove from the valid cells the ones where the player cannot build from
-        for (Cell cell : nV) {
-            validCells.remove(cell);
-        }
+        validCells.removeAll(nV);
 
         ArrayList<Position> validPositions = new ArrayList<>();
         validCells.forEach((Cell c) -> validPositions.add(new Position(c.getRow(), c.getColumn())));
