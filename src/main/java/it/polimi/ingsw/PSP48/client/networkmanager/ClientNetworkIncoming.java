@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -36,6 +35,9 @@ public class ClientNetworkIncoming implements Runnable {
         observers.remove(n);
     }
 
+    /**
+     * Initializes the message listener
+     */
     @Override
     public void run() {
         try {
@@ -54,6 +56,15 @@ public class ClientNetworkIncoming implements Runnable {
         }
     }
 
+    /**
+     * Waits for new message from the server, and:
+     * - if it's a setup message, asks the view to process it
+     * - if it's a PingMessage, schedules a reply in 5 seconds
+     * - if it's a NetworkMessagesToClient, the server is requiring an action to the player; the view is notified
+     *
+     * @throws IOException            if there's something wrong with the connection
+     * @throws ClassNotFoundException if we receive an unexpected class
+     */
     public synchronized void retrieveMessage() throws IOException, ClassNotFoundException {
         while (true) {
             Object newMessage = in.readObject();
@@ -68,17 +79,29 @@ public class ClientNetworkIncoming implements Runnable {
 
     }
 
+    /**
+     * Sets up the message listener
+     *
+     * @param playerView the player view
+     * @param server     the server socket
+     */
     public ClientNetworkIncoming(ViewInterface playerView, Socket server) {
         this.playerView = playerView;
         this.server = server;
     }
 
-
-
+    /**
+     * Sets the message sender
+     *
+     * @param out the message sender
+     */
     public void setOutHandler(ClientNetworkOutcoming out) {
         this.o = out;
     }
 
+    /**
+     * Shutdowns the message listener. Sets closed to true to avoid false connection errors.
+     */
     public void shutdown() {
         pingScheduler.shutdown();
         closed = true;

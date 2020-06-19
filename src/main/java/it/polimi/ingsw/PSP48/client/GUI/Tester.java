@@ -115,7 +115,12 @@ public class Tester extends GUI {
         d.add(new DivinitiesWithDescription("Atlas", "A"));
         d.add(new DivinitiesWithDescription("Eros", "A"));
 
-        boardController.requestChallengerDivinitiesSelection(d);
+        ArrayList<String> players = new ArrayList<>();
+        players.add("pippo");
+        players.add("pluto");
+        players.add("paperino");
+
+        boardController.requestInitialPlayerSelection(players);
 
 
     }

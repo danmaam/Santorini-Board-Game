@@ -470,7 +470,7 @@ public class GameController implements ViewObserver {
 
     /**
      * @author Daniele Mammone
-     * request the player to perform an optional move, but first checks if it's possible
+     * Request the player to perform an optional move, but first checks if it's possible
      */
     public void requestOptionalMove() {
         //first, I must check if the optional move is possible

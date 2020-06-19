@@ -1,17 +1,16 @@
 package it.polimi.ingsw.PSP48.client.GUI.sceneControllers;
 
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
-import it.polimi.ingsw.PSP48.client.GUI.GUI;
-import it.polimi.ingsw.PSP48.observers.ViewObserver;
 import javafx.fxml.FXML;
-import javafx.scene.control.Pagination;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
+/**
+ * The controller for divinity chooser Pane
+ */
 public class DivinityChoiceController {
     @FXML
     private ImageView prev;
@@ -33,20 +32,29 @@ public class DivinityChoiceController {
     private Text infoText;
 
     private int currentDivinity = 0;
-    private GameBoardController outerController;
+    private final GameBoardController outerController;
 
-    private ArrayList<DivinitiesWithDescription> divinities;
+    private final ArrayList<DivinitiesWithDescription> divinities;
     private final ArrayList<String> chosenDivinities = new ArrayList<>();
-    private int numberToBeChosen;
-    private Boolean free = false;
+    private final int numberToBeChosen;
 
 
+    /**
+     * Initialized the controller
+     *
+     * @param divinityList     the list of divinities from which the player can choose
+     * @param numberToBeChosen the number of divinities to be chosen
+     * @param outerController  the controller of the game board's scene
+     */
     public DivinityChoiceController(ArrayList<DivinitiesWithDescription> divinityList, int numberToBeChosen, GameBoardController outerController) {
         this.divinities = divinityList;
         this.numberToBeChosen = numberToBeChosen;
         this.outerController = outerController;
     }
 
+    /**
+     * Initializer method for FXML load
+     */
     public void initialize() {
         //must import first divinity
         currentDivinity = 0;
@@ -67,6 +75,11 @@ public class DivinityChoiceController {
         else infoText.setText("Choose your divinity!");
     }
 
+    /**
+     * Set the next divinity in the divinity list as the visible, and:
+     * -if the new current divinity isn't neither the last or the first, sets the new previous and new next divinities name on next and previous buttons;
+     * -if the new current divinity is the last divinity in the list, updates only the previous button, hiding the next button
+     */
     public void nextDivinity() {
         if (currentDivinity + 1 < divinities.size()) {
             currentDivinity++;
@@ -89,6 +102,11 @@ public class DivinityChoiceController {
         }
     }
 
+    /**
+     * Set the previous divinity in the divinity list as the visible, and:
+     * -if the new current divinity isn't neither the last or the first, sets the new previous and new next divinities name on next and previous buttons;
+     * -if the new current divinity is the first divinity in the list, updates only the next button, hiding the previous button
+     */
     public void prevDivinity() {
         if (currentDivinity > 0) {
             currentDivinity--;
@@ -111,26 +129,43 @@ public class DivinityChoiceController {
         }
     }
 
+    /**
+     * Changes next button image until mouse isn't released, to make pressed button effect
+     */
     public void clickedNext() {
         Image pressedButton = new Image("/santorini_risorse-grafiche-2/Sprite/Buttons/btn_blue_pressed.png");
         next.setImage(pressedButton);
     }
 
+    /**
+     * Restore next button background when the mouse is released
+     */
     public void releasedNext() {
         Image pressedButton = new Image("/santorini_risorse-grafiche-2/Sprite/Buttons/btn_blue.png");
         next.setImage(pressedButton);
     }
 
+    /**
+     * Changes prev button image until mouse isn't released, to make pressed button effect
+     */
     public void clickedPrev() {
         Image pressedButton = new Image("/santorini_risorse-grafiche-2/Sprite/Buttons/btn_coral_pressed.png");
         prev.setImage(pressedButton);
     }
 
+    /**
+     * Restore prev button background when the mouse is released
+     */
     public void releasedPrev() {
         Image pressedButton = new Image("/santorini_risorse-grafiche-2/Sprite/Buttons/btn_coral.png");
         prev.setImage(pressedButton);
     }
 
+    /**
+     * Saves in a list the selected divinity, deletes the chosen divinity from the list of available divinities and
+     * - if there are other divinities to be selected, changes the visible divinity and asks player to choose another divinity
+     * - else notify the view that the player completed divinities selection
+     */
     public void choose() {
         String chosenDivinity = divinityName.getText();
         chosenDivinities.add(chosenDivinity);
@@ -150,6 +185,9 @@ public class DivinityChoiceController {
 
     }
 
+    /**
+     * Set as visible the first divinity in the list, hides prev button and updates next button
+     */
     public void firstDivinity() {
         Image card = new Image("santorini_risorse-grafiche-2/Sprite/Cards/Full/" + divinities.get(0).getName() + ".png");
         divinityCard.setImage(card);
@@ -165,6 +203,9 @@ public class DivinityChoiceController {
         prev.setVisible(false);
     }
 
+    /**
+     * Set as visible the last divinity in the list, hides next button and updates prev button
+     */
     public void lastDivinity() {
         currentDivinity = divinities.size() - 1;
         Image card = new Image("santorini_risorse-grafiche-2/Sprite/Cards/Full/" + divinities.get(currentDivinity).getName() + ".png");
@@ -182,11 +223,17 @@ public class DivinityChoiceController {
     }
 
 
+    /**
+     * Changes choose button image until mouse isn't released, to make pressed button effect
+     */
     public void clickedChoose() {
         Image pressedButton = new Image("/santorini_risorse-grafiche-2/Sprite/Buttons/btn_green_pressed.png");
         choose.setImage(pressedButton);
     }
 
+    /**
+     * Restore choose button background when the mouse is released
+     */
     public void releasedChoose() {
         Image pressedButton = new Image("/santorini_risorse-grafiche-2/Sprite/Buttons/btn_green.png");
         choose.setImage(pressedButton);

@@ -871,6 +871,15 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
      */
     @Override
     public void run() {
+        String logo = "   _____                 _________         _____   _             _\n" +
+                "  /     \\    __    _   _|___    __|__    /   _   \\|_|  _   ___  |_|\n" +
+                " |    /\\/   /  \\  |  \\/   \\ |  | /___ \\  |  |_)  | _  |  \\/   \\  _\n" +
+                "  \\   \\    / /\\ \\ |   /\\   ||  |/ __ \\ \\ |      / | | |   /\\   || |\n" +
+                "/\\ \\   \\  / /__\\ \\\\  |  |  ||  | | |_/| ||  |\\  \\ | | |  |  |  || |\n" +
+                "\\ \\_|   |/   __   \\\\ |  |  ||  |\\ \\__/  /|  | \\  \\| |_|  |  |  || |_\n" +
+                " \\      |   /  \\   \\||  |__/\\  | \\_____/ |__\\  \\  \\__/|__|  |__/\\__/\n" +
+                "  \\____/|__|    \\___/        \\_|                \\__/";
+        System.out.println(logo);
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to Santorini CLI Mode\nPlease insert the Server IP and press ENTER.");
         String serverIP = scanner.nextLine();

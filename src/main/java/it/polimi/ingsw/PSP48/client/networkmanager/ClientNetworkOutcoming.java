@@ -11,7 +11,12 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.Queue;
 
+/**
+ * Handles message send to the server
+ */
 public class ClientNetworkOutcoming implements Runnable, ViewObserver {
     private final Socket server;
     private ObjectOutputStream outputStm;
@@ -19,77 +24,69 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
 
     private NetworkMessagesToServer o;
 
+    private boolean shutdownThread = false;
+
+    /**
+     * A queue of messages to be sent to the server
+     */
+    private final Queue<Object> messagesToBeSent = new LinkedList<>();
+
     public ClientNetworkOutcoming(Socket s) {
         this.server = s;
     }
 
+    /**
+     * Adds in queue a move action message
+     *
+     * @param p the move coordinates
+     */
     @Override
     public synchronized void move(MoveCoordinates p) {
-        while (nextAction != null) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        nextAction = action.send_gameAction;
-        o = new MoveMessage(p);
+        messagesToBeSent.add(new MoveMessage(p));
         notifyAll();
     }
 
+    /**
+     * Adds in queue a build action message
+     *
+     * @param p the build coordinates
+     */
     @Override
     public synchronized void build(MoveCoordinates p) {
-        while (nextAction != null) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        nextAction = action.send_gameAction;
-        o = new BuildMessage(p);
+        messagesToBeSent.add(new BuildMessage(p));
         notifyAll();
     }
 
+    /**
+     * Adds in queue a dome action message
+     *
+     * @param p the dome coordinates
+     */
     @Override
     public synchronized void dome(MoveCoordinates p) {
-        while (nextAction != null) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        nextAction = action.send_gameAction;
-        o = new DomeMessage(p);
+        messagesToBeSent.add(new DomeMessage(p));
         notifyAll();
     }
 
+    /**
+     * Adds in queue a message with chosen position for worker initial positioning
+     *
+     * @param p the position chosen by the player
+     */
     @Override
     public synchronized void putWorkerOnTable(Position p) {
-        while (nextAction != null) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        nextAction = action.send_gameAction;
-        o = new WorkerPositionMessage(p);
+        messagesToBeSent.add(new WorkerPositionMessage(p));
         notifyAll();
     }
 
+    /**
+     * Adds in queue a divinity selection message
+     *
+     * @param divinity the chosen divinity
+     */
     @Override
     public synchronized void registerPlayerDivinity(String divinity) {
-        while (nextAction != null) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        nextAction = action.send_gameAction;
-        o = new PlayerDivinityMessage(divinity);
+        messagesToBeSent.add(new PlayerDivinityMessage(divinity));
         notifyAll();
     }
 
@@ -98,42 +95,34 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
 
     }
 
+    /**
+     * Adds in queue the message for initial divinities selection by the challenger
+     *
+     * @param divinities the selected divinities by the challenger
+     */
     @Override
     public synchronized void selectAvailableDivinities(ArrayList<String> divinities) {
-        while (nextAction != null) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        nextAction = action.send_gameAction;
-        o = new ChallengerDivinitiesMessage(divinities);
+        messagesToBeSent.add(new ChallengerDivinitiesMessage(divinities));
         notifyAll();
     }
 
+    /**
+     * Adds in queue a first player selection message
+     *
+     * @param playerName the first player chosen by the challenger
+     */
     @Override
     public synchronized void selectFirstPlayer(String playerName) {
-        while (nextAction != null) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        nextAction = action.send_gameAction;
-        o = new FirstPlayerSelectionMessage(playerName);
+        messagesToBeSent.add(new FirstPlayerSelectionMessage(playerName));
         notifyAll();
     }
 
-    private enum action {
-        send_nickname, send_gamemode, send_gameAction, close_inputstream, replyPing
-    }
 
-
-    private action nextAction = null;
     private String nextMessage;
 
+    /**
+     * Initializes the message sender
+     */
     @Override
     public void run() {
         try {
@@ -146,82 +135,65 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
         }
     }
 
+    /**
+     * Sends all messages contained in the queue. Waits for new messages to be sent if the queue is empty. If shutdownThread is true,
+     * the thread ends.
+     *
+     * @throws IOException            if there's something wrong with the connection
+     * @throws ClassNotFoundException if there is a strange class to be sent
+     */
     public synchronized void handleServerConnection() throws IOException, ClassNotFoundException {
-        while (true) {
+        while (messagesToBeSent.isEmpty()) {
             try {
                 wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-            if (nextAction == null)
-                continue;
-            else if (nextAction == action.close_inputstream) {
-                server.close();
-                return;
-            }
-
-            switch (nextAction) {
-                case send_nickname:
-                    sendPlayerNickname();
-                    nextAction = null;
-                    notifyAll();
-                    break;
-                case send_gamemode:
-                    sendGameMode();
-                    nextAction = null;
-                    notifyAll();
-                    break;
-                case send_gameAction:
-                    sendGameAction();
-                    nextAction = null;
-                    notifyAll();
-                    break;
-                case replyPing:
-                    sendPingMessage();
-                    nextAction = null;
-                    notifyAll();
-                    break;
-
-            }
+            if (shutdownThread) break;
+            outputStm.writeObject(messagesToBeSent.remove());
         }
     }
 
-    private synchronized void sendPlayerNickname() throws IOException {
-        outputStm.writeObject(nextMessage);
-    }
-
-    private synchronized void sendGameMode() throws IOException {
-        outputStm.writeObject(nextMessage);
-    }
-
+    /**
+     * Adds in queue a message with the chosen nickname
+     *
+     * @param nickname the chosen nickname
+     */
     public synchronized void requestNicknameSend(String nickname) {
-        nextAction = action.send_nickname;
-        this.nextMessage = nickname;
+        messagesToBeSent.add(nickname);
         notifyAll();
     }
 
+    /**
+     * Adds in queue a message with the chosen game mode
+     *
+     * @param n the chosen game mode
+     */
     public synchronized void setGameMode(String n) {
-        nextAction = action.send_gamemode;
-        nextMessage = n;
+        messagesToBeSent.add(n);
         notifyAll();
     }
 
-    public synchronized void sendGameAction() throws IOException {
-        outputStm.writeObject(o);
-    }
 
+    /**
+     * Close the server socket, and notify the message sender that the connection closed
+     */
     public synchronized void shutDown() {
-        nextAction = action.close_inputstream;
+        shutdownThread = true;
         notifyAll();
+        try {
+            server.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
+    /**
+     * Adds in queue a ping message
+     */
     public synchronized void replyPing() {
-        nextAction = action.replyPing;
+        messagesToBeSent.add(new PingMessage());
         notifyAll();
-    }
-
-    public synchronized void sendPingMessage() throws IOException {
-        outputStm.writeObject(new PingMessage());
     }
 }

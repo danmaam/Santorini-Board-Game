@@ -37,8 +37,14 @@ public class ClientHandlerListener implements Runnable {
         observers.remove(obv);
     }
 
-    private ExecutorService executors = Executors.newSingleThreadExecutor();
-    private ScheduledExecutorService pingExecutor = Executors.newScheduledThreadPool(1);
+    /**
+     * Single thread executors used to schedule next action
+     */
+    private final ExecutorService executors = Executors.newSingleThreadExecutor();
+    /**
+     * Single thread executor used to schedule ping reply message
+     */
+    private final ScheduledExecutorService pingExecutor = Executors.newScheduledThreadPool(1);
 
     public void notifyObservers() {
         for (ServerNetworkObserver nO : observers) {
@@ -50,6 +56,9 @@ public class ClientHandlerListener implements Runnable {
         this.clientSocket = client;
     }
 
+    /**
+     * Starts the listener, and put it in listening mode
+     */
     @Override
     public void run() {
         try {
@@ -87,6 +96,15 @@ public class ClientHandlerListener implements Runnable {
         }
     }
 
+    /**
+     * Wait for a message from the client and do different actions depending to the type of the message:
+     * A String is a setup message. When received, asks to process the nickname or the game-mode, depending on the setup phase;
+     * A PingMessage means that the client is still alive; schedules a reply in 5 seconds;
+     * a NetworkMessageToServer is some action from the player; notifies the view to process the action.
+     *
+     * @throws IOException            if something is wrong with connection
+     * @throws ClassNotFoundException if is received an unexpected class
+     */
     public synchronized void waitForMessages() throws IOException, ClassNotFoundException {
         ObjectInputStream input = new ObjectInputStream(clientSocket.getInputStream());
         while (true) {
@@ -106,18 +124,37 @@ public class ClientHandlerListener implements Runnable {
         }
     }
 
+    /**
+     * Changes the setup phase status, precisely if the nickname have been set
+     *
+     * @param value true if the nickname has been set
+     */
     public void nicknameSet(boolean value) {
         setNickname = value;
     }
 
+    /**
+     * Changes the setup phase status, precisely if the game mode have been set
+     *
+     * @param value true if the game mode has been set
+     */
     public void setGameMode(boolean value) {
         setGameMode = value;
     }
 
+    /**
+     * Used by the first listener when the player is out the game, to avoid the destruction of the game room
+     * when it mustn't be destroyed
+     */
     public void setClosed() {
         setClosed = true;
     }
 
+    /**
+     * Class constructor
+     *
+     * @param h the handler that sends messages to the client
+     */
     public void setUploader(ClientHandler h) {
         out = h;
     }
