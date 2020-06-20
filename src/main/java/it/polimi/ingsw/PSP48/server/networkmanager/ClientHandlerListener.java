@@ -77,7 +77,7 @@ public class ClientHandlerListener implements Runnable {
                     for (ServerNetworkObserver o : observers) {
                         o.destroyGame();
                     }
-
+                    out.handleClientDisconnection();
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
 
@@ -90,7 +90,7 @@ public class ClientHandlerListener implements Runnable {
                     o.destroyGame();
                 }
             }
-
+            out.handleClientDisconnection();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -147,6 +147,8 @@ public class ClientHandlerListener implements Runnable {
      * when it mustn't be destroyed
      */
     public void setClosed() {
+        executors.shutdown();
+        pingExecutor.shutdown();
         setClosed = true;
     }
 

@@ -1,9 +1,6 @@
 package it.polimi.ingsw.PSP48.client.GUI.sceneControllers;
 
-import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.client.GUI.GUI;
-import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkIncoming;
-import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkOutcoming;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
@@ -11,11 +8,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.time.LocalDate;
 
 public class LoginScreenController {
-    ClientNetworkOutcoming clientHandler;
     @FXML
     private ToggleButton isGameWithDivinities;
     @FXML
@@ -27,14 +22,14 @@ public class LoginScreenController {
     @FXML
     private DatePicker birthday;
 
-    private GUI View;
+    private final GUI View;
 
     public LoginScreenController(GUI view) {
         View = view;
     }
 
 
-    public synchronized void requestGameModeSend(String message) {
+    public synchronized void requestGameModeSend() {
         int numberOfPlayers;
         if (isGameWithThreePlayers.isSelected()) numberOfPlayers = 3;
         else numberOfPlayers = 2;
@@ -55,12 +50,12 @@ public class LoginScreenController {
     }
 
 
-    public void requestNicknameSend(String message) {
-            String nickname = playerNickname.getText();
-            View.getUploader().requestNicknameSend(nickname);
+    public void requestNicknameSend() {
+        String nickname = playerNickname.getText();
+        View.getUploader().requestNicknameSend(nickname);
     }
 
-    public synchronized void loginButton() throws IOException {
+    public synchronized void loginButton() {
         if (serverIP.getText().length() == 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");

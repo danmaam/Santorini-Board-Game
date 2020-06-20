@@ -13,7 +13,6 @@ import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Position;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -285,7 +284,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     }
 
     public void requestGameModeSend(String message) {
-        loginController.requestGameModeSend(message);
+        loginController.requestGameModeSend();
     }
 
     public void nicknameResult(String result) {
@@ -299,7 +298,7 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
 
     public void requestNicknameSend(String message) {
         if (!message.equals("Invalid nickname. Retry")) {
-            Platform.runLater(() -> loginController.requestNicknameSend(message));
+            Platform.runLater(() -> loginController.requestNicknameSend());
         } else {
             Platform.runLater(() -> {
                 stopNetwork();
