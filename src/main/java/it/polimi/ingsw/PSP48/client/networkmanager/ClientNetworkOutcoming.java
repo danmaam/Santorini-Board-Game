@@ -186,7 +186,6 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     /**

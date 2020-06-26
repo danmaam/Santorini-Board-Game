@@ -68,22 +68,14 @@ public class ClientHandlerListener implements Runnable {
         }
         try {
             waitForMessages();
-        } catch (SocketTimeoutException e) {
+        } catch (IOException e) {
             if (clientSocket.isConnected()) {
-
                 try {
                     clientSocket.close();
-                    System.out.println("Disconnected for inactivity");
-                    for (ServerNetworkObserver o : observers) {
-                        o.destroyGame();
-                    }
-                    out.handleClientDisconnection();
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
-
                 }
             }
-        } catch (IOException e) {
             //means that the connection dropped. i must close the game.
             if (!setClosed) {
                 for (ServerNetworkObserver o : observers) {

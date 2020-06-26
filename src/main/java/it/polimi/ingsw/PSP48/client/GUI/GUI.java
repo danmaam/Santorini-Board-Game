@@ -54,14 +54,13 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     @Override
     public void endgame(String messageOfEndGame) {
         Platform.runLater(() -> {
-            cI.shutdown();
-            cA.shutDown();
             primaryStage.close();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("End of game");
             alert.setHeaderText("Oh! The game finished!");
             alert.setContentText(messageOfEndGame);
             alert.showAndWait();
+            System.exit(0);
         });
 
     }
@@ -224,13 +223,8 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     }
 
     public void manageWindowClose() {
-        cA.shutDown();
-        cI.shutdown();
-        try {
-            server.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Platform.exit();
+        System.exit(0);
     }
 
 

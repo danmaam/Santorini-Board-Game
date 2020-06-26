@@ -553,10 +553,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
     public void endgame(String messageOfEndGame) {
         if (!threadExecutor.isShutdown()) threadExecutor.submit(() -> {
             System.out.println(messageOfEndGame);
-            threadExecutor.shutdown();
-            cI.shutdown();
-            cA.shutDown();
-
+            System.exit(0);
         });
 
     }
