@@ -29,7 +29,7 @@ public class Prometheus extends Divinity {
 
 
     /**
-     * don't do anything since without a divinity there isn't a modifier
+     * Calculates if Prometheus can do a first optional build allowing him to complete the turn. If not, checks if he can normally end the turn.
      *
      * @param gd the model
      */
@@ -53,8 +53,8 @@ public class Prometheus extends Divinity {
         ArrayList<WorkerValidCells> domeCells = new ArrayList<>();
 
         for (Position w : workers) {
-            buildCells.add(new WorkerValidCells(getValidCellForBuilding(w.getColumn(), w.getRow(), otherDivinities, gd.getClonedGameBoard()), w.getRow(), w.getColumn()));
-            domeCells.add(new WorkerValidCells(getValidCellsToPutDome(w.getColumn(), w.getRow(), gd.getClonedGameBoard(), otherDivinities), w.getRow(), w.getColumn()));
+            buildCells.add(new WorkerValidCells(getValidCellForBuilding(w.getRow(), w.getColumn(), otherDivinities, gd.getClonedGameBoard()), w.getRow(), w.getColumn()));
+            domeCells.add(new WorkerValidCells(getValidCellsToPutDome(w.getRow(), w.getColumn(), gd.getClonedGameBoard(), otherDivinities), w.getRow(), w.getColumn()));
         }
 
         //now i have for each workers cells where he could build or put dome; now i must check if building or doming before the move allows the player to complete the turn
@@ -83,43 +83,50 @@ public class Prometheus extends Divinity {
     }
 
     /**
-     * @param WorkerColumn          the column where the worker is
-     * @param WorkerRow             the row where the worker is
+     * @param workerRow             the row where the worker is
+     * @param workerColumn          the column where the worker is
      * @param gameCells             the actual board state
      * @param otherDivinitiesInGame the other divinities in game
      * @return a list of cells valid for the move of the worker
      * @author Daniele Mammone
      */
     @Override
-    public ArrayList<Position> getValidCellForMove(int WorkerColumn, int WorkerRow, Cell[][] gameCells, ArrayList<Divinity> otherDivinitiesInGame) {
-        return super.getValidCellForMove(WorkerColumn, WorkerRow, gameCells, otherDivinitiesInGame).stream()
-                .filter(cell -> !previousBuild || !(gameCells[cell.getRow()][cell.getColumn()].getLevel() > gameCells[WorkerRow][WorkerColumn].getLevel()))
+    public ArrayList<Position> getValidCellForMove(int workerRow, int workerColumn, Cell[][] gameCells, ArrayList<Divinity> otherDivinitiesInGame) {
+        return super.getValidCellForMove(workerRow, workerColumn, gameCells, otherDivinitiesInGame).stream()
+                .filter(cell -> !previousBuild || !(gameCells[cell.getRow()][cell.getColumn()].getLevel() > gameCells[workerRow][workerColumn].getLevel()))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
-     * @param WorkerColumn the column of the cell where the worker is
-     * @param WorkerRow    the row of the cell where the worker is
-     * @param moveColumn   the column of the board where the worker wants to move
+     * Calls the super move method, and updates Prometheus game status, setting that the move has done.
+     *
+     * @param workerRow    the row of the cell where the worker is
+     * @param workerColumn the column of the cell where the worker is
      * @param moveRow      the row of the board where the worker wants to move
+     * @param moveColumn   the column of the board where the worker wants to move
      * @param gd           the actual game state
-     * @throws NotAdjacentCellException if the destination cell is not adjacent to the worker
+     * @return the next controller FSM state
+     * @throws NotAdjacentCellException if the destination cell is not adiacent to the worker
      * @throws IncorrectLevelException  if the destination cell is too high to be reached
      * @throws OccupiedCellException    if the destination cell has another worker on it
      * @throws DomedCellException       if the destination cell has a dome on it
+     * @throws DivinityPowerException   if the move isn't allowed by another divinity
+     * @throws NoTurnEndException       if the move doesn't allow the player to end the turn
      * @author Daniele Mammone
      */
     @Override
-    public Consumer<GameController> move(int WorkerColumn, int WorkerRow, int moveColumn, int moveRow, Model gd) throws NotAdjacentCellException, IncorrectLevelException, OccupiedCellException, DomedCellException, DivinityPowerException, NoTurnEndException {
+    public Consumer<GameController> move(int workerRow, int workerColumn, int moveRow, int moveColumn, Model gd) throws NotAdjacentCellException, IncorrectLevelException, OccupiedCellException, DomedCellException, DivinityPowerException, NoTurnEndException {
         //i must check if i'm not growing up level if i built before
-        if (previousBuild && gd.getCell(moveRow, moveColumn).getLevel() > gd.getCell(WorkerRow, WorkerColumn).getLevel())
+        if (previousBuild && gd.getCell(moveRow, moveColumn).getLevel() > gd.getCell(workerRow, workerColumn).getLevel())
             throw new DivinityPowerException("trying to level up after previous building");
-        super.move(WorkerColumn, WorkerRow, moveColumn, moveRow, gd);
+        super.move(workerRow, workerColumn, moveRow, moveColumn, gd);
         doneMove = true;
         return GameController::requestBuildDome;
     }
 
     /**
+     * Requests the model to register the build action by calling the super build method, and updates the status of the turn: if it's the optional build,
+     * it's requested the move, while if it's the second is returned a turnEnd state
      * @param workerRow    the row where the worker is
      * @param workerColumn the column where the worker is
      * @param buildRow     the row where the player wants to add a level
@@ -147,6 +154,8 @@ public class Prometheus extends Divinity {
     }
 
     /**
+     *  Requests the model to register the dome action by calling the super build method, and updates the status of the turn: if it's the optional build,
+     *  it's requested the move, while if it's the second is returned a turnEnd state
      * @param workerRow    the row where the worker is
      * @param workerColumn the column where the worker is
      * @param domeRow      the row where the player wants to add the dome
@@ -198,7 +207,7 @@ public class Prometheus extends Divinity {
             System.out.println("Fatal error");
         }
 
-        boolean can = !getValidCellForMove(wC, wR, gameBoard, otherDiv).isEmpty();
+        boolean can = !getValidCellForMove(wR, wC, gameBoard, otherDiv).isEmpty();
         previousBuild = false;
         gameBoard[mR][mC] = new Cell(mR, mC, oldLevel, playerOnCell, isCellDomed);
         return can;
@@ -209,15 +218,35 @@ public class Prometheus extends Divinity {
         return "If your Worker does not move up, it may build both before and after moving.";
     }
 
+    /**
+     * Generates a list of cell where a certain worker can build: if the method is called for the optional build, checks if building in
+     * a certain cell, the player can complete the turn.
+     *
+     * @param workerRow             the row where the worker is
+     * @param workerColumn          the column where the worker is
+     * @param otherDivinitiesInGame the other divinities in game
+     * @param gameCell              the game board
+     * @return a list of valid cells where the player can build
+     */
     @Override
-    public ArrayList<Position> getValidCellForBuilding(int WorkerColumn, int WorkerRow, ArrayList<Divinity> otherDivinitiesInGame, Cell[][] gameCell) {
+    public ArrayList<Position> getValidCellForBuilding(int workerRow, int workerColumn, ArrayList<Divinity> otherDivinitiesInGame, Cell[][] gameCell) {
 
-        return super.getValidCellForBuilding(WorkerColumn, WorkerRow, otherDivinitiesInGame, gameCell).stream().filter(x -> previousBuild || simulateBuildingCheckIfCanMoveAfterWards(WorkerRow, WorkerColumn, x.getRow(), x.getColumn(), gameCell, false, otherDivinitiesInGame)).collect(Collectors.toCollection(ArrayList::new));
+        return super.getValidCellForBuilding(workerRow, workerColumn, otherDivinitiesInGame, gameCell).stream().filter(x -> previousBuild || simulateBuildingCheckIfCanMoveAfterWards(workerRow, workerColumn, x.getRow(), x.getColumn(), gameCell, false, otherDivinitiesInGame)).collect(Collectors.toCollection(ArrayList::new));
     }
 
+    /**
+     * Generates a list of cell where a certain worker can build: if the method is called for the optional build, checks if building in
+     * a certain cell, the player can complete the turn.
+     *
+     * @param workerRow        the row where the worker is
+     * @param workerColumn     the column where the worker is
+     * @param gameCells        the actual state of the board
+     * @param divinitiesInGame the other divinities in game
+     * @return a list of valid cells where the player can build
+     */
     @Override
-    public ArrayList<Position> getValidCellsToPutDome(int workerColumn, int workerRow, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
+    public ArrayList<Position> getValidCellsToPutDome(int workerRow, int workerColumn, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
 
-        return super.getValidCellsToPutDome(workerColumn, workerRow, gameCells, divinitiesInGame).stream().filter(x -> previousBuild || simulateBuildingCheckIfCanMoveAfterWards(workerRow, workerColumn, x.getRow(), x.getColumn(), gameCells, true, divinitiesInGame)).collect(Collectors.toCollection(ArrayList::new));
+        return super.getValidCellsToPutDome(workerRow, workerColumn, gameCells, divinitiesInGame).stream().filter(x -> previousBuild || simulateBuildingCheckIfCanMoveAfterWards(workerRow, workerColumn, x.getRow(), x.getColumn(), gameCells, true, divinitiesInGame)).collect(Collectors.toCollection(ArrayList::new));
     }
 }

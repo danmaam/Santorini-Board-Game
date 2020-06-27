@@ -1,8 +1,6 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
 import it.polimi.ingsw.PSP48.server.model.*;
-import it.polimi.ingsw.PSP48.server.model.divinities.Divinity;
-import it.polimi.ingsw.PSP48.server.model.divinities.Pan;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +36,7 @@ public class PanTest {
 
     @Test
     public void normalWin() throws DomedCellException, OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, NoTurnEndException {
-        game_database.getCurrentPlayer().getDivinity().move(4, 4, 3, 4, game_database);
+        game_database.getCurrentPlayer().getDivinity().move(4, 4, 4, 3, game_database);
         assertTrue(game_database.getCurrentPlayer().getDivinity().winCondition(game_database));
     }
 

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
-import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.Colour;
 import it.polimi.ingsw.PSP48.server.model.Model;
 import it.polimi.ingsw.PSP48.server.model.Player;
@@ -57,12 +56,12 @@ public class HephaestusTest {
         vD.add(new Position(0, 4));
 
 
-        assertTrue(vB.size() == player1.getDivinity().getValidCellForBuilding(3, 1, new ArrayList<>(), game_database.getGameBoard()).size());
-        assertTrue(vB.containsAll(player1.getDivinity().getValidCellForBuilding(3, 1, new ArrayList<>(), game_database.getGameBoard())));
+        assertTrue(vB.size() == player1.getDivinity().getValidCellForBuilding(1, 3, new ArrayList<>(), game_database.getGameBoard()).size());
+        assertTrue(vB.containsAll(player1.getDivinity().getValidCellForBuilding(1, 3, new ArrayList<>(), game_database.getGameBoard())));
 
 
-        assertTrue(vD.size() == player1.getDivinity().getValidCellsToPutDome(3, 1, game_database.getGameBoard(), new ArrayList<>()).size());
-        assertTrue(vD.containsAll(player1.getDivinity().getValidCellsToPutDome(3, 1, game_database.getGameBoard(), new ArrayList<>())));
+        assertTrue(vD.size() == player1.getDivinity().getValidCellsToPutDome(1, 3, game_database.getGameBoard(), new ArrayList<>()).size());
+        assertTrue(vD.containsAll(player1.getDivinity().getValidCellsToPutDome(1, 3, game_database.getGameBoard(), new ArrayList<>())));
 
         player1.getDivinity().build(1, 3, 1, 4, game_database);
 
@@ -70,8 +69,8 @@ public class HephaestusTest {
         vB.add(new Position(1, 4));
         vD = new ArrayList<>();
 
-        assertEquals(vB, player1.getDivinity().getValidCellForBuilding(3, 1, new ArrayList<>(), game_database.getGameBoard()));
-        assertEquals(vD, player1.getDivinity().getValidCellsToPutDome(3, 1, game_database.getGameBoard(), new ArrayList<>()));
+        assertEquals(vB, player1.getDivinity().getValidCellForBuilding(1, 3, new ArrayList<>(), game_database.getGameBoard()));
+        assertEquals(vD, player1.getDivinity().getValidCellsToPutDome(1, 3, game_database.getGameBoard(), new ArrayList<>()));
     }
 
     @Test
@@ -92,12 +91,12 @@ public class HephaestusTest {
         vD.add(new Position(0, 4));
 
 
-        assertTrue(vB.size() == player1.getDivinity().getValidCellForBuilding(3, 1, new ArrayList<>(), game_database.getGameBoard()).size());
-        assertTrue(vB.containsAll(player1.getDivinity().getValidCellForBuilding(3, 1, new ArrayList<>(), game_database.getGameBoard())));
+        assertTrue(vB.size() == player1.getDivinity().getValidCellForBuilding(1, 3, new ArrayList<>(), game_database.getGameBoard()).size());
+        assertTrue(vB.containsAll(player1.getDivinity().getValidCellForBuilding(1, 3, new ArrayList<>(), game_database.getGameBoard())));
 
 
-        assertTrue(vD.size() == player1.getDivinity().getValidCellsToPutDome(3, 1, game_database.getGameBoard(), new ArrayList<>()).size());
-        assertTrue(vD.containsAll(player1.getDivinity().getValidCellsToPutDome(3, 1, game_database.getGameBoard(), new ArrayList<>())));
+        assertTrue(vD.size() == player1.getDivinity().getValidCellsToPutDome(1, 3, game_database.getGameBoard(), new ArrayList<>()).size());
+        assertTrue(vD.containsAll(player1.getDivinity().getValidCellsToPutDome(1, 3, game_database.getGameBoard(), new ArrayList<>())));
 
         player1.getDivinity().build(1, 3, 0, 3, game_database);
 
@@ -105,8 +104,8 @@ public class HephaestusTest {
         vB.add(new Position(0, 3));
         vD = new ArrayList<>();
 
-        assertEquals(vB, player1.getDivinity().getValidCellForBuilding(3, 1, new ArrayList<>(), game_database.getGameBoard()));
-        assertEquals(vD, player1.getDivinity().getValidCellsToPutDome(3, 1, game_database.getGameBoard(), new ArrayList<>()));
+        assertEquals(vB, player1.getDivinity().getValidCellForBuilding(1, 3, new ArrayList<>(), game_database.getGameBoard()));
+        assertEquals(vD, player1.getDivinity().getValidCellsToPutDome(1, 3, game_database.getGameBoard(), new ArrayList<>()));
     }
 
 

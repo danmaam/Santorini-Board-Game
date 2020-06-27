@@ -30,14 +30,35 @@ public class Athena extends Divinity {
         return super.turnBegin(gd);
     }
 
-    public Consumer<GameController> move(int workerColumn, int workerRow, int moveColumn, int moveRow, Model gd) throws DivinityPowerException, IncorrectLevelException, OccupiedCellException, NotAdjacentCellException, DomedCellException, NoTurnEndException {
-        super.move(workerColumn, workerRow, moveColumn, moveRow, gd);
+    /**
+     * @param workerRow    the row of the cell where the worker is
+     * @param workerColumn the column of the cell where the worker is
+     * @param moveRow      the row of the board where the worker wants to move
+     * @param moveColumn   the column of the board where the worker wants to move
+     * @param gd           the actual game state
+     * @return the next controller FSM state
+     * @throws NotAdjacentCellException if the destination cell is not adjacent to the worker
+     * @throws IncorrectLevelException  if the destination cell is too high to be reached
+     * @throws OccupiedCellException    if the destination cell has another worker on it
+     * @throws DomedCellException       if the destination cell has a dome on it
+     * @throws DivinityPowerException   if the move isn't allowed by another divinity
+     * @throws NoTurnEndException       if the move doesn't allow the player to end the turn
+     */
+    public Consumer<GameController> move(int workerRow, int workerColumn, int moveRow, int moveColumn, Model gd) throws DivinityPowerException, IncorrectLevelException, OccupiedCellException, NotAdjacentCellException, DomedCellException, NoTurnEndException {
+        super.move(workerRow, workerColumn, moveRow, moveColumn, gd);
         if (gd.getCell(moveRow, moveColumn).getLevel() > gd.getCell(workerRow, workerColumn).getLevel())
             lastTurnLevelUp = true;
         return GameController::requestBuildDome;
     }
 
 
+    /**
+     * Checks if another player move is allowed, since Athena blocks other players from getting higher
+     * when an Athena's worker went up in the last turn.
+     *
+     * @param move the coordinates of the move
+     * @return false if the move isn't allowed, true otherwise
+     */
     @Override
     public Boolean othersMove(MovePosition move) {
         if (move.getDifference() >= 1) return !lastTurnLevelUp;

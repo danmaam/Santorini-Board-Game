@@ -53,7 +53,7 @@ public class ClientHandler implements Runnable {
      * Starts the network handler
      */
     @Override
-    public void run() {
+    public synchronized void run() {
 
         try {
             handleGamePhases();
@@ -82,8 +82,8 @@ public class ClientHandler implements Runnable {
         setUpMessage(new nicknameRequest("Please choose a nickname without dots and press enter"));
 
         while (true) {
-            if (messagesToBeSent.isEmpty() && closeThread) throw new IOException("The game has ended");
             while (messagesToBeSent.isEmpty()) {
+                if (closeThread) throw new IOException("The game has ended");
                 try {
                     wait();
                 } catch (InterruptedException e) {

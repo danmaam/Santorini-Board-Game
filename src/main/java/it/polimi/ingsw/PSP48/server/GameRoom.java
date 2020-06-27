@@ -49,7 +49,7 @@ public class GameRoom {
     public void notifyAllPlayersOfDisconnection(String disconnectedPlayers) {
         for (Player p : model.getPlayersInGame()) {
             if (!p.getName().equals(disconnectedPlayers)) {
-                controller.getPlayerView(p.getName()).endgame(disconnectedPlayers + "have been disconnected. Aborting game.");
+                controller.getPlayerView(p.getName()).endgame(disconnectedPlayers + " disconnected. Aborting game.");
             }
         }
         //closed the connection with all the players, GameRoom must free nicknames on the server

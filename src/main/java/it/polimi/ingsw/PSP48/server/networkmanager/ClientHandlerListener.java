@@ -60,7 +60,7 @@ public class ClientHandlerListener implements Runnable {
      * Starts the listener, and put it in listening mode
      */
     @Override
-    public void run() {
+    public synchronized void run() {
         try {
             clientSocket.setSoTimeout(15 * 1000);
         } catch (SocketException e) {
@@ -69,19 +69,14 @@ public class ClientHandlerListener implements Runnable {
         try {
             waitForMessages();
         } catch (IOException e) {
-            if (clientSocket.isConnected()) {
-                try {
-                    clientSocket.close();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-            }
-            //means that the connection dropped. i must close the game.
+            //requests the game closing only there was a disconnection, and not in case of losing
             if (!setClosed) {
                 for (ServerNetworkObserver o : observers) {
                     o.destroyGame();
                 }
             }
+            pingExecutor.shutdown();
+            executors.shutdown();
             out.handleClientDisconnection();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

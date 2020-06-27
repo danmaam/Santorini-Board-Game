@@ -28,44 +28,48 @@ public class Demeter extends Divinity {
 
 
     /**
-     * Reset the coordinate of first building
+     * Reset the coordinate of first building and then checks if the player can end the turn
      *
-     * @return the next method that the game controller have to invoke
+     * @return the next controller FSM state
      */
     @Override
     public Consumer<GameController> turnBegin(Model gd) {
         oldRowBuild = -1;
         oldColumnBuild = -1;
         prevBuild = false;
-        return GameController::requestMove;
+        return super.turnBegin(gd);
     }
 
     /**
-     * @param WorkerColumn          the column where the worker is
-     * @param WorkerRow             the row where the worker is
-     * @param gameCells             the actual board state
+     * Generates a list of cells where a certain worker can build
+     *
+     * @param workerRow             the row where the worker is
+     * @param workerColumn          the column where the worker is
      * @param otherDivinitiesInGame the divinities in the game
+     * @param gameCells             the actual board state
      * @return a list of cell valid for the building of the worker
      */
     @Override
-    public ArrayList<Position> getValidCellForBuilding(int WorkerColumn, int WorkerRow, ArrayList<Divinity> otherDivinitiesInGame, Cell[][] gameCells) {
-        return super.getValidCellForBuilding(WorkerColumn, WorkerRow, otherDivinitiesInGame, gameCells)
+    public ArrayList<Position> getValidCellForBuilding(int workerRow, int workerColumn, ArrayList<Divinity> otherDivinitiesInGame, Cell[][] gameCells) {
+        return super.getValidCellForBuilding(workerRow, workerColumn, otherDivinitiesInGame, gameCells)
                 .stream()
                 .filter(cell -> !(cell.getColumn() == oldColumnBuild && cell.getRow() == oldRowBuild))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
-     * @param workerColumn     the column where the worker is
+     * Generates a list of cells where a certain worker can put a dome
+     *
      * @param workerRow        the row where the worker is
+     * @param workerColumn     the column where the worker is
      * @param gameCells        the actual state of the board
      * @param divinitiesInGame the divinities in game
      * @return true if it's possible to add the dome
      * @author Daniele Mammone
      */
     @Override
-    public ArrayList<Position> getValidCellsToPutDome(int workerColumn, int workerRow, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
-        return super.getValidCellsToPutDome(workerColumn, workerRow, gameCells, divinitiesInGame).stream()
+    public ArrayList<Position> getValidCellsToPutDome(int workerRow, int workerColumn, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
+        return super.getValidCellsToPutDome(workerRow, workerColumn, gameCells, divinitiesInGame).stream()
                 .filter(cell -> !(cell.getColumn() == oldColumnBuild && cell.getRow() == oldRowBuild))
                 .collect(Collectors.toCollection(ArrayList::new));
     }

@@ -69,7 +69,7 @@ public class DivinityMovementsTest {
         oldCell.setPlayer(null);
         newCell.setPlayer(player1.getName());
         player2.setDivinity(baseDivinity);
-        player1.getDivinity().move(2, 2, 2, 1, game_database);
+        player1.getDivinity().move(2, 2, 1, 2, game_database);
         assertEquals(newCell, game_database.getCell(1, 2));
         assertEquals(oldCell, game_database.getCell(2, 2));
     }
@@ -78,7 +78,7 @@ public class DivinityMovementsTest {
     public void move_occupiedCell_excpetion() throws OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, DomedCellException, NoTurnEndException{
         oldCell.setPlayer(null);
         newCell.setPlayer(player1.getName());
-        player1.getDivinity().move(2, 2, 3, 1, game_database);
+        player1.getDivinity().move(2, 2, 1, 3, game_database);
     }
 
     @org.junit.Test(expected = DomedCellException.class)
@@ -92,21 +92,21 @@ public class DivinityMovementsTest {
     public void move_notAdiacentCell_excpetion() throws OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, DomedCellException, NoTurnEndException{
         oldCell.setPlayer(null);
         newCell.setPlayer(player1.getName());
-        player1.getDivinity().move(2, 2, 0, 4, game_database);
+        player1.getDivinity().move(2, 2, 4, 0, game_database);
     }
 
     @org.junit.Test(expected = DivinityPowerException.class)
     public void move_otherDivinityPower_excpetion() throws OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, DomedCellException, NoTurnEndException{
         oldCell.setPlayer(null);
         newCell.setPlayer(player1.getName());
-        player1.getDivinity().move(2, 2, 2, 1, game_database);
+        player1.getDivinity().move(2, 2, 1, 2, game_database);
     }
 
     @org.junit.Test(expected = IncorrectLevelException.class)
     public void move_incorrectLevel_excpetion() throws OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, DomedCellException, NoTurnEndException{
         oldCell.setPlayer(null);
         newCell.setPlayer(player1.getName());
-        player1.getDivinity().move(2, 2, 1, 3, game_database);
+        player1.getDivinity().move(2, 2, 3, 1, game_database);
     }
 
     @org.junit.Test

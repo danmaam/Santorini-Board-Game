@@ -46,32 +46,34 @@ public class Hestia extends Divinity {
 
     /**
      * Gets the cells where a worker can build; redefined since Hestia allows an additional build, but not on a perimetric cell
-     * @param WorkerColumn          the column where the worker is
-     * @param WorkerRow             the row where the worker is
+     *
+     * @param workerRow             the row where the worker is
+     * @param workerColumn          the column where the worker is
      * @param otherDivinitiesInGame the other divinities in game
      * @param gameCell              the game board
      * @return a list of cell valid for the building of the worker
      * @author Daniele Mammone
      */
     @Override
-    public ArrayList<Position> getValidCellForBuilding(int WorkerColumn, int WorkerRow, ArrayList<Divinity> otherDivinitiesInGame, Cell[][] gameCell) {
-        return super.getValidCellForBuilding(WorkerColumn, WorkerRow, otherDivinitiesInGame, gameCell).stream()
+    public ArrayList<Position> getValidCellForBuilding(int workerRow, int workerColumn, ArrayList<Divinity> otherDivinitiesInGame, Cell[][] gameCell) {
+        return super.getValidCellForBuilding(workerRow, workerColumn, otherDivinitiesInGame, gameCell).stream()
                 .filter(cell -> !alreadyBuilt || cell.getColumn() != 0 && cell.getColumn() != 4 && cell.getRow() != 0 && cell.getRow() != 4)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
      * Gets the cells where a worker can put a dome; redefined since Hestia allows an additional build or dome, but not on a perimetric cell
-     * @param workerColumn     the column where the worker is
+     *
      * @param workerRow        the row where the worker is
+     * @param workerColumn     the column where the worker is
      * @param gameCells        the actual state of the board
      * @param divinitiesInGame
      * @return true if it's possible to add the dome
      * @author Daniele Mammone
      */
     @Override
-    public ArrayList<Position> getValidCellsToPutDome(int workerColumn, int workerRow, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
-        return super.getValidCellsToPutDome(workerColumn, workerRow, gameCells, divinitiesInGame).stream()
+    public ArrayList<Position> getValidCellsToPutDome(int workerRow, int workerColumn, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
+        return super.getValidCellsToPutDome(workerRow, workerColumn, gameCells, divinitiesInGame).stream()
                 .filter(cell -> !alreadyBuilt || cell.getColumn() != 0 && cell.getColumn() != 4 && cell.getRow() != 0 && cell.getRow() != 4)
                 .collect(Collectors.toCollection(ArrayList::new));
     }

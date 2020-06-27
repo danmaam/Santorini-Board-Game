@@ -63,12 +63,12 @@ public class MinotaurTest {
 
     @Test(expected = OccupiedCellException.class)
     public void move_pushingCellNotEmpty() throws DomedCellException, OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, NoTurnEndException{
-        p1.getDivinity().move(2, 2, 3, 1, gd);
+        p1.getDivinity().move(2, 2, 1, 3, gd);
     }
 
     @Test(expected = OccupiedCellException.class)
     public void move_pushingCellDomed() throws DomedCellException, OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, NoTurnEndException{
-        p1.getDivinity().move(2, 2, 2, 1, gd);
+        p1.getDivinity().move(2, 2, 1, 2, gd);
     }
 
     @Test(expected = DivinityPowerException.class)
@@ -82,7 +82,7 @@ public class MinotaurTest {
     public void move_pushWithColumnOutOfBoard() throws DomedCellException, OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, NoTurnEndException{
         gd.getCell(2, 1).setPlayer(p1.getName());
         gd.getCell(2, 0).setPlayer(p2.getName());
-        p1.getDivinity().move(1, 1, 0, 2, gd);
+        p1.getDivinity().move(1, 1, 2, 0, gd);
     }
 
     @Test(expected = DomedCellException.class)
@@ -90,7 +90,7 @@ public class MinotaurTest {
         gd = new Model(2, true);
         gd.getCell(2, 2).setPlayer(p1.getName());
         gd.getCell(2, 3).addDome();
-        p1.getDivinity().move(2, 2, 3, 2, gd);
+        p1.getDivinity().move(2, 2, 2, 3, gd);
     }
 
     @Test(expected = IncorrectLevelException.class)
@@ -98,7 +98,7 @@ public class MinotaurTest {
         gd = new Model(2, true);
         gd.getCell(2, 2).setPlayer(p1.getName());
         gd.getCell(2, 3).setActualLevel(2);
-        p1.getDivinity().move(2, 2, 3, 2, gd);
+        p1.getDivinity().move(2, 2, 2, 3, gd);
     }
 
     @Test(expected = DivinityPowerException.class)
@@ -108,7 +108,7 @@ public class MinotaurTest {
         gd.getPlayersInGame().add(p2);
         gd.setNextPlayer(0);
         gd.getCell(2, 2).setPlayer(p1.getName());
-        p1.getDivinity().move(2, 2, 2, 1, gd);
+        p1.getDivinity().move(2, 2, 1, 2, gd);
     }
 
     @Test(expected = NotAdjacentCellException.class)

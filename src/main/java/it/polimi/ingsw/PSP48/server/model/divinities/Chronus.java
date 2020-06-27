@@ -15,6 +15,8 @@ public class Chronus extends Divinity {
     }
 
     /**
+     * Chronus can win when there are five complete buildings on the board
+     *
      * @param gd the state of the game
      * @return true if the actual player considered has won, false if the game must go on
      */

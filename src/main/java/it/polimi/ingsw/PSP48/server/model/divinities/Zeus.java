@@ -28,21 +28,24 @@ public class Zeus extends Divinity {
     }
 
     /**
-     * @param WorkerColumn     the column where the worker is
-     * @param WorkerRow        the row where the worker is
-     * @param gameCells        the actual board state
+     * Generates a list of cell where a certain worker can build, according to Zeus' power: he can also build under his worker.
+     *
+     * @param workerRow        the row where the worker is
+     * @param workerColumn     the column where the worker is
      * @param divinitiesInGame the divinities in the game
+     * @param gameCells        the actual board state
      * @return a list of cell valid for the building of the worker
      * @author Daniele Mammone
      */
     @Override
-    public ArrayList<Position> getValidCellForBuilding(int WorkerColumn, int WorkerRow, ArrayList<Divinity> divinitiesInGame, Cell[][] gameCells) {
-        ArrayList<Position> validCells = super.getValidCellForBuilding(WorkerColumn, WorkerRow, divinitiesInGame, gameCells);
-        if (gameCells[WorkerRow][WorkerColumn].getLevel() < 3) validCells.add(new Position(WorkerRow, WorkerColumn));
+    public ArrayList<Position> getValidCellForBuilding(int workerRow, int workerColumn, ArrayList<Divinity> divinitiesInGame, Cell[][] gameCells) {
+        ArrayList<Position> validCells = super.getValidCellForBuilding(workerRow, workerColumn, divinitiesInGame, gameCells);
+        if (gameCells[workerRow][workerColumn].getLevel() < 3) validCells.add(new Position(workerRow, workerColumn));
         return validCells;
     }
 
     /**
+     * Requests the model to register the build action performed by the player, according according to Zeus' power: he can also build under his worker.
      * @param workerRow    the row where the worker is
      * @param workerColumn the column where the worker is
      * @param buildRow     the row where the player wants to add a level

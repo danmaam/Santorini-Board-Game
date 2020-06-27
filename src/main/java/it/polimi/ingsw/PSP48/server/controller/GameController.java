@@ -66,7 +66,7 @@ public class GameController implements ViewObserver {
         System.out.println("doing move");
         //i must check if this move allows the player to end the turn
         try {
-            nextAction = model.getCurrentPlayer().getDivinity().move(p.getWorkerColumn(), p.getWorkerRow(), p.getMoveColumn(), p.getMoveRow(), model);
+            nextAction = model.getCurrentPlayer().getDivinity().move(p.getWorkerRow(), p.getWorkerColumn(), p.getMoveRow(), p.getMoveColumn(), model);
         } catch (IncorrectLevelException e) {
             getPlayerView(model.getCurrentPlayer().getName()).printMessage("Trying to go on a too high level. Retry the move.");
             nextAction();
@@ -249,8 +249,8 @@ public class GameController implements ViewObserver {
         Position lW = model.getCurrentPlayer().getLastWorkerMoved();
         ArrayList<WorkerValidCells> build = new ArrayList<>();
         ArrayList<WorkerValidCells> dome = new ArrayList<>();
-        build.add(new WorkerValidCells(model.getCurrentPlayer().getDivinity().getValidCellForBuilding(lW.getColumn(), lW.getRow(), otherDivinities, model.getGameBoard()), lW.getRow(), lW.getColumn()));
-        dome.add(new WorkerValidCells(model.getCurrentPlayer().getDivinity().getValidCellsToPutDome(lW.getColumn(), lW.getRow(), model.getGameBoard(), otherDivinities), lW.getRow(), lW.getColumn()));
+        build.add(new WorkerValidCells(model.getCurrentPlayer().getDivinity().getValidCellForBuilding(lW.getRow(), lW.getColumn(), otherDivinities, model.getGameBoard()), lW.getRow(), lW.getColumn()));
+        dome.add(new WorkerValidCells(model.getCurrentPlayer().getDivinity().getValidCellsToPutDome(lW.getRow(), lW.getColumn(), model.getGameBoard(), otherDivinities), lW.getRow(), lW.getColumn()));
         getPlayerView(model.getCurrentPlayer().getName()).requestDomeOrBuild(build, dome);
     }
 
@@ -267,7 +267,7 @@ public class GameController implements ViewObserver {
             if (!p.getName().equals(model.getCurrentPlayer().getName())) otherDivinities.add(p.getDivinity());
         }
         for (Position p : workersPosition) {
-            validCells.add(new WorkerValidCells(new ArrayList<>(model.getCurrentPlayer().getDivinity().getValidCellForMove(p.getColumn(), p.getRow(), model.getGameBoard(), otherDivinities)), p.getRow(), p.getColumn()));
+            validCells.add(new WorkerValidCells(new ArrayList<>(model.getCurrentPlayer().getDivinity().getValidCellForMove(p.getRow(), p.getColumn(), model.getGameBoard(), otherDivinities)), p.getRow(), p.getColumn()));
         }
         validCells.removeIf(x-> x.getValidPositions().size()==0); //removes elements that have no valid positions
         getPlayerView(model.getCurrentPlayer().getName()).requestMove(validCells);
@@ -447,11 +447,11 @@ public class GameController implements ViewObserver {
         for (Player p : model.getPlayersInGame()) {
             if (!p.getName().equals(model.getCurrentPlayer().getName())) otherDivinities.add(p.getDivinity());
         }
-        ArrayList<Position> validForBuilding = model.getCurrentPlayer().getDivinity().getValidCellForBuilding(lastWorker.getColumn(), lastWorker.getRow(), otherDivinities, model.getClonedGameBoard());
-        ArrayList<Position> validForDoming = model.getCurrentPlayer().getDivinity().getValidCellsToPutDome(lastWorker.getColumn(), lastWorker.getRow(), model.getClonedGameBoard(), otherDivinities);
+        ArrayList<Position> validForBuilding = model.getCurrentPlayer().getDivinity().getValidCellForBuilding(lastWorker.getRow(), lastWorker.getColumn(), otherDivinities, model.getClonedGameBoard());
+        ArrayList<Position> validForDoming = model.getCurrentPlayer().getDivinity().getValidCellsToPutDome(lastWorker.getRow(), lastWorker.getColumn(), model.getClonedGameBoard(), otherDivinities);
         if (validForBuilding.isEmpty() && validForDoming.isEmpty()) {
             try {
-                nextAction = model.getCurrentPlayer().getDivinity().build(-1, -1, -1, -1, null);
+                nextAction = model.getCurrentPlayer().getDivinity().build(-1, -1, -1, -1, model);
                 nextAction();
             } catch (Exception e) {
                 System.out.println("Fatal error");
@@ -479,7 +479,7 @@ public class GameController implements ViewObserver {
         for (Player p : model.getPlayersInGame()) {
             if (!p.getName().equals(model.getCurrentPlayer().getName())) otherDivinities.add(p.getDivinity());
         }
-        ArrayList<Position> validPositionsForMove = model.getCurrentPlayer().getDivinity().getValidCellForMove(model.getCurrentPlayer().getLastWorkerMoved().getColumn(), model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getClonedGameBoard(), otherDivinities);
+        ArrayList<Position> validPositionsForMove = model.getCurrentPlayer().getDivinity().getValidCellForMove(model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getCurrentPlayer().getLastWorkerMoved().getColumn(), model.getClonedGameBoard(), otherDivinities);
         if (validPositionsForMove.isEmpty()) {
             try {
                 nextAction = model.getCurrentPlayer().getDivinity().move(-1, -1, -1, -1, model);
@@ -507,8 +507,8 @@ public class GameController implements ViewObserver {
         ArrayList<Position> workersPosition = model.getPlayerPositionsInMap(model.getCurrentPlayer().getName());
 
         for (Position p : workersPosition) {
-            WorkerValidCells b = new WorkerValidCells(new ArrayList<>(model.getCurrentPlayer().getDivinity().getValidCellForBuilding(p.getColumn(), p.getRow(), otherDivinities, model.getGameBoard())), p.getRow(), p.getColumn());
-            WorkerValidCells d = new WorkerValidCells(new ArrayList<>(model.getCurrentPlayer().getDivinity().getValidCellsToPutDome(p.getColumn(), p.getRow(), model.getGameBoard(), otherDivinities)), p.getRow(), p.getColumn());
+            WorkerValidCells b = new WorkerValidCells(new ArrayList<>(model.getCurrentPlayer().getDivinity().getValidCellForBuilding(p.getRow(), p.getColumn(), otherDivinities, model.getGameBoard())), p.getRow(), p.getColumn());
+            WorkerValidCells d = new WorkerValidCells(new ArrayList<>(model.getCurrentPlayer().getDivinity().getValidCellsToPutDome(p.getRow(), p.getColumn(), model.getGameBoard(), otherDivinities)), p.getRow(), p.getColumn());
             if (!b.getValidPositions().isEmpty()) build.add(b);
             if (!d.getValidPositions().isEmpty()) dome.add(d);
         }
@@ -521,7 +521,7 @@ public class GameController implements ViewObserver {
             if (!p.getName().equals(model.getCurrentPlayer().getName())) otherDivinities.add(p.getDivinity());
         }
         ArrayList<WorkerValidCells> move = new ArrayList<>();
-        move.add(new WorkerValidCells(model.getCurrentPlayer().getDivinity().getValidCellForMove(model.getCurrentPlayer().getLastWorkerMoved().getColumn(), model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getGameBoard(), otherDivinities), model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getCurrentPlayer().getLastWorkerMoved().getColumn()));
+        move.add(new WorkerValidCells(model.getCurrentPlayer().getDivinity().getValidCellForMove(model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getCurrentPlayer().getLastWorkerMoved().getColumn(), model.getGameBoard(), otherDivinities), model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getCurrentPlayer().getLastWorkerMoved().getColumn()));
         getPlayerView(model.getCurrentPlayer().getName()).requestMove(move);
     }
 

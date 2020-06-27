@@ -55,7 +55,7 @@ public class ArtemisTest {
         valid.add(new Position(1, 2));
         assertEquals(valid, player1.getDivinity().getValidCellForMove(1, 1, game_database.getGameBoard(), new ArrayList<Divinity>()));
 
-        player1.getDivinity().move(1, 1, 2, 1, game_database);
+        player1.getDivinity().move(1, 1, 1, 2, game_database);
 
         valid = new ArrayList<>();
         valid.add(new Position(0, 2));
@@ -64,9 +64,9 @@ public class ArtemisTest {
         valid.add(new Position(0, 3));
 
 
-        assertTrue(valid.containsAll(player1.getDivinity().getValidCellForMove(2, 1, game_database.getGameBoard(), new ArrayList<>())));
-        assertEquals(valid.size(), player1.getDivinity().getValidCellForMove(2, 1, game_database.getGameBoard(), new ArrayList<>()).size());
+        assertTrue(valid.containsAll(player1.getDivinity().getValidCellForMove(1, 2, game_database.getGameBoard(), new ArrayList<>())));
+        assertEquals(valid.size(), player1.getDivinity().getValidCellForMove(1, 2, game_database.getGameBoard(), new ArrayList<>()).size());
 
-        player1.getDivinity().move(2, 1, 1, 1, game_database);
+        player1.getDivinity().move(1, 2, 1, 1, game_database);
     }
 }

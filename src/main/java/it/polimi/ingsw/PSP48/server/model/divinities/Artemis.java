@@ -26,7 +26,7 @@ public class Artemis extends Divinity {
     }
 
     /**
-     * reset the last move coordinate
+     * Resets the last move coordinate and the super method to check if the player can end his turn.
      */
     @Override
     public Consumer<GameController> turnBegin(Model gd) {
@@ -36,15 +36,15 @@ public class Artemis extends Divinity {
     }
 
     /**
-     * @param WorkerColumn     the column where the worker is
-     * @param WorkerRow        the row where the worker is
+     * @param workerRow        the row where the worker is
+     * @param workerColumn     the column where the worker is
      * @param gameCells        the actual board state
      * @param divinitiesInGame the divinities in game
      * @return a list of cells valid for the move of the worker
      */
     @Override
-    public ArrayList<Position> getValidCellForMove(int WorkerColumn, int WorkerRow, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
-        return super.getValidCellForMove(WorkerColumn, WorkerRow, gameCells, divinitiesInGame).stream()
+    public ArrayList<Position> getValidCellForMove(int workerRow, int workerColumn, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
+        return super.getValidCellForMove(workerRow, workerColumn, gameCells, divinitiesInGame).stream()
                 .filter(cell -> !(cell.getColumn() == oldColumnMove && cell.getRow() == oldRowMove))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
@@ -52,10 +52,10 @@ public class Artemis extends Divinity {
     /**
      * Overriden since Artemis allows a second move, but not on the previous cell
      *
-     * @param WorkerColumn the column of the cell where the worker is
-     * @param WorkerRow    the row of the cell where the worker is
-     * @param moveColumn   the column of the board where the worker wants to move
+     * @param workerRow    the row of the cell where the worker is
+     * @param workerColumn the column of the cell where the worker is
      * @param moveRow      the row of the board where the worker wants to move
+     * @param moveColumn   the column of the board where the worker wants to move
      * @param gd           the game status
      * @return the next method to be invoked by the controller
      * @throws NotAdjacentCellException if the destination cell is not adjacent to the worker
@@ -65,7 +65,7 @@ public class Artemis extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public Consumer<GameController> move(int WorkerColumn, int WorkerRow, int moveColumn, int moveRow, Model gd) throws NotAdjacentCellException, IncorrectLevelException, OccupiedCellException, DomedCellException, DivinityPowerException, NoTurnEndException {
+    public Consumer<GameController> move(int workerRow, int workerColumn, int moveRow, int moveColumn, Model gd) throws NotAdjacentCellException, IncorrectLevelException, OccupiedCellException, DomedCellException, DivinityPowerException, NoTurnEndException {
         Consumer<GameController> nextAction;
         if (oldRowMove == -1 && oldColumnMove == -1) nextAction = GameController::requestOptionalMove;
         else {
@@ -75,14 +75,15 @@ public class Artemis extends Divinity {
         }
         if (oldRowMove != -1 && oldColumnMove != -1 && oldRowMove == moveRow && oldColumnMove == moveColumn)
             throw new DivinityPowerException("Fail to move on the previous cell");
-        super.move(WorkerColumn, WorkerRow, moveColumn, moveRow, gd);
+        super.move(workerRow, workerColumn, moveRow, moveColumn, gd);
         if (oldRowMove == -1 && oldColumnMove == -1) {
-            oldRowMove = WorkerRow;
-            oldColumnMove = WorkerColumn;
+            oldRowMove = workerRow;
+            oldColumnMove = workerColumn;
         }
 
         return nextAction;
     }
+
 
     @Override
     public String getName() {

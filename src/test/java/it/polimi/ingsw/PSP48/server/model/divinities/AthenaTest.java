@@ -49,7 +49,7 @@ public class AthenaTest {
         game_database.getCell(2, 4).setActualLevel(2);
 
         player2.getDivinity().turnBegin(game_database);
-        player2.getDivinity().move(3, 2, 4, 2, game_database);
+        player2.getDivinity().move(2, 3, 2, 4, game_database);
         player2.getDivinity().build(2, 4, 1, 4, game_database);
         game_database.setNextPlayer(0);
         player1.getDivinity().turnBegin(game_database);
@@ -63,12 +63,12 @@ public class AthenaTest {
         for (Player p : game_database.getPlayersInGame()) {
             if (!p.getName().equals(game_database.getCurrentPlayer().getName())) div.add(p.getDivinity());
         }
-        assertEquals(validCells, player1.getDivinity().getValidCellForMove(1, 2, game_database.getGameBoard(), div));
+        assertEquals(validCells, player1.getDivinity().getValidCellForMove(2, 1, game_database.getGameBoard(), div));
     }
 
     @Test(expected = DivinityPowerException.class)
     public void otherPlayer_tryingToGroupUp_DivinityPowerExcpetion() throws DomedCellException, OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, NoTurnEndException{
-        player1.getDivinity().move(1, 2, 1, 1, game_database);
+        player1.getDivinity().move(2, 1, 1, 1, game_database);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class AthenaTest {
         Cell newCell = new Cell(3, 1, 0, player1.getName(), false);
         Cell oldCell = new Cell(2, 1, 2, null, false);
 
-        player1.getDivinity().move(1, 2, 1, 3, game_database);
+        player1.getDivinity().move(2, 1, 3, 1, game_database);
 
         assertEquals(newCell, game_database.getCell(3, 1));
         assertEquals(oldCell, game_database.getCell(2, 1));

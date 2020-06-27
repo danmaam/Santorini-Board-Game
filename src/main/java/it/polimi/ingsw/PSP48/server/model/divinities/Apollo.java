@@ -29,22 +29,22 @@ public class Apollo extends Divinity {
     /**
      * re-implements getValidCellForMove since also occupied Cells are valid
      *
-     * @param WorkerColumn     the column where the worker is
-     * @param WorkerRow        the row where the worker is
+     * @param workerRow        the row where the worker is
+     * @param workerColumn     the column where the worker is
      * @param gameCells        the actual board state
      * @param divinitiesInGame the divinities in game
      * @return a list of cells valid for the move of the worker
      */
     @Override
-    public ArrayList<Position> getValidCellForMove(int WorkerColumn, int WorkerRow, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
-        Cell actualWorkerCell = gameCells[WorkerRow][WorkerColumn];
+    public ArrayList<Position> getValidCellForMove(int workerRow, int workerColumn, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
+        Cell actualWorkerCell = gameCells[workerRow][workerColumn];
         ArrayList<Cell> validCells = new ArrayList<>();
 
         //with the for loop, i'm adding to the arrayList the cell adjacent to the worker
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                if (!(i == 0 && j == 0) && 0 <= WorkerRow + i && WorkerRow + i <= 4 && 0 <= WorkerColumn + j && WorkerColumn + j <= 4) {
-                    validCells.add(gameCells[WorkerRow + i][WorkerColumn + j]);
+                if (!(i == 0 && j == 0) && 0 <= workerRow + i && workerRow + i <= 4 && 0 <= workerColumn + j && workerColumn + j <= 4) {
+                    validCells.add(gameCells[workerRow + i][workerColumn + j]);
                 }
             }
         }
@@ -54,50 +54,23 @@ public class Apollo extends Divinity {
                 //deletes from the valid the cell which are too high or too low to be reached
                 .filter(cell -> cell.getLevel() - actualWorkerCell.getLevel() <= 1)
                 //deletes the domed cells
-                .filter(cell -> cell.getPlayer() == null || !cell.getPlayer().equals(gameCells[WorkerRow][WorkerColumn].getPlayer()))
+                .filter(cell -> cell.getPlayer() == null || !cell.getPlayer().equals(gameCells[workerRow][workerColumn].getPlayer()))
                 .filter(cell -> !cell.isDomed())
                 .collect(Collectors.toCollection(ArrayList::new));
 
         //now we have to remove cells where the move is impossible due to other divinity powers
 
-        ArrayList<Cell> nV = new ArrayList<>();
+        for (Divinity d : divinitiesInGame) {
+            validCells.removeIf(c -> !d.getName().equals(this.getName()) && !d.othersMove(new MovePosition(workerRow, workerColumn, c.getRow(), c.getColumn(), gameCells[c.getRow()][c.getColumn()].getLevel() - gameCells[workerRow][workerColumn].getLevel())));
 
-        for (Cell c : validCells) {
-            for (Divinity d : divinitiesInGame) {
-                if (!d.getName().equals(this.getName()) && !d.othersMove(new MovePosition(WorkerRow, WorkerColumn, c.getRow(), c.getColumn(), gameCells[c.getRow()][c.getColumn()].getLevel() - gameCells[WorkerRow][WorkerColumn].getLevel()))) {
-                    nV.add(c);
-                    break;
-                }
-            }
         }
-        for (Cell c : nV) validCells.remove(c);
 
         //now in valid cells there is the list with compatible moves cells, but i must check that moving in these cells doesn't
-        //block the worker from building, possible since apollo can swap workers, while without apollo these situations
+        //block the worker from ending the turn, possible since apollo can swap workers, while without apollo these situations
         //aren't possible
 
-        nV = new ArrayList<>();
 
-
-        //i must clone the game-board to simulate the move, and than check the valid cells for building
-        Cell[][] clonedBoard = new Cell[5][5];
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                clonedBoard[i][j] = (Cell) gameCells[i][j].clone();
-            }
-        }
-
-
-        for (Cell c : validCells) {
-            if (!checkIfCanBuildAfterTheMove(WorkerRow, WorkerColumn, c.getRow(), c.getColumn(), clonedBoard, divinitiesInGame))
-                nV.add(c);
-        }
-
-        //we need to remove from the not valid cells the ones where the player cannot build from, but that can still make the player win if he moves on them
-        nV.removeIf(c -> checkIfWinsAfterMove(WorkerRow, WorkerColumn, c.getRow(), c.getColumn(), clonedBoard));
-
-        //now we can finally remove from the valid cells the ones where the player cannot build from
-        validCells.removeAll(nV);
+        validCells.removeIf(c -> !checkIfCanBuildAfterTheMove(workerRow, workerColumn, c.getRow(), c.getColumn(), gameCells, divinitiesInGame) && !checkIfWinsAfterMove(workerRow, workerColumn, c.getRow(), c.getColumn(), gameCells));
 
         ArrayList<Position> validPositions = new ArrayList<>();
         validCells.forEach((Cell c) -> validPositions.add(new Position(c.getRow(), c.getColumn())));
@@ -107,10 +80,10 @@ public class Apollo extends Divinity {
     /**
      * Redefined since Apollo allows to move on an occupied Cell, swapping the two workers
      *
-     * @param WorkerColumn the column of the cell where the worker is
-     * @param WorkerRow    the row of the cell where the worker is
-     * @param moveColumn   the column of the board where the worker wants to move
+     * @param workerRow    the row of the cell where the worker is
+     * @param workerColumn the column of the cell where the worker is
      * @param moveRow      the row of the board where the worker wants to move
+     * @param moveColumn   the column of the board where the worker wants to move
      * @param gd           the Game status
      * @return the next action of the controller
      * @throws NotAdjacentCellException if the destination cell is not adiacent to the worker
@@ -120,12 +93,12 @@ public class Apollo extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public Consumer<GameController> move(int WorkerColumn, int WorkerRow, int moveColumn, int moveRow, Model gd) throws NotAdjacentCellException, IncorrectLevelException, DomedCellException, DivinityPowerException, OccupiedCellException, NoTurnEndException {
+    public Consumer<GameController> move(int workerRow, int workerColumn, int moveRow, int moveColumn, Model gd) throws NotAdjacentCellException, IncorrectLevelException, DomedCellException, DivinityPowerException, OccupiedCellException, NoTurnEndException {
         //first check: the two cells must be adiacent
-        if (!(adiacentCellVerifier(WorkerRow, WorkerColumn, moveRow, moveColumn)))
+        if (!(adiacentCellVerifier(workerRow, workerColumn, moveRow, moveColumn)))
             throw new NotAdjacentCellException("Celle non adiacenti");
         //second check: the two levels must be compatible
-        int workerLevel = gd.getCell(WorkerRow, WorkerColumn).getLevel();
+        int workerLevel = gd.getCell(workerRow, workerColumn).getLevel();
         int moveLevel = gd.getCell(moveRow, moveColumn).getLevel();
         if (!(moveLevel - workerLevel <= 1))
             throw new IncorrectLevelException("Stai cerando di salire a un livello troppo alto");
@@ -138,7 +111,7 @@ public class Apollo extends Divinity {
             throw new OccupiedCellException("trying to switch with another your worker");
 
         for (Player p : gd.getPlayersInGame()) {
-            if (p != gd.getCurrentPlayer() && !p.getDivinity().othersMove(new MovePosition(WorkerRow, WorkerColumn, moveRow, moveColumn, moveLevel - moveColumn)))
+            if (p != gd.getCurrentPlayer() && !p.getDivinity().othersMove(new MovePosition(workerRow, workerColumn, moveRow, moveColumn, moveLevel - moveColumn)))
                 throw new DivinityPowerException("Fail due to other divinity");
         }
 
@@ -148,18 +121,18 @@ public class Apollo extends Divinity {
         for (Player p : gd.getPlayersInGame()) {
             if (!p.getName().equals(gd.getCurrentPlayer().getName())) otherDiv.add(p.getDivinity());
         }
-        if (!checkIfCanBuildAfterTheMove(WorkerRow, WorkerColumn, moveRow, moveColumn, gd.getClonedGameBoard(), otherDiv))
+        if (!checkIfCanBuildAfterTheMove(workerRow, workerColumn, moveRow, moveColumn, gd.getClonedGameBoard(), otherDiv))
             throw new NoTurnEndException("WIth this move, you can't end the turn");
 
         String tempWorker = gd.getCell(moveRow, moveColumn).getPlayer();
-        gd.getCell(moveRow, moveColumn).setPlayer(gd.getCell(WorkerRow, WorkerColumn).getPlayer());
-        gd.getCell(WorkerRow, WorkerColumn).setPlayer(tempWorker);
+        gd.getCell(moveRow, moveColumn).setPlayer(gd.getCell(workerRow, workerColumn).getPlayer());
+        gd.getCell(workerRow, workerColumn).setPlayer(tempWorker);
         gd.getCurrentPlayer().setOldLevel(workerLevel);
         gd.getCurrentPlayer().setNewLevel(moveLevel);
         gd.getCurrentPlayer().setLastWorkerUsed(moveRow, moveColumn);
 
         ArrayList<Cell> changedCell = new ArrayList<>();
-        changedCell.add((Cell) gd.getCell(WorkerRow, WorkerColumn).clone());
+        changedCell.add((Cell) gd.getCell(workerRow, workerColumn).clone());
         changedCell.add((Cell) gd.getCell(moveRow, moveColumn).clone());
         gd.notifyObservers(x -> x.changedBoard(changedCell));
 
@@ -167,6 +140,17 @@ public class Apollo extends Divinity {
         return GameController::requestBuildDome;
     }
 
+    /**
+     * Simulates a move, and checks if the player can complete the turn after.     *
+     *
+     * @param wR        the row where the worker is
+     * @param wC        the column where the worker is
+     * @param mR        the row where the worker wants to move
+     * @param mC        the column where the worker wants to move
+     * @param gameBoard the game board
+     * @param otherDiv  the other divinities in game
+     * @return true if the move doesn't block the player from completing the turn, false otherwise
+     */
     private boolean checkIfCanBuildAfterTheMove(int wR, int wC, int mR, int mC, Cell[][] gameBoard, ArrayList<Divinity> otherDiv) {
         //here i must simulate the move and then calculate the valid cells for building and doming
         boolean canBuild;
@@ -174,21 +158,24 @@ public class Apollo extends Divinity {
         String currentPlayer = gameBoard[wR][wC].getPlayer();
         gameBoard[mR][mC].setPlayer(currentPlayer);
         gameBoard[wR][wC].setPlayer(tempPlayer);
-        canBuild = !getValidCellForBuilding(mC, mR, otherDiv, gameBoard).isEmpty() || !getValidCellsToPutDome(mC, mR, gameBoard, otherDiv).isEmpty();
+        canBuild = !getValidCellForBuilding(mR, mC, otherDiv, gameBoard).isEmpty() || !getValidCellsToPutDome(mR, mC, gameBoard, otherDiv).isEmpty();
         gameBoard[mR][mC].setPlayer(tempPlayer);
         gameBoard[wR][wC].setPlayer(currentPlayer);
         return canBuild;
     }
 
-    private boolean checkIfWinsAfterMove(int wR, int wC, int mR, int mC, Cell[][] gameBoard)
-    {
-        boolean wins;
-
-        if (gameBoard[mR][mC].getLevel() == 3 && gameBoard[mR][mC].getLevel() > gameBoard[wR][wC].getLevel())
-            wins = true;
-        else wins = false;
-
-        return wins;
+    /**
+     * Checks if after a move the player wins
+     *
+     * @param wR        the row where the worker is
+     * @param wC        the column where the worker is
+     * @param mR        the row where the worker wants to move
+     * @param mC        the column where the worker wants to move
+     * @param gameBoard the game bord
+     * @return true is the player wins after this move, false otherwise
+     */
+    private boolean checkIfWinsAfterMove(int wR, int wC, int mR, int mC, Cell[][] gameBoard) {
+        return gameBoard[mR][mC].getLevel() == 3 && gameBoard[mR][mC].getLevel() > gameBoard[wR][wC].getLevel();
     }
 
     @Override

@@ -28,9 +28,12 @@ public class Circe extends Divinity {
 
 
     /**
-     * stole other player divinity if the the other player's workers are not adjacent
+     * At the beginning of each Circe turn, restores the original players' divinities situation.
+     * Then, stole other player divinity if the the other player's workers are not adjacent.
+     * Then, checks if the player can end the turn
      *
-     * @param gd the game state
+     * @param gd the model
+     * @return the next controller FSN state
      * @author Daniele Mammone
      */
     @Override
@@ -58,7 +61,7 @@ public class Circe extends Divinity {
             }
         }
         gd.sendPlayerList();
-        return GameController::requestMove;
+        return super.turnBegin(gd);
     }
 
     @Override

@@ -11,7 +11,6 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Hephaestus extends Divinity {
-    private final String name = "Hephaestus";
 
     private int prevBuildRow = -1;
     private int prevBuildColumn = -1;
@@ -29,15 +28,18 @@ public class Hephaestus extends Divinity {
     }
 
     /**
-     * @param WorkerColumn     the column where the worker is
-     * @param WorkerRow        the row where the worker is
-     * @param gameCells        the actual board state
+     * Generates a list of cell where a certain worker can build, according to Hephaestus' power, since he can
+     * do an optional build on the same cell.
+     *
+     * @param workerRow        the row where the worker is
+     * @param workerColumn     the column where the worker is
      * @param divinitiesInGame the divinities in the game
+     * @param gameCells        the actual board state
      * @return a list of cell valid for the building of the worker
      */
     @Override
-    public ArrayList<Position> getValidCellForBuilding(int WorkerColumn, int WorkerRow, ArrayList<Divinity> divinitiesInGame, Cell[][] gameCells) {
-        ArrayList<Position> validCells = super.getValidCellForBuilding(WorkerColumn, WorkerRow, divinitiesInGame, gameCells);
+    public ArrayList<Position> getValidCellForBuilding(int workerRow, int workerColumn, ArrayList<Divinity> divinitiesInGame, Cell[][] gameCells) {
+        ArrayList<Position> validCells = super.getValidCellForBuilding(workerRow, workerColumn, divinitiesInGame, gameCells);
         if (prevBuildRow != -1 && prevBuildColumn != -1) validCells = validCells.stream()
                 .filter(cell -> cell.getRow() == prevBuildRow && cell.getColumn() == prevBuildColumn)
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -46,7 +48,8 @@ public class Hephaestus extends Divinity {
 
 
     /**
-     * Redefined since it has to check if we are trying to perform the second build on cells different from the first
+     * Redefined since it has to check if we are trying to perform the second build on cells different from the first.
+     * If the player build a third level, return a turn change since he can't complete a second build.
      *
      * @param workerRow    the row where the worker is
      * @param workerColumn the column where the worker is
@@ -82,20 +85,38 @@ public class Hephaestus extends Divinity {
     }
 
     /**
-     * @param workerColumn     the column where the worker is
+     * Generates a list of cells where a certain worker can put a dome, according to Eros' power: he can put a dome only at the first construction
+     * operation.
+     *
      * @param workerRow        the row where the worker is
+     * @param workerColumn     the column where the worker is
      * @param gameCells        the actual state of the board
      * @param divinitiesInGame the divinities in game
      * @return a list of cell where the player can put a dome
      * @author Daniele Mammone
      */
     @Override
-    public ArrayList<Position> getValidCellsToPutDome(int workerColumn, int workerRow, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
+    public ArrayList<Position> getValidCellsToPutDome(int workerRow, int workerColumn, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
         if (prevBuildColumn == -1 && prevBuildRow == -1)
-            return super.getValidCellsToPutDome(workerColumn, workerRow, gameCells, divinitiesInGame);
+            return super.getValidCellsToPutDome(workerRow, workerColumn, gameCells, divinitiesInGame);
         else return new ArrayList<>();
     }
 
+    /**
+     * Requires the model to register a dome operation performed by the player
+     *
+     * @param workerRow    the row where the worker is
+     * @param workerColumn the column where the worker is
+     * @param domeRow      the row where the player wants to add the dome
+     * @param domeColumn   the column where the player wants to add the dome
+     * @param gd           the current game board state
+     * @return the next controller FSM state
+     * @throws NotAdjacentCellException        if player is trying to put a dome on a cell not adjacent to the worker
+     * @throws OccupiedCellException           if player is trying to put a dome on a occupied cell
+     * @throws DomedCellException              if player is trying to put a dome on an already domed cell
+     * @throws MaximumLevelNotReachedException if the player is trying to put a dome on a cell with level <= 2
+     * @throws DivinityPowerException          if another divinity blocks the dome, or if the player is trying to put a dome as second operation.
+     */
     @Override
     public Consumer<GameController> dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
         if (prevBuild) throw new DivinityPowerException("Trying to add a dome as the second build!");
@@ -104,7 +125,7 @@ public class Hephaestus extends Divinity {
 
     @Override
     public String getName() {
-        return name;
+        return "Hephaestus";
     }
 
     @Override

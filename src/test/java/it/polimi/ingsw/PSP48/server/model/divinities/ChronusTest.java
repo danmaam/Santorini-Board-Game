@@ -57,7 +57,7 @@ public class ChronusTest {
     public void testWithGrowingUp() throws DomedCellException, OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, NoTurnEndException {
         game_database.getCell(0, 1).setActualLevel(2);
         game_database.getCell(0, 2).setActualLevel(3);
-        player1.getDivinity().move(1, 0, 2, 0, game_database);
+        player1.getDivinity().move(0, 1, 0, 2, game_database);
         assertTrue(player1.getDivinity().winCondition(game_database));
     }
 }

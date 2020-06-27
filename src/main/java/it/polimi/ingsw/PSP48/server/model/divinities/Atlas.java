@@ -9,7 +9,6 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Atlas extends Divinity {
-    private final Boolean threePlayerSupported = true;
 
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
@@ -22,18 +21,18 @@ public class Atlas extends Divinity {
     }
 
     /**
-     * Redefined method since Atlas can add a dome on each level
+     * Generates a list of valid cells where a certain worker can build
+     * Redefined method since Atlas can add a dome on each level     *
      *
-     * @param workerColumn     the column where the worker is
      * @param workerRow        the row where the worker is
+     * @param workerColumn     the column where the worker is
      * @param gameCells        the actual state of the board
      * @param divinitiesInGame the divinities that are in game
      * @return true if it's possible to add the dome
      * @author Daniele Mammone
      */
     @Override
-    public ArrayList<Position> getValidCellsToPutDome(int workerColumn, int workerRow, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
-        ArrayList<Cell> newCells = new ArrayList<>();
+    public ArrayList<Position> getValidCellsToPutDome(int workerRow, int workerColumn, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
         //with the for loop, i'm adding to the arrayList the cell adiacent to the worker
         ArrayList<Cell> validCells = new ArrayList<>();
         for (int i = -1; i <= 1; i++) {
@@ -49,19 +48,10 @@ public class Atlas extends Divinity {
                 .filter(cell -> !cell.isDomed())
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        ArrayList<Cell> nV = new ArrayList<>();
+        for (Divinity d : divinitiesInGame) {
+            validCells.removeIf(c -> !d.getName().equals(this.getName()) && !d.othersDome(new DomePosition(workerRow, workerColumn, c.getRow(), c.getColumn(), c.getLevel())));
 
-
-        for (Cell c : validCells) {
-            for (Divinity d : divinitiesInGame) {
-                if (!d.getName().equals(this.getName()) && !d.othersDome(new DomePosition(workerRow, workerColumn, c.getRow(), c.getColumn(), c.getLevel()))) {
-                    nV.add(c);
-                    break;
-                }
-            }
         }
-
-        for (Cell c : nV) validCells.remove(c);
 
         ArrayList<Position> validPositions = new ArrayList<>();
         validCells.forEach((Cell c) -> validPositions.add(new Position(c.getRow(), c.getColumn())));
@@ -121,7 +111,7 @@ public class Atlas extends Divinity {
     }
 
     @Override
-    public String getDescription(){
+    public String getDescription() {
         return "Your Worker may build a dome at any level.";
     }
 }

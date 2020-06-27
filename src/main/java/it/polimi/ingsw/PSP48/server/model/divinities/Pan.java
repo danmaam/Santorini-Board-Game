@@ -24,6 +24,8 @@ public class Pan extends Divinity {
 
 
     /**
+     * Calculates the player's winning condition according to Pan's power: he can also won if he jump down of two or more levels.
+     *
      * @param gd the state of the game
      * @return true if the actual player considered has won, false if the game must go on
      * @author Daniele Mammone

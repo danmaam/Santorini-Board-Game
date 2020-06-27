@@ -39,7 +39,7 @@ public class ClientNetworkIncoming implements Runnable {
      * Initializes the message listener
      */
     @Override
-    public void run() {
+    public synchronized void run() {
         try {
             in = new ObjectInputStream(server.getInputStream());
             try {

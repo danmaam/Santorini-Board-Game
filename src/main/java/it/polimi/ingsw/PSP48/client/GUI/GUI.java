@@ -55,6 +55,11 @@ public class GUI extends Application implements ClientNetworkObserver, Runnable,
     public void endgame(String messageOfEndGame) {
         Platform.runLater(() -> {
             primaryStage.close();
+            try {
+                server.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("End of game");
             alert.setHeaderText("Oh! The game finished!");

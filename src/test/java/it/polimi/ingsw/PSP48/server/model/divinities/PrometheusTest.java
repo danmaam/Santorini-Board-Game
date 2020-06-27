@@ -54,7 +54,7 @@ public class PrometheusTest {
         ArrayList<Divinity> div = new ArrayList<>();
         div.add(p2.getDivinity());
         p1.getDivinity().turnBegin(model);
-        assertTrue(p1.getDivinity().getValidCellForBuilding(1, 0, div, model.getGameBoard()).isEmpty());
+        assertTrue(p1.getDivinity().getValidCellForBuilding(0, 1, div, model.getGameBoard()).isEmpty());
 
     }
 
@@ -63,7 +63,7 @@ public class PrometheusTest {
         ArrayList<Divinity> div = new ArrayList<>();
         div.add(p2.getDivinity());
         p1.getDivinity().turnBegin(model);
-        assertTrue(p1.getDivinity().getValidCellsToPutDome(1, 0, model.getGameBoard(), div).isEmpty());
+        assertTrue(p1.getDivinity().getValidCellsToPutDome(0, 1, model.getGameBoard(), div).isEmpty());
     }
 
     @Test
@@ -74,7 +74,7 @@ public class PrometheusTest {
         div.add(p2.getDivinity());
         ArrayList<Position> valid = new ArrayList<>();
         p1.getDivinity().turnBegin(model);
-        assertEquals(p1.getDivinity().getValidCellForBuilding(1, 0, div, model.getGameBoard()), valid);
+        assertEquals(p1.getDivinity().getValidCellForBuilding(0, 1, div, model.getGameBoard()), valid);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class PrometheusTest {
         div.add(p2.getDivinity());
         ArrayList<Position> valid = new ArrayList<>();
         p1.getDivinity().turnBegin(model);
-        assertEquals(p1.getDivinity().getValidCellsToPutDome(1, 0, model.getGameBoard(), div), valid);
+        assertEquals(p1.getDivinity().getValidCellsToPutDome(0, 1, model.getGameBoard(), div), valid);
     }
 
     @Test
@@ -95,7 +95,7 @@ public class PrometheusTest {
         model.getCell(1, 2).addDome();
         model.getCell(1, 1).addDome();
         model.getCell(0, 2).setActualLevel(0);
-        p1.getDivinity().move(1, 0, 2, 0, model);
+        p1.getDivinity().move(0, 1, 0, 2, model);
         assertEquals(model.getCell(0, 1).getLevel(), model.getCell(0, 2).getLevel());
         assertTrue((model.getCell(0, 1).getPlayer() == null) && (model.getCell(0, 2).getPlayer().equals(p1.getName())));
     }
@@ -106,7 +106,7 @@ public class PrometheusTest {
         model.getCell(1, 2).addDome();
         model.getCell(1, 1).addDome();
         model.getCell(0, 2).setActualLevel(1);
-        p1.getDivinity().move(1, 0, 2, 0, model);
+        p1.getDivinity().move(0, 1, 0, 2, model);
         assertTrue(model.getCell(0, 1).getLevel() < model.getCell(0, 2).getLevel());
         assertTrue((model.getCell(0, 1).getPlayer() == null) && (model.getCell(0, 2).getPlayer().equals(p1.getName())));
     }
@@ -116,7 +116,7 @@ public class PrometheusTest {
         model.getCell(0, 2).setActualLevel(0);
         p1.getDivinity().turnBegin(model);
         p1.getDivinity().build(0, 1, 0, 2, model);
-        p1.getDivinity().move(1, 0, 2, 0, model);
+        p1.getDivinity().move(0, 1, 0, 2, model);
     }
 
     @Test
@@ -126,7 +126,7 @@ public class PrometheusTest {
         model.getCell(1, 1).setActualLevel(1);
         p1.getDivinity().turnBegin(model);
         p1.getDivinity().build(0, 1, 0, 2, model);
-        p1.getDivinity().move(1, 0, 2, 0, model);
+        p1.getDivinity().move(0, 1, 0, 2, model);
         assertEquals(model.getCell(0, 1).getLevel(), model.getCell(0, 2).getLevel());
         assertTrue((model.getCell(0, 1).getPlayer() == null) && (model.getCell(0, 2).getPlayer().equals(p1.getName())));
     }
@@ -137,7 +137,7 @@ public class PrometheusTest {
         model.getCell(1, 1).setActualLevel(3);
         p1.getDivinity().turnBegin(model);
         p1.getDivinity().dome(0, 1, 1, 1, model);
-        p1.getDivinity().move(1, 0, 2, 0, model);
+        p1.getDivinity().move(0, 1, 0, 2, model);
     }
 
     @Test
@@ -146,7 +146,7 @@ public class PrometheusTest {
         model.getCell(1, 1).setActualLevel(3);
         p1.getDivinity().turnBegin(model);
         p1.getDivinity().dome(0, 1, 1, 1, model);
-        p1.getDivinity().move(1, 0, 2, 0, model);
+        p1.getDivinity().move(0, 1, 0, 2, model);
         assertEquals(model.getCell(0, 1).getLevel(), model.getCell(0, 2).getLevel());
         assertTrue((model.getCell(0, 1).getPlayer() == null) && (model.getCell(0, 2).getPlayer().equals(p1.getName())));
     }
@@ -162,7 +162,7 @@ public class PrometheusTest {
         v.add(new Position(1, 2));
         v.add(new Position(1, 2));
 
-        ArrayList<Position> valid = p1.getDivinity().getValidCellForBuilding(1, 0, new ArrayList(), model.getGameBoard());
+        ArrayList<Position> valid = p1.getDivinity().getValidCellForBuilding(0, 1, new ArrayList(), model.getGameBoard());
 
         assertTrue(valid.containsAll(v));
         assertEquals(valid.size(), v.size());
@@ -172,7 +172,7 @@ public class PrometheusTest {
     public void doubleBuild() throws MaximumLevelReachedException, OccupiedCellException, NotAdjacentCellException, DomedCellException, DivinityPowerException, NoTurnEndException, IncorrectLevelException {
         p2.setDivinity(new Divinity());
         model.getCurrentPlayer().getDivinity().build(0, 1, 0, 2, model);
-        model.getCurrentPlayer().getDivinity().move(1, 0, 2, 1, model);
+        model.getCurrentPlayer().getDivinity().move(0, 1, 1, 2, model);
         model.getCurrentPlayer().getDivinity().build(1, 2, 1, 3, model);
         assertEquals(model.getCell(0, 2).getLevel(), 1);
         assertEquals(model.getCell(1, 3).getLevel(), 1);
@@ -185,7 +185,7 @@ public class PrometheusTest {
         p2.setDivinity(new Divinity());
         model.getCell(1, 3).setActualLevel(3);
         model.getCurrentPlayer().getDivinity().build(0, 1, 0, 2, model);
-        model.getCurrentPlayer().getDivinity().move(1, 0, 2, 1, model);
+        model.getCurrentPlayer().getDivinity().move(0, 1, 1, 2, model);
         model.getCurrentPlayer().getDivinity().dome(1, 2, 1, 3, model);
         assertEquals(model.getCell(0, 2).getLevel(), 1);
         assertTrue(model.getCell(1, 3).isDomed());

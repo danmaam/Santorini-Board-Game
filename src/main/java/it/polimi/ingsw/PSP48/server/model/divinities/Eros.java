@@ -28,8 +28,10 @@ public class Eros extends Divinity {
 
 
     /**
+     * Generates a list of cells where a player can put his initial worker according to Eros' power
+     *
      * @param gameCells the actual game board state
-     * @return an array list of cells valid fro the positioning
+     * @return an array list of cells valid for the positioning
      */
     @Override
     public ArrayList<Position> validCellsForInitialPositioning(Cell[][] gameCells) {
@@ -64,19 +66,21 @@ public class Eros extends Divinity {
     }
 
     /**
+     * Calculate Eros' win condition according to the game rules
+     *
      * @param gd the state of the game
-     * @return true if the actual player considererd has won, false if the game must go on
+     * @return true if the actual player has won, false if the game must go on
      */
     @Override
     public boolean winCondition(Model gd) {
-        Boolean divinityWinCondition = false;
+        boolean divinityWinCondition = false;
         //first, we have to check if the player has two workers in game
         String playerName = gd.getCurrentPlayer().getName();
         ArrayList<Position> positions = gd.getPlayerPositionsInMap(playerName);
-        //check if the player has at least two workers in game, and if they are adiacent
+        //check if the player has at least two workers in game, and if they are adjacent
         if (positions.size() <= 1 || !adiacentCellVerifier(positions.get(0).getRow(), positions.get(0).getColumn(), positions.get(1).getRow(), positions.get(1).getColumn()))
             divinityWinCondition = false;
-            //now, i have to verify the win condition depending on the number of player in game, cause they are adiacent
+            //now, i have to verify the win condition depending on the number of player in game, cause they are adjacent
         else if (gd.getNumberOfPlayers() == 2) {
             if (gd.getCell(positions.get(0).getRow(), positions.get(0).getColumn()).getLevel() == 1 && gd.getCell(positions.get(1).getRow(), positions.get(1).getColumn()).getLevel() == 1)
                 divinityWinCondition = true;
@@ -87,6 +91,16 @@ public class Eros extends Divinity {
         return super.winCondition(gd) || divinityWinCondition;
     }
 
+    /**
+     * Puts player's workers on the board, according to Eros' power, so only on the board margin, and on board
+     * opposite sides.
+     *
+     * @param p  the position where the player would put the worker on the board
+     * @param gd the model
+     * @return the next controller FSM state
+     * @throws OccupiedCellException  if the desidered cell is occupied
+     * @throws DivinityPowerException if the positioning isn't complain to eros' power
+     */
     @Override
     public Consumer<GameController> putWorkerOnBoard(Position p, Model gd) throws OccupiedCellException, DivinityPowerException {
         if (!(p.getRow() == 0 || p.getRow() == 4 || p.getColumn() == 0 || p.getColumn() == 4)) {

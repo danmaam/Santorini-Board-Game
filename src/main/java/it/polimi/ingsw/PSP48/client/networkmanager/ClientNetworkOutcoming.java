@@ -124,7 +124,7 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
      * Initializes the message sender
      */
     @Override
-    public void run() {
+    public synchronized void run() {
         try {
             outputStm = new ObjectOutputStream(server.getOutputStream());
             handleServerConnection();

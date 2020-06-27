@@ -92,7 +92,6 @@ public class Server {
                 }
             }
             //found the game room, notify all the players to shutdown connection
-            //but it may occur that the player disconnects before entering in a game room
             switch (reason) {
                 case disconnection:
                     tbd.notifyAllPlayersOfDisconnection(incriminatedPlayer);

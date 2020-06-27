@@ -80,7 +80,7 @@ public class ApolloTest {
     public void move_occupiedCell_exception() throws OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, DomedCellException, NoTurnEndException {
         oldCell.setPlayer(null);
         newCell.setPlayer(game_database.getCurrentPlayer().getName());
-        game_database.getCurrentPlayer().getDivinity().move(2, 2, 3, 1, game_database);
+        game_database.getCurrentPlayer().getDivinity().move(2, 2, 1, 3, game_database);
     }
 
     @org.junit.Test(expected = DomedCellException.class)
@@ -94,19 +94,19 @@ public class ApolloTest {
     public void move_notAdjacentCell_exception() throws OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, DomedCellException, NoTurnEndException {
         oldCell.setPlayer(null);
         newCell.setPlayer(game_database.getCurrentPlayer().getName());
-        game_database.getCurrentPlayer().getDivinity().move(2, 2, 0, 4, game_database);
+        game_database.getCurrentPlayer().getDivinity().move(2, 2, 4, 0, game_database);
     }
 
     @org.junit.Test(expected = DivinityPowerException.class)
     public void move_otherDivinityPower_exception() throws OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, DomedCellException, NoTurnEndException {
-        game_database.getCurrentPlayer().getDivinity().move(2, 2, 2, 1, game_database);
+        game_database.getCurrentPlayer().getDivinity().move(2, 2, 1, 2, game_database);
     }
 
     @org.junit.Test(expected = IncorrectLevelException.class)
     public void move_incorrectLevel_exception() throws OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, DomedCellException, NoTurnEndException {
         oldCell.setPlayer(null);
         newCell.setPlayer(game_database.getCurrentPlayer().getName());
-        game_database.getCurrentPlayer().getDivinity().move(2, 2, 1, 3, game_database);
+        game_database.getCurrentPlayer().getDivinity().move(2, 2, 3, 1, game_database);
     }
 
     @Test
