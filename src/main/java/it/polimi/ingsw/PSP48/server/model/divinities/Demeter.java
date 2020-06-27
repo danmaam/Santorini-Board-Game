@@ -99,12 +99,12 @@ public class Demeter extends Divinity {
             prevBuild = true;
             return GameController::requestOptionalBuilding;
         } else {
-            if (workerRow == -1 && workerColumn == -1) return GameController::turnChange;
+            if (workerRow == -1 && workerColumn == -1) return GameController::turnEnd;
             else if (buildRow == oldRowBuild && buildColumn == oldColumnBuild)
                 throw new DivinityPowerException("NO!");
             else {
                 super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
-                return GameController::turnChange;
+                return GameController::turnEnd;
             }
         }
     }
@@ -136,12 +136,12 @@ public class Demeter extends Divinity {
             prevBuild = true;
             return GameController::requestOptionalBuilding;
         } else {
-            if (workerRow == -1 && workerColumn == -1) return GameController::turnChange;
+            if (workerRow == -1 && workerColumn == -1) return GameController::turnEnd;
             else if (domeRow == oldRowBuild && domeColumn == oldColumnBuild)
                 throw new DivinityPowerException("NO!");
             else {
                 super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
-                return GameController::turnChange;
+                return GameController::turnEnd;
             }
         }
     }

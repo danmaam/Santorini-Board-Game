@@ -269,7 +269,7 @@ public class GameController implements ViewObserver {
         for (Position p : workersPosition) {
             validCells.add(new WorkerValidCells(new ArrayList<>(model.getCurrentPlayer().getDivinity().getValidCellForMove(p.getRow(), p.getColumn(), model.getGameBoard(), otherDivinities)), p.getRow(), p.getColumn()));
         }
-        validCells.removeIf(x-> x.getValidPositions().size()==0); //removes elements that have no valid positions
+        validCells.removeIf(x -> x.getValidPositions().size() == 0); //removes elements that have no valid positions
         getPlayerView(model.getCurrentPlayer().getName()).requestMove(validCells);
     }
 
@@ -286,34 +286,28 @@ public class GameController implements ViewObserver {
      * @author Daniele Mammone
      */
     public void postMove() {
-        boolean endGame = model.getCurrentPlayer().getDivinity().winCondition(model);
-        if (endGame) {
-            nextAction = (GameController::gameEnd);
-        }
+        boolean endGame = model.getCurrentPlayer().getDivinity().postMoveWinCondition(model);
+        if (endGame)
+            Server.destroyGameRoom(roomID, model.getCurrentPlayer().getName(), EndReason.win);
         this.nextAction();
-    }
-
-    public void gameEnd() {
-        Server.destroyGameRoom(roomID, model.getCurrentPlayer().getName(), EndReason.win);
     }
 
 
     /**
-     * @author Rebecca Marelli
+     * @author Daniele Mammone
      */
     public void postBuild() {
         boolean win = false;
-        String playerWithChronus = null;
+        String playerThatWon = null;
         for (Player p : model.getPlayersInGame()) {
-            if (p.getDivinity().getName().equals("Chronus")) {
-                win = p.getDivinity().winCondition(model);
-                playerWithChronus = p.getName();
+            if (p.getDivinity().postBuildWinCondition(model)) {
+                playerThatWon = p.getName();
                 break;
             }
         }
 
-        if (win && playerWithChronus != null) {
-            Server.destroyGameRoom(roomID, playerWithChronus, EndReason.win);
+        if (playerThatWon != null) {
+            Server.destroyGameRoom(roomID, playerThatWon, EndReason.win);
         } else this.nextAction();
     }
 
@@ -447,8 +441,8 @@ public class GameController implements ViewObserver {
         for (Player p : model.getPlayersInGame()) {
             if (!p.getName().equals(model.getCurrentPlayer().getName())) otherDivinities.add(p.getDivinity());
         }
-        ArrayList<Position> validForBuilding = model.getCurrentPlayer().getDivinity().getValidCellForBuilding(lastWorker.getRow(), lastWorker.getColumn(), otherDivinities, model.getClonedGameBoard());
-        ArrayList<Position> validForDoming = model.getCurrentPlayer().getDivinity().getValidCellsToPutDome(lastWorker.getRow(), lastWorker.getColumn(), model.getClonedGameBoard(), otherDivinities);
+        ArrayList<Position> validForBuilding = model.getCurrentPlayer().getDivinity().getValidCellForBuilding(lastWorker.getRow(), lastWorker.getColumn(), otherDivinities, model.getGameBoard());
+        ArrayList<Position> validForDoming = model.getCurrentPlayer().getDivinity().getValidCellsToPutDome(lastWorker.getRow(), lastWorker.getColumn(), model.getGameBoard(), otherDivinities);
         if (validForBuilding.isEmpty() && validForDoming.isEmpty()) {
             try {
                 nextAction = model.getCurrentPlayer().getDivinity().build(-1, -1, -1, -1, model);
@@ -479,7 +473,7 @@ public class GameController implements ViewObserver {
         for (Player p : model.getPlayersInGame()) {
             if (!p.getName().equals(model.getCurrentPlayer().getName())) otherDivinities.add(p.getDivinity());
         }
-        ArrayList<Position> validPositionsForMove = model.getCurrentPlayer().getDivinity().getValidCellForMove(model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getCurrentPlayer().getLastWorkerMoved().getColumn(), model.getClonedGameBoard(), otherDivinities);
+        ArrayList<Position> validPositionsForMove = model.getCurrentPlayer().getDivinity().getValidCellForMove(model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getCurrentPlayer().getLastWorkerMoved().getColumn(), model.getGameBoard(), otherDivinities);
         if (validPositionsForMove.isEmpty()) {
             try {
                 nextAction = model.getCurrentPlayer().getDivinity().move(-1, -1, -1, -1, model);

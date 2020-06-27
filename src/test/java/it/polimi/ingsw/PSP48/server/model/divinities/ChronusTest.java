@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class ChronusTest {
@@ -41,16 +42,16 @@ public class ChronusTest {
 
     @Test
     public void testWithFiveOrMoreTowers() {
-        assertTrue(!(player1.getDivinity().winCondition(game_database)));
+        assertFalse(player1.getDivinity().postMoveWinCondition(game_database));
         game_database.getCell(4, 4).setActualLevel(3);
         game_database.getCell(4, 4).addDome();
 
-        assertTrue((player1.getDivinity().winCondition(game_database)));
+        assertTrue((player1.getDivinity().postBuildWinCondition(game_database)));
 
         game_database.getCell(4, 0).setActualLevel(3);
         game_database.getCell(4, 0).addDome();
 
-        assertTrue((player1.getDivinity().winCondition(game_database)));
+        assertTrue((player1.getDivinity().postBuildWinCondition(game_database)));
     }
 
     @Test
@@ -58,6 +59,6 @@ public class ChronusTest {
         game_database.getCell(0, 1).setActualLevel(2);
         game_database.getCell(0, 2).setActualLevel(3);
         player1.getDivinity().move(0, 1, 0, 2, game_database);
-        assertTrue(player1.getDivinity().winCondition(game_database));
+        assertTrue(player1.getDivinity().postMoveWinCondition(game_database));
     }
 }

@@ -297,17 +297,6 @@ public class Model {
         }
     }
 
-    public Cell[][] getClonedGameBoard() {
-        Cell[][] clonedBoard = new Cell[5][5];
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                clonedBoard[i][j] = (Cell) boardCell[i][j].clone();
-            }
-        }
-
-        return clonedBoard;
-    }
-
     public String getPlayerWithCirce() {
         return playerWithCirce;
     }

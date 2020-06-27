@@ -5,6 +5,9 @@ import it.polimi.ingsw.PSP48.server.model.Position;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Data type representing an association between a worker, and the valid cells where it can complete a certain action (eg. move, build, dome)
+ */
 public class WorkerValidCells implements Serializable {
     private ArrayList<Position> validPositions;
     private int wR;

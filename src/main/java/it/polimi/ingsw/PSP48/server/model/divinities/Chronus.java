@@ -14,14 +14,15 @@ public class Chronus extends Divinity {
         return false;
     }
 
+
     /**
-     * Chronus can win when there are five complete buildings on the board
+     * Calculates win condition after a build happened, according to Chronus' power.
      *
-     * @param gd the state of the game
-     * @return true if the actual player considered has won, false if the game must go on
+     * @param gd the model
+     * @return true if the player has won
      */
     @Override
-    public boolean winCondition(Model gd) {
+    public boolean postBuildWinCondition(Model gd) {
         int numbersOfCompleteTowers = 0;
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -29,7 +30,7 @@ public class Chronus extends Divinity {
             }
 
         }
-        return super.winCondition(gd) || numbersOfCompleteTowers >= 5;
+        return numbersOfCompleteTowers >= 5;
     }
 
     @Override

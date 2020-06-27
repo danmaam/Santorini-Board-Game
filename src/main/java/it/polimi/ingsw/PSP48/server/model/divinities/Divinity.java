@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
+import it.polimi.ingsw.PSP48.server.MoveCoordinates;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import it.polimi.ingsw.PSP48.server.model.*;
@@ -75,7 +76,7 @@ public class Divinity {
         //now we have to remove cells where the move is impossible due to other divinity powers
 
         for (Divinity d : otherDivinitiesInGame) {
-            validCells.removeIf(c -> !d.getName().equals(this.getName()) && !d.othersMove(new MovePosition(workerRow, workerColumn, c.getRow(), c.getColumn(), gameCells[c.getRow()][c.getColumn()].getLevel() - gameCells[workerRow][workerColumn].getLevel())));
+            validCells.removeIf(c -> !d.getName().equals(this.getName()) && !d.othersMove(new MoveCoordinates(workerRow, workerColumn, c.getRow(), c.getColumn()), gameCells));
         }
         //now in valid cells there is the list with compatible moves cells
 
@@ -117,7 +118,7 @@ public class Divinity {
         //fifth check: if another different divinity doesn't invalid this move
 
         for (Player p : gd.getPlayersInGame()) {
-            if (p != gd.getCurrentPlayer() && !p.getDivinity().othersMove(new MovePosition(workerRow, workerColumn, moveRow, moveColumn, moveLevel - workerLevel)))
+            if (p != gd.getCurrentPlayer() && !p.getDivinity().othersMove(new MoveCoordinates(workerRow, workerColumn, moveRow, moveColumn), gd.getGameBoard()))
                 throw new DivinityPowerException("Fail due to other divinity");
         }
 
@@ -175,7 +176,7 @@ public class Divinity {
 
 
         for (Divinity d : otherDivinitiesInGame) {
-            validBuild.removeIf(c -> !d.getName().equals(this.getName()) && !d.othersBuilding(new BuildPosition(workerRow, workerColumn, c.getRow(), c.getColumn(), c.getLevel())));
+            validBuild.removeIf(c -> !d.getName().equals(this.getName()) && !d.othersBuilding(new MoveCoordinates(workerRow, workerColumn, c.getRow(), c.getColumn())));
         }
 
         ArrayList<Position> validPositions = new ArrayList<>();
@@ -213,7 +214,7 @@ public class Divinity {
         //fifth check: if another different divinity doesn't invalid this move
 
         for (Player p : gd.getPlayersInGame()) {
-            if (p != gd.getCurrentPlayer() && !p.getDivinity().othersBuilding(new BuildPosition(workerRow, workerColumn, buildRow, buildColumn, gd.getCell(buildRow, buildColumn).getLevel())))
+            if (p != gd.getCurrentPlayer() && !p.getDivinity().othersBuilding(new MoveCoordinates(workerRow, workerColumn, buildRow, buildColumn)))
                 throw new DivinityPowerException("Fail due to other divinity");
         }
 
@@ -265,7 +266,7 @@ public class Divinity {
 
 
         for (Divinity d : divinitiesInGame)
-            validCells.removeIf(c -> !d.getName().equals(this.getName()) && !d.othersDome(new DomePosition(workerRow, workerColumn, c.getRow(), c.getColumn(), c.getLevel())));
+            validCells.removeIf(c -> !d.getName().equals(this.getName()) && !d.othersDome(new MoveCoordinates(workerRow, workerColumn, c.getRow(), c.getColumn())));
 
 
         ArrayList<Position> validPositions = new ArrayList<>();
@@ -303,7 +304,7 @@ public class Divinity {
 
 
         for (Player p : gd.getPlayersInGame()) {
-            if (p != gd.getCurrentPlayer() && !p.getDivinity().othersDome(new DomePosition(workerRow, workerColumn, domeRow, domeColumn, gd.getCell(domeRow, domeColumn).getLevel())))
+            if (p != gd.getCurrentPlayer() && !p.getDivinity().othersDome(new MoveCoordinates(workerRow, workerColumn, domeRow, domeColumn)))
                 throw new DivinityPowerException("Fail due to other divinity");
         }
 
@@ -331,10 +332,11 @@ public class Divinity {
 
     /**
      * @param moveCells the cells where the player wants to move, where the player is and the difference between the two cells
+     * @param gameBoard the game board
      * @return true if the divinity doesn't affect the other player's move, false if the divinity blocks the move
      * @author Daniele Mammone
      */
-    public Boolean othersMove(MovePosition moveCells) {
+    public Boolean othersMove(MoveCoordinates moveCells, Cell[][] gameBoard) {
         return true;
     }
 
@@ -344,7 +346,7 @@ public class Divinity {
      * @return true if the divinity doesn't affect the other player's move, false if the divinity blocks the move
      * @author Daniele Mammone
      */
-    public Boolean othersBuilding(BuildPosition buildCells) {
+    public Boolean othersBuilding(MoveCoordinates buildCells) {
         return true;
     }
 
@@ -353,7 +355,7 @@ public class Divinity {
      * @return true if the divinity doesn't affect the other player's move, false if the divinity blocks the move
      * @author Daniele Mammone
      */
-    public Boolean othersDome(DomePosition domeCells) {
+    public Boolean othersDome(MoveCoordinates domeCells) {
         //since this is the base divinity's method, it always returns true
         return true;
     }
@@ -400,8 +402,18 @@ public class Divinity {
      * @param gd the state of the game
      * @return true if the actual player considererd has won, false if the game must go on
      */
-    public boolean winCondition(Model gd) {
+    public boolean postMoveWinCondition(Model gd) {
         return (gd.getCurrentPlayer().getOldLevel() != gd.getCurrentPlayer().getNewLevel() && gd.getCurrentPlayer().getNewLevel() == 3);
+    }
+
+    /**
+     * Calculates the win condition after a build action happened
+     *
+     * @param gd the model
+     * @return true if the player has won
+     */
+    public boolean postBuildWinCondition(Model gd) {
+        return false;
     }
 
 

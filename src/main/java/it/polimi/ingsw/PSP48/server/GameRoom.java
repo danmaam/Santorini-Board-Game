@@ -22,18 +22,34 @@ public class GameRoom {
         gameRoomID = ID;
     }
 
+    /**
+     * @return the maximum number of player allowed in this room
+     */
     public int getRoomPlayerNumber() {
         return model.getGamePlayerNumber();
     }
 
+    /**
+     * @return the number of players actually in the room
+     */
     public int getPlayersInTheRoom() {
         return model.getNumberOfPlayers();
     }
 
+    /**
+     * @return true if the room contains a game with divinities, false otherwise
+     */
     public boolean isGameWithDivinities() {
         return model.isGameWithDivinities();
     }
 
+    /**
+     * Adds a player in the game room
+     *
+     * @param name              the name of the player to be added
+     * @param birthday          the birthday of the player
+     * @param playerVirtualView the virtualview of the player
+     */
     public void addPlayerInRoom(String name, Calendar birthday, ViewInterface playerVirtualView) {
         playerVirtualView.registerObserver(controller);
         ((VirtualView) playerVirtualView).setRoomID(gameRoomID);
@@ -42,10 +58,18 @@ public class GameRoom {
         playerVirtualView.notifyObserver((c) -> c.addPlayer(name, birthday));
     }
 
+    /**
+     * @return the ID of the game room
+     */
     public int getGameRoomID() {
         return gameRoomID;
     }
 
+    /**
+     * Notifies all the players in the game room that one player disconnected, and remove from the server the nicknames of all players in the game room
+     *
+     * @param disconnectedPlayers the player that disconnected from the server
+     */
     public void notifyAllPlayersOfDisconnection(String disconnectedPlayers) {
         for (Player p : model.getPlayersInGame()) {
             if (!p.getName().equals(disconnectedPlayers)) {
@@ -59,6 +83,13 @@ public class GameRoom {
         //at this point, the server will destroy the room
     }
 
+    /**
+     * Notifies all the players that someone won the game; the winner is notified of his success, other players are notified
+     * of their failure.
+     * In the end, free all game room players' nickname from the server
+     *
+     * @param winner the player that won the game
+     */
     public void notifyAllPlayersOfWinner(String winner) {
         for (Player p : model.getPlayersInGame()) {
 
@@ -73,6 +104,13 @@ public class GameRoom {
         }
     }
 
+    /**
+     * Notifies all the players that someone lost the game and the game is ended; the winner is notified of his success, other players are notified
+     * of their failure.
+     * In the end, free all game room players' nickname from the server
+     *
+     * @param loser the player that lost the game
+     */
     public void notifyAllPlayersOfLoser(String loser) {
         controller.getPlayerView(loser).endgame("You lose cause you won't be able to end the turn");
         for (Player p : model.getPlayersInGame()) {

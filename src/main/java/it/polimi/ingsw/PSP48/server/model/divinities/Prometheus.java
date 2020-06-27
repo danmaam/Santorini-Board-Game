@@ -53,14 +53,14 @@ public class Prometheus extends Divinity {
         ArrayList<WorkerValidCells> domeCells = new ArrayList<>();
 
         for (Position w : workers) {
-            buildCells.add(new WorkerValidCells(getValidCellForBuilding(w.getRow(), w.getColumn(), otherDivinities, gd.getClonedGameBoard()), w.getRow(), w.getColumn()));
-            domeCells.add(new WorkerValidCells(getValidCellsToPutDome(w.getRow(), w.getColumn(), gd.getClonedGameBoard(), otherDivinities), w.getRow(), w.getColumn()));
+            buildCells.add(new WorkerValidCells(getValidCellForBuilding(w.getRow(), w.getColumn(), otherDivinities, gd.getGameBoard()), w.getRow(), w.getColumn()));
+            domeCells.add(new WorkerValidCells(getValidCellsToPutDome(w.getRow(), w.getColumn(), gd.getGameBoard(), otherDivinities), w.getRow(), w.getColumn()));
         }
 
         //now i have for each workers cells where he could build or put dome; now i must check if building or doming before the move allows the player to complete the turn
         for (WorkerValidCells c : buildCells) {
             for (Position p : c.getValidPositions()) {
-                if (simulateBuildingCheckIfCanMoveAfterWards(c.getwR(), c.getwC(), p.getRow(), p.getColumn(), gd.getClonedGameBoard(), false, otherDivinities)) {
+                if (simulateBuildingCheckIfCanMoveAfterWards(c.getwR(), c.getwC(), p.getRow(), p.getColumn(), gd.getGameBoard(), false, otherDivinities)) {
                     build = true;
                     break;
                 }
@@ -70,7 +70,7 @@ public class Prometheus extends Divinity {
 
         if (!build) for (WorkerValidCells c : domeCells) {
             for (Position p : c.getValidPositions()) {
-                if (simulateBuildingCheckIfCanMoveAfterWards(c.getwR(), c.getwC(), p.getRow(), p.getColumn(), gd.getClonedGameBoard(), true, otherDivinities)) {
+                if (simulateBuildingCheckIfCanMoveAfterWards(c.getwR(), c.getwC(), p.getRow(), p.getColumn(), gd.getGameBoard(), true, otherDivinities)) {
                     dome = true;
                     break;
                 }

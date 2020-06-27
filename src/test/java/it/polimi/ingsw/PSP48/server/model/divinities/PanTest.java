@@ -37,18 +37,18 @@ public class PanTest {
     @Test
     public void normalWin() throws DomedCellException, OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, NoTurnEndException {
         game_database.getCurrentPlayer().getDivinity().move(4, 4, 4, 3, game_database);
-        assertTrue(game_database.getCurrentPlayer().getDivinity().winCondition(game_database));
+        assertTrue(game_database.getCurrentPlayer().getDivinity().postMoveWinCondition(game_database));
     }
 
     @Test
     public void winWithFaithJump() throws DomedCellException, OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, NoTurnEndException {
         game_database.getCurrentPlayer().getDivinity().move(4, 4, 3, 3, game_database);
-        assertTrue(game_database.getCurrentPlayer().getDivinity().winCondition(game_database));
+        assertTrue(game_database.getCurrentPlayer().getDivinity().postMoveWinCondition(game_database));
     }
 
     @Test
     public void notWin() {
-        assertTrue(!game_database.getCurrentPlayer().getDivinity().winCondition(game_database));
+        assertTrue(!game_database.getCurrentPlayer().getDivinity().postMoveWinCondition(game_database));
     }
 
 }

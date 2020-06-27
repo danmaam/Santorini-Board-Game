@@ -472,22 +472,22 @@ public class ErosTest {
         game_database.getCell(2, 2).setActualLevel(3);
         game_database.getCell(2, 3).setActualLevel(3);
 
-        assertTrue(player1.getDivinity().winCondition(game_database));
+        assertTrue(player1.getDivinity().postMoveWinCondition(game_database));
 
         game_database.getCell(2, 2).setActualLevel(2);
         game_database.getCell(2, 3).setActualLevel(2);
 
-        assertTrue(player1.getDivinity().winCondition(game_database));
+        assertTrue(player1.getDivinity().postMoveWinCondition(game_database));
 
         game_database.getCell(2, 2).setActualLevel(1);
         game_database.getCell(2, 3).setActualLevel(1);
 
-        assertTrue(player1.getDivinity().winCondition(game_database));
+        assertTrue(player1.getDivinity().postMoveWinCondition(game_database));
 
         game_database.getCell(2, 2).setActualLevel(0);
         game_database.getCell(2, 3).setActualLevel(0);
 
-        assertTrue(player1.getDivinity().winCondition(game_database));
+        assertTrue(player1.getDivinity().postMoveWinCondition(game_database));
     }
 
     @Test
@@ -501,7 +501,7 @@ public class ErosTest {
         game_database.getCell(2, 2).setActualLevel(1);
         game_database.getCell(2, 3).setActualLevel(1);
 
-        assertTrue(player1.getDivinity().winCondition(game_database));
+        assertTrue(player1.getDivinity().postMoveWinCondition(game_database));
 
     }
 
@@ -516,17 +516,17 @@ public class ErosTest {
         game_database.getCell(2, 2).setActualLevel(0);
         game_database.getCell(2, 3).setActualLevel(0);
 
-        assertTrue(!player1.getDivinity().winCondition(game_database));
+        assertTrue(!player1.getDivinity().postMoveWinCondition(game_database));
 
         game_database.getCell(2, 2).setActualLevel(2);
         game_database.getCell(2, 3).setActualLevel(2);
 
-        assertTrue(!player1.getDivinity().winCondition(game_database));
+        assertTrue(!player1.getDivinity().postMoveWinCondition(game_database));
 
         game_database.getCell(2, 2).setActualLevel(3);
         game_database.getCell(2, 3).setActualLevel(3);
 
-        assertTrue(!player1.getDivinity().winCondition(game_database));
+        assertTrue(!player1.getDivinity().postMoveWinCondition(game_database));
     }
 
     @Test
@@ -540,6 +540,6 @@ public class ErosTest {
 
         player1.getDivinity().move(0, 0, 1, 1, game_database);
 
-        assertTrue(player1.getDivinity().winCondition(game_database));
+        assertTrue(player1.getDivinity().postMoveWinCondition(game_database));
     }
 }

@@ -39,8 +39,7 @@ public class Server {
                 Thread th = new Thread(cH);
 
 
-                VirtualView playerVirtualView = new VirtualView(cH, incomingMessagesHandler);
-                incomingMessagesHandler.registerObserver(playerVirtualView);
+
                 incomingMessagesHandler.setUploader(cH);
                 Thread listenerThread = new Thread(incomingMessagesHandler);
                 listenerThread.start();
@@ -83,7 +82,7 @@ public class Server {
     public static synchronized void destroyGameRoom(int roomID, String incriminatedPlayer, EndReason reason) {
         //i must find the game room
         if (roomID != -1) {
-            //it must be different -1, since we must handle disconnection
+            //it must be different -1, since we must handle disconnection after a player entered in a game room
             GameRoom tbd = null;
             for (GameRoom g : roomsOnTheServer) {
                 if (g.getGameRoomID() == roomID) {

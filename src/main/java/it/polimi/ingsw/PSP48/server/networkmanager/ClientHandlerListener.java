@@ -3,14 +3,19 @@ package it.polimi.ingsw.PSP48.server.networkmanager;
 import it.polimi.ingsw.PSP48.PingMessage;
 import it.polimi.ingsw.PSP48.networkMessagesToServer.NetworkMessagesToServer;
 import it.polimi.ingsw.PSP48.observers.ServerNetworkObserver;
-import javafx.concurrent.ScheduledService;
+import it.polimi.ingsw.PSP48.server.Server;
+import it.polimi.ingsw.PSP48.server.virtualview.VirtualView;
+import it.polimi.ingsw.PSP48.setupMessagesToClient.ClientSetupMessages;
+import it.polimi.ingsw.PSP48.setupMessagesToClient.GameModeRequest;
+import it.polimi.ingsw.PSP48.setupMessagesToClient.completedSetup;
+import it.polimi.ingsw.PSP48.setupMessagesToClient.nicknameRequest;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -20,7 +25,7 @@ public class ClientHandlerListener implements Runnable {
 
     private Object nextMessage;
 
-    private boolean setNickname = false;
+    private String playerNickname = null;
     private boolean setGameMode = false;
     private boolean setClosed = false;
 
@@ -97,12 +102,10 @@ public class ClientHandlerListener implements Runnable {
         while (true) {
             nextMessage = input.readObject();
             if (nextMessage instanceof String) {
-                if (!setNickname) {
-                    for (ServerNetworkObserver o : observers)
-                        executors.submit(() -> o.processNickname((String) nextMessage));
+                if (playerNickname == null) {
+                    executors.submit(() -> this.processNickname((String) nextMessage));
                 } else if (!setGameMode) {
-                    for (ServerNetworkObserver o : observers)
-                        executors.submit(() -> o.processGameMode((String) nextMessage));
+                    executors.submit(() -> this.processGameMode((String) nextMessage));
                 }
             } else if (nextMessage instanceof NetworkMessagesToServer) {
                 executors.submit(this::notifyObservers);
@@ -111,14 +114,6 @@ public class ClientHandlerListener implements Runnable {
         }
     }
 
-    /**
-     * Changes the setup phase status, precisely if the nickname have been set
-     *
-     * @param value true if the nickname has been set
-     */
-    public void nicknameSet(boolean value) {
-        setNickname = value;
-    }
 
     /**
      * Changes the setup phase status, precisely if the game mode have been set
@@ -146,6 +141,85 @@ public class ClientHandlerListener implements Runnable {
      */
     public void setUploader(ClientHandler h) {
         out = h;
+    }
+
+    /**
+     * Process the player's nickname. Verify if it's available, and notify the result to the client
+     *
+     * @param nickname the nickname chosen by the player
+     */
+    public void processNickname(String nickname) {
+        ClientSetupMessages nextMessage;
+        try {
+            Server.addNickname(nickname);
+            nextMessage = new GameModeRequest("Valid Nickname. Welcome to the game");
+            playerNickname = nickname;
+        } catch (IllegalArgumentException e) {
+            nextMessage = new nicknameRequest("Invalid nickname. Retry");
+        }
+        out.setUpMessage(nextMessage);
+    }
+
+    /**
+     * Process the game mode chosen by the player. If the player sent a wrong message, notify it of the problem, otherwise add
+     * it in a game room.
+     *
+     * @param gameMode the game mode sent by the player
+     */
+    public void processGameMode(String gameMode) {
+
+        int playerNumber = 0;
+        Calendar c = null;
+        String nextMessage = null;
+        boolean divinities = false;
+        String[] data;
+        String mode = gameMode.split(" ")[0];
+        if (!(mode.equals("3ND") || mode.equals("2ND") || mode.equals("3D") || mode.equals("2D")))
+            nextMessage = "Not valid mode. Retry";
+
+        else if (mode.equals("3ND")) {
+            if (gameMode.split(" ").length == 1) {
+                nextMessage = "Missing Birthday. Retry";
+            } else {
+                playerNumber = 3;
+                divinities = false;
+                c = Calendar.getInstance();
+                data = gameMode.split(" ")[1].split("-");
+                c.set(Integer.parseInt(data[2]), Integer.parseInt(data[1]), Integer.parseInt(data[0]));
+                nextMessage = "You're in Game Room now! 3 Players, without divinities. The game will begin soon";
+            }
+        } else if (mode.equals("2ND")) {
+            if (gameMode.split(" ").length == 1) {
+                nextMessage = "Missing Birthday. Retry";
+            } else {
+                playerNumber = 2;
+                divinities = false;
+                c = Calendar.getInstance();
+                data = gameMode.split(" ")[1].split("-");
+                c.set(Integer.parseInt(data[2]), Integer.parseInt(data[1]), Integer.parseInt(data[0]));
+                nextMessage = "You're in Game Room now! 2 Players, without divinities. The game will begin soon";
+            }
+        } else if (mode.equals("3D")) {
+            playerNumber = 3;
+            divinities = true;
+            nextMessage = "You are in the game room! 3 players with divinities. The game will begin soon";
+        } else {
+            playerNumber = 2;
+            divinities = true;
+            nextMessage = "You are in the game room! 2 players with divinities. The game will begin soon";
+        }
+        if (!nextMessage.equals("Missing Birthday. Retry") && !nextMessage.equals("Not valid mode. Retry")) {
+            setGameMode = true;
+            out.setUpMessage(new completedSetup(nextMessage));
+
+            VirtualView playerVirtualView = new VirtualView(out, this);
+            this.registerObserver(playerVirtualView);
+
+            Server.insertPlayerInGameRoom(playerNumber, divinities, playerNickname, c, playerVirtualView);
+        } else {
+            out.setUpMessage(new GameModeRequest("Invalid game mode. Please retry."));
+        }
+
     }
 
 

@@ -1,8 +1,9 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
+import it.polimi.ingsw.PSP48.server.MoveCoordinates;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
+import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Model;
-import it.polimi.ingsw.PSP48.server.model.MovePosition;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 
 import java.util.function.Consumer;
@@ -56,12 +57,15 @@ public class Athena extends Divinity {
      * Checks if another player move is allowed, since Athena blocks other players from getting higher
      * when an Athena's worker went up in the last turn.
      *
-     * @param move the coordinates of the move
+     * @param move      the coordinates of the move
+     * @param gameBoard the model of the game
      * @return false if the move isn't allowed, true otherwise
      */
     @Override
-    public Boolean othersMove(MovePosition move) {
-        if (move.getDifference() >= 1) return !lastTurnLevelUp;
+    public Boolean othersMove(MoveCoordinates move, Cell[][] gameBoard) {
+        int workerLevel = gameBoard[move.getWorkerRow()][move.getWorkerColumn()].getLevel();
+        int moveLevel = gameBoard[move.getMoveRow()][move.getMoveColumn()].getLevel();
+        if (moveLevel - workerLevel >= 1) return !lastTurnLevelUp;
         return true;
     }
 

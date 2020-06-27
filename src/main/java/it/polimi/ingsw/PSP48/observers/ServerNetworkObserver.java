@@ -21,9 +21,6 @@ public interface ServerNetworkObserver {
 
     public void firstPlayerRegistration(String player);
 
-    public void processNickname(String nickname);
-
-    public void processGameMode(String gameMode);
-
     public void destroyGame();
+
 }

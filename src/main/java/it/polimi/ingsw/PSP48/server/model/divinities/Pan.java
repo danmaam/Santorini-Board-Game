@@ -31,9 +31,10 @@ public class Pan extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public boolean winCondition(Model gd) {
-        return (super.winCondition(gd) || gd.getCurrentPlayer().getNewLevel() - gd.getCurrentPlayer().getOldLevel() <= -2);
+    public boolean postMoveWinCondition(Model gd) {
+        return (super.postMoveWinCondition(gd) || gd.getCurrentPlayer().getNewLevel() - gd.getCurrentPlayer().getOldLevel() <= -2);
     }
+
 
     /**
      * Getter of name

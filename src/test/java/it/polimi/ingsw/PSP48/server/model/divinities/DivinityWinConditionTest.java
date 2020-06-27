@@ -39,14 +39,14 @@ public class DivinityWinConditionTest {
         player2.getDivinity().move(0, 3, 1, 3, game_database);
         player2.getDivinity().move(1, 3, 2, 3, game_database);
         player2.getDivinity().move(2, 3, 3, 4, game_database);
-        assertTrue(player2.getDivinity().winCondition(game_database));
+        assertTrue(player2.getDivinity().postMoveWinCondition(game_database));
     }
 
     @Test
     public void notWinSituation() throws DomedCellException, OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, NoTurnEndException {
         player2.getDivinity().move(0, 3, 1, 3, game_database);
         player2.getDivinity().move(1, 3, 2, 3, game_database);
-        assertTrue(!player2.getDivinity().winCondition(game_database));
+        assertTrue(!player2.getDivinity().postMoveWinCondition(game_database));
     }
 
     @Test
@@ -55,6 +55,6 @@ public class DivinityWinConditionTest {
         player2.getDivinity().move(1, 3, 2, 3, game_database);
         game_database.getCell(3, 4).setPlayer(player2.getName());
         game_database.getCell(2, 3).setPlayer(null);
-        assertTrue(!player2.getDivinity().winCondition(game_database));
+        assertTrue(!player2.getDivinity().postMoveWinCondition(game_database));
     }
 }

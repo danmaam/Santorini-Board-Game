@@ -72,7 +72,7 @@ public class Eros extends Divinity {
      * @return true if the actual player has won, false if the game must go on
      */
     @Override
-    public boolean winCondition(Model gd) {
+    public boolean postMoveWinCondition(Model gd) {
         boolean divinityWinCondition = false;
         //first, we have to check if the player has two workers in game
         String playerName = gd.getCurrentPlayer().getName();
@@ -88,7 +88,7 @@ public class Eros extends Divinity {
             if (gd.getCell(positions.get(0).getRow(), positions.get(0).getColumn()).getLevel() == gd.getCell(positions.get(1).getRow(), positions.get(1).getColumn()).getLevel())
                 divinityWinCondition = true;
         }
-        return super.winCondition(gd) || divinityWinCondition;
+        return super.postMoveWinCondition(gd) || divinityWinCondition;
     }
 
     /**
