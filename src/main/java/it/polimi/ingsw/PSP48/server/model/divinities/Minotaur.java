@@ -221,7 +221,7 @@ public class Minotaur extends Divinity {
 
         if (pushingPosition != null) {
             gd.getCell(pushingPosition.getRow(), pushingPosition.getColumn()).setPlayer(tempPlayer);
-            changedCell.add((Cell) gd.getCell(pushingPosition.getRow(), pushingPosition.getColumn()));
+            changedCell.add(gd.getCell(pushingPosition.getRow(), pushingPosition.getColumn()));
         }
 
         gd.notifyObservers(x -> x.changedBoard(changedCell));

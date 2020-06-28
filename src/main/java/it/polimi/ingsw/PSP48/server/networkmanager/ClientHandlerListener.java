@@ -212,7 +212,7 @@ public class ClientHandlerListener implements Runnable {
             setGameMode = true;
             out.setUpMessage(new completedSetup(nextMessage));
 
-            VirtualView playerVirtualView = new VirtualView(out, this);
+            VirtualView playerVirtualView = new VirtualView(out, this, playerNickname);
             this.registerObserver(playerVirtualView);
 
             Server.insertPlayerInGameRoom(playerNumber, divinities, playerNickname, c, playerVirtualView);

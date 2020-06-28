@@ -90,10 +90,6 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
         notifyAll();
     }
 
-    @Override
-    public synchronized void addPlayer(String playerDetails, Calendar birthday) {
-
-    }
 
     /**
      * Adds in queue the message for initial divinities selection by the challenger

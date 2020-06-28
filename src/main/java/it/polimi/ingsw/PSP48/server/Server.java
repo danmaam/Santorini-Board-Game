@@ -18,6 +18,12 @@ public class Server {
     private static final ArrayList<GameRoom> roomsOnTheServer = new ArrayList<>();
     private static int nextRoomID = 0;
 
+    /**
+     * Starts the server, and puts it in wait for connections for clients. When a client connects,
+     * generates two handler for it: to send messages, and to receive messages.
+     *
+     * @param args
+     */
     public static void main(String[] args) {
 
         System.out.println("Santorini Server V.0.5 Alpha.");
@@ -39,7 +45,6 @@ public class Server {
                 Thread th = new Thread(cH);
 
 
-
                 incomingMessagesHandler.setUploader(cH);
                 Thread listenerThread = new Thread(incomingMessagesHandler);
                 listenerThread.start();
@@ -50,16 +55,36 @@ public class Server {
         }
     }
 
+    /**
+     * Adds a player nickname to the server
+     *
+     * @param s the chosen nickname
+     * @throws IllegalArgumentException if the nickname is already in use
+     */
     public synchronized static void addNickname(String s) throws IllegalArgumentException {
         if (playersConnectedToTheGame.contains(s)) throw new IllegalArgumentException();
         playersConnectedToTheGame.add(s);
     }
 
+    /**
+     * Frees a nickname from the server
+     *
+     * @param s the nickname to be removed
+     */
     public synchronized static void removeNickname(String s) {
         playersConnectedToTheGame.remove(s);
     }
 
 
+    /**
+     * Inserts a player in a game room. Is a game room is available, adds the player in it, otherwise creates a new game room.
+     *
+     * @param playerNumber      the number of players of the chosen game mode
+     * @param allowedDivinities if divinities are allowed in the game
+     * @param name              the name of the added player
+     * @param Birthday          the player's birthday
+     * @param playerVirtualView the players' virtualview
+     */
     public static synchronized void insertPlayerInGameRoom(int playerNumber, boolean allowedDivinities, String name, Calendar Birthday, ViewInterface playerVirtualView) {
         System.out.println("Adding in the game room");
         boolean added = false;
@@ -79,6 +104,13 @@ public class Server {
         }
     }
 
+    /**
+     * Destroys a game room due to game end. Notifies all the players of the game end, with its reason.
+     *
+     * @param roomID             the ID of the room to be deleted
+     * @param incriminatedPlayer the player that provoked the game end
+     * @param reason             the reason why the game ended
+     */
     public static synchronized void destroyGameRoom(int roomID, String incriminatedPlayer, EndReason reason) {
         //i must find the game room
         if (roomID != -1) {

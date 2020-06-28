@@ -37,7 +37,7 @@ public class VirtualView implements ViewInterface, ServerNetworkObserver {
     }
 
 
-    private String playerName;
+    private final String playerName;
     ClientHandler playerHandler;
     ClientHandlerListener playerListener;
     private int roomID = -1;
@@ -51,9 +51,10 @@ public class VirtualView implements ViewInterface, ServerNetworkObserver {
         this.roomID = roomID;
     }
 
-    public VirtualView(ClientHandler p, ClientHandlerListener l) {
+    public VirtualView(ClientHandler p, ClientHandlerListener l, String playerName) {
         playerHandler = p;
         playerListener = l;
+        this.playerName = playerName;
     }
 
     /**
@@ -249,7 +250,7 @@ public class VirtualView implements ViewInterface, ServerNetworkObserver {
      * @param player the first player chosen
      */
     @Override
-    public void firstPlayerRegistration(String player) {
+    public void selectFirstPlayer(String player) {
         notifyObserver(c -> c.selectFirstPlayer(player));
     }
 

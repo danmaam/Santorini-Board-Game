@@ -26,6 +26,12 @@ public class GameController implements ViewObserver {
 
     private final HashMap<String, ViewInterface> playersViews = new HashMap<>();
 
+    /**
+     * Associates each game's player with his view
+     *
+     * @param name the player's name
+     * @param view the player's virtual view
+     */
     public void associateViewWithPlayer(String name, ViewInterface view) {
         playersViews.put(name, view);
     }
@@ -35,16 +41,21 @@ public class GameController implements ViewObserver {
         roomID = ID;
     }
 
+    /**
+     * Returns the view of a certain player
+     *
+     * @param playerName the player name
+     * @return the player view
+     */
     public ViewInterface getPlayerView(String playerName) {
         return playersViews.get(playerName);
     }
 
     /**
-     * Adds a player in the game when a client connects to the server; if the game's player number is reached, the controller starts the game.
+     * Adds a player in the game; if the game's player number is reached, the controller starts the game.
      *
      * @author Daniele Mammone
      */
-    @Override
     public void addPlayer(String name, Calendar birthday) {
         System.out.println("adding player");
         model.addPlayer(name, model.getNextColour(), birthday);
@@ -297,7 +308,6 @@ public class GameController implements ViewObserver {
      * @author Daniele Mammone
      */
     public void postBuild() {
-        boolean win = false;
         String playerThatWon = null;
         for (Player p : model.getPlayersInGame()) {
             if (p.getDivinity().postBuildWinCondition(model)) {
@@ -320,6 +330,9 @@ public class GameController implements ViewObserver {
         nextAction();
     }
 
+    /**
+     * Changes the current player with the next player
+     */
     public void turnChange() {
         model.setNextPlayer();
         if (model.getPlayerWithCirce() != null && model.getCurrentPlayer().getName().equals(model.getPlayerWithCirce()) && model.getCurrentPlayer().getTempDivinity() != null)
@@ -376,6 +389,9 @@ public class GameController implements ViewObserver {
         getPlayerView(model.getCurrentPlayer().getName()).requestDivinitySelection(model.getAvailableDivinities());
     }
 
+    /**
+     * Notifies the challenger's view to request him to choose the first player
+     */
     public void requestFirstPlayerSelection() {
         for (Player p : model.getPlayersInGame()) {
             if (model.getPlayersInGame().indexOf(p) != model.getChallengerIndex())
@@ -386,6 +402,9 @@ public class GameController implements ViewObserver {
         getPlayerView(model.getPlayersInGame().get(model.getChallengerIndex()).getName()).requestInitialPlayerSelection(players);
     }
 
+    /**
+     * Notifies the current player's view to ask him to put one of his workers on the board
+     */
     public void requestInitialPositioning() {
         for (Player p : model.getPlayersInGame()) {
             if (p != model.getCurrentPlayer())
@@ -489,6 +508,10 @@ public class GameController implements ViewObserver {
 
     }
 
+    /**
+     * Notify the view to request the player to complete prometheus initial optional build. Redefined since the optional
+     * build is at the beginning of the turn and the player can use all of his workers to do the build action.
+     */
     public void PrometheusInitialOptionalBuild() {
         ArrayList<WorkerValidCells> build = new ArrayList<>();
         ArrayList<WorkerValidCells> dome = new ArrayList<>();
@@ -509,6 +532,10 @@ public class GameController implements ViewObserver {
         getPlayerView(model.getCurrentPlayer().getName()).requestOptionalBuild(build, dome);
     }
 
+    /**
+     * Notify the view to ask the player to complete a move action. Redefined for Prometheus since is the optional build is completed, player
+     * can't use all his workers to move, but only the one who completed the build.
+     */
     public void PrometheusMovePostOptionalBuild() {
         ArrayList<Divinity> otherDivinities = new ArrayList<>();
         for (Player p : model.getPlayersInGame()) {

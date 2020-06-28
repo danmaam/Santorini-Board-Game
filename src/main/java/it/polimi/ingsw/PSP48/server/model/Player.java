@@ -28,15 +28,6 @@ public class Player {
     }
 
     /**
-     * Method used to decrease the number of workers on the board.
-     * @throws IllegalStateException if there are no workers left.
-     */
-    public void removeWorker() throws IllegalStateException {
-        if (workersOnTable == 0) throw new IllegalStateException("trying to remove a worker that doesn't exists");
-        else this.workersOnTable--;
-    }
-
-    /**
      * Getter of the number of the worker on the board
      * @return number of workers in game
      */
@@ -172,13 +163,6 @@ public class Player {
     public void restoreTempDivinity() {
         divinity = tempDivinity;
         tempDivinity = null;
-    }
-
-    /**
-     * Method used to reset the position of the last used worker
-     */
-    public void resetLastWorkerUsed() {
-        lastWorkerMoved = new Position(-1, 1);
     }
 
     /**

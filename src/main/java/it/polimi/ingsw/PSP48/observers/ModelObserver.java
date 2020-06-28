@@ -6,10 +6,20 @@ import it.polimi.ingsw.PSP48.server.model.Cell;
 import java.util.ArrayList;
 
 /**
- * view is observed by something: in virtualview, vv is observed by controller, in vlient view it's observed by network handler
+ * Interface of a model observer.
  */
 public interface ModelObserver {
+    /**
+     * Notifies the observer that some cells on the board changed
+     *
+     * @param newCells the changed cells
+     */
     public void changedBoard(ArrayList<Cell> newCells);
 
+    /**
+     * Notifies the observer that the player list and/or player-divinity associations changed
+     *
+     * @param newPlayerList the new player-divinity association list
+     */
     public void changedPlayerList(ArrayList<String> newPlayerList);
 }

@@ -11,6 +11,6 @@ public class FirstPlayerSelectionMessage extends NetworkMessagesToServer {
 
     @Override
     public void doThings(ServerNetworkObserver obv) {
-        obv.firstPlayerRegistration(firstPlayer);
+        obv.selectFirstPlayer(firstPlayer);
     }
 }

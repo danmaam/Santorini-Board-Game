@@ -35,7 +35,7 @@ public class Hestia extends Divinity {
     /**
      * don't do anything since without a divinity there isn't a modifier
      *
-     * @param gd
+     * @param gd the game model
      * @return the next action of the controller
      */
     @Override
@@ -67,7 +67,7 @@ public class Hestia extends Divinity {
      * @param workerRow        the row where the worker is
      * @param workerColumn     the column where the worker is
      * @param gameCells        the actual state of the board
-     * @param divinitiesInGame
+     * @param divinitiesInGame the other divinities in the game
      * @return true if it's possible to add the dome
      * @author Daniele Mammone
      */

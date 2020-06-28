@@ -55,7 +55,7 @@ public class GameRoom {
         ((VirtualView) playerVirtualView).setRoomID(gameRoomID);
         model.registerObserver(playerVirtualView);
         controller.associateViewWithPlayer(name, playerVirtualView);
-        playerVirtualView.notifyObserver((c) -> c.addPlayer(name, birthday));
+        controller.addPlayer(name, birthday);
     }
 
     /**

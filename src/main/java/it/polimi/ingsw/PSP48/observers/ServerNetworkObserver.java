@@ -6,21 +6,14 @@ import it.polimi.ingsw.PSP48.server.model.Position;
 
 import java.util.ArrayList;
 
-public interface ServerNetworkObserver {
-    public void move(MoveCoordinates p);
+/**
+ * An observer of server incoming messages handler
+ */
+public interface ServerNetworkObserver extends ViewObserver {
 
-    public void build(MoveCoordinates p);
-
-    public void dome(MoveCoordinates p);
-
-    public void putWorkerOnTable(Position p);
-
-    public void registerPlayerDivinity(String divinity);
-
-    public void selectAvailableDivinities(ArrayList<String> divinities);
-
-    public void firstPlayerRegistration(String player);
-
+    /**
+     * Requests the observer to destroy a game room
+     */
     public void destroyGame();
 
 }

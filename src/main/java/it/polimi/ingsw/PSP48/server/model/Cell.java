@@ -13,14 +13,15 @@ import java.util.Objects;
  * worker contains the reference to the worker placed on the cell of the board game; it can be set using setWorker.
  */
 public class Cell implements Cloneable, Serializable {
-    private int column;
-    private int row;
+    private final int column;
+    private final int row;
     private String player = null;
     private int actualLevel = 0;
     private boolean domed = false;
 
     /**
      * Class constructor
+     *
      * @param row    index of the row of the cell.
      * @param column index of the column of the cell.
      */

@@ -11,8 +11,9 @@ public class Position implements Serializable {
 
     /**
      * Class constructor
-     * @param row
-     * @param column
+     *
+     * @param row    the row of the cell
+     * @param column the column of the cell
      */
     public Position(int row, int column) {
         this.row = row;
