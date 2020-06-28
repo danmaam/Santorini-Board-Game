@@ -78,16 +78,17 @@ public class Eros extends Divinity {
         String playerName = gd.getCurrentPlayer().getName();
         ArrayList<Position> positions = gd.getPlayerPositionsInMap(playerName);
         //check if the player has at least two workers in game, and if they are adjacent
-        if (positions.size() <= 1 || !adiacentCellVerifier(positions.get(0).getRow(), positions.get(0).getColumn(), positions.get(1).getRow(), positions.get(1).getColumn()))
-            divinityWinCondition = false;
-            //now, i have to verify the win condition depending on the number of player in game, cause they are adjacent
-        else if (gd.getNumberOfPlayers() == 2) {
-            if (gd.getCell(positions.get(0).getRow(), positions.get(0).getColumn()).getLevel() == 1 && gd.getCell(positions.get(1).getRow(), positions.get(1).getColumn()).getLevel() == 1)
-                divinityWinCondition = true;
-        } else {
-            if (gd.getCell(positions.get(0).getRow(), positions.get(0).getColumn()).getLevel() == gd.getCell(positions.get(1).getRow(), positions.get(1).getColumn()).getLevel())
-                divinityWinCondition = true;
+        if (!(positions.size() <= 1 || !adjacentCellVerifier(positions.get(0).getRow(), positions.get(0).getColumn(), positions.get(1).getRow(), positions.get(1).getColumn()))) {
+            if (gd.getNumberOfPlayers() == 2) {
+                if (gd.getCell(positions.get(0).getRow(), positions.get(0).getColumn()).getLevel() == 1 && gd.getCell(positions.get(1).getRow(), positions.get(1).getColumn()).getLevel() == 1)
+                    divinityWinCondition = true;
+            } else {
+                if (gd.getCell(positions.get(0).getRow(), positions.get(0).getColumn()).getLevel() == gd.getCell(positions.get(1).getRow(), positions.get(1).getColumn()).getLevel())
+                    divinityWinCondition = true;
+            }
         }
+        //now, i have to verify the win condition depending on the number of player in game, cause they are adjacent
+
         return super.postMoveWinCondition(gd) || divinityWinCondition;
     }
 

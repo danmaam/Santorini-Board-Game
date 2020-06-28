@@ -17,6 +17,7 @@ public class Hestia extends Divinity {
 
     /**
      * Method that checks if the divinity can be used in a game with a certain number of players
+     *
      * @param pNum the number of players
      * @return true if the game is played by two or three players
      */
@@ -80,6 +81,7 @@ public class Hestia extends Divinity {
 
     /**
      * Redefined since Hestia allows an additional build or dome, but not on a perimetric cell
+     *
      * @param workerRow    the row where the worker is
      * @param workerColumn the column where the worker is
      * @param buildRow     the row where the player wants to add a level
@@ -110,6 +112,7 @@ public class Hestia extends Divinity {
 
     /**
      * Redefined since Hestia allows an additional build or dome, but not on a perimetric cell
+     *
      * @param workerRow    the row where the worker is
      * @param workerColumn the column where the worker is
      * @param domeRow      the row where the player wants to add the dome
@@ -140,6 +143,7 @@ public class Hestia extends Divinity {
 
     /**
      * Getter of name
+     *
      * @return the divinity's name
      */
     @Override
@@ -149,6 +153,7 @@ public class Hestia extends Divinity {
 
     /**
      * Getter of the divinity's description
+     *
      * @return the description of how the divinity's power affects the game
      */
     @Override

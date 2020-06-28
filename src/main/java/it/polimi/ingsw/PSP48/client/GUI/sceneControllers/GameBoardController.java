@@ -3,12 +3,10 @@ package it.polimi.ingsw.PSP48.client.GUI.sceneControllers;
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
 import it.polimi.ingsw.PSP48.client.GUI.GUI;
-import it.polimi.ingsw.PSP48.server.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Position;
-import javafx.concurrent.Worker;
 import javafx.event.EventHandler;
-import javafx.event.WeakEventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
@@ -27,10 +25,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-import java.math.*;
-
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class GameBoardController {
@@ -105,28 +100,23 @@ public class GameBoardController {
     private final Image buildButtonImage = new Image("santorini_risorse-grafiche-2/Sprite/Buttons/build.png");
     private final Image domeButtonImage = new Image("santorini_risorse-grafiche-2/Sprite/Buttons/dome.png");
 
-    private final EventHandler<MouseEvent> handleOperation = new EventHandler<MouseEvent>() {
-        @Override
-        public void handle(MouseEvent mouseEvent) {
-            nextPosition = new Position((GridPane.getRowIndex((Node) mouseEvent.getSource()) - 1) / 2, (GridPane.getColumnIndex(((Node) mouseEvent.getSource())) - 1) / 2);
-            nextActionFSM();
-        }
+    private final EventHandler<MouseEvent> handleOperation = mouseEvent -> {
+        nextPosition = new Position((GridPane.getRowIndex((Node) mouseEvent.getSource()) - 1) / 2, (GridPane.getColumnIndex(((Node) mouseEvent.getSource())) - 1) / 2);
+        nextActionFSM();
     };
 
-    private final EventHandler<MouseEvent> handleBuild = new EventHandler<MouseEvent>() {
+    private final EventHandler<MouseEvent> handleBuild = new EventHandler<>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
             ArrayList<Node> removeButtons = new ArrayList<>();
             ArrayList<Node> removeSelectionImage = new ArrayList<>();
 
-            for (Node n : boardPane.getChildren())
-            {
-                if (((ImageView)n).getImage()==isSelectionImage ||((ImageView)n).getImage()==buildAndDomeImage || ((ImageView)n).getImage()==domeSelectionImage)
-                {
+            for (Node n : boardPane.getChildren()) {
+                if (((ImageView) n).getImage() == isSelectionImage || ((ImageView) n).getImage() == buildAndDomeImage || ((ImageView) n).getImage() == domeSelectionImage) {
                     removeSelectionImage.add(n);
                 }
             }
-            removeSelectionImage.forEach(x->boardPane.getChildren().remove(x));
+            removeSelectionImage.forEach(x -> boardPane.getChildren().remove(x));
 
             multifunctionalPane.getChildren().clear();
 
@@ -134,20 +124,18 @@ public class GameBoardController {
         }
     };
 
-    private final EventHandler<MouseEvent> handleDome = new EventHandler<MouseEvent>() {
+    private final EventHandler<MouseEvent> handleDome = new EventHandler<>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
             ArrayList<Node> removeButtons = new ArrayList<>();
             ArrayList<Node> removeSelectionImage = new ArrayList<>();
 
-            for (Node n : boardPane.getChildren())
-            {
-                if (((ImageView)n).getImage()==isSelectionImage ||((ImageView)n).getImage()==buildAndDomeImage || ((ImageView)n).getImage()==domeSelectionImage)
-                {
+            for (Node n : boardPane.getChildren()) {
+                if (((ImageView) n).getImage() == isSelectionImage || ((ImageView) n).getImage() == buildAndDomeImage || ((ImageView) n).getImage() == domeSelectionImage) {
                     removeSelectionImage.add(n);
                 }
             }
-            removeSelectionImage.forEach(x->boardPane.getChildren().remove(x));
+            removeSelectionImage.forEach(x -> boardPane.getChildren().remove(x));
 
             multifunctionalPane.getChildren().clear();
 
@@ -155,21 +143,18 @@ public class GameBoardController {
         }
     };
 
-    private final EventHandler<MouseEvent> handleOptionalMoveSkip = new EventHandler<MouseEvent>() {
+    private final EventHandler<MouseEvent> handleOptionalMoveSkip = new EventHandler<>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
-            ArrayList<Node> removeNodes= new ArrayList<>();
-            ArrayList<Node> removeFromPane = new ArrayList<>();
+            ArrayList<Node> removeNodes = new ArrayList<>();
 
-            for (Node n : boardPane.getChildren())
-            {
-                if (((ImageView)n).getImage()==isSelectionImage ||((ImageView)n).getImage()==workerChoiceImage)
-                {
+            for (Node n : boardPane.getChildren()) {
+                if (((ImageView) n).getImage() == isSelectionImage || ((ImageView) n).getImage() == workerChoiceImage) {
                     n.removeEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
                     removeNodes.add(n);
                 }
             }
-            removeNodes.forEach(x->boardPane.getChildren().remove(x));
+            removeNodes.forEach(x -> boardPane.getChildren().remove(x));
 
             multifunctionalPane.getChildren().clear();
 
@@ -177,21 +162,19 @@ public class GameBoardController {
         }
     };
 
-    private final EventHandler<MouseEvent> handleOptionalBuildSkip = new EventHandler<MouseEvent>() {
+    private final EventHandler<MouseEvent> handleOptionalBuildSkip = new EventHandler<>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
-            ArrayList<Node> removeNodes= new ArrayList<>();
+            ArrayList<Node> removeNodes = new ArrayList<>();
             ArrayList<Node> removeFromPane = new ArrayList<>();
 
-            for (Node n : boardPane.getChildren())
-            {
-                if (((ImageView)n).getImage()==isSelectionImage ||((ImageView)n).getImage()==buildAndDomeImage || ((ImageView)n).getImage()==domeSelectionImage || ((ImageView)n).getImage()==workerChoiceImage)
-                {
+            for (Node n : boardPane.getChildren()) {
+                if (((ImageView) n).getImage() == isSelectionImage || ((ImageView) n).getImage() == buildAndDomeImage || ((ImageView) n).getImage() == domeSelectionImage || ((ImageView) n).getImage() == workerChoiceImage) {
                     n.removeEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
                     removeNodes.add(n);
                 }
             }
-            removeNodes.forEach(x->boardPane.getChildren().remove(x));
+            removeNodes.forEach(x -> boardPane.getChildren().remove(x));
 
             multifunctionalPane.getChildren().clear();
 
@@ -401,19 +384,15 @@ public class GameBoardController {
         this.buildValid=validForBuild;
         this.domeValid=validForDome;
 
-        if (validForBuild.size() > 1 || validForDome.size() > 1 || !(validForBuild.get(0).getwR() == validForDome.get(0).getwR() && validForBuild.get(0).getwC() == validForDome.get(0).getwC()))
-        {
+        if (validForBuild.size() > 1 || validForDome.size() > 1 || (validForBuild.size() > 0 && validForDome.size() > 0 && !(validForBuild.get(0).getwR() == validForDome.get(0).getwR() && validForBuild.get(0).getwC() == validForDome.get(0).getwC()))) {
             //the player can choose the worker, so we need to highlight the cells
             gameMessage.setText("Click on the worker you want to use for the building actions");
             boardPane.setVisible(true);
-            for (WorkerValidCells w1 : validForBuild)
-            {
+            for (WorkerValidCells w1 : validForBuild) {
                 //first of all we get both lists of cells for each worker (there can also be just one)
-                for (WorkerValidCells w2 : validForDome)
-                {
-                    if (w2.getwR()==w1.getwR() && w2.getwC()==w1.getwC())
-                    {
-                        tempList=w2.getValidPositions();
+                for (WorkerValidCells w2 : validForDome) {
+                    if (w2.getwR() == w1.getwR() && w2.getwC() == w1.getwC()) {
+                        tempList = w2.getValidPositions();
                         break;
                     }
                 }
@@ -426,14 +405,11 @@ public class GameBoardController {
                 boardPane.add(workerImage, 1 + 2 * w1.getwC(), 1 + 2 * w1.getwR());
                 //then we need to highlight all the cells of the worker
                 boolean buildHighlighted;
-                for (Position p1 : w1.getValidPositions())
-                {
+                for (Position p1 : w1.getValidPositions()) {
                     //the worker can only do the build action on a certain cell
-                    if (tempList==null || (tempList!=null && !tempList.contains(p1)))
-                    {
-                        buildHighlighted=isAlreadyHighlighted(validForBuild, p1, w1.getwR(), w1.getwC());
-                        if (!buildHighlighted)
-                        {
+                    if (tempList == null || !tempList.contains(p1)) {
+                        buildHighlighted = isAlreadyHighlighted(validForBuild, p1, w1.getwR(), w1.getwC());
+                        if (!buildHighlighted) {
                             ImageView buildChoice = new ImageView(isSelectionImage);
                             buildChoice.setOpacity(0.4);
                             buildChoice.setFitWidth(95);
@@ -560,14 +536,11 @@ public class GameBoardController {
             }
             //now we need to highlight the positions of the worker
             boolean buildHighlighted;
-            for (Position p1 : w1.getValidPositions())
-            {
+            for (Position p1 : w1.getValidPositions()) {
                 //the worker can only do the build action on a certain cell
-                if (domeList==null || (domeList!=null && !domeList.contains(p1)))
-                {
-                    buildHighlighted=isAlreadyHighlighted(buildWorker, p1, w1.getwR(), w1.getwC());
-                    if (!buildHighlighted)
-                    {
+                if (domeList == null || !domeList.contains(p1)) {
+                    buildHighlighted = isAlreadyHighlighted(buildWorker, p1, w1.getwR(), w1.getwC());
+                    if (!buildHighlighted) {
                         ImageView buildChoice = new ImageView(isSelectionImage);
                         buildChoice.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
                         buildChoice.setOpacity(0.4);
@@ -799,16 +772,6 @@ public class GameBoardController {
 
     }
 
-    private Node getNodeFromGridPane(GridPane gridPane, int col, int row, boolean image) {
-        for (Node node : gridPane.getChildren()) {
-            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
-                if (image && node instanceof ImageView) return node;
-                else if (node instanceof Text) return node;
-            }
-        }
-        return null;
-    }
-
     public void printMessage(String s) {
         gameLog.getItems().add(s);
         gameMessage.setText(s);
@@ -883,15 +846,13 @@ public class GameBoardController {
                 multifunctionalPane.getChildren().clear();
 
                 //after restoring the board we can proceed with the choice of the cell
-                WorkerValidCells workerToSend = null;
 
                 for (WorkerValidCells w1 : moveValid) {
                     if (w1.getwR() == nextPosition.getRow() && w1.getwC() == nextPosition.getColumn()) {
-                        workerToSend = w1;
+                        postWorkerChoiceMove(w1);
                         break;
                     }
                 }
-                postWorkerChoiceMove(workerToSend);
                 break;
 
             case sendmove:
@@ -1120,21 +1081,6 @@ public class GameBoardController {
         boardPane.setAlignment(Pos.CENTER);
 
 
-    }
-
-    /**
-     * method used in the functions handling the game board, to see if a certain selected position is among the valid ones
-     *
-     * @param arr    is the list containing the valid worker positions
-     * @param row    is the row selected by the player for the worker to use
-     * @param column is the column selected by the player for the worker to use
-     * @return true if the worker is valid, else false
-     */
-    public boolean containsWorker(ArrayList<WorkerValidCells> arr, int row, int column) {
-        for (WorkerValidCells v : arr) {
-            if (v.getwR() == row && v.getwC() == column && !v.getValidPositions().isEmpty()) return true;
-        }
-        return false;
     }
 
 

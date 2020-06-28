@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP48.server;
+package it.polimi.ingsw.PSP48.server.model;
 
 import java.io.Serializable;
 

@@ -29,8 +29,6 @@ public class Model {
         return gamePlayerNumber;
     }
 
-    private String playerWithCirce = null;
-
     private ArrayList<Divinity> availableDivinities;
     private int currentPlayer = -1; //it has this initial value cause there are moments of the game when there isn't a current player
     private final Cell[][] boardCell = new Cell[5][5];
@@ -266,7 +264,6 @@ public class Model {
         if (actualDivinity == null) throw new IllegalArgumentException("Divinity selection not corrected");
         else {
             this.getPlayer(playerName).setDivinity(actualDivinity);
-            if (divinity.equals("Circe")) playerWithCirce = playerName;
             if (isGameWithDivinities()) availableDivinities.remove(actualDivinity);
         }
         sendPlayerList();
@@ -297,9 +294,6 @@ public class Model {
         }
     }
 
-    public String getPlayerWithCirce() {
-        return playerWithCirce;
-    }
 
     public void sendPlayerList() {
         ArrayList<String> newPlayerString = new ArrayList<>();

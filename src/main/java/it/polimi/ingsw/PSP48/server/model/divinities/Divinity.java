@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
-import it.polimi.ingsw.PSP48.server.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import it.polimi.ingsw.PSP48.server.model.*;
@@ -103,7 +103,7 @@ public class Divinity {
     public Consumer<GameController> move(int workerRow, int workerColumn, int moveRow, int moveColumn, Model gd) throws
             NotAdjacentCellException, IncorrectLevelException, OccupiedCellException, DomedCellException, DivinityPowerException, NoTurnEndException {
         //first check: the two cells must be adiacent
-        if (!(adiacentCellVerifier(workerRow, workerColumn, moveRow, moveColumn)))
+        if (!(adjacentCellVerifier(workerRow, workerColumn, moveRow, moveColumn)))
             throw new NotAdjacentCellException("Celle non adiacenti");
         //second check: the two levels must be compatible
         int workerLevel = gd.getCell(workerRow, workerColumn).getLevel();
@@ -201,7 +201,7 @@ public class Divinity {
     public Consumer<GameController> build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws
             NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelReachedException, DivinityPowerException {
         //first check: the two cells must be adiacent
-        if (!(adiacentCellVerifier(workerRow, workerColumn, buildRow, buildColumn)))
+        if (!(adjacentCellVerifier(workerRow, workerColumn, buildRow, buildColumn)))
             throw new NotAdjacentCellException("Celle non adiacenti");
         //second check: the cell must be empty of workers
         if (!(gd.getCell(buildRow, buildColumn).getPlayer() == null)) throw new OccupiedCellException("Cella occupata");
@@ -290,7 +290,7 @@ public class Divinity {
     public Consumer<GameController> dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws
             NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
         //first check: the two cells must be adiacent
-        if (!(adiacentCellVerifier(workerRow, workerColumn, domeRow, domeColumn)))
+        if (!(adjacentCellVerifier(workerRow, workerColumn, domeRow, domeColumn)))
             throw new NotAdjacentCellException("Celle non adiacenti");
         //second check: the cell must be empty of workers
         if (!(gd.getCell(domeRow, domeColumn).getPlayer() == null)) throw new OccupiedCellException("Cella occupata");
@@ -417,8 +417,6 @@ public class Divinity {
     }
 
 
-    ///// AUXILIARY METHODS
-
     /**
      * @param workerRow    the row where the worker is
      * @param workerColumn the column where the worker is
@@ -427,13 +425,19 @@ public class Divinity {
      * @return true if the worker is adiacent to the generic cell
      * @author Daniele Mammone
      */
-    protected boolean adiacentCellVerifier(int workerRow, int workerColumn, int cellRow, int cellColumn) {
+    protected boolean adjacentCellVerifier(int workerRow, int workerColumn, int cellRow, int cellColumn) {
         int columnDifference = cellColumn - workerColumn;
         int rowDifference = cellRow - workerRow;
         return (-1 <= columnDifference && columnDifference <= 1 && -1 <= rowDifference && rowDifference <= 1 &&
                 !(columnDifference == 0 && rowDifference == 0) && !(workerColumn == cellColumn && workerRow == cellRow));
     }
 
+    /**
+     * Generates a list of valid cells where the player can put one of his workers on the game board
+     *
+     * @param gameCells the actual game board
+     * @return the list ov valid cells
+     */
     public ArrayList<Position> validCellsForInitialPositioning(Cell[][] gameCells) {
         ArrayList<Cell> validCells = new ArrayList<>();
         ArrayList<Position> validPositions = new ArrayList<>();
@@ -445,6 +449,16 @@ public class Divinity {
         return validPositions;
     }
 
+    /**
+     * Elaborates a worker positioning. If the move is valid, the worker is put on the board, and the observers notified. Otherwise,
+     * an exception is thrown and the move is rejected
+     *
+     * @param p  the position where the player wants to put the worker
+     * @param gd the game model
+     * @return the next controller FSM state
+     * @throws OccupiedCellException  if the chosen cell is occupied
+     * @throws DivinityPowerException if the move is rejected by a divinity power
+     */
     public Consumer<GameController> putWorkerOnBoard(Position p, Model gd) throws OccupiedCellException, DivinityPowerException {
         //check if the cell is occupied
         if (gd.getCell(p.getRow(), p.getColumn()).getPlayer() != null)
@@ -459,4 +473,14 @@ public class Divinity {
         if (gd.getCurrentPlayer().getWorkersOnTable() == 2) return GameController::initialPositioningTurnChange;
         else return GameController::requestInitialPositioning;
     }
+
+    /**
+     * Restores a certain condition before the turn if the player has a secondary divinity.
+     *
+     * @param model the game model
+     */
+    public void preTurnSecondaryDivinityChecks(Model model) {
+
+    }
+
 }

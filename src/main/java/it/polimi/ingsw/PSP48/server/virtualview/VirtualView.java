@@ -6,7 +6,7 @@ import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
 import it.polimi.ingsw.PSP48.observers.ServerNetworkObserver;
 import it.polimi.ingsw.PSP48.observers.ViewObserver;
-import it.polimi.ingsw.PSP48.server.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
 import it.polimi.ingsw.PSP48.server.Server;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Position;

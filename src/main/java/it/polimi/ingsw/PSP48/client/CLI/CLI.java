@@ -7,7 +7,7 @@ import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkIncoming;
 import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkOutcoming;
 import it.polimi.ingsw.PSP48.observers.ClientNetworkObserver;
 import it.polimi.ingsw.PSP48.observers.ViewObserver;
-import it.polimi.ingsw.PSP48.server.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Position;
 
@@ -68,9 +68,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
         for (ViewObserver obv : observers) lambda.accept(obv);
     }
 
-    private Socket server;
     private ClientNetworkOutcoming cA;
-    private ClientNetworkIncoming cI;
 
     /**
      * class constructor initialising the cells of the board
@@ -230,9 +228,10 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
     @Override
     public void requestMove(ArrayList<WorkerValidCells> validCellsForMove) {
         threadExecutor.submit(() -> {
-            ArrayList<Position> tempList = new ArrayList<>();
+            ArrayList<Position> tempList;
             int workerRow = -1, workerColumn = -1;
             int chosenRow = -1, chosenColumn = -1;
+            WorkerValidCells validCellsMove = null;
 
             for (WorkerValidCells c : validCellsForMove) {
                 tempList = c.getValidPositions(); //each time we retrieve the list of valid positions for the move action
@@ -254,7 +253,8 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
                     if (workerCoordinate.split(",").length == 2) {
                         workerRow = Integer.parseInt(workerCoordinate.split(",")[0]) - 1;
                         workerColumn = Integer.parseInt(workerCoordinate.split(",")[1]) - 1;
-                        if (!containsWorker(validCellsForMove, workerRow, workerColumn)) {
+                        validCellsMove = containsWorker(validCellsForMove, workerRow, workerColumn);
+                        if (validCellsMove == null) {
                             System.out.println("Invalid choice");
                         } else inputSet = true;
                     } else {
@@ -264,6 +264,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
             } else {
                 workerRow = validCellsForMove.get(0).getwR();
                 workerColumn = validCellsForMove.get(0).getwC();
+                validCellsMove = validCellsForMove.get(0);
             }
 
             //after we make sure that the player has chosen a valid worker to move, we highlight again the board, but only with the cells of that worker
@@ -283,14 +284,6 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
                 }
             }
 
-            WorkerValidCells validCellsMove = null;
-
-            for (WorkerValidCells c : validCellsForMove) {
-                if (c.getwR() == workerRow && c.getwC() == workerColumn) {
-                    validCellsMove = c;
-                    break;
-                }
-            }
 
             inputSet = false;
             String cellCoordinate;
@@ -315,9 +308,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
             this.printBoard();
 
             MoveCoordinates chosenCoordinates = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
-            this.notifyObserver(x -> {
-                x.move(chosenCoordinates);
-            });
+            this.notifyObserver(x -> x.move(chosenCoordinates));
         });
 
     }
@@ -332,6 +323,8 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
     @Override
     public void requestDomeOrBuild(ArrayList<WorkerValidCells> validForBuild, ArrayList<WorkerValidCells> validForDome) {
         threadExecutor.submit(() -> {
+            WorkerValidCells validCellsBuild = null;
+            WorkerValidCells validCellsDome = null;
             int workerRow = -1, workerColumn = -1;
             int chosenRow = -1, chosenColumn = -1;
             ArrayList<Position> tempPositionsBuild;
@@ -346,10 +339,12 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
                         break;
                     }
                 }
+
                 for (Position p1 : tempPositionsBuild) {
                     this.getCellOnBoard(p1.getRow(), p1.getColumn()).setCellColour(ColoursForPrinting.red);
                 }
-                for (Position p2 : tempPositionsDome) {
+
+                if (tempPositionsDome != null) for (Position p2 : tempPositionsDome) {
                     if (this.getCellOnBoard(p2.getRow(), p2.getColumn()).getCellColour() == ColoursForPrinting.red)
                         this.getCellOnBoard(p2.getRow(), p2.getColumn()).setCellColour(ColoursForPrinting.green);
                     else this.getCellOnBoard(p2.getRow(), p2.getColumn()).setCellColour(ColoursForPrinting.yellow);
@@ -379,7 +374,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
             String workerCoordinate;
 
 
-            if (validForBuild.size() > 1 || validForDome.size() > 1 || !(validForBuild.get(0).getwR() == validForDome.get(0).getwR() && validForBuild.get(0).getwC() == validForDome.get(0).getwC())) {
+            if (validForBuild.size() > 1 || validForDome.size() > 1 || (validForBuild.size() > 0 && validForDome.size() > 0 && !(validForBuild.get(0).getwR() == validForDome.get(0).getwR() && validForBuild.get(0).getwC() == validForDome.get(0).getwC()))) {
                 do {
                     this.printBoard();
                     System.out.println("Red cells are for building, yellow cells can be domed, green cells can take both actions");
@@ -388,7 +383,10 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
                     if (workerCoordinate.split(",").length == 2) {
                         workerRow = Integer.parseInt(workerCoordinate.split(",")[0]) - 1;
                         workerColumn = Integer.parseInt(workerCoordinate.split(",")[1]) - 1;
-                        if (!containsWorker(validForBuild, workerRow, workerColumn) && !containsWorker(validForBuild, workerRow, workerColumn)) {
+                        validCellsBuild = containsWorker(validForBuild, workerRow, workerColumn);
+                        validCellsDome = containsWorker(validForDome, workerRow, workerColumn);
+
+                        if (validCellsBuild == null && validCellsDome == null) {
                             System.out.println("Invalid choice");
                         } else inputSet = true;
                     } else {
@@ -398,6 +396,8 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
             } else {
                 workerRow = validForBuild.get(0).getwR();
                 workerColumn = validForBuild.get(0).getwC();
+                validCellsBuild = containsWorker(validForBuild, workerRow, workerColumn);
+                validCellsDome = containsWorker(validForDome, workerRow, workerColumn);
             }
 
 
@@ -422,7 +422,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
                     for (Position p1 : tempPositionsBuild) {
                         this.getCellOnBoard(p1.getRow(), p1.getColumn()).setCellColour(ColoursForPrinting.red);
                     }
-                    for (Position p2 : tempPositionsDome) {
+                    if (tempPositionsDome != null) for (Position p2 : tempPositionsDome) {
                         if (this.getCellOnBoard(p2.getRow(), p2.getColumn()).getCellColour() == ColoursForPrinting.red)
                             this.getCellOnBoard(p2.getRow(), p2.getColumn()).setCellColour(ColoursForPrinting.green);
                         else this.getCellOnBoard(p2.getRow(), p2.getColumn()).setCellColour(ColoursForPrinting.yellow);
@@ -455,26 +455,10 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
             }
 
             //now we ask the player the action he wants to make and check if it is compatible with the chosen worker
-            String chosenAction = null;
             String cellCoordinate;
 
-            WorkerValidCells validCellsBuild = null;
-            WorkerValidCells validCellsDome = null;
-            for (WorkerValidCells c : validForBuild) //with these two loops we are looking for the chosen worker in the two lists
-            {
-                if (c.getwR() == workerRow && c.getwC() == workerColumn) {
-                    validCellsBuild = c;
-                    break;
-                }
-            }
 
-            for (WorkerValidCells c : validForDome) {
-                if (c.getwR() == workerRow && c.getwC() == workerColumn) {
-                    validCellsDome = c;
-                    break;
-                }
-            }
-
+            inputSet = false;
             do {
                 this.printBoard();
                 System.out.println("Red cells are for building, yellow cells can be domed, green cells can take both actions");
@@ -483,7 +467,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
                 if (cellCoordinate.split(",").length == 2) {
                     chosenRow = Integer.parseInt(cellCoordinate.split(",")[0]) - 1;
                     chosenColumn = Integer.parseInt(cellCoordinate.split(",")[1]) - 1;
-                    if (!validCellsBuild.contains(chosenRow, chosenColumn) && !validCellsDome.contains(chosenRow, chosenColumn)) {
+                    if (!(validCellsBuild != null && validCellsBuild.contains(chosenRow, chosenColumn) || (validCellsDome != null && validCellsDome.contains(chosenRow, chosenColumn)))) {
                         System.out.println("Invalid choice");
                     } else inputSet = true;
                 } else {
@@ -505,7 +489,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
                 }
             }
 
-            if (validCellsBuild != null) {
+            if (validCellsDome != null) {
                 for (Position p : validCellsDome.getValidPositions()) {
                     if (p.getRow() == chosenRow && p.getColumn() == chosenColumn) {
                         dome = true;
@@ -532,8 +516,8 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
             } else if (build) whatToDO = action.build;
             else if (dome) whatToDO = action.dome;
 
-            this.resetBoard(validCellsBuild.getValidPositions());
-            this.resetBoard(validCellsDome.getValidPositions());
+            if (validCellsBuild != null) this.resetBoard(validCellsBuild.getValidPositions());
+            if (validCellsDome != null) this.resetBoard(validCellsDome.getValidPositions());
             this.printBoard();
 
             MoveCoordinates move = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
@@ -746,14 +730,14 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
             this.printBoard();
 
             //after highlighting the cells to the player, we ask him if he wants to move or to skip the action
-            String chosenAction = null;
+
             Scanner s = new Scanner(System.in);
             boolean completed = false;
             do {
                 System.out.println("Write skip if you want to skip the optional move action, move if you want to do the optional move: ");
-                if (s.hasNext()) {
-                    chosenAction = s.nextLine();
-                }
+
+                String chosenAction = s.nextLine();
+
 
                 if (chosenAction.equals("skip")) //the player has chosen to skip so we can just notify the server
                 {
@@ -762,9 +746,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
                         resetBoard(c.getValidPositions());
                     }
                     this.printBoard();
-                    this.notifyObserver(x -> {
-                        x.move(chosenCoordinates);
-                    });
+                    this.notifyObserver(x -> x.move(chosenCoordinates));
                     completed = true;
                 } else if (chosenAction.equals("move")) {
                     this.requestMove(validCellsForMove);
@@ -789,7 +771,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
         threadExecutor.submit(() -> {
             int workerRow = -1, workerColumn = -1;
             int chosenRow = -1, chosenColumn = -1;
-            ArrayList<Position> tempPositionsBuild = null;
+            ArrayList<Position> tempPositionsBuild;
             ArrayList<Position> tempPositionsDome = null;
 
             for (WorkerValidCells c1 : build) {
@@ -830,12 +812,10 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
             boolean completed = false;
 
             do {
-                String chosenAction = null;
                 Scanner s = new Scanner(System.in);
                 System.out.println("Write skip if you want to skip the optional construction actions, build if you want to do the build: ");
-                if (s.hasNext()) {
-                    chosenAction = s.nextLine();
-                }
+                String chosenAction = s.nextLine();
+
 
                 if (chosenAction.equals("skip")) //the player has chosen to skip so we can just notify the server
                 {
@@ -882,6 +862,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
         String serverIP = scanner.nextLine();
 
 
+        Socket server;
         try {
             server = new Socket(serverIP, 7777);
         } catch (IOException e) {
@@ -894,7 +875,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
 
         this.registerObserver(cA);
 
-        cI = new ClientNetworkIncoming(this, server);
+        ClientNetworkIncoming cI = new ClientNetworkIncoming(this, server);
         cI.setOutHandler(cA);
         cI.addObserver(this);
         Thread cIThread = new Thread(cI);
@@ -975,11 +956,11 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
      * @param column is the column selected by the player for the worker to use
      * @return true if the worker is valid, else false
      */
-    public boolean containsWorker(ArrayList<WorkerValidCells> arr, int row, int column) {
+    public WorkerValidCells containsWorker(ArrayList<WorkerValidCells> arr, int row, int column) {
         for (WorkerValidCells v : arr) {
-            if (v.getwR() == row && v.getwC() == column && !v.getValidPositions().isEmpty()) return true;
+            if (v.getwR() == row && v.getwC() == column && !v.getValidPositions().isEmpty()) return v;
         }
-        return false;
+        return null;
     }
 
     /**

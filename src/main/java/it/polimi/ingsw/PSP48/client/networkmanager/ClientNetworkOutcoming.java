@@ -3,14 +3,13 @@ package it.polimi.ingsw.PSP48.client.networkmanager;
 import it.polimi.ingsw.PSP48.PingMessage;
 import it.polimi.ingsw.PSP48.networkMessagesToServer.*;
 import it.polimi.ingsw.PSP48.observers.ViewObserver;
-import it.polimi.ingsw.PSP48.server.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
 import it.polimi.ingsw.PSP48.server.model.Position;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -21,8 +20,6 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
     private final Socket server;
     private ObjectOutputStream outputStm;
 
-
-    private NetworkMessagesToServer o;
 
     private boolean shutdownThread = false;
 
@@ -114,8 +111,6 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
     }
 
 
-    private String nextMessage;
-
     /**
      * Initializes the message sender
      */
@@ -126,7 +121,7 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
             handleServerConnection();
         } catch (IOException e) {
             System.out.println("server has died");
-        } catch (ClassCastException | ClassNotFoundException e) {
+        } catch (ClassCastException e) {
             System.out.println("protocol violation");
         }
     }
@@ -135,10 +130,9 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
      * Sends all messages contained in the queue. Waits for new messages to be sent if the queue is empty. If shutdownThread is true,
      * the thread ends.
      *
-     * @throws IOException            if there's something wrong with the connection
-     * @throws ClassNotFoundException if there is a strange class to be sent
+     * @throws IOException if there's something wrong with the connection
      */
-    public synchronized void handleServerConnection() throws IOException, ClassNotFoundException {
+    public synchronized void handleServerConnection() throws IOException {
         while (messagesToBeSent.isEmpty()) {
             try {
                 wait();

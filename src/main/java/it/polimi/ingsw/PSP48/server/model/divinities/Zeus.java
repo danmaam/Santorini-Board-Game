@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
-import it.polimi.ingsw.PSP48.server.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.*;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
@@ -64,7 +64,7 @@ public class Zeus extends Divinity {
     public Consumer<GameController> build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws
             NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelReachedException, DivinityPowerException {
         //first check: the two cells must be adiacent
-        if (!(adiacentCellVerifier(workerRow, workerColumn, buildRow, buildColumn))) {
+        if (!(adjacentCellVerifier(workerRow, workerColumn, buildRow, buildColumn))) {
             if (!(buildColumn == workerColumn && buildRow == workerRow))
                 throw new NotAdjacentCellException("Celle non adiacenti");
             else if (gd.getCell(workerRow, workerColumn).getLevel() == 3)

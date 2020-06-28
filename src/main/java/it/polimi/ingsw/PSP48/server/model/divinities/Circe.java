@@ -39,33 +39,39 @@ public class Circe extends Divinity {
     @Override
     public Consumer<GameController> turnBegin(Model gd) {
         //first, i must rollback the divinities of the players
-        for (Player p : gd.getPlayersInGame()) {
-            if (p.getTempDivinity() != null) p.restoreTempDivinity();
-        }
-
         // i remove the other player from the list of players
         String otherPlayer = gd.getPlayersInGame().stream().filter(p -> !(p.getName().equals(gd.getCurrentPlayer().getName()))).collect(Collectors.toCollection(ArrayList::new)).get(0).getName();
         // there must be present almost two workers to apply the power, and there are gods that deletes workers from the board
-        //now i must find the player's workers on the board
+        //now i must find the player's workers on the board and must check if them are adjacent or not
         ArrayList<Position> workersPosition = gd.getPlayerPositionsInMap(otherPlayer);
-        if (workersPosition.size() > 1) {
-            //found the two workers, i must check if them are adjacent or not
-            if (!adiacentCellVerifier(workersPosition.get(0).getRow(), workersPosition.get(0).getColumn(), workersPosition.get(1).getRow(), workersPosition.get(1).getColumn())) {
-                //the workers are not adjacent, so the player stoles the divinity to the other player
-                gd.getCurrentPlayer().setTempDivinity(gd.getCurrentPlayer().getDivinity());
-                gd.getCurrentPlayer().setDivinity(gd.getPlayer(otherPlayer).getDivinity());
-                gd.getPlayer(otherPlayer).setTempDivinity(gd.getPlayer(otherPlayer).getDivinity());
-                gd.getPlayer(otherPlayer).setDivinity(new Divinity());
-                gd.sendPlayerList();
-                return gd.getCurrentPlayer().getDivinity().turnBegin(gd);
-            }
+        if (workersPosition.size() > 1 && !adjacentCellVerifier(workersPosition.get(0).getRow(), workersPosition.get(0).getColumn(), workersPosition.get(1).getRow(), workersPosition.get(1).getColumn())) {
+            //there are almost two workers and they are not not adjacent, so the player stoles the divinity to the other player
+            gd.getCurrentPlayer().setTempDivinity(gd.getCurrentPlayer().getDivinity());
+            gd.getCurrentPlayer().setDivinity(gd.getPlayer(otherPlayer).getDivinity());
+            gd.getPlayer(otherPlayer).setTempDivinity(gd.getPlayer(otherPlayer).getDivinity());
+            gd.getPlayer(otherPlayer).setDivinity(new Divinity());
+            gd.sendPlayerList();
+            return gd.getCurrentPlayer().getDivinity().turnBegin(gd);
+
         }
-        gd.sendPlayerList();
         return super.turnBegin(gd);
     }
 
     @Override
     public String getDescription() {
         return "If an opponent's Workers do not neighbor each other, you alone have use of their power until your next turn.";
+    }
+
+    /**
+     * Before each Circe turn, restores all players' original divinity
+     *
+     * @param model the model of the game
+     */
+    @Override
+    public void preTurnSecondaryDivinityChecks(Model model) {
+        for (Player p : model.getPlayersInGame()) {
+            if (p.getTempDivinity() != null) p.restoreTempDivinity();
+        }
+        model.sendPlayerList();
     }
 }

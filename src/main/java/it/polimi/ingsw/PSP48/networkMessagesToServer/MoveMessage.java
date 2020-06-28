@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP48.networkMessagesToServer;
 
-import it.polimi.ingsw.PSP48.server.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
 import it.polimi.ingsw.PSP48.observers.ServerNetworkObserver;
 
 public class MoveMessage extends NetworkMessagesToServer {

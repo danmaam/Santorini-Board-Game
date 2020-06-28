@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
-import it.polimi.ingsw.PSP48.server.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.*;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
@@ -78,7 +78,7 @@ public class Atlas extends Divinity {
     @Override
     public Consumer<GameController> dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, DivinityPowerException {
         //first check: the two cells must be adjacent
-        if (!(adiacentCellVerifier(workerRow, workerColumn, domeRow, domeColumn)))
+        if (!(adjacentCellVerifier(workerRow, workerColumn, domeRow, domeColumn)))
             throw new NotAdjacentCellException("Celle non adiacenti");
         //second check: the cell must be empty of workers
         if (!(gd.getCell(domeRow, domeColumn).getPlayer() == null)) throw new OccupiedCellException("Cella occupata");

@@ -177,7 +177,7 @@ public class DivinityChoiceController {
         } else {
             if (currentDivinity == 0) {
                 firstDivinity();
-            } else if (currentDivinity == divinities.size()) {
+            } else if (currentDivinity == divinities.size() - 1) {
                 lastDivinity();
             } else nextDivinity();
             infoText.setText("Remaining " + (numberToBeChosen - chosenDivinities.size()) + " divinities to be chosen");
@@ -219,7 +219,7 @@ public class DivinityChoiceController {
         }
         nextName.setText("");
         nextName.setVisible(false);
-        nextName.setVisible(false);
+        next.setVisible(false);
     }
 
 

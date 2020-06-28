@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
-import it.polimi.ingsw.PSP48.server.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.*;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
@@ -96,7 +96,7 @@ public class Apollo extends Divinity {
     @Override
     public Consumer<GameController> move(int workerRow, int workerColumn, int moveRow, int moveColumn, Model gd) throws NotAdjacentCellException, IncorrectLevelException, DomedCellException, DivinityPowerException, OccupiedCellException, NoTurnEndException {
         //first check: the two cells must be adiacent
-        if (!(adiacentCellVerifier(workerRow, workerColumn, moveRow, moveColumn)))
+        if (!(adjacentCellVerifier(workerRow, workerColumn, moveRow, moveColumn)))
             throw new NotAdjacentCellException("Celle non adiacenti");
         //second check: the two levels must be compatible
         int workerLevel = gd.getCell(workerRow, workerColumn).getLevel();

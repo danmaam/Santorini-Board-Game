@@ -3,7 +3,7 @@ package it.polimi.ingsw.PSP48.server.controller;
 import it.polimi.ingsw.PSP48.EndReason;
 import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
-import it.polimi.ingsw.PSP48.server.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
 import it.polimi.ingsw.PSP48.server.Server;
 import it.polimi.ingsw.PSP48.server.model.*;
 import it.polimi.ingsw.PSP48.server.model.divinities.Divinity;
@@ -260,8 +260,14 @@ public class GameController implements ViewObserver {
         Position lW = model.getCurrentPlayer().getLastWorkerMoved();
         ArrayList<WorkerValidCells> build = new ArrayList<>();
         ArrayList<WorkerValidCells> dome = new ArrayList<>();
-        build.add(new WorkerValidCells(model.getCurrentPlayer().getDivinity().getValidCellForBuilding(lW.getRow(), lW.getColumn(), otherDivinities, model.getGameBoard()), lW.getRow(), lW.getColumn()));
-        dome.add(new WorkerValidCells(model.getCurrentPlayer().getDivinity().getValidCellsToPutDome(lW.getRow(), lW.getColumn(), model.getGameBoard(), otherDivinities), lW.getRow(), lW.getColumn()));
+
+        //Generates valid cells for the action
+        ArrayList<Position> buildCells = model.getCurrentPlayer().getDivinity().getValidCellForBuilding(lW.getRow(), lW.getColumn(), otherDivinities, model.getGameBoard());
+        ArrayList<Position> domeCells = model.getCurrentPlayer().getDivinity().getValidCellsToPutDome(lW.getRow(), lW.getColumn(), model.getGameBoard(), otherDivinities);
+
+        //Associate valid cells with the worker only if the worker is able to complete the action
+        if (!buildCells.isEmpty()) build.add(new WorkerValidCells(buildCells, lW.getRow(), lW.getColumn()));
+        if (!domeCells.isEmpty()) dome.add(new WorkerValidCells(domeCells, lW.getRow(), lW.getColumn()));
         getPlayerView(model.getCurrentPlayer().getName()).requestDomeOrBuild(build, dome);
     }
 
@@ -278,9 +284,9 @@ public class GameController implements ViewObserver {
             if (!p.getName().equals(model.getCurrentPlayer().getName())) otherDivinities.add(p.getDivinity());
         }
         for (Position p : workersPosition) {
-            validCells.add(new WorkerValidCells(new ArrayList<>(model.getCurrentPlayer().getDivinity().getValidCellForMove(p.getRow(), p.getColumn(), model.getGameBoard(), otherDivinities)), p.getRow(), p.getColumn()));
+            ArrayList<Position> cells = model.getCurrentPlayer().getDivinity().getValidCellForMove(p.getRow(), p.getColumn(), model.getGameBoard(), otherDivinities);
+            if (!cells.isEmpty()) validCells.add(new WorkerValidCells(cells, p.getRow(), p.getColumn()));
         }
-        validCells.removeIf(x -> x.getValidPositions().size() == 0); //removes elements that have no valid positions
         getPlayerView(model.getCurrentPlayer().getName()).requestMove(validCells);
     }
 
@@ -335,9 +341,9 @@ public class GameController implements ViewObserver {
      */
     public void turnChange() {
         model.setNextPlayer();
-        if (model.getPlayerWithCirce() != null && model.getCurrentPlayer().getName().equals(model.getPlayerWithCirce()) && model.getCurrentPlayer().getTempDivinity() != null)
-            nextAction = model.getCurrentPlayer().getTempDivinity().turnBegin(model);
-        else nextAction = model.getCurrentPlayer().getDivinity().turnBegin(model);
+        if (model.getCurrentPlayer().getTempDivinity() != null)
+            model.getCurrentPlayer().getTempDivinity().preTurnSecondaryDivinityChecks(model);
+        nextAction = model.getCurrentPlayer().getDivinity().turnBegin(model);
         this.nextAction();
     }
 
@@ -472,8 +478,12 @@ public class GameController implements ViewObserver {
         } else {
             ArrayList<WorkerValidCells> build = new ArrayList<>();
             ArrayList<WorkerValidCells> dome = new ArrayList<>();
-            build.add(new WorkerValidCells(validForBuilding, model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getCurrentPlayer().getLastWorkerMoved().getColumn()));
-            dome.add(new WorkerValidCells(validForDoming, model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getCurrentPlayer().getLastWorkerMoved().getColumn()));
+
+
+            if (!validForBuilding.isEmpty())
+                build.add(new WorkerValidCells(validForBuilding, model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getCurrentPlayer().getLastWorkerMoved().getColumn()));
+            if (!validForDoming.isEmpty())
+                dome.add(new WorkerValidCells(validForDoming, model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getCurrentPlayer().getLastWorkerMoved().getColumn()));
 
             getPlayerView(model.getCurrentPlayer().getName()).requestOptionalBuild(build, dome);
         }

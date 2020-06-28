@@ -9,12 +9,13 @@ import java.util.ArrayList;
  * Data type representing an association between a worker, and the valid cells where it can complete a certain action (eg. move, build, dome)
  */
 public class WorkerValidCells implements Serializable {
-    private ArrayList<Position> validPositions;
-    private int wR;
-    private int wC;
+    private final ArrayList<Position> validPositions;
+    private final int wR;
+    private final int wC;
 
     public ArrayList<Position> getValidPositions() {
-        return validPositions;
+        if (validPositions != null) return validPositions;
+        else return new ArrayList<Position>();
     }
 
     public int getwR() {
