@@ -53,7 +53,8 @@ public class DivinityChoiceController {
     }
 
     /**
-     * Initializer method for FXML load
+     * Initializer method for FXML load, sets visible the first divinity, and then updates the next button with the next divinity (if
+     * there are more than one divinities)
      */
     public void initialize() {
         //must import first divinity

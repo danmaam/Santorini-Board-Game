@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP48.server.controller;
 
-import it.polimi.ingsw.PSP48.EndReason;
+import it.polimi.ingsw.PSP48.server.EndReason;
 import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
 import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;

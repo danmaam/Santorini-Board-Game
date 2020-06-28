@@ -182,6 +182,11 @@ public class GameBoardController {
         }
     };
 
+    /**
+     * Loads and makes visible divinities selector controller, in order to request player to select his own divinity
+     *
+     * @param availableDivinities the list of available divinities to choose
+     */
     public void requestDivinitySelection(ArrayList<DivinitiesWithDescription> availableDivinities) {
         startedGame = true;
         final FXMLLoader divinitiesSelectorLoader = new FXMLLoader(getClass().getResource("/divinitySelection.fxml"));
@@ -203,16 +208,31 @@ public class GameBoardController {
         }
     }
 
+    /**
+     * Notifies the game controller that challenger selected the available divinities in the game
+     *
+     * @param divinities the chosen divinities
+     */
     public void sendChallengerDivinities(ArrayList<String> divinities) {
         view.notifyObserver((x) -> x.selectAvailableDivinities(divinities));
         multifunctionalPane.getChildren().clear();
     }
 
+    /**
+     * Notifies the game controller of the divinity chosen by the player
+     *
+     * @param divinity the chosen divinities
+     */
     public void sendPlayerDivinity(String divinity) {
         view.notifyObserver((x) -> x.registerPlayerDivinity(divinity));
         multifunctionalPane.getChildren().clear();
     }
 
+    /**
+     * Notifies the game controller that the challenger chosen the first player of the game
+     *
+     * @param playerName the name of the first player
+     */
     public void sendFirstPlayerChoice(String playerName) {
         view.notifyObserver((x) -> x.selectFirstPlayer(playerName));
         multifunctionalPane.getChildren().clear();
@@ -716,6 +736,11 @@ public class GameBoardController {
         requestDomeOrBuild(build, dome);
     }
 
+    /**
+     * Updates the player list shown at video when it changed
+     *
+     * @param newPlayerList the new player-divinity association list
+     */
     public void changedPlayerList(ArrayList<String> newPlayerList) {
 
         playerList = newPlayerList;
@@ -772,11 +797,21 @@ public class GameBoardController {
 
     }
 
+    /**
+     * Shows a message in the left bottom corner of the window
+     *
+     * @param s the message to be shown
+     */
     public void printMessage(String s) {
         gameLog.getItems().add(s);
         gameMessage.setText(s);
     }
 
+    /**
+     * Loads and makes visible the divinity selector, in order to request the player to choose his own divinity
+     *
+     * @param div the available divinities to choose
+     */
     public void requestChallengerDivinitiesSelection(ArrayList<DivinitiesWithDescription> div) {
         startedGame = true;
         final FXMLLoader divinitiesSelectorLoader = new FXMLLoader(getClass().getResource("/divinitySelection.fxml"));
@@ -793,6 +828,11 @@ public class GameBoardController {
         multifunctionalPane.getChildren().add(selectionPane);
     }
 
+    /**
+     * Loads and makes visible the first player pane, to request the challenger to choose game's first player
+     *
+     * @param players the list of players in game
+     */
     public void requestInitialPlayerSelection(ArrayList<String> players) {
         final FXMLLoader divinitiesSelectorLoader = new FXMLLoader(getClass().getResource("/firstPlayerSelection.fxml"));
         final GameBoardController thisController = this;
@@ -808,6 +848,11 @@ public class GameBoardController {
 
     }
 
+    /**
+     * Helper method to complete player's action, dependently to tha completed actions; invokes some helper methods to
+     * notify the game controller of the action, or to request the player to complete the second part of some action.
+     * Restores than the original board state.
+     */
     public void nextActionFSM() {
         ArrayList<Node> tbr = new ArrayList<>();
         switch (nextState) {
@@ -837,8 +882,7 @@ public class GameBoardController {
                 }
                 tbr.forEach(x -> boardPane.getChildren().remove(x));
 
-                for (Node n : multifunctionalPane.getChildren())
-                {
+                for (Node n : multifunctionalPane.getChildren()) {
                     if (((ImageView)n).getImage()==skipButtonImage) tbr.add(n);
 
                 }
@@ -872,10 +916,8 @@ public class GameBoardController {
 
             case worker_selection_build:
                 //we remove all the images and mouse events from the board
-                for (Node n : boardPane.getChildren())
-                {
-                    if (((ImageView)n).getImage()==workerChoiceImage || ((ImageView)n).getImage()==isSelectionImage ||((ImageView)n).getImage()==buildAndDomeImage || ((ImageView)n).getImage()==domeSelectionImage)
-                    {
+                for (Node n : boardPane.getChildren()) {
+                    if (((ImageView)n).getImage()==workerChoiceImage || ((ImageView)n).getImage()==isSelectionImage ||((ImageView)n).getImage()==buildAndDomeImage || ((ImageView)n).getImage()==domeSelectionImage) {
                         n.removeEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
                         tbr.add(n);
                     }
@@ -886,17 +928,13 @@ public class GameBoardController {
                 //now we need to call the method for the choice of the cell
                 ArrayList<WorkerValidCells> chosenBuildWorker= new ArrayList<>();
                 ArrayList<WorkerValidCells> chosenDomeWorker= new ArrayList<>();
-                for (WorkerValidCells w1 : buildValid)
-                {
-                    if (w1.getwR()==nextPosition.getRow() && w1.getwC()==nextPosition.getColumn())
-                    {
+                for (WorkerValidCells w1 : buildValid) {
+                    if (w1.getwR()==nextPosition.getRow() && w1.getwC()==nextPosition.getColumn()) {
                         chosenBuildWorker.add(new WorkerValidCells(w1.getValidPositions(), w1.getwR(), w1.getwC()));
                     }
                 }
-                for (WorkerValidCells w2 : domeValid)
-                {
-                    if (w2.getwR()==nextPosition.getRow() && w2.getwC()==nextPosition.getColumn())
-                    {
+                for (WorkerValidCells w2 : domeValid) {
+                    if (w2.getwR()==nextPosition.getRow() && w2.getwC()==nextPosition.getColumn()) {
                         chosenDomeWorker.add(new WorkerValidCells(w2.getValidPositions(), w2.getwR(), w2.getwC()));
                     }
                 }
@@ -907,29 +945,22 @@ public class GameBoardController {
                 //if the player has chosen a cell and cannot choose what action to do, we notify the observers and clear the board
                 //we need to get both lists of positions of the worker to check if he can choose the action
                 ArrayList<Position> buildPositions=null, domePositions=null;
-                for (WorkerValidCells w : buildValid)
-                {
-                    if (w.getwR()==workerPosition.getRow() && w.getwC()==workerPosition.getColumn())
-                    {
+                for (WorkerValidCells w : buildValid) {
+                    if (w.getwR()==workerPosition.getRow() && w.getwC()==workerPosition.getColumn()) {
                         buildPositions=w.getValidPositions();
                         break;
                     }
                 }
-                for (WorkerValidCells w1 : domeValid)
-                {
-                    if (w1.getwR()==workerPosition.getRow() && w1.getwC()==workerPosition.getColumn())
-                    {
+                for (WorkerValidCells w1 : domeValid) {
+                    if (w1.getwR()==workerPosition.getRow() && w1.getwC()==workerPosition.getColumn()) {
                         domePositions=w1.getValidPositions();
                     }
                 }
 
-                if (buildPositions==null || domePositions==null || !buildPositions.contains(nextPosition) || !domePositions.contains(nextPosition))
-                {
+                if (buildPositions==null || domePositions==null || !buildPositions.contains(nextPosition) || !domePositions.contains(nextPosition)) {
                     //the player can't choose the action so we clear the board and notify the observers
-                    for (Node n : boardPane.getChildren())
-                    {
-                        if (((ImageView)n).getImage()==isSelectionImage ||((ImageView)n).getImage()==buildAndDomeImage || ((ImageView)n).getImage()==domeSelectionImage)
-                        {
+                    for (Node n : boardPane.getChildren()) {
+                        if (((ImageView)n).getImage()==isSelectionImage ||((ImageView)n).getImage()==buildAndDomeImage || ((ImageView)n).getImage()==domeSelectionImage) {
                             n.removeEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
                             tbr.add(n);
                         }
@@ -939,17 +970,13 @@ public class GameBoardController {
                     //board reset, now we just need to check which observer to notify
                     if (buildPositions!=null && buildPositions.contains(nextPosition)) this.sendBuildChoice(new MoveCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
                     else this.sendDomeChoice(new MoveCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
-                }
-                else //the player has chosen a cell that can take both building and doming actions, we have to ask about his choice
+                } else //the player has chosen a cell that can take both building and doming actions, we have to ask about his choice
                 {
                     //the cell has already been chosen so we remove the mouse events from the board
-                    for (Node n : boardPane.getChildren())
-                    {
-                        if (((ImageView)n).getImage()==isSelectionImage ||((ImageView)n).getImage()==buildAndDomeImage || ((ImageView)n).getImage()==domeSelectionImage)
-                        {
+                    for (Node n : boardPane.getChildren()) {
+                        if (((ImageView)n).getImage()==isSelectionImage ||((ImageView)n).getImage()==buildAndDomeImage || ((ImageView)n).getImage()==domeSelectionImage) {
                             n.removeEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
-                            if((1+2*nextPosition.getRow())!=GridPane.getRowIndex(n) || (1+2*nextPosition.getColumn())!=GridPane.getColumnIndex(n))
-                            {
+                            if((1+2*nextPosition.getRow())!=GridPane.getRowIndex(n) || (1+2*nextPosition.getColumn())!=GridPane.getColumnIndex(n)) {
                                 tbr.add(n);
                             }
                         }
@@ -990,6 +1017,11 @@ public class GameBoardController {
         }
     }
 
+    /**
+     * Updates the board cells which content has changed
+     *
+     * @param newCells the cells that have been updated
+     */
     public void changedBoard(ArrayList<Cell> newCells) {
         //must reset all the new cells, and and recreate these cells with the new information
         for (Cell c : newCells) {
@@ -1062,6 +1094,12 @@ public class GameBoardController {
 
     }
 
+    /**
+     * Gets the player workers' colour parsing the string arrived from the controller
+     *
+     * @param playerName the player name
+     * @return the player workers' colour
+     */
     public String getPlayerColour(String playerName) {
         for (String s : playerList) {
             if (s.split("\\.")[0].equals(playerName)) return s.split("\\.")[1];
@@ -1069,7 +1107,9 @@ public class GameBoardController {
         return null;
     }
 
-
+    /**
+     * Initializes the board controller, and some helper structure
+     */
     public void initialize() {
         playersDivinity.add(firstPlayerDivinity);
         playersDivinity.add(secondPlayerDivinity);

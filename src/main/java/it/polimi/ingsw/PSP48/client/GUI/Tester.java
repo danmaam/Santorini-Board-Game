@@ -36,12 +36,17 @@ public class Tester extends GUI {
 
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         System.out.println(this);
         FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/SantoriniGUI.fxml"));
         loginController = new LoginScreenController(this);
         loginLoader.setController(loginController);
-        Parent root = loginLoader.load();
+        Parent root = null;
+        try {
+            root = loginLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Scene scene = new Scene(root, 467, 653);
         primaryStage = stage;
 

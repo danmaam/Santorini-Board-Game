@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP48;
+package it.polimi.ingsw.PSP48.server;
 
 /**
  * The reason why a game ended

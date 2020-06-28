@@ -29,6 +29,9 @@ public class LoginScreenController {
     }
 
 
+    /**
+     * Sends via network the game mode selected by the player
+     */
     public synchronized void requestGameModeSend() {
         int numberOfPlayers;
         if (isGameWithThreePlayers.isSelected()) numberOfPlayers = 3;
@@ -44,17 +47,18 @@ public class LoginScreenController {
     }
 
 
-    public synchronized void nicknameResult(String result) {
-        System.out.println(result);
-
-    }
-
-
+    /**
+     * Sends via network the nickname chosen by the player
+     */
     public void requestNicknameSend() {
         String nickname = playerNickname.getText();
         View.getUploader().requestNicknameSend(nickname);
     }
 
+    /**
+     * Starts the connection to the server.
+     * Shows a dialog error if the ip doesn't exists, or if the nickname is invalid.
+     */
     public synchronized void loginButton() {
         if (serverIP.getText().length() == 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -80,6 +84,10 @@ public class LoginScreenController {
         View.startNetwork(IP);
     }
 
+    /**
+     * Sets the game mode selected by the player, and makes visible the birthday choose if
+     * the player selected game mode without divinities.
+     */
     public void divinitiesButton() {
         birthday.setDisable(!birthday.isDisable());
         birthday.setValue(LocalDate.now());

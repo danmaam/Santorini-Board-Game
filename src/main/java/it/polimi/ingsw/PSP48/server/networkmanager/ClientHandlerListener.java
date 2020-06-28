@@ -79,6 +79,7 @@ public class ClientHandlerListener implements Runnable {
                 for (ServerNetworkObserver o : observers) {
                     o.destroyGame();
                 }
+                if (observers.isEmpty() && playerNickname != null) Server.removeNickname(playerNickname);
             }
             pingExecutor.shutdown();
             executors.shutdown();

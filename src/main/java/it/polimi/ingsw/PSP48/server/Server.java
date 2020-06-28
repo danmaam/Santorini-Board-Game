@@ -1,10 +1,8 @@
 package it.polimi.ingsw.PSP48.server;
 
-import it.polimi.ingsw.PSP48.EndReason;
 import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.server.networkmanager.ClientHandler;
 import it.polimi.ingsw.PSP48.server.networkmanager.ClientHandlerListener;
-import it.polimi.ingsw.PSP48.server.virtualview.VirtualView;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -21,12 +19,10 @@ public class Server {
     /**
      * Starts the server, and puts it in wait for connections for clients. When a client connects,
      * generates two handler for it: to send messages, and to receive messages.
-     *
-     * @param args
      */
-    public static void main(String[] args) {
+    public static void run() {
 
-        System.out.println("Santorini Server V.0.5 Alpha.");
+        System.out.println("Santorini Server V.1.0");
         ServerSocket socket;
         try {
             socket = new ServerSocket(TCP_PORT);

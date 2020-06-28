@@ -26,6 +26,12 @@ public class FirstPlayerSelectionController {
         this.players = players;
     }
 
+    /**
+     * Initializes the player selection pane.
+     * Adds to each button:
+     * - the handler of mouse pressing/releasing, to implement pressed button effect
+     * - the handler of mouse click, that sends to the board controller the selected player
+     */
     public void initialize() {
         playersButton.add(first);
         playersButton.add(second);

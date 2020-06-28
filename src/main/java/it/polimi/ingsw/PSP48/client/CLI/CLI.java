@@ -10,6 +10,7 @@ import it.polimi.ingsw.PSP48.observers.ViewObserver;
 import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Position;
+import javafx.scene.control.Alert;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -888,26 +889,6 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
 
 
     /**
-     * method showing to a player the nickname he has chosen to login with, together with the assigned colour
-     *
-     * @param result is what we show to the client
-     */
-    @Override
-    public synchronized void nicknameResult(String result) {
-        threadExecutor.submit(() -> System.out.println(result));
-    }
-
-    /**
-     * method showing the result of the game mode selection
-     *
-     * @param result is the result we show to the client
-     */
-    @Override
-    public synchronized void gameModeResult(String result) {
-        threadExecutor.submit(() -> System.out.println(result));
-    }
-
-    /**
      * method requesting to a player to write a nickname in order to login and play
      *
      * @param message is the message we print to make our request
@@ -915,9 +896,17 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
     @Override
     public void requestNicknameSend(String message) {
         threadExecutor.submit(() -> {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Choose a nickname to login");
-            String nextMessage = scanner.nextLine();
+            String nextMessage;
+            System.out.println(message);
+            boolean completed = false;
+            while (true) {
+                Scanner scanner = new Scanner(System.in);
+                nextMessage = scanner.nextLine();
+                if (nextMessage.length() == 0 || nextMessage.contains(".")) {
+                    System.out.println("Invalid nickname, since it's empty or contains dots.");
+                    System.out.println(message);
+                } else break;
+            }
             cA.requestNicknameSend(nextMessage);
         });
 
@@ -943,9 +932,14 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
 
     }
 
+    /**
+     * Notifies the client the setup phase has been completed.
+     *
+     * @param message the message of completed setup
+     */
     @Override
     public void completedSetup(String message) {
-
+        threadExecutor.submit(() -> System.out.println(message));
     }
 
     /**
