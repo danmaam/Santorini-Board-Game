@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * The coordinates of some action completed by a player
  */
-public class MoveCoordinates implements Serializable {
+public class ActionCoordinates implements Serializable {
     private final int workerRow;
     private final int workerColumn;
     private final int moveRow;
@@ -39,7 +39,15 @@ public class MoveCoordinates implements Serializable {
     }
 
 
-    public MoveCoordinates(int workerRow, int workerColumn, int moveRow, int moveColumn) {
+    /**
+     * Initializes the object
+     *
+     * @param workerRow    the row of the worker
+     * @param workerColumn the column of the worker
+     * @param moveRow      the row of the cell where the action must be completed
+     * @param moveColumn   the column of the cell on which the action must be completed
+     */
+    public ActionCoordinates(int workerRow, int workerColumn, int moveRow, int moveColumn) {
         this.workerRow = workerRow;
         this.workerColumn = workerColumn;
         this.moveRow = moveRow;
@@ -48,7 +56,7 @@ public class MoveCoordinates implements Serializable {
 
     private final int moveColumn;
 
-    public MoveCoordinates clone() {
-        return new MoveCoordinates(workerRow, workerColumn, moveRow, moveColumn);
+    public ActionCoordinates clone() {
+        return new ActionCoordinates(workerRow, workerColumn, moveRow, moveColumn);
     }
 }

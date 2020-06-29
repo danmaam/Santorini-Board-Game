@@ -3,7 +3,7 @@ package it.polimi.ingsw.PSP48.server.controller;
 import it.polimi.ingsw.PSP48.server.EndReason;
 import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
-import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
 import it.polimi.ingsw.PSP48.server.Server;
 import it.polimi.ingsw.PSP48.server.model.*;
 import it.polimi.ingsw.PSP48.server.model.divinities.Divinity;
@@ -73,7 +73,7 @@ public class GameController implements ViewObserver {
      * @author Daniele Mammone
      */
     @Override
-    public void move(MoveCoordinates p) {
+    public void move(ActionCoordinates p) {
         System.out.println("doing move");
         //i must check if this move allows the player to end the turn
         try {
@@ -113,7 +113,7 @@ public class GameController implements ViewObserver {
      * @author Daniele Mammone
      */
     @Override
-    public void build(MoveCoordinates p) {
+    public void build(ActionCoordinates p) {
         System.out.println("build");
         try {
             nextAction = model.getCurrentPlayer().getDivinity().build(p.getWorkerRow(), p.getWorkerColumn(), p.getMoveRow(), p.getMoveColumn(), model);
@@ -148,7 +148,7 @@ public class GameController implements ViewObserver {
      * @author Daniele Mammone
      */
     @Override
-    public void dome(MoveCoordinates p) {
+    public void dome(ActionCoordinates p) {
         System.out.println("dome");
         try {
             nextAction = model.getCurrentPlayer().getDivinity().dome(p.getWorkerRow(), p.getWorkerColumn(), p.getMoveRow(), p.getMoveColumn(), model);

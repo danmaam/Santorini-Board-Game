@@ -1,17 +1,17 @@
 package it.polimi.ingsw.PSP48.server.model.divinities.testingDivinities;
 
-import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.divinities.Divinity;
 
 public class DivinityFalsePower extends Divinity {
     @Override
-    public Boolean othersMove(MoveCoordinates moveCells, Cell[][] gameBoard) {
+    public Boolean othersMove(ActionCoordinates moveCells, Cell[][] gameBoard) {
         return moveCells.getMoveRow() != 1 || moveCells.getMoveColumn() != 2;
     }
 
     @Override
-    public Boolean othersBuilding(MoveCoordinates moveCells) {
+    public Boolean othersBuilding(ActionCoordinates moveCells) {
         return moveCells.getMoveRow() != 1 || moveCells.getMoveColumn() != 2;
     }
 
@@ -21,7 +21,7 @@ public class DivinityFalsePower extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public Boolean othersDome(MoveCoordinates domeCells) {
+    public Boolean othersDome(ActionCoordinates domeCells) {
         return domeCells.getMoveRow() != 2 || domeCells.getMoveColumn() != 1;
     }
 }

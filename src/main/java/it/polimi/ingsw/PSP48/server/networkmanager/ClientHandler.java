@@ -7,7 +7,7 @@ import it.polimi.ingsw.PSP48.networkMessagesToClient.*;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Position;
 import it.polimi.ingsw.PSP48.setupMessagesToClient.ClientSetupMessages;
-import it.polimi.ingsw.PSP48.setupMessagesToClient.nicknameRequest;
+import it.polimi.ingsw.PSP48.setupMessagesToClient.NicknameRequest;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -79,7 +79,7 @@ public class ClientHandler implements Runnable {
         System.out.println("Connected to " + client.getInetAddress());
         output.writeObject(new PingMessage());
 
-        setUpMessage(new nicknameRequest("Please choose a nickname without dots and press enter"));
+        setUpMessage(new NicknameRequest("Please choose a nickname without dots and press enter"));
 
         while (true) {
             while (messagesToBeSent.isEmpty()) {
@@ -100,7 +100,7 @@ public class ClientHandler implements Runnable {
      * @param message the message the client has to show
      */
     public synchronized void requestMessageSend(String message) {
-        messagesToBeSent.add(new requestMessagePrint(message));
+        messagesToBeSent.add(new RequestMessagePrint(message));
         notifyAll();
     }
 
@@ -249,6 +249,10 @@ public class ClientHandler implements Runnable {
         notifyAll();
     }
 
+    /**
+     * Handles the disconnection of a client setting the message sender in a shutdown state and waking up the thread form waiting
+     * for messages to be sent
+     */
     public synchronized void handleClientDisconnection() {
         closeThread = true;
         notifyAll();

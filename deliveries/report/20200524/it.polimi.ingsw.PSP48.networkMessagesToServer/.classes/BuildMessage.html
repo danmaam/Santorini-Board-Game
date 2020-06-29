@@ -73,22 +73,22 @@
 
 
 <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.networkMessagesToServer;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import it.polimi.ingsw.PSP48.server.MoveCoordinates;
-<i>4</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ServerNetworkObserver;
-<i>5</i>&nbsp;
-<i>6</i>&nbsp;public class BuildMessage extends NetworkMessagesToServer {
-<i>7</i>&nbsp;    private final MoveCoordinates cordinateOfTheMove;
-<i>8</i>&nbsp;
-<b class="nc"><i>9</i>&nbsp;    public BuildMessage(MoveCoordinates m) {</b>
-<b class="nc"><i>10</i>&nbsp;        cordinateOfTheMove = m.clone();</b>
-<i>11</i>&nbsp;    }
-<i>12</i>&nbsp;
-<i>13</i>&nbsp;    @Override
-<i>14</i>&nbsp;    public void doThings(ServerNetworkObserver obv) {
-<b class="nc"><i>15</i>&nbsp;        obv.build(cordinateOfTheMove);</b>
-<i>16</i>&nbsp;    }
-<i>17</i>&nbsp;}
+    <i>2</i>&nbsp;
+    <i>3</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
+    <i>4</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ServerNetworkObserver;
+    <i>5</i>&nbsp;
+    <i>6</i>&nbsp;public class BuildMessage extends NetworkMessagesToServer {
+    <i>7</i>&nbsp; private final MoveCoordinates cordinateOfTheMove;
+    <i>8</i>&nbsp;
+    <b class="nc"><i>9</i>&nbsp; public BuildMessage(MoveCoordinates m) {</b>
+    <b class="nc"><i>10</i>&nbsp; cordinateOfTheMove = m.clone();</b>
+    <i>11</i>&nbsp; }
+    <i>12</i>&nbsp;
+    <i>13</i>&nbsp; @Override
+    <i>14</i>&nbsp; public void doThings(ServerNetworkObserver obv) {
+    <b class="nc"><i>15</i>&nbsp; obv.build(cordinateOfTheMove);</b>
+    <i>16</i>&nbsp; }
+    <i>17</i>&nbsp;}
 </div>
 </div>
 

@@ -73,40 +73,40 @@
 
 
 <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.server.controller;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import it.polimi.ingsw.PSP48.ViewInterface;
-<i>4</i>&nbsp;import it.polimi.ingsw.PSP48.WorkerValidCells;
-<i>5</i>&nbsp;import it.polimi.ingsw.PSP48.server.MoveCoordinates;
-<i>6</i>&nbsp;import it.polimi.ingsw.PSP48.server.Server;
-<i>7</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.*;
-<i>8</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.divinities.Divinity;
-<i>9</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.exceptions.*;
-<i>10</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ViewObserver;
-<i>11</i>&nbsp;
-<i>12</i>&nbsp;import java.util.*;
-<i>13</i>&nbsp;import java.util.function.Consumer;
-<i>14</i>&nbsp;
-<i>15</i>&nbsp;/**
-<i>16</i>&nbsp; * @author Daniele Mammone
-<i>17</i>&nbsp; * the entire game controller in his magnificence
-<i>18</i>&nbsp; * it&#39;s an observer f the view, invokes methods on view and model
-<i>19</i>&nbsp; */
-<i>20</i>&nbsp;
-<i>21</i>&nbsp;public class GameController implements ViewObserver {
-<i>22</i>&nbsp;    private final Model model;
-<i>23</i>&nbsp;    private Consumer&lt;GameController&gt; nextAction;
-<i>24</i>&nbsp;    private final int roomID;
-<i>25</i>&nbsp;
-<b class="nc"><i>26</i>&nbsp;    private final HashMap&lt;String, ViewInterface&gt; playersViews = new HashMap&lt;&gt;();</b>
-<i>27</i>&nbsp;
-<i>28</i>&nbsp;    public void associateViewWithPlayer(String name, ViewInterface view) {
-<b class="nc"><i>29</i>&nbsp;        playersViews.put(name, view);</b>
-<b class="nc"><i>30</i>&nbsp;    }</b>
-<i>31</i>&nbsp;
-<b class="nc"><i>32</i>&nbsp;    public GameController(Model m, int ID) {</b>
-<b class="nc"><i>33</i>&nbsp;        model = m;</b>
-<b class="nc"><i>34</i>&nbsp;        roomID = ID;</b>
-<b class="nc"><i>35</i>&nbsp;    }</b>
+    <i>2</i>&nbsp;
+    <i>3</i>&nbsp;import it.polimi.ingsw.PSP48.ViewInterface;
+    <i>4</i>&nbsp;import it.polimi.ingsw.PSP48.WorkerValidCells;
+    <i>5</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
+    <i>6</i>&nbsp;import it.polimi.ingsw.PSP48.server.Server;
+    <i>7</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.*;
+    <i>8</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.divinities.Divinity;
+    <i>9</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.exceptions.*;
+    <i>10</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ViewObserver;
+    <i>11</i>&nbsp;
+    <i>12</i>&nbsp;import java.util.*;
+    <i>13</i>&nbsp;import java.util.function.Consumer;
+    <i>14</i>&nbsp;
+    <i>15</i>&nbsp;/**
+    <i>16</i>&nbsp; * @author Daniele Mammone
+    <i>17</i>&nbsp; * the entire game controller in his magnificence
+    <i>18</i>&nbsp; * it&#39;s an observer f the view, invokes methods on view and model
+    <i>19</i>&nbsp; */
+    <i>20</i>&nbsp;
+    <i>21</i>&nbsp;public class GameController implements ViewObserver {
+    <i>22</i>&nbsp; private final Model model;
+    <i>23</i>&nbsp; private Consumer&lt;GameController&gt; nextAction;
+    <i>24</i>&nbsp; private final int roomID;
+    <i>25</i>&nbsp;
+    <b class="nc"><i>26</i>&nbsp; private final HashMap&lt;String, ViewInterface&gt; playersViews = new HashMap&lt;&gt;();</b>
+    <i>27</i>&nbsp;
+    <i>28</i>&nbsp; public void associateViewWithPlayer(String name, ViewInterface view) {
+    <b class="nc"><i>29</i>&nbsp; playersViews.put(name, view);</b>
+    <b class="nc"><i>30</i>&nbsp; }</b>
+    <i>31</i>&nbsp;
+    <b class="nc"><i>32</i>&nbsp; public GameController(Model m, int ID) {</b>
+    <b class="nc"><i>33</i>&nbsp; model = m;</b>
+    <b class="nc"><i>34</i>&nbsp; roomID = ID;</b>
+    <b class="nc"><i>35</i>&nbsp; }</b>
 <i>36</i>&nbsp;
 <i>37</i>&nbsp;    public ViewInterface getPlayerView(String playerName) {
 <b class="nc"><i>38</i>&nbsp;        return playersViews.get(playerName);</b>

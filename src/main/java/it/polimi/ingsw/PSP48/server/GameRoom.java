@@ -16,6 +16,13 @@ public class GameRoom {
     private final GameController controller;
     private final int gameRoomID;
 
+    /**
+     * Initializes a game room object
+     *
+     * @param playersNumber     the number of players allowed in the game room
+     * @param AllowedDivinities if the match in the game room allows divinities
+     * @param ID                the univocal ID of the game room
+     */
     public GameRoom(int playersNumber, boolean AllowedDivinities, int ID) {
         model = new Model(playersNumber, AllowedDivinities);
         controller = new GameController(model, ID);

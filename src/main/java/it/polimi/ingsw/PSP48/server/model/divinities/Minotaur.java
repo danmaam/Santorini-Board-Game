@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
-import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import it.polimi.ingsw.PSP48.server.model.*;
@@ -84,7 +84,7 @@ public class Minotaur extends Divinity {
 
         for (Cell c : validCells) {
             for (Divinity d : otherDivinitiesInGame) {
-                if (!d.getName().equals(this.getName()) && !d.othersMove(new MoveCoordinates(workerRow, workerColumn, c.getRow(), c.getColumn()), gameCells)) {
+                if (!d.getName().equals(this.getName()) && !d.othersMove(new ActionCoordinates(workerRow, workerColumn, c.getRow(), c.getColumn()), gameCells)) {
                     nV.add(c);
                     break;
                 }
@@ -200,7 +200,7 @@ public class Minotaur extends Divinity {
         //fifth check: if another different divinity doesn't invalid this move
 
         for (Player p : gd.getPlayersInGame()) {
-            if (p != gd.getCurrentPlayer() && !p.getDivinity().othersMove(new MoveCoordinates(workerRow, workerColumn, moveRow, moveColumn), gd.getGameBoard()))
+            if (p != gd.getCurrentPlayer() && !p.getDivinity().othersMove(new ActionCoordinates(workerRow, workerColumn, moveRow, moveColumn), gd.getGameBoard()))
                 throw new DivinityPowerException("Fail due to other divinity");
         }
 

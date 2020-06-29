@@ -9,6 +9,12 @@ public class DivinitiesWithDescription implements Serializable {
     private final String name;
     private final String description;
 
+    /**
+     * Initializes the object
+     *
+     * @param name        the name of the divinity
+     * @param description the description of the divinity
+     */
     public DivinitiesWithDescription(String name, String description) {
         this.name = name;
         this.description = description;

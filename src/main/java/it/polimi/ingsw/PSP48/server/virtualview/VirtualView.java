@@ -6,7 +6,7 @@ import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
 import it.polimi.ingsw.PSP48.observers.ServerNetworkObserver;
 import it.polimi.ingsw.PSP48.observers.ViewObserver;
-import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
 import it.polimi.ingsw.PSP48.server.Server;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Position;
@@ -24,14 +24,29 @@ public class VirtualView implements ViewInterface, ServerNetworkObserver {
     private final ArrayList<ViewObserver> observers = new ArrayList<>();
 
 
+    /**
+     * Registers an observer of the virtual view
+     *
+     * @param obv the observer to be registered
+     */
     public void registerObserver(ViewObserver obv) {
         observers.add(obv);
     }
 
+    /**
+     * Stops an observer from observing the virtual view
+     *
+     * @param obv the observer to be unregistered
+     */
     public void unregisterObserver(ViewObserver obv) {
         observers.remove(obv);
     }
 
+    /**
+     * Notifies the observers to complete a certain action
+     *
+     * @param lambda the observer's method that must be called
+     */
     public void notifyObserver(Consumer<ViewObserver> lambda) {
         for (ViewObserver obv : observers) lambda.accept(obv);
     }
@@ -51,6 +66,13 @@ public class VirtualView implements ViewInterface, ServerNetworkObserver {
         this.roomID = roomID;
     }
 
+    /**
+     * Initializes the virtual view object
+     *
+     * @param p          the network message sender
+     * @param l          the message listener
+     * @param playerName the name of the player
+     */
     public VirtualView(ClientHandler p, ClientHandlerListener l, String playerName) {
         playerHandler = p;
         playerListener = l;
@@ -190,7 +212,7 @@ public class VirtualView implements ViewInterface, ServerNetworkObserver {
      * @param p the coordinates of the move action
      */
     @Override
-    public void move(MoveCoordinates p) {
+    public void move(ActionCoordinates p) {
         notifyObserver(c -> c.move(p));
     }
 
@@ -200,7 +222,7 @@ public class VirtualView implements ViewInterface, ServerNetworkObserver {
      * @param p the coordinates of the build action
      */
     @Override
-    public void build(MoveCoordinates p) {
+    public void build(ActionCoordinates p) {
         notifyObserver(c -> c.build(p));
     }
 
@@ -210,7 +232,7 @@ public class VirtualView implements ViewInterface, ServerNetworkObserver {
      * @param p the coordinates of the dome action
      */
     @Override
-    public void dome(MoveCoordinates p) {
+    public void dome(ActionCoordinates p) {
         notifyObserver(c -> c.dome(p));
     }
 

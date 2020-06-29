@@ -37,31 +37,31 @@
 
 
 <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.observers;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
-<i>4</i>&nbsp;import it.polimi.ingsw.PSP48.server.MoveCoordinates;
-<i>5</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Position;
-<i>6</i>&nbsp;
-<i>7</i>&nbsp;import java.util.ArrayList;
-<i>8</i>&nbsp;import java.util.Calendar;
-<i>9</i>&nbsp;
-<i>10</i>&nbsp;public interface ViewObserver {
-<i>11</i>&nbsp;    public void move(MoveCoordinates p);
-<i>12</i>&nbsp;
-<i>13</i>&nbsp;    public void build(MoveCoordinates p);
-<i>14</i>&nbsp;
-<i>15</i>&nbsp;    public void dome(MoveCoordinates p);
-<i>16</i>&nbsp;
-<i>17</i>&nbsp;    public void putWorkerOnTable(Position p);
-<i>18</i>&nbsp;
-<i>19</i>&nbsp;    public void registerPlayerDivinity(String divinity);
-<i>20</i>&nbsp;
-<i>21</i>&nbsp;    public void addPlayer(String playerDetails, Calendar birthday);
-<i>22</i>&nbsp;
-<i>23</i>&nbsp;    public void selectAvailableDivinities(ArrayList&lt;String&gt; divinities);
-<i>24</i>&nbsp;
-<i>25</i>&nbsp;    public void selectFirstPlayer(String playerName);
-<i>26</i>&nbsp;}
+    <i>2</i>&nbsp;
+    <i>3</i>&nbsp;import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
+    <i>4</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
+    <i>5</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Position;
+    <i>6</i>&nbsp;
+    <i>7</i>&nbsp;import java.util.ArrayList;
+    <i>8</i>&nbsp;import java.util.Calendar;
+    <i>9</i>&nbsp;
+    <i>10</i>&nbsp;public interface ViewObserver {
+    <i>11</i>&nbsp; public void move(MoveCoordinates p);
+    <i>12</i>&nbsp;
+    <i>13</i>&nbsp; public void build(MoveCoordinates p);
+    <i>14</i>&nbsp;
+    <i>15</i>&nbsp; public void dome(MoveCoordinates p);
+    <i>16</i>&nbsp;
+    <i>17</i>&nbsp; public void putWorkerOnTable(Position p);
+    <i>18</i>&nbsp;
+    <i>19</i>&nbsp; public void registerPlayerDivinity(String divinity);
+    <i>20</i>&nbsp;
+    <i>21</i>&nbsp; public void addPlayer(String playerDetails, Calendar birthday);
+    <i>22</i>&nbsp;
+    <i>23</i>&nbsp; public void selectAvailableDivinities(ArrayList&lt;String&gt; divinities);
+    <i>24</i>&nbsp;
+    <i>25</i>&nbsp; public void selectFirstPlayer(String playerName);
+    <i>26</i>&nbsp;}
 </div>
 </div>
 

@@ -21,13 +21,6 @@ public class Model {
     private final ArrayList<Player> playersInGame = new ArrayList<>(); //the player are stored in a certain order, according to the order of their turns
     private final Stack<Colour> availableColours = new Stack<>();
 
-    public boolean isGameWithDivinities() {
-        return gameWithDivinities;
-    }
-
-    public int getGamePlayerNumber() {
-        return gamePlayerNumber;
-    }
 
     private ArrayList<Divinity> availableDivinities;
     private int currentPlayer = -1; //it has this initial value cause there are moments of the game when there isn't a current player
@@ -35,17 +28,15 @@ public class Model {
     private int gamePlayerNumber;
     private final boolean gameWithDivinities;
     private int challengerIndex;
-
-    public void setFirstPlayerIndex(int firstPlayerIndex) {
-        this.firstPlayerIndex = firstPlayerIndex;
-    }
-
     private int firstPlayerIndex;
 
-    public int getFirstPlayerIndex() {
-        return firstPlayerIndex;
-    }
 
+    /**
+     * Initializes the model
+     *
+     * @param number     the number of players
+     * @param divinities if the match allows or not divinities
+     */
     public Model(int number, boolean divinities) {
         if (divinities) {
             availableDivinities = new ArrayList<>();
@@ -82,23 +73,60 @@ public class Model {
 
     private final ArrayList<ModelObserver> observers = new ArrayList<>();
 
+    /**
+     * Adds a Model Observer
+     *
+     * @param obv the new observer
+     */
     public void registerObserver(ModelObserver obv) {
         observers.add(obv);
     }
 
+    /**
+     * Removes an observer from observing the model
+     *
+     * @param obv the observer to be removed
+     */
     public void unregisterObserver(ModelObserver obv) {
         observers.remove(obv);
     }
 
+    /**
+     * Sets the index of the first player
+     *
+     * @param firstPlayerIndex the index of the first player
+     */
+    public void setFirstPlayerIndex(int firstPlayerIndex) {
+        this.firstPlayerIndex = firstPlayerIndex;
+    }
+
+    /**
+     * Notifies the observers to do some action
+     *
+     * @param lambda the method that observers must runs
+     */
     public void notifyObservers(Consumer<ModelObserver> lambda) {
         for (ModelObserver o : observers) {
             lambda.accept(o);
         }
     }
 
+    /**
+     * @return if divinities are allowed in the match
+     */
+    public boolean isGameWithDivinities() {
+        return gameWithDivinities;
+    }
 
     /**
-     * method used to obtain how many players are in a certain game (they can be 2 or 3)
+     * @return the number of player allowed for the match
+     */
+    public int getGamePlayerNumber() {
+        return gamePlayerNumber;
+    }
+
+    /**
+     * method used to obtain how many players are actually in a certain game (they can be 2 or 3)
      *
      * @return an int that is the total number of players in the game
      */
@@ -157,6 +185,13 @@ public class Model {
     }
 
     /**
+     * @return the index of the first player
+     */
+    public int getFirstPlayerIndex() {
+        return firstPlayerIndex;
+    }
+
+    /**
      * method used to change the current player at the end of a certain turn
      * since players are stored in playersInGame according to their turns, we just need to increase by one the int parameter currentPlayer
      */
@@ -198,6 +233,12 @@ public class Model {
         return returnArray;
     }
 
+    /**
+     * Returns a reference to a player
+     *
+     * @param playerName the name of the requested player
+     * @return the reference to the requested player
+     */
     public Player getPlayer(String playerName) {
         for (Player p : playersInGame) {
             if (p.getName().equals(playerName)) return p;
@@ -205,14 +246,27 @@ public class Model {
         return null;
     }
 
+    /**
+     * @return the game board
+     */
     public Cell[][] getGameBoard() {
         return boardCell;
     }
 
+    /**
+     * Sets the next player, according to his index, derived form the order of the join of the game
+     *
+     * @param i the index of the next player
+     */
     public void setNextPlayer(int i) {
         currentPlayer = i;
     }
 
+    /**
+     * Removes a plyer from the match
+     *
+     * @param pName the name of the player
+     */
     public void removePlayer(String pName) {
         ArrayList<Cell> updatedCells = new ArrayList<>();
         ArrayList<String> newPlayerList = new ArrayList<>();
@@ -228,7 +282,7 @@ public class Model {
             }
         }
         notifyObservers(x -> x.changedBoard(updatedCells));
-        setNextPlayer(playersInGame.indexOf(getPlayer(pName))-1); //we set the current player index to the player preceding the one to be removed
+        setNextPlayer(playersInGame.indexOf(getPlayer(pName)) - 1); //we set the current player index to the player preceding the one to be removed
         playersInGame.remove(getPlayer(pName)); //then we remove the player from the player list
         for (Player p : playersInGame) {
             newPlayerList.add(p.getName());
@@ -237,10 +291,18 @@ public class Model {
         sendPlayerList();
     }
 
+    /**
+     * Sets the index of the player that is the challenger
+     *
+     * @param challengerIndex the index of the challenger
+     */
     public void setChallengerIndex(int challengerIndex) {
         this.challengerIndex = challengerIndex;
     }
 
+    /**
+     * @return the index of the challenger
+     */
     public int getChallengerIndex() {
         return challengerIndex;
     }
@@ -294,7 +356,9 @@ public class Model {
         }
     }
 
-
+    /**
+     * Notifies all ModelObserver with the new player-divinities association
+     */
     public void sendPlayerList() {
         ArrayList<String> newPlayerString = new ArrayList<>();
         for (Player p : playersInGame) {
@@ -309,6 +373,11 @@ public class Model {
         notifyObservers(x -> x.changedPlayerList(newPlayerString));
     }
 
+    /**
+     * Sets the number of players allowed for the game
+     *
+     * @param number the number of players of the match
+     */
     public void setNumberOfPlayer(int number) {
         gamePlayerNumber = number;
     }

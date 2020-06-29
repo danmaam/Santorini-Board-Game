@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
-import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.*;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
@@ -62,7 +62,7 @@ public class Apollo extends Divinity {
         //now we have to remove cells where the move is impossible due to other divinity powers
 
         for (Divinity d : divinitiesInGame) {
-            validCells.removeIf(c -> !d.getName().equals(this.getName()) && !d.othersMove(new MoveCoordinates(workerRow, workerColumn, c.getRow(), c.getColumn()), gameCells));
+            validCells.removeIf(c -> !d.getName().equals(this.getName()) && !d.othersMove(new ActionCoordinates(workerRow, workerColumn, c.getRow(), c.getColumn()), gameCells));
 
         }
 
@@ -112,7 +112,7 @@ public class Apollo extends Divinity {
             throw new OccupiedCellException("trying to switch with another your worker");
 
         for (Player p : gd.getPlayersInGame()) {
-            if (p != gd.getCurrentPlayer() && !p.getDivinity().othersMove(new MoveCoordinates(workerRow, workerColumn, moveRow, moveColumn), gd.getGameBoard()))
+            if (p != gd.getCurrentPlayer() && !p.getDivinity().othersMove(new ActionCoordinates(workerRow, workerColumn, moveRow, moveColumn), gd.getGameBoard()))
                 throw new DivinityPowerException("Fail due to other divinity");
         }
 

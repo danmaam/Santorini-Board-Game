@@ -3,7 +3,7 @@ package it.polimi.ingsw.PSP48.client.GUI.sceneControllers;
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
 import it.polimi.ingsw.PSP48.client.GUI.GUI;
-import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Position;
 import javafx.event.EventHandler;
@@ -120,7 +120,7 @@ public class GameBoardController {
 
             multifunctionalPane.getChildren().clear();
 
-            sendBuildChoice(new MoveCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
+            sendBuildChoice(new ActionCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
         }
     };
 
@@ -139,7 +139,7 @@ public class GameBoardController {
 
             multifunctionalPane.getChildren().clear();
 
-            sendDomeChoice(new MoveCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
+            sendDomeChoice(new ActionCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
         }
     };
 
@@ -158,7 +158,7 @@ public class GameBoardController {
 
             multifunctionalPane.getChildren().clear();
 
-            sendMoveChoice(new MoveCoordinates(-1, -1, -1, -1));
+            sendMoveChoice(new ActionCoordinates(-1, -1, -1, -1));
         }
     };
 
@@ -178,7 +178,7 @@ public class GameBoardController {
 
             multifunctionalPane.getChildren().clear();
 
-            sendBuildChoice(new MoveCoordinates(-1, -1, -1, -1));
+            sendBuildChoice(new ActionCoordinates(-1, -1, -1, -1));
         }
     };
 
@@ -360,7 +360,7 @@ public class GameBoardController {
      *
      * @param moveChoiceCoordinates contains the coordinates of the worker and of the cell
      */
-    public void sendMoveChoice(MoveCoordinates moveChoiceCoordinates) {
+    public void sendMoveChoice(ActionCoordinates moveChoiceCoordinates) {
         view.notifyObserver(x -> x.move(moveChoiceCoordinates));
     }
 
@@ -646,20 +646,20 @@ public class GameBoardController {
 
     /**
      * method used to notify the server about the build action coordinates
+     *
      * @param buildActionCoordinates contains the chosen worker and the chosen cell to do the build
      */
-    public void sendBuildChoice (MoveCoordinates buildActionCoordinates)
-    {
-        view.notifyObserver(x->x.build(buildActionCoordinates));
+    public void sendBuildChoice(ActionCoordinates buildActionCoordinates) {
+        view.notifyObserver(x -> x.build(buildActionCoordinates));
     }
 
     /**
      * method used to notify the client observers about the dome action coordinates
+     *
      * @param domeActionCoordinates contains the worker and the cell to do the dome action
      */
-    public void sendDomeChoice (MoveCoordinates domeActionCoordinates)
-    {
-        view.notifyObserver(x->x.dome(domeActionCoordinates));
+    public void sendDomeChoice(ActionCoordinates domeActionCoordinates) {
+        view.notifyObserver(x -> x.dome(domeActionCoordinates));
     }
 
     /**
@@ -911,7 +911,7 @@ public class GameBoardController {
                 multifunctionalPane.getChildren().clear();
 
                 //restored the board situation, I must send the cell
-                this.sendMoveChoice(new MoveCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
+                this.sendMoveChoice(new ActionCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
                 break;
 
             case worker_selection_build:
@@ -960,16 +960,18 @@ public class GameBoardController {
                 if (buildPositions==null || domePositions==null || !buildPositions.contains(nextPosition) || !domePositions.contains(nextPosition)) {
                     //the player can't choose the action so we clear the board and notify the observers
                     for (Node n : boardPane.getChildren()) {
-                        if (((ImageView)n).getImage()==isSelectionImage ||((ImageView)n).getImage()==buildAndDomeImage || ((ImageView)n).getImage()==domeSelectionImage) {
+                        if (((ImageView) n).getImage() == isSelectionImage || ((ImageView) n).getImage() == buildAndDomeImage || ((ImageView) n).getImage() == domeSelectionImage) {
                             n.removeEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
                             tbr.add(n);
                         }
                     }
-                    tbr.forEach(x->boardPane.getChildren().remove(x));
+                    tbr.forEach(x -> boardPane.getChildren().remove(x));
                     multifunctionalPane.getChildren().clear();
                     //board reset, now we just need to check which observer to notify
-                    if (buildPositions!=null && buildPositions.contains(nextPosition)) this.sendBuildChoice(new MoveCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
-                    else this.sendDomeChoice(new MoveCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
+                    if (buildPositions != null && buildPositions.contains(nextPosition))
+                        this.sendBuildChoice(new ActionCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
+                    else
+                        this.sendDomeChoice(new ActionCoordinates(workerPosition.getRow(), workerPosition.getColumn(), nextPosition.getRow(), nextPosition.getColumn()));
                 } else //the player has chosen a cell that can take both building and doming actions, we have to ask about his choice
                 {
                     //the cell has already been chosen so we remove the mouse events from the board

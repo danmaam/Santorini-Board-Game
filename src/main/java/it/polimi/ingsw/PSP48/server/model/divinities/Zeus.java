@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
-import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.*;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
@@ -82,7 +82,7 @@ public class Zeus extends Divinity {
         //fifth check: if another different divinity doesn't invalid this move
 
         for (Player p : gd.getPlayersInGame()) {
-            if (p != gd.getCurrentPlayer() && !p.getDivinity().othersBuilding(new MoveCoordinates(workerRow, workerColumn, buildRow, buildColumn)))
+            if (p != gd.getCurrentPlayer() && !p.getDivinity().othersBuilding(new ActionCoordinates(workerRow, workerColumn, buildRow, buildColumn)))
                 throw new DivinityPowerException("Fail due to other divinity");
         }
 

@@ -5,11 +5,6 @@ import it.polimi.ingsw.PSP48.observers.ServerNetworkObserver;
 public class ServerInitializationMessage extends NetworkMessagesToServer {
     private String message;
 
-    @Override
-    public boolean InitializationMessage() {
-        return true;
-    }
-
     public String getMessage() {
         return message;
     }

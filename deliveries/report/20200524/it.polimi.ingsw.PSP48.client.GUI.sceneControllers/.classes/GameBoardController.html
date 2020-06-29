@@ -137,41 +137,41 @@
 
 
 <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.client.GUI.sceneControllers;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
-<i>4</i>&nbsp;import it.polimi.ingsw.PSP48.WorkerValidCells;
-<i>5</i>&nbsp;import it.polimi.ingsw.PSP48.client.GUI.GUI;
-<i>6</i>&nbsp;import it.polimi.ingsw.PSP48.server.MoveCoordinates;
-<i>7</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Cell;
-<i>8</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Position;
-<i>9</i>&nbsp;import javafx.concurrent.Worker;
-<i>10</i>&nbsp;import javafx.event.EventHandler;
-<i>11</i>&nbsp;import javafx.fxml.FXML;
-<i>12</i>&nbsp;import javafx.fxml.FXMLLoader;
-<i>13</i>&nbsp;import javafx.geometry.HPos;
-<i>14</i>&nbsp;import javafx.geometry.Pos;
-<i>15</i>&nbsp;import javafx.geometry.VPos;
-<i>16</i>&nbsp;import javafx.scene.Node;
-<i>17</i>&nbsp;import javafx.scene.image.Image;
-<i>18</i>&nbsp;import javafx.scene.image.ImageView;
-<i>19</i>&nbsp;import javafx.scene.input.MouseEvent;
-<i>20</i>&nbsp;import javafx.scene.layout.BorderPane;
-<i>21</i>&nbsp;import javafx.scene.layout.GridPane;
-<i>22</i>&nbsp;import javafx.scene.layout.Pane;
-<i>23</i>&nbsp;import javafx.scene.paint.Color;
-<i>24</i>&nbsp;import javafx.scene.text.Text;
-<i>25</i>&nbsp;
-<i>26</i>&nbsp;import java.math.*;
-<i>27</i>&nbsp;
-<i>28</i>&nbsp;import java.io.IOException;
-<i>29</i>&nbsp;import java.lang.reflect.Array;
-<i>30</i>&nbsp;import java.util.ArrayList;
-<i>31</i>&nbsp;
-<b class="nc"><i>32</i>&nbsp;public class GameBoardController {</b>
-<b class="nc"><i>33</i>&nbsp;    public GameBoardController(GUI view) {</b>
-<b class="nc"><i>34</i>&nbsp;        this.view = view;</b>
-<i>35</i>&nbsp;    }
-<i>36</i>&nbsp;
+    <i>2</i>&nbsp;
+    <i>3</i>&nbsp;import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
+    <i>4</i>&nbsp;import it.polimi.ingsw.PSP48.WorkerValidCells;
+    <i>5</i>&nbsp;import it.polimi.ingsw.PSP48.client.GUI.GUI;
+    <i>6</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
+    <i>7</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Cell;
+    <i>8</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Position;
+    <i>9</i>&nbsp;import javafx.concurrent.Worker;
+    <i>10</i>&nbsp;import javafx.event.EventHandler;
+    <i>11</i>&nbsp;import javafx.fxml.FXML;
+    <i>12</i>&nbsp;import javafx.fxml.FXMLLoader;
+    <i>13</i>&nbsp;import javafx.geometry.HPos;
+    <i>14</i>&nbsp;import javafx.geometry.Pos;
+    <i>15</i>&nbsp;import javafx.geometry.VPos;
+    <i>16</i>&nbsp;import javafx.scene.Node;
+    <i>17</i>&nbsp;import javafx.scene.image.Image;
+    <i>18</i>&nbsp;import javafx.scene.image.ImageView;
+    <i>19</i>&nbsp;import javafx.scene.input.MouseEvent;
+    <i>20</i>&nbsp;import javafx.scene.layout.BorderPane;
+    <i>21</i>&nbsp;import javafx.scene.layout.GridPane;
+    <i>22</i>&nbsp;import javafx.scene.layout.Pane;
+    <i>23</i>&nbsp;import javafx.scene.paint.Color;
+    <i>24</i>&nbsp;import javafx.scene.text.Text;
+    <i>25</i>&nbsp;
+    <i>26</i>&nbsp;import java.math.*;
+    <i>27</i>&nbsp;
+    <i>28</i>&nbsp;import java.io.IOException;
+    <i>29</i>&nbsp;import java.lang.reflect.Array;
+    <i>30</i>&nbsp;import java.util.ArrayList;
+    <i>31</i>&nbsp;
+    <b class="nc"><i>32</i>&nbsp;public class GameBoardController {</b>
+    <b class="nc"><i>33</i>&nbsp; public GameBoardController(GUI view) {</b>
+    <b class="nc"><i>34</i>&nbsp; this.view = view;</b>
+    <i>35</i>&nbsp; }
+    <i>36</i>&nbsp;
 <i>37</i>&nbsp;    private final GUI view;
 <i>38</i>&nbsp;
 <i>39</i>&nbsp;    @FXML

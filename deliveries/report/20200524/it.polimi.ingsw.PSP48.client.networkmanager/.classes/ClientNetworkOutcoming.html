@@ -118,41 +118,41 @@
 
 
 <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.client.networkmanager;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import it.polimi.ingsw.PSP48.PingMessage;
-<i>4</i>&nbsp;import it.polimi.ingsw.PSP48.networkMessagesToServer.*;
-<i>5</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ViewObserver;
-<i>6</i>&nbsp;import it.polimi.ingsw.PSP48.server.MoveCoordinates;
-<i>7</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Position;
-<i>8</i>&nbsp;
-<i>9</i>&nbsp;import java.io.IOException;
-<i>10</i>&nbsp;import java.io.ObjectOutputStream;
-<i>11</i>&nbsp;import java.net.Socket;
-<i>12</i>&nbsp;import java.util.ArrayList;
-<i>13</i>&nbsp;import java.util.Calendar;
-<i>14</i>&nbsp;
-<i>15</i>&nbsp;public class ClientNetworkOutcoming implements Runnable, ViewObserver {
-<i>16</i>&nbsp;    private final Socket server;
-<i>17</i>&nbsp;    private ObjectOutputStream outputStm;
-<i>18</i>&nbsp;
-<i>19</i>&nbsp;
-<i>20</i>&nbsp;    private NetworkMessagesToServer o;
-<i>21</i>&nbsp;
-<b class="nc"><i>22</i>&nbsp;    public ClientNetworkOutcoming(Socket s) {</b>
-<b class="nc"><i>23</i>&nbsp;        this.server = s;</b>
-<i>24</i>&nbsp;    }
-<i>25</i>&nbsp;
-<i>26</i>&nbsp;    @Override
-<i>27</i>&nbsp;    public synchronized void move(MoveCoordinates p) {
-<b class="nc"><i>28</i>&nbsp;        nextAction = action.send_gameAction;</b>
-<b class="nc"><i>29</i>&nbsp;        o = new MoveMessage(p);</b>
-<b class="nc"><i>30</i>&nbsp;        notifyAll();</b>
-<i>31</i>&nbsp;    }
-<i>32</i>&nbsp;
-<i>33</i>&nbsp;    @Override
-<i>34</i>&nbsp;    public synchronized void build(MoveCoordinates p) {
-<b class="nc"><i>35</i>&nbsp;        nextAction = action.send_gameAction;</b>
-<b class="nc"><i>36</i>&nbsp;        o = new BuildMessage(p);</b>
+    <i>2</i>&nbsp;
+    <i>3</i>&nbsp;import it.polimi.ingsw.PSP48.PingMessage;
+    <i>4</i>&nbsp;import it.polimi.ingsw.PSP48.networkMessagesToServer.*;
+    <i>5</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ViewObserver;
+    <i>6</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
+    <i>7</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Position;
+    <i>8</i>&nbsp;
+    <i>9</i>&nbsp;import java.io.IOException;
+    <i>10</i>&nbsp;import java.io.ObjectOutputStream;
+    <i>11</i>&nbsp;import java.net.Socket;
+    <i>12</i>&nbsp;import java.util.ArrayList;
+    <i>13</i>&nbsp;import java.util.Calendar;
+    <i>14</i>&nbsp;
+    <i>15</i>&nbsp;public class ClientNetworkOutcoming implements Runnable, ViewObserver {
+    <i>16</i>&nbsp; private final Socket server;
+    <i>17</i>&nbsp; private ObjectOutputStream outputStm;
+    <i>18</i>&nbsp;
+    <i>19</i>&nbsp;
+    <i>20</i>&nbsp; private NetworkMessagesToServer o;
+    <i>21</i>&nbsp;
+    <b class="nc"><i>22</i>&nbsp; public ClientNetworkOutcoming(Socket s) {</b>
+    <b class="nc"><i>23</i>&nbsp; this.server = s;</b>
+    <i>24</i>&nbsp; }
+    <i>25</i>&nbsp;
+    <i>26</i>&nbsp; @Override
+    <i>27</i>&nbsp; public synchronized void move(MoveCoordinates p) {
+    <b class="nc"><i>28</i>&nbsp; nextAction = action.send_gameAction;</b>
+    <b class="nc"><i>29</i>&nbsp; o = new MoveMessage(p);</b>
+    <b class="nc"><i>30</i>&nbsp; notifyAll();</b>
+    <i>31</i>&nbsp; }
+    <i>32</i>&nbsp;
+    <i>33</i>&nbsp; @Override
+    <i>34</i>&nbsp; public synchronized void build(MoveCoordinates p) {
+    <b class="nc"><i>35</i>&nbsp; nextAction = action.send_gameAction;</b>
+    <b class="nc"><i>36</i>&nbsp; o = new BuildMessage(p);</b>
 <b class="nc"><i>37</i>&nbsp;        notifyAll();</b>
 <i>38</i>&nbsp;    }
 <i>39</i>&nbsp;

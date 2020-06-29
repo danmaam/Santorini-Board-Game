@@ -73,44 +73,44 @@
 
 
 <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.server.virtualview;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
-<i>4</i>&nbsp;import it.polimi.ingsw.PSP48.ViewInterface;
-<i>5</i>&nbsp;import it.polimi.ingsw.PSP48.WorkerValidCells;
-<i>6</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ViewObserver;
-<i>7</i>&nbsp;import it.polimi.ingsw.PSP48.server.Server;
-<i>8</i>&nbsp;import it.polimi.ingsw.PSP48.server.networkmanager.ClientHandler;
-<i>9</i>&nbsp;import it.polimi.ingsw.PSP48.server.MoveCoordinates;
-<i>10</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Cell;
-<i>11</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Position;
-<i>12</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ServerNetworkObserver;
-<i>13</i>&nbsp;import it.polimi.ingsw.PSP48.server.networkmanager.ClientHandlerListener;
-<i>14</i>&nbsp;import it.polimi.ingsw.PSP48.setupMessagesToClient.ClientSetupMessages;
-<i>15</i>&nbsp;import it.polimi.ingsw.PSP48.setupMessagesToClient.GameModeRequest;
-<i>16</i>&nbsp;import it.polimi.ingsw.PSP48.setupMessagesToClient.completedSetup;
-<i>17</i>&nbsp;import it.polimi.ingsw.PSP48.setupMessagesToClient.nicknameRequest;
-<i>18</i>&nbsp;
-<i>19</i>&nbsp;import java.util.ArrayList;
-<i>20</i>&nbsp;import java.util.Calendar;
-<i>21</i>&nbsp;import java.util.concurrent.ExecutorService;
-<i>22</i>&nbsp;import java.util.concurrent.Executors;
-<i>23</i>&nbsp;import java.util.function.Consumer;
-<i>24</i>&nbsp;
-<i>25</i>&nbsp;/**
-<i>26</i>&nbsp; * class used to implements a model observer as view
-<i>27</i>&nbsp; */
-<i>28</i>&nbsp;public class VirtualView implements ViewInterface, ServerNetworkObserver {
-<i>29</i>&nbsp;
-<b class="nc"><i>30</i>&nbsp;    private ArrayList&lt;ViewObserver&gt; observers = new ArrayList&lt;ViewObserver&gt;();</b>
-<i>31</i>&nbsp;
-<i>32</i>&nbsp;    public void registerObserver(ViewObserver obv) {
-<b class="nc"><i>33</i>&nbsp;        observers.add(obv);</b>
-<i>34</i>&nbsp;    }
-<i>35</i>&nbsp;
-<i>36</i>&nbsp;    public void unregisterObserver(ViewObserver obv) {
-<b class="nc"><i>37</i>&nbsp;        observers.remove(obv);</b>
-<i>38</i>&nbsp;    }
-<i>39</i>&nbsp;
+    <i>2</i>&nbsp;
+    <i>3</i>&nbsp;import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
+    <i>4</i>&nbsp;import it.polimi.ingsw.PSP48.ViewInterface;
+    <i>5</i>&nbsp;import it.polimi.ingsw.PSP48.WorkerValidCells;
+    <i>6</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ViewObserver;
+    <i>7</i>&nbsp;import it.polimi.ingsw.PSP48.server.Server;
+    <i>8</i>&nbsp;import it.polimi.ingsw.PSP48.server.networkmanager.ClientHandler;
+    <i>9</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
+    <i>10</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Cell;
+    <i>11</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Position;
+    <i>12</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ServerNetworkObserver;
+    <i>13</i>&nbsp;import it.polimi.ingsw.PSP48.server.networkmanager.ClientHandlerListener;
+    <i>14</i>&nbsp;import it.polimi.ingsw.PSP48.setupMessagesToClient.ClientSetupMessages;
+    <i>15</i>&nbsp;import it.polimi.ingsw.PSP48.setupMessagesToClient.GameModeRequest;
+    <i>16</i>&nbsp;import it.polimi.ingsw.PSP48.setupMessagesToClient.completedSetup;
+    <i>17</i>&nbsp;import it.polimi.ingsw.PSP48.setupMessagesToClient.NicknameRequest;
+    <i>18</i>&nbsp;
+    <i>19</i>&nbsp;import java.util.ArrayList;
+    <i>20</i>&nbsp;import java.util.Calendar;
+    <i>21</i>&nbsp;import java.util.concurrent.ExecutorService;
+    <i>22</i>&nbsp;import java.util.concurrent.Executors;
+    <i>23</i>&nbsp;import java.util.function.Consumer;
+    <i>24</i>&nbsp;
+    <i>25</i>&nbsp;/**
+    <i>26</i>&nbsp; * class used to implements a model observer as view
+    <i>27</i>&nbsp; */
+    <i>28</i>&nbsp;public class VirtualView implements ViewInterface, ServerNetworkObserver {
+    <i>29</i>&nbsp;
+    <b class="nc"><i>30</i>&nbsp; private ArrayList&lt;ViewObserver&gt; observers = new ArrayList&lt;ViewObserver&gt;();</b>
+    <i>31</i>&nbsp;
+    <i>32</i>&nbsp; public void registerObserver(ViewObserver obv) {
+    <b class="nc"><i>33</i>&nbsp; observers.add(obv);</b>
+    <i>34</i>&nbsp; }
+    <i>35</i>&nbsp;
+    <i>36</i>&nbsp; public void unregisterObserver(ViewObserver obv) {
+    <b class="nc"><i>37</i>&nbsp; observers.remove(obv);</b>
+    <i>38</i>&nbsp; }
+    <i>39</i>&nbsp;
 <i>40</i>&nbsp;    public void notifyObserver(Consumer&lt;ViewObserver&gt; lambda) {
 <b class="nc"><i>41</i>&nbsp;        for (ViewObserver obv : observers) lambda.accept(obv);</b>
 <i>42</i>&nbsp;    }

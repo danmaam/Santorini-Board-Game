@@ -3,7 +3,7 @@ package it.polimi.ingsw.PSP48.client.networkmanager;
 import it.polimi.ingsw.PSP48.PingMessage;
 import it.polimi.ingsw.PSP48.networkMessagesToServer.*;
 import it.polimi.ingsw.PSP48.observers.ViewObserver;
-import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
 import it.polimi.ingsw.PSP48.server.model.Position;
 
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
      * @param p the move coordinates
      */
     @Override
-    public synchronized void move(MoveCoordinates p) {
+    public synchronized void move(ActionCoordinates p) {
         messagesToBeSent.add(new MoveMessage(p));
         notifyAll();
     }
@@ -49,7 +49,7 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
      * @param p the build coordinates
      */
     @Override
-    public synchronized void build(MoveCoordinates p) {
+    public synchronized void build(ActionCoordinates p) {
         messagesToBeSent.add(new BuildMessage(p));
         notifyAll();
     }
@@ -60,7 +60,7 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
      * @param p the dome coordinates
      */
     @Override
-    public synchronized void dome(MoveCoordinates p) {
+    public synchronized void dome(ActionCoordinates p) {
         messagesToBeSent.add(new DomeMessage(p));
         notifyAll();
     }

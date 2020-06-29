@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP48.server.model.divinities.testingDivinities;
 
-import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.divinities.Divinity;
 
@@ -13,12 +13,12 @@ public class DivFalse extends Divinity {
     private int newLevel;
 
     @Override
-    public Boolean othersMove(MoveCoordinates moveCells, Cell[][] gameBoard) {
+    public Boolean othersMove(ActionCoordinates moveCells, Cell[][] gameBoard) {
         return moveCells.getMoveRow() != 1 || moveCells.getMoveColumn() != 1;
     }
 
     @Override
-    public Boolean othersBuilding(MoveCoordinates moveCells) {
+    public Boolean othersBuilding(ActionCoordinates moveCells) {
         return moveCells.getMoveRow() != 3 || moveCells.getMoveColumn() != 3;
     }
 
@@ -28,7 +28,7 @@ public class DivFalse extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public Boolean othersDome(MoveCoordinates domeCells) {
+    public Boolean othersDome(ActionCoordinates domeCells) {
         return domeCells.getMoveRow() != 3 || domeCells.getMoveColumn() != 3;
     }
 }

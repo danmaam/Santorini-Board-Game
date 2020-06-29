@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
-import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Model;
@@ -62,7 +62,7 @@ public class Athena extends Divinity {
      * @return false if the move isn't allowed, true otherwise
      */
     @Override
-    public Boolean othersMove(MoveCoordinates move, Cell[][] gameBoard) {
+    public Boolean othersMove(ActionCoordinates move, Cell[][] gameBoard) {
         int workerLevel = gameBoard[move.getWorkerRow()][move.getWorkerColumn()].getLevel();
         int moveLevel = gameBoard[move.getMoveRow()][move.getMoveColumn()].getLevel();
         if (moveLevel - workerLevel >= 1) return !lastTurnLevelUp;

@@ -7,8 +7,8 @@ import it.polimi.ingsw.PSP48.server.Server;
 import it.polimi.ingsw.PSP48.server.virtualview.VirtualView;
 import it.polimi.ingsw.PSP48.setupMessagesToClient.ClientSetupMessages;
 import it.polimi.ingsw.PSP48.setupMessagesToClient.GameModeRequest;
+import it.polimi.ingsw.PSP48.setupMessagesToClient.NicknameRequest;
 import it.polimi.ingsw.PSP48.setupMessagesToClient.completedSetup;
-import it.polimi.ingsw.PSP48.setupMessagesToClient.nicknameRequest;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -34,10 +34,20 @@ public class ClientHandlerListener implements Runnable {
 
     private final ArrayList<ServerNetworkObserver> observers = new ArrayList<>();
 
+    /**
+     * Register an observer of network messages
+     *
+     * @param obv the observer to be registered
+     */
     public void registerObserver(ServerNetworkObserver obv) {
         observers.add(obv);
     }
 
+    /**
+     * Unregisters an observer of network messages
+     *
+     * @param obv the observer to be removed
+     */
     public void unregisterObserver(ServerNetworkObserver obv) {
         observers.remove(obv);
     }
@@ -51,12 +61,20 @@ public class ClientHandlerListener implements Runnable {
      */
     private final ScheduledExecutorService pingExecutor = Executors.newScheduledThreadPool(1);
 
+    /**
+     * Notifies the observers to complete the action contained in the network message that arrived
+     */
     public void notifyObservers() {
         for (ServerNetworkObserver nO : observers) {
             ((NetworkMessagesToServer) nextMessage).doThings(nO);
         }
     }
 
+    /**
+     * Initializes the listener object
+     *
+     * @param client the socket of the client
+     */
     public ClientHandlerListener(Socket client) {
         this.clientSocket = client;
     }
@@ -156,7 +174,7 @@ public class ClientHandlerListener implements Runnable {
             nextMessage = new GameModeRequest("Valid Nickname. Welcome to the game");
             playerNickname = nickname;
         } catch (IllegalArgumentException e) {
-            nextMessage = new nicknameRequest("Invalid nickname. Retry");
+            nextMessage = new NicknameRequest("Invalid nickname. Retry");
         }
         out.setUpMessage(nextMessage);
     }

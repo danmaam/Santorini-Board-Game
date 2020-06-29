@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
-import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.*;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
@@ -50,7 +50,7 @@ public class Atlas extends Divinity {
                 .collect(Collectors.toCollection(ArrayList::new));
 
         for (Divinity d : divinitiesInGame) {
-            validCells.removeIf(c -> !d.getName().equals(this.getName()) && !d.othersDome(new MoveCoordinates(workerRow, workerColumn, c.getRow(), c.getColumn())));
+            validCells.removeIf(c -> !d.getName().equals(this.getName()) && !d.othersDome(new ActionCoordinates(workerRow, workerColumn, c.getRow(), c.getColumn())));
 
         }
 
@@ -89,7 +89,7 @@ public class Atlas extends Divinity {
 
 
         for (Player p : gd.getPlayersInGame()) {
-            if (p != gd.getCurrentPlayer() && !p.getDivinity().othersDome(new MoveCoordinates(workerRow, workerColumn, domeRow, domeColumn)))
+            if (p != gd.getCurrentPlayer() && !p.getDivinity().othersDome(new ActionCoordinates(workerRow, workerColumn, domeRow, domeColumn)))
                 throw new DivinityPowerException("Fail due to other divinity");
         }
 

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP48.observers;
 
-import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
 import it.polimi.ingsw.PSP48.server.model.Position;
 
 import java.util.ArrayList;
@@ -14,21 +14,21 @@ public interface ViewObserver {
      *
      * @param p the coordinates of the move
      */
-    void move(MoveCoordinates p);
+    void move(ActionCoordinates p);
 
     /**
      * Request the observer to process a build action
      *
      * @param p the coordinates of the build
      */
-    void build(MoveCoordinates p);
+    void build(ActionCoordinates p);
 
     /**
      * Request the observer to process a dome action
      *
      * @param p the coordinates of the dome
      */
-    void dome(MoveCoordinates p);
+    void dome(ActionCoordinates p);
 
     /**
      * Requests the observer to process a worker positioning on the board

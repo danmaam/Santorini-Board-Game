@@ -118,35 +118,35 @@
 
 
 <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.server.networkmanager;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
-<i>4</i>&nbsp;import it.polimi.ingsw.PSP48.PingMessage;
-<i>5</i>&nbsp;import it.polimi.ingsw.PSP48.WorkerValidCells;
-<i>6</i>&nbsp;import it.polimi.ingsw.PSP48.networkMessagesToClient.*;
-<i>7</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Cell;
-<i>8</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Position;
-<i>9</i>&nbsp;import it.polimi.ingsw.PSP48.setupMessagesToClient.ClientSetupMessages;
-<i>10</i>&nbsp;import it.polimi.ingsw.PSP48.setupMessagesToClient.nicknameRequest;
-<i>11</i>&nbsp;
-<i>12</i>&nbsp;import java.io.IOException;
-<i>13</i>&nbsp;import java.io.ObjectOutputStream;
-<i>14</i>&nbsp;import java.net.Socket;
-<i>15</i>&nbsp;import java.util.ArrayList;
-<i>16</i>&nbsp;
-<i>17</i>&nbsp;/**
-<i>18</i>&nbsp; * Handles the connection of a player
-<i>19</i>&nbsp; */
-<i>20</i>&nbsp;public class ClientHandler implements Runnable {
-<i>21</i>&nbsp;
-<b class="nc"><i>22</i>&nbsp;    private enum nextAction {</b>
-<b class="nc"><i>23</i>&nbsp;        requestAction, setupmessage, closegame, replyPing</b>
-<i>24</i>&nbsp;    }
-<i>25</i>&nbsp;
-<b class="nc"><i>26</i>&nbsp;    private nextAction toDO = null;</b>
-<b class="nc"><i>27</i>&nbsp;    final Object toDOLOCK = new Object();</b>
-<i>28</i>&nbsp;
-<b class="nc"><i>29</i>&nbsp;    public ClientHandler(Socket client, ClientHandlerListener i) {</b>
-<b class="nc"><i>30</i>&nbsp;        this.client = client;</b>
+    <i>2</i>&nbsp;
+    <i>3</i>&nbsp;import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
+    <i>4</i>&nbsp;import it.polimi.ingsw.PSP48.PingMessage;
+    <i>5</i>&nbsp;import it.polimi.ingsw.PSP48.WorkerValidCells;
+    <i>6</i>&nbsp;import it.polimi.ingsw.PSP48.networkMessagesToClient.*;
+    <i>7</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Cell;
+    <i>8</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Position;
+    <i>9</i>&nbsp;import it.polimi.ingsw.PSP48.setupMessagesToClient.ClientSetupMessages;
+    <i>10</i>&nbsp;import it.polimi.ingsw.PSP48.setupMessagesToClient.NicknameRequest;
+    <i>11</i>&nbsp;
+    <i>12</i>&nbsp;import java.io.IOException;
+    <i>13</i>&nbsp;import java.io.ObjectOutputStream;
+    <i>14</i>&nbsp;import java.net.Socket;
+    <i>15</i>&nbsp;import java.util.ArrayList;
+    <i>16</i>&nbsp;
+    <i>17</i>&nbsp;/**
+    <i>18</i>&nbsp; * Handles the connection of a player
+    <i>19</i>&nbsp; */
+    <i>20</i>&nbsp;public class ClientHandler implements Runnable {
+    <i>21</i>&nbsp;
+    <b class="nc"><i>22</i>&nbsp; private enum nextAction {</b>
+    <b class="nc"><i>23</i>&nbsp; requestAction, setupmessage, closegame, replyPing</b>
+    <i>24</i>&nbsp; }
+    <i>25</i>&nbsp;
+    <b class="nc"><i>26</i>&nbsp; private nextAction toDO = null;</b>
+    <b class="nc"><i>27</i>&nbsp; final Object toDOLOCK = new Object();</b>
+    <i>28</i>&nbsp;
+    <b class="nc"><i>29</i>&nbsp; public ClientHandler(Socket client, ClientHandlerListener i) {</b>
+    <b class="nc"><i>30</i>&nbsp; this.client = client;</b>
 <b class="nc"><i>31</i>&nbsp;        this.incomingMessagesHandler = i;</b>
 <i>32</i>&nbsp;    }
 <i>33</i>&nbsp;

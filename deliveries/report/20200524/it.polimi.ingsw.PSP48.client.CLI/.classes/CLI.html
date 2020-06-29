@@ -99,45 +99,45 @@
 
 
 <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.client.CLI;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
-<i>4</i>&nbsp;import it.polimi.ingsw.PSP48.ViewInterface;
-<i>5</i>&nbsp;import it.polimi.ingsw.PSP48.WorkerValidCells;
-<i>6</i>&nbsp;import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkIncoming;
-<i>7</i>&nbsp;import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkOutcoming;
-<i>8</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ClientNetworkObserver;
-<i>9</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ViewObserver;
-<i>10</i>&nbsp;import it.polimi.ingsw.PSP48.server.MoveCoordinates;
-<i>11</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Cell;
-<i>12</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Position;
-<i>13</i>&nbsp;
-<i>14</i>&nbsp;import java.io.IOException;
-<i>15</i>&nbsp;import java.net.Socket;
-<i>16</i>&nbsp;import java.util.ArrayList;
-<i>17</i>&nbsp;import java.util.Scanner;
-<i>18</i>&nbsp;import java.util.concurrent.ExecutorService;
-<i>19</i>&nbsp;import java.util.concurrent.Executors;
-<i>20</i>&nbsp;import java.util.function.Consumer;
-<i>21</i>&nbsp;
-<i>22</i>&nbsp;/**
-<i>23</i>&nbsp; * concrete class that represents all the interactions with the client
-<i>24</i>&nbsp; * @author Rebecca Marelli, Annalaura Massa, Daniele Mammone
-<i>25</i>&nbsp; */
-<i>26</i>&nbsp;public class CLI implements Runnable, ViewInterface, ClientNetworkObserver
-<i>27</i>&nbsp;{
-<b class="nc"><i>28</i>&nbsp;    ExecutorService threadExecutor = Executors.newSingleThreadExecutor();</b>
-<i>29</i>&nbsp;
-<i>30</i>&nbsp;    /**
-<i>31</i>&nbsp;     * private attribute of the CLI class that represents the board of the game and its content
-<i>32</i>&nbsp;     */
-<b class="nc"><i>33</i>&nbsp;    private static final CellForPrinting[][] gameBoard = new CellForPrinting[5][5];</b>
-<i>34</i>&nbsp;    /**
-<i>35</i>&nbsp;     * private attribute of the CLI class that contains all the players of a match
-<i>36</i>&nbsp;     */
-<b class="nc"><i>37</i>&nbsp;    private ArrayList&lt;Player&gt; playerList = new ArrayList&lt;Player&gt;();</b>
-<i>38</i>&nbsp;    /**
-<i>39</i>&nbsp;     * private attribute of the CLI class containing all the observers to notify
-<i>40</i>&nbsp;     */
+    <i>2</i>&nbsp;
+    <i>3</i>&nbsp;import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
+    <i>4</i>&nbsp;import it.polimi.ingsw.PSP48.ViewInterface;
+    <i>5</i>&nbsp;import it.polimi.ingsw.PSP48.WorkerValidCells;
+    <i>6</i>&nbsp;import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkIncoming;
+    <i>7</i>&nbsp;import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkOutcoming;
+    <i>8</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ClientNetworkObserver;
+    <i>9</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ViewObserver;
+    <i>10</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
+    <i>11</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Cell;
+    <i>12</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Position;
+    <i>13</i>&nbsp;
+    <i>14</i>&nbsp;import java.io.IOException;
+    <i>15</i>&nbsp;import java.net.Socket;
+    <i>16</i>&nbsp;import java.util.ArrayList;
+    <i>17</i>&nbsp;import java.util.Scanner;
+    <i>18</i>&nbsp;import java.util.concurrent.ExecutorService;
+    <i>19</i>&nbsp;import java.util.concurrent.Executors;
+    <i>20</i>&nbsp;import java.util.function.Consumer;
+    <i>21</i>&nbsp;
+    <i>22</i>&nbsp;/**
+    <i>23</i>&nbsp; * concrete class that represents all the interactions with the client
+    <i>24</i>&nbsp; * @author Rebecca Marelli, Annalaura Massa, Daniele Mammone
+    <i>25</i>&nbsp; */
+    <i>26</i>&nbsp;public class CLI implements Runnable, ViewInterface, ClientNetworkObserver
+    <i>27</i>&nbsp;{
+    <b class="nc"><i>28</i>&nbsp; ExecutorService threadExecutor = Executors.newSingleThreadExecutor();</b>
+    <i>29</i>&nbsp;
+    <i>30</i>&nbsp; /**
+    <i>31</i>&nbsp; * private attribute of the CLI class that represents the board of the game and its content
+    <i>32</i>&nbsp; */
+    <b class="nc"><i>33</i>&nbsp; private static final CellForPrinting[][] gameBoard = new CellForPrinting[5][5];</b>
+    <i>34</i>&nbsp; /**
+    <i>35</i>&nbsp; * private attribute of the CLI class that contains all the players of a match
+    <i>36</i>&nbsp; */
+    <b class="nc"><i>37</i>&nbsp; private ArrayList&lt;Player&gt; playerList = new ArrayList&lt;Player&gt;();</b>
+    <i>38</i>&nbsp; /**
+    <i>39</i>&nbsp; * private attribute of the CLI class containing all the observers to notify
+    <i>40</i>&nbsp; */
 <b class="nc"><i>41</i>&nbsp;    private ArrayList&lt;ViewObserver&gt; observers = new ArrayList&lt;ViewObserver&gt;();</b>
 <i>42</i>&nbsp;
 <i>43</i>&nbsp;

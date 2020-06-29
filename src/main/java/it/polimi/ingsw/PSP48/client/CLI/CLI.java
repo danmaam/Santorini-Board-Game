@@ -7,10 +7,9 @@ import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkIncoming;
 import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkOutcoming;
 import it.polimi.ingsw.PSP48.observers.ClientNetworkObserver;
 import it.polimi.ingsw.PSP48.observers.ViewObserver;
-import it.polimi.ingsw.PSP48.server.model.MoveCoordinates;
+import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Position;
-import javafx.scene.control.Alert;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -308,7 +307,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
             this.resetBoard(validCellsMove.getValidPositions());
             this.printBoard();
 
-            MoveCoordinates chosenCoordinates = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
+            ActionCoordinates chosenCoordinates = new ActionCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
             this.notifyObserver(x -> x.move(chosenCoordinates));
         });
 
@@ -521,7 +520,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
             if (validCellsDome != null) this.resetBoard(validCellsDome.getValidPositions());
             this.printBoard();
 
-            MoveCoordinates move = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
+            ActionCoordinates move = new ActionCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
             if (whatToDO == action.build) notifyObserver((x) -> x.build(move));
             else notifyObserver((x) -> x.dome(move));
         });
@@ -742,7 +741,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
 
                 if (chosenAction.equals("skip")) //the player has chosen to skip so we can just notify the server
                 {
-                    MoveCoordinates chosenCoordinates = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
+                    ActionCoordinates chosenCoordinates = new ActionCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
                     for (WorkerValidCells c : validCellsForMove) {
                         resetBoard(c.getValidPositions());
                     }
@@ -820,7 +819,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
 
                 if (chosenAction.equals("skip")) //the player has chosen to skip so we can just notify the server
                 {
-                    MoveCoordinates chosenCoordinates = new MoveCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
+                    ActionCoordinates chosenCoordinates = new ActionCoordinates(workerRow, workerColumn, chosenRow, chosenColumn);
                     for (WorkerValidCells c1 : build) {
                         resetBoard(c1.getValidPositions());
                     }
