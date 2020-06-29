@@ -28,7 +28,15 @@ import javafx.scene.text.Text;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * class used as a controller for the board, used to update it and modify its status
+ * @author Daniele Mammone, Rebecca Marelli
+ */
 public class GameBoardController {
+    /**
+     * class constructor, initialising the reference to the gui object
+     * @param view is the reference to a GUI object, containing the methods to notify the server
+     */
     public GameBoardController(GUI view) {
         this.view = view;
     }
@@ -100,11 +108,17 @@ public class GameBoardController {
     private final Image buildButtonImage = new Image("santorini_risorse-grafiche-2/Sprite/Buttons/build.png");
     private final Image domeButtonImage = new Image("santorini_risorse-grafiche-2/Sprite/Buttons/dome.png");
 
+    /**
+     * attribute used to save the position of the board chosen by the player, and then to clear and update it
+     */
     private final EventHandler<MouseEvent> handleOperation = mouseEvent -> {
         nextPosition = new Position((GridPane.getRowIndex((Node) mouseEvent.getSource()) - 1) / 2, (GridPane.getColumnIndex(((Node) mouseEvent.getSource())) - 1) / 2);
         nextActionFSM();
     };
 
+    /**
+     * attribute used to save the position chosen to build, to clear the board and then notify the build observer
+     */
     private final EventHandler<MouseEvent> handleBuild = new EventHandler<>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
@@ -124,6 +138,9 @@ public class GameBoardController {
         }
     };
 
+    /**
+     * handler of the actions following a dome operation: it saves the chosen cell, clears the board and notifies the observer
+     */
     private final EventHandler<MouseEvent> handleDome = new EventHandler<>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
@@ -143,6 +160,10 @@ public class GameBoardController {
         }
     };
 
+    /**
+     * handler of the skip of the optional move action
+     * this attribute clears the board and the board pane (removing the skip button), and notifies the server about the choice
+     */
     private final EventHandler<MouseEvent> handleOptionalMoveSkip = new EventHandler<>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
@@ -162,6 +183,10 @@ public class GameBoardController {
         }
     };
 
+    /**
+     * handler of the skip of the optional build operation
+     * it acts similarly to the one for the move operation, and notifies the correct observer
+     */
     private final EventHandler<MouseEvent> handleOptionalBuildSkip = new EventHandler<>() {
         @Override
         public void handle(MouseEvent mouseEvent) {

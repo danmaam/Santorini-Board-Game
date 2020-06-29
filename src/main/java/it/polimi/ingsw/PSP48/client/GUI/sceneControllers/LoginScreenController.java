@@ -10,6 +10,10 @@ import javafx.scene.control.ToggleButton;
 import java.io.IOException;
 import java.time.LocalDate;
 
+/**
+ * Controller for the login screen and all the actions associated to it
+ * @author Daniele Mammone
+ */
 public class LoginScreenController {
     @FXML
     private ToggleButton isGameWithDivinities;

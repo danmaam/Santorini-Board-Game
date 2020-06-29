@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 /**
  * The controller for divinity chooser Pane
+ * @author Daniele Mammone
  */
 public class DivinityChoiceController {
     @FXML

@@ -8,6 +8,10 @@ import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
 
+/**
+ * Controller used for the selection of the first player of the match
+ * @author Daniele Mammone
+ */
 public class FirstPlayerSelectionController {
     @FXML
     ImageView first;
