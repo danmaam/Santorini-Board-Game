@@ -25,6 +25,10 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
+/**
+ * class used to call the methods of the various scene controllers, which implement the operations of the gui
+ * @author Daniele Mammone, Rebecca Marelli
+ */
 public class GUI extends Application implements ClientNetworkObserver, ViewInterface {
 
 
