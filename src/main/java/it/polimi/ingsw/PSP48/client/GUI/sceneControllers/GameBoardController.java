@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP48.client.GUI.sceneControllers;
 
 import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
+import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
 import it.polimi.ingsw.PSP48.client.GUI.GUI;
 import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;

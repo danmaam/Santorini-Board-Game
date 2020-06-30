@@ -382,9 +382,11 @@ public class GUI extends Application implements ClientNetworkObserver, ViewInter
      *
      * @param message the game mode chosen by the player
      */
+    @Override
     public void requestGameModeSend(String message) {
         loginController.requestGameModeSend();
     }
+
 
     /**
      * Request the login controller to send to the server the chosen nickname
@@ -392,6 +394,7 @@ public class GUI extends Application implements ClientNetworkObserver, ViewInter
      *
      * @param message the request made by the server
      */
+    @Override
     public void requestNicknameSend(String message) {
         if (!message.equals("Invalid nickname. Retry")) {
             Platform.runLater(() -> loginController.requestNicknameSend());

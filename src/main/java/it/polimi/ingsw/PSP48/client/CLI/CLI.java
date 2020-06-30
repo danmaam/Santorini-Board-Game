@@ -30,7 +30,7 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
     /**
      * private attribute of the CLI class that represents the board of the game and its content
      */
-    private static final CellForPrinting[][] gameBoard = new CellForPrinting[5][5];
+    private final CellForPrinting[][] gameBoard = new CellForPrinting[5][5];
     /**
      * private attribute of the CLI class that contains all the players of a match
      */
@@ -81,15 +81,6 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
                 gameBoard[i][j] = new CellForPrinting(i, j, colour);
             }
         }
-    }
-
-    /**
-     * method giving access to the game board contained in the class
-     *
-     * @return a reference to the board
-     */
-    public CellForPrinting[][] getGameBoard() {
-        return (gameBoard);
     }
 
     /**
@@ -897,7 +888,6 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
         threadExecutor.submit(() -> {
             String nextMessage;
             System.out.println(message);
-            boolean completed = false;
             while (true) {
                 Scanner scanner = new Scanner(System.in);
                 nextMessage = scanner.nextLine();
