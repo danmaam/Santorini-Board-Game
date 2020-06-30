@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP48.server.controller;
 import it.polimi.ingsw.PSP48.server.EndReason;
 import it.polimi.ingsw.PSP48.ViewInterface;
 import it.polimi.ingsw.PSP48.WorkerValidCells;
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.*;
 import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
 import it.polimi.ingsw.PSP48.server.Server;
 import it.polimi.ingsw.PSP48.server.model.*;
@@ -21,7 +22,7 @@ import java.util.function.Consumer;
 
 public class GameController implements ViewObserver {
     private final Model model;
-    private Consumer<GameController> nextAction;
+    private GameControllerState nextAction;
     private final int roomID;
 
     private final HashMap<String, ViewInterface> playersViews = new HashMap<>();
@@ -185,7 +186,7 @@ public class GameController implements ViewObserver {
     public void putWorkerOnTable(Position p) {
         System.out.println("positioning worker");
         try {
-            model.getCurrentPlayer().getDivinity().putWorkerOnBoard(p, model).accept(this);
+            model.getCurrentPlayer().getDivinity().putWorkerOnBoard(p, model).nextState().accept(this);
         } catch (OccupiedCellException e) {
             System.out.println("Positioning on occupied cell");
             getPlayerView(model.getCurrentPlayer().getName()).printMessage("Can't put worker here, occupied cell. Retry operation");
@@ -210,10 +211,10 @@ public class GameController implements ViewObserver {
         model.setPlayerDivinity(model.getCurrentPlayer().getName(), divinity);
         //if the current player is the chosen, all divinities has benn selected, and the game must start
         if (model.getPlayersInGame().indexOf(model.getCurrentPlayer()) == model.getChallengerIndex())
-            nextAction = GameController::requestFirstPlayerSelection;
+            nextAction = new RequestFirstPlayerSelection();
         else {
             model.setNextPlayer();
-            nextAction = GameController::requestDivinitySelection;
+            nextAction = new RequestDivinitySelection();
         }
         this.nextAction();
     }
@@ -294,7 +295,7 @@ public class GameController implements ViewObserver {
      * Perform controller's next action.
      */
     public void nextAction() {
-        nextAction.accept(this);
+        nextAction.nextState().accept(this);
     }
 
     /**
@@ -435,7 +436,7 @@ public class GameController implements ViewObserver {
             nextAction = model.getCurrentPlayer().getDivinity().turnBegin(model);
         } else {
             System.out.println("changing initial positioning turn");
-            nextAction = GameController::requestInitialPositioning;
+            nextAction = new RequestInitialPositioning();
         }
         nextAction();
     }
@@ -574,7 +575,7 @@ public class GameController implements ViewObserver {
             Server.removeNickname(model.getCurrentPlayer().getName());
             model.unregisterObserver(getPlayerView(model.getCurrentPlayer().getName()));
             model.removePlayer(model.getCurrentPlayer().getName());
-            nextAction = GameController::turnChange;
+            nextAction = new TurnChange();
         }
         nextAction();
     }

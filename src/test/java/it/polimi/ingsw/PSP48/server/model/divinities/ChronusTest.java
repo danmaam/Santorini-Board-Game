@@ -60,5 +60,6 @@ public class ChronusTest {
         game_database.getCell(0, 2).setActualLevel(3);
         player1.getDivinity().move(0, 1, 0, 2, game_database);
         assertTrue(player1.getDivinity().postMoveWinCondition(game_database));
+
     }
 }

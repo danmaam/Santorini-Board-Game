@@ -1,12 +1,12 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.GameControllerState;
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.RequestBuildDome;
 import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Model;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
-
-import java.util.function.Consumer;
 
 public class Athena extends Divinity {
 
@@ -24,9 +24,11 @@ public class Athena extends Divinity {
 
     /**
      * Resets the flag if the player went level up on the last turn
+     *
+     * @return
      */
     @Override
-    public Consumer<GameController> turnBegin(Model gd) {
+    public GameControllerState turnBegin(Model gd) {
         lastTurnLevelUp = false;
         return super.turnBegin(gd);
     }
@@ -45,11 +47,11 @@ public class Athena extends Divinity {
      * @throws DivinityPowerException   if the move isn't allowed by another divinity
      * @throws NoTurnEndException       if the move doesn't allow the player to end the turn
      */
-    public Consumer<GameController> move(int workerRow, int workerColumn, int moveRow, int moveColumn, Model gd) throws DivinityPowerException, IncorrectLevelException, OccupiedCellException, NotAdjacentCellException, DomedCellException, NoTurnEndException {
+    public GameControllerState move(int workerRow, int workerColumn, int moveRow, int moveColumn, Model gd) throws DivinityPowerException, IncorrectLevelException, OccupiedCellException, NotAdjacentCellException, DomedCellException, NoTurnEndException {
         super.move(workerRow, workerColumn, moveRow, moveColumn, gd);
         if (gd.getCell(moveRow, moveColumn).getLevel() > gd.getCell(workerRow, workerColumn).getLevel())
             lastTurnLevelUp = true;
-        return GameController::requestBuildDome;
+        return new RequestBuildDome();
     }
 
 

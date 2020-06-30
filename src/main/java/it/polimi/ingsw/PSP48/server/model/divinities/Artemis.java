@@ -1,5 +1,8 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.GameControllerState;
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.RequestBuildDome;
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.RequestOptionalMove;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Model;
@@ -27,9 +30,11 @@ public class Artemis extends Divinity {
 
     /**
      * Resets the last move coordinate and the super method to check if the player can end his turn.
+     *
+     * @return
      */
     @Override
-    public Consumer<GameController> turnBegin(Model gd) {
+    public GameControllerState turnBegin(Model gd) {
         oldColumnMove = -1;
         oldRowMove = -1;
         return (super.turnBegin(gd));
@@ -65,11 +70,11 @@ public class Artemis extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public Consumer<GameController> move(int workerRow, int workerColumn, int moveRow, int moveColumn, Model gd) throws NotAdjacentCellException, IncorrectLevelException, OccupiedCellException, DomedCellException, DivinityPowerException, NoTurnEndException {
-        Consumer<GameController> nextAction;
-        if (oldRowMove == -1 && oldColumnMove == -1) nextAction = GameController::requestOptionalMove;
+    public GameControllerState move(int workerRow, int workerColumn, int moveRow, int moveColumn, Model gd) throws NotAdjacentCellException, IncorrectLevelException, OccupiedCellException, DomedCellException, DivinityPowerException, NoTurnEndException {
+        GameControllerState nextAction;
+        if (oldRowMove == -1 && oldColumnMove == -1) nextAction = new RequestOptionalMove();
         else {
-            nextAction = GameController::requestBuildDome;
+            nextAction = new RequestBuildDome();
             //the player doesn't want to do the optional move, or the controller requests the next action since the optional move isn't possible
             if (moveColumn == -1 && moveRow == -1) return nextAction;
         }

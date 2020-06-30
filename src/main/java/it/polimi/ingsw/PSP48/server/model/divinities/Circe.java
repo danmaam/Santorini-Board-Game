@@ -1,12 +1,11 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
-import it.polimi.ingsw.PSP48.server.controller.GameController;
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.GameControllerState;
 import it.polimi.ingsw.PSP48.server.model.Model;
 import it.polimi.ingsw.PSP48.server.model.Player;
 import it.polimi.ingsw.PSP48.server.model.Position;
 
 import java.util.ArrayList;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Circe extends Divinity {
@@ -37,7 +36,7 @@ public class Circe extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public Consumer<GameController> turnBegin(Model gd) {
+    public GameControllerState turnBegin(Model gd) {
         //first, i must rollback the divinities of the players
         // i remove the other player from the list of players
         String otherPlayer = gd.getPlayersInGame().stream().filter(p -> !(p.getName().equals(gd.getCurrentPlayer().getName()))).collect(Collectors.toCollection(ArrayList::new)).get(0).getName();

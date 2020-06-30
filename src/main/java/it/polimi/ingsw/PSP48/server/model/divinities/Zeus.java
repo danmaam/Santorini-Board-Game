@@ -1,12 +1,13 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.GameControllerState;
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.TurnEnd;
 import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.*;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 
 import java.util.ArrayList;
-import java.util.function.Consumer;
 
 /**
  * Class that represents advanced god Zeus
@@ -59,9 +60,10 @@ public class Zeus extends Divinity {
      * @throws MaximumLevelReachedException if the cell contains a level 3 building
      * @throws DivinityPowerException       if another divinity blocks the increment of the level
      * @author Daniele Mammone
+     * @return
      */
     @Override
-    public Consumer<GameController> build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws
+    public GameControllerState build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws
             NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelReachedException, DivinityPowerException {
         //first check: the two cells must be adiacent
         if (!(adjacentCellVerifier(workerRow, workerColumn, buildRow, buildColumn))) {
@@ -95,7 +97,7 @@ public class Zeus extends Divinity {
         gd.notifyObservers(x -> x.changedBoard(changedCell));
 
         //now, the game board has been modified
-        return GameController::turnChange;
+        return new TurnEnd();
     }
 
     /**

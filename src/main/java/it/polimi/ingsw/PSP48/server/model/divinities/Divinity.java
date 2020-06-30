@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.*;
 import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
@@ -7,7 +8,6 @@ import it.polimi.ingsw.PSP48.server.model.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Divinity {
@@ -100,7 +100,7 @@ public class Divinity {
      * @throws NoTurnEndException       if the move doesn't allow the player to end the turn
      * @author Daniele Mammone
      */
-    public Consumer<GameController> move(int workerRow, int workerColumn, int moveRow, int moveColumn, Model gd) throws
+    public GameControllerState move(int workerRow, int workerColumn, int moveRow, int moveColumn, Model gd) throws
             NotAdjacentCellException, IncorrectLevelException, OccupiedCellException, DomedCellException, DivinityPowerException, NoTurnEndException {
         //first check: the two cells must be adiacent
         if (!(adjacentCellVerifier(workerRow, workerColumn, moveRow, moveColumn)))
@@ -135,7 +135,7 @@ public class Divinity {
         gd.notifyObservers(x -> x.changedBoard(changedCell));
         //now, the game board has been modified
 
-        return GameController::requestBuildDome;
+        return new RequestBuildDome();
     }
 
     //
@@ -197,8 +197,9 @@ public class Divinity {
      * @throws MaximumLevelReachedException if the cell contains a level 3 building
      * @throws DivinityPowerException       if another divinity blocks the increment of the level
      * @author Daniele Mammone
+     * @return the next controller fsm state
      */
-    public Consumer<GameController> build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws
+    public GameControllerState build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws
             NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelReachedException, DivinityPowerException {
         //first check: the two cells must be adiacent
         if (!(adjacentCellVerifier(workerRow, workerColumn, buildRow, buildColumn)))
@@ -229,7 +230,7 @@ public class Divinity {
         changedCell.add((Cell) gd.getCell(buildRow, buildColumn).clone());
         gd.notifyObservers(x -> x.changedBoard(changedCell));
 
-        return GameController::turnEnd;
+        return new TurnEnd();
     }
 
 
@@ -286,8 +287,9 @@ public class Divinity {
      * @throws MaximumLevelNotReachedException if the cell doesn't contain a level 3 building
      * @throws DivinityPowerException          if another divinity blocks the adding of the dome
      * @author Daniele Mammone
+     * @return the next controller fsm state
      */
-    public Consumer<GameController> dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws
+    public GameControllerState dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws
             NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
         //first check: the two cells must be adiacent
         if (!(adjacentCellVerifier(workerRow, workerColumn, domeRow, domeColumn)))
@@ -318,7 +320,7 @@ public class Divinity {
         changedCell.add((Cell) gd.getCell(domeRow, domeColumn).clone());
         gd.notifyObservers(x -> x.changedBoard(changedCell));
 
-        return GameController::turnEnd;
+        return new TurnEnd();
 
         //now, the game has been modified
     }
@@ -363,16 +365,20 @@ public class Divinity {
 
     /**
      * don't do anything since without a divinity there isn't a modifier
+     *
+     * @return the next controller fsm state
      */
-    public Consumer<GameController> turnEnd() {
-        return GameController::turnChange;
+    public GameControllerState turnEnd() {
+        return new TurnChange();
     }
 
     /**
      * don't do anything since without a divinity there isn't a modifier
+     *
+     * @return the next controller fsm state
      */
 
-    public Consumer<GameController> turnBegin(Model gd) {
+    public GameControllerState turnBegin(Model gd) {
         ArrayList<Position> playerPositions, workerPositions;
         ArrayList<Divinity> otherDivinities = new ArrayList<>();
         ArrayList<Player> players;
@@ -394,8 +400,8 @@ public class Divinity {
         }
 
         //if the player can move at least one of the two workers, the turn can be completed (the player can certainly build in the cell he moved from)
-        if (!canComplete) return (GameController::currentPlayerCantEndTurn);
-        else return (GameController::requestMove);
+        if (!canComplete) return (new CurrentPlayerCantEndTurn());
+        else return (new RequestMove());
     }
 
     /**
@@ -459,7 +465,7 @@ public class Divinity {
      * @throws OccupiedCellException  if the chosen cell is occupied
      * @throws DivinityPowerException if the move is rejected by a divinity power
      */
-    public Consumer<GameController> putWorkerOnBoard(Position p, Model gd) throws OccupiedCellException, DivinityPowerException {
+    public GameControllerState putWorkerOnBoard(Position p, Model gd) throws OccupiedCellException, DivinityPowerException {
         //check if the cell is occupied
         if (gd.getCell(p.getRow(), p.getColumn()).getPlayer() != null)
             throw new OccupiedCellException("trying to put worker on an occupied cell");
@@ -470,8 +476,8 @@ public class Divinity {
         modifiedCells.add((Cell) gd.getCell(p.getRow(), p.getColumn()).clone());
         gd.notifyObservers(x -> x.changedBoard(modifiedCells));
         //now i have to manage the number of workers that i have positioned
-        if (gd.getCurrentPlayer().getWorkersOnTable() == 2) return GameController::initialPositioningTurnChange;
-        else return GameController::requestInitialPositioning;
+        if (gd.getCurrentPlayer().getWorkersOnTable() == 2) return new InitialPositioningTurnChange();
+        else return new RequestInitialPositioning();
     }
 
     /**

@@ -1,5 +1,9 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.GameControllerState;
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.RequestMove;
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.RequestOptionalBuild;
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.TurnEnd;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Model;
@@ -7,7 +11,6 @@ import it.polimi.ingsw.PSP48.server.model.Position;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 
 import java.util.ArrayList;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -40,9 +43,9 @@ public class Hestia extends Divinity {
      * @return the next action of the controller
      */
     @Override
-    public Consumer<GameController> turnBegin(Model gd) {
+    public GameControllerState turnBegin(Model gd) {
         alreadyBuilt = false;
-        return GameController::requestMove;
+        return super.turnBegin(gd);
     }
 
     /**
@@ -96,17 +99,17 @@ public class Hestia extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public Consumer<GameController> build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelReachedException, DivinityPowerException {
+    public GameControllerState build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelReachedException, DivinityPowerException {
         if (!alreadyBuilt) {
             super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
             alreadyBuilt = true;
-            return GameController::requestOptionalBuilding;
+            return new RequestOptionalBuild();
         } else {
             if (buildRow == 4 || buildColumn == 0 || buildColumn == 4 || buildRow == 0)
                 throw new DivinityPowerException("Trying to make the second construction on a perimetral cell");
-            else if (buildRow == -1 && buildColumn == -1) return GameController::turnChange;
+            else if (buildRow == -1 && buildColumn == -1) return new TurnEnd();
             super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
-            return GameController::turnChange;
+            return new TurnEnd();
         }
     }
 
@@ -127,17 +130,17 @@ public class Hestia extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public Consumer<GameController> dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
+    public GameControllerState dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
         if (!alreadyBuilt) {
             super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
             alreadyBuilt = true;
-            return GameController::requestOptionalBuilding;
+            return new RequestOptionalBuild();
         } else {
             if (domeRow == 4 || domeColumn == 0 || domeColumn == 4 || domeRow == 0)
                 throw new DivinityPowerException("Trying to make the second construction on a perimetral cell");
-            else if (domeRow == -1 && domeColumn == -1) return GameController::turnChange;
+            else if (domeRow == -1 && domeColumn == -1) return new TurnEnd();
             super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
-            return GameController::turnChange;
+            return new TurnEnd();
         }
     }
 

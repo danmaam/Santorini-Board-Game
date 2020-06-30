@@ -1,5 +1,8 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.GameControllerState;
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.RequestOptionalBuild;
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.TurnEnd;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Model;
@@ -7,7 +10,6 @@ import it.polimi.ingsw.PSP48.server.model.Position;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 
 import java.util.ArrayList;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Demeter extends Divinity {
@@ -33,7 +35,7 @@ public class Demeter extends Divinity {
      * @return the next controller FSM state
      */
     @Override
-    public Consumer<GameController> turnBegin(Model gd) {
+    public GameControllerState turnBegin(Model gd) {
         oldRowBuild = -1;
         oldColumnBuild = -1;
         prevBuild = false;
@@ -88,23 +90,24 @@ public class Demeter extends Divinity {
      * @throws MaximumLevelReachedException if the cell contains a level 3 building
      * @throws DivinityPowerException       if another divinity blocks the increment of the level
      * @author Daniele Mammone
+     * @return the next fsm controller state
      */
     @Override
-    public Consumer<GameController> build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws DivinityPowerException, MaximumLevelReachedException, OccupiedCellException, NotAdjacentCellException, DomedCellException {
+    public GameControllerState build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws DivinityPowerException, MaximumLevelReachedException, OccupiedCellException, NotAdjacentCellException, DomedCellException {
 
         if (!prevBuild) {
             super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
             oldRowBuild = buildRow;
             oldColumnBuild = buildColumn;
             prevBuild = true;
-            return GameController::requestOptionalBuilding;
+            return new RequestOptionalBuild();
         } else {
-            if (workerRow == -1 && workerColumn == -1) return GameController::turnEnd;
+            if (workerRow == -1 && workerColumn == -1) return new TurnEnd();
             else if (buildRow == oldRowBuild && buildColumn == oldColumnBuild)
                 throw new DivinityPowerException("NO!");
             else {
                 super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
-                return GameController::turnEnd;
+                return new TurnEnd();
             }
         }
     }
@@ -126,22 +129,23 @@ public class Demeter extends Divinity {
      * @throws MaximumLevelNotReachedException if the cell doesn't contain a level 3 building
      * @throws DivinityPowerException          if another divinity blocks the adding of the dome
      * @author Daniele Mammone
+     * @return the next controller fsm state
      */
     @Override
-    public Consumer<GameController> dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
+    public GameControllerState dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
         if (!prevBuild) {
             super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
             oldRowBuild = domeRow;
             oldColumnBuild = domeColumn;
             prevBuild = true;
-            return GameController::requestOptionalBuilding;
+            return new RequestOptionalBuild();
         } else {
-            if (workerRow == -1 && workerColumn == -1) return GameController::turnEnd;
+            if (workerRow == -1 && workerColumn == -1) return new TurnEnd();
             else if (domeRow == oldRowBuild && domeColumn == oldColumnBuild)
                 throw new DivinityPowerException("NO!");
             else {
                 super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
-                return GameController::turnEnd;
+                return new TurnEnd();
             }
         }
     }

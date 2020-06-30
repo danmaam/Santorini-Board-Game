@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
 import it.polimi.ingsw.PSP48.WorkerValidCells;
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.*;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Model;
@@ -32,9 +33,10 @@ public class Prometheus extends Divinity {
      * Calculates if Prometheus can do a first optional build allowing him to complete the turn. If not, checks if he can normally end the turn.
      *
      * @param gd the model
+     * @return
      */
     @Override
-    public Consumer<GameController> turnBegin(Model gd) {
+    public GameControllerState turnBegin(Model gd) {
         previousBuild = false;
         doneMove = false;
         //for building and doming, i must check if the first optional building allows to complete the turn, so that the player can move
@@ -78,7 +80,7 @@ public class Prometheus extends Divinity {
             if (dome) break;
         }
 
-        if (build || dome) return GameController::PrometheusInitialOptionalBuild;
+        if (build || dome) return new PrometheusInitialOptionalBuild();
         else return super.turnBegin(gd);
     }
 
@@ -115,13 +117,13 @@ public class Prometheus extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public Consumer<GameController> move(int workerRow, int workerColumn, int moveRow, int moveColumn, Model gd) throws NotAdjacentCellException, IncorrectLevelException, OccupiedCellException, DomedCellException, DivinityPowerException, NoTurnEndException {
+    public GameControllerState move(int workerRow, int workerColumn, int moveRow, int moveColumn, Model gd) throws NotAdjacentCellException, IncorrectLevelException, OccupiedCellException, DomedCellException, DivinityPowerException, NoTurnEndException {
         //i must check if i'm not growing up level if i built before
         if (previousBuild && gd.getCell(moveRow, moveColumn).getLevel() > gd.getCell(workerRow, workerColumn).getLevel())
             throw new DivinityPowerException("trying to level up after previous building");
         super.move(workerRow, workerColumn, moveRow, moveColumn, gd);
         doneMove = true;
-        return GameController::requestBuildDome;
+        return new RequestBuildDome();
     }
 
     /**
@@ -141,14 +143,14 @@ public class Prometheus extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public Consumer<GameController> build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelReachedException, DivinityPowerException {
-        Consumer<GameController> nextAction;
+    public GameControllerState build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelReachedException, DivinityPowerException {
+        GameControllerState nextAction;
         if (buildRow == -1 && buildColumn == -1) return super.turnBegin(gd);
         super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
         if (!previousBuild && !doneMove) {
             gd.getCurrentPlayer().setLastWorkerUsed(workerRow, workerColumn);
-            nextAction = GameController::PrometheusMovePostOptionalBuild;
-        } else nextAction = GameController::turnEnd;
+            nextAction = new PrometheusMovePostOptionalBuild();
+        } else nextAction = new TurnEnd();
         previousBuild = true;
         return nextAction;
     }
@@ -170,14 +172,14 @@ public class Prometheus extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public Consumer<GameController> dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
-        Consumer<GameController> nextAction;
+    public GameControllerState dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
+        GameControllerState nextAction;
         if (domeRow == -1 && domeColumn == -1) return super.turnBegin(gd);
         super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
         if (!previousBuild && !doneMove) {
-            nextAction = GameController::PrometheusMovePostOptionalBuild;
+            nextAction = new PrometheusMovePostOptionalBuild();
             gd.getCurrentPlayer().setLastWorkerUsed(workerRow, workerColumn);
-        } else nextAction = GameController::turnEnd;
+        } else nextAction = new TurnEnd();
         previousBuild = true;
         return nextAction;
     }

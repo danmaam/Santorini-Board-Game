@@ -1,5 +1,8 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
+import it.polimi.ingsw.PSP48.networkMessagesToClient.RequestMove;
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.CurrentPlayerCantEndTurn;
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.GameControllerState;
 import it.polimi.ingsw.PSP48.server.model.*;
 import it.polimi.ingsw.PSP48.server.model.divinities.testingDivinities.DivinityFalsePower;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
@@ -50,12 +53,11 @@ public class PrometheusTest {
     public void turnBegin_cannotPerformOptionalBuild_baseDivinityBehaviour() {
         model.getCell(0, 2).addDome();
         model.getCell(1, 2).addDome();
-        model.getCell(1, 1).addDome();
         ArrayList<Divinity> div = new ArrayList<>();
         div.add(p2.getDivinity());
-        p1.getDivinity().turnBegin(model);
+        GameControllerState nextState = p1.getDivinity().turnBegin(model);
+        assertTrue(nextState instanceof RequestMove);
         assertTrue(p1.getDivinity().getValidCellForBuilding(0, 1, div, model.getGameBoard()).isEmpty());
-
     }
 
     @Test

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.GameControllerState;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Model;
@@ -103,7 +104,7 @@ public class Eros extends Divinity {
      * @throws DivinityPowerException if the positioning isn't complain to eros' power
      */
     @Override
-    public Consumer<GameController> putWorkerOnBoard(Position p, Model gd) throws OccupiedCellException, DivinityPowerException {
+    public GameControllerState putWorkerOnBoard(Position p, Model gd) throws OccupiedCellException, DivinityPowerException {
         if (!(p.getRow() == 0 || p.getRow() == 4 || p.getColumn() == 0 || p.getColumn() == 4)) {
             throw new DivinityPowerException("Can't put the worker on this cell due to divinity power");
         }
@@ -120,7 +121,7 @@ public class Eros extends Divinity {
                 }
             }
         }
-        Consumer<GameController> nextAction = super.putWorkerOnBoard(p, gd);
+        GameControllerState nextAction = super.putWorkerOnBoard(p, gd);
         if (p.getRow() == 0 || p.getRow() == 4) previousRow = p.getRow();
         if (p.getColumn() == 0 || p.getColumn() == 4) previousColumn = p.getColumn();
         return nextAction;

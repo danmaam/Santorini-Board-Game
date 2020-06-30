@@ -1,12 +1,13 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.GameControllerState;
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.RequestBuildDome;
 import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import it.polimi.ingsw.PSP48.server.model.*;
 
 import java.util.ArrayList;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Minotaur extends Divinity {
@@ -169,7 +170,7 @@ public class Minotaur extends Divinity {
      * @throws DomedCellException       if the destination cell has a dome on it
      * @author Daniele Mammone
      */
-    public Consumer<GameController> move(int workerRow, int workerColumn, int moveRow, int moveColumn, Model gd) throws
+    public GameControllerState move(int workerRow, int workerColumn, int moveRow, int moveColumn, Model gd) throws
             NotAdjacentCellException, IncorrectLevelException, OccupiedCellException, DomedCellException, DivinityPowerException {
         //first check: the two cells must be adiacent
         if (!(adjacentCellVerifier(workerRow, workerColumn, moveRow, moveColumn)))
@@ -227,7 +228,7 @@ public class Minotaur extends Divinity {
         gd.notifyObservers(x -> x.changedBoard(changedCell));
         //now, the game board has been modified
 
-        return GameController::requestBuildDome;
+        return new RequestBuildDome();
     }
 
     @Override

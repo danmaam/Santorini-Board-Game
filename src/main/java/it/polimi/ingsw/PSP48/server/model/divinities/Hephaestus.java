@@ -1,5 +1,8 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.GameControllerState;
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.RequestOptionalBuild;
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.TurnEnd;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Model;
@@ -7,7 +10,6 @@ import it.polimi.ingsw.PSP48.server.model.Position;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 
 import java.util.ArrayList;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Hephaestus extends Divinity {
@@ -65,21 +67,21 @@ public class Hephaestus extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public Consumer<GameController> build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws DivinityPowerException, MaximumLevelReachedException, OccupiedCellException, NotAdjacentCellException, DomedCellException {
+    public GameControllerState build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws DivinityPowerException, MaximumLevelReachedException, OccupiedCellException, NotAdjacentCellException, DomedCellException {
         if (!prevBuild) {
             super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
             prevBuildRow = buildRow;
             prevBuildColumn = buildColumn;
             prevBuild = true;
-            if (gd.getCell(buildRow, buildColumn).getLevel() < 3) return GameController::requestOptionalBuilding;
-            else return GameController::turnChange;
+            if (gd.getCell(buildRow, buildColumn).getLevel() < 3) return new RequestOptionalBuild();
+            else return new TurnEnd();
         } else {
-            if (workerRow == -1 && workerColumn == -1) return GameController::turnChange;
+            if (workerRow == -1 && workerColumn == -1) return new TurnEnd();
             else if (buildRow != prevBuildRow && buildColumn != prevBuildColumn)
                 throw new DivinityPowerException("NO!");
             else {
                 super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
-                return GameController::turnChange;
+                return new TurnEnd();
             }
         }
     }
@@ -118,7 +120,7 @@ public class Hephaestus extends Divinity {
      * @throws DivinityPowerException          if another divinity blocks the dome, or if the player is trying to put a dome as second operation.
      */
     @Override
-    public Consumer<GameController> dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
+    public GameControllerState dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
         if (prevBuild) throw new DivinityPowerException("Trying to add a dome as the second build!");
         return super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
     }
@@ -134,7 +136,7 @@ public class Hephaestus extends Divinity {
     }
 
     @Override
-    public Consumer<GameController> turnBegin(Model gd) {
+    public GameControllerState turnBegin(Model gd) {
         prevBuildRow = -1;
         prevBuildColumn = -1;
         prevBuild = false;

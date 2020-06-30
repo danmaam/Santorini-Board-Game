@@ -1,12 +1,13 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.GameControllerState;
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.RequestBuildDome;
 import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.*;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 
 import java.util.ArrayList;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Apollo extends Divinity {
@@ -94,7 +95,7 @@ public class Apollo extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public Consumer<GameController> move(int workerRow, int workerColumn, int moveRow, int moveColumn, Model gd) throws NotAdjacentCellException, IncorrectLevelException, DomedCellException, DivinityPowerException, OccupiedCellException, NoTurnEndException {
+    public GameControllerState move(int workerRow, int workerColumn, int moveRow, int moveColumn, Model gd) throws NotAdjacentCellException, IncorrectLevelException, DomedCellException, DivinityPowerException, OccupiedCellException, NoTurnEndException {
         //first check: the two cells must be adiacent
         if (!(adjacentCellVerifier(workerRow, workerColumn, moveRow, moveColumn)))
             throw new NotAdjacentCellException("Celle non adiacenti");
@@ -138,7 +139,7 @@ public class Apollo extends Divinity {
         gd.notifyObservers(x -> x.changedBoard(changedCell));
 
         //now, the game board has been modified
-        return GameController::requestBuildDome;
+        return new RequestBuildDome();
     }
 
     /**

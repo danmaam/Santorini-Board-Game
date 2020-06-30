@@ -1,12 +1,13 @@
 package it.polimi.ingsw.PSP48.server.model.divinities;
 
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.GameControllerState;
+import it.polimi.ingsw.PSP48.server.controller.ControllerState.TurnEnd;
 import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
 import it.polimi.ingsw.PSP48.server.controller.GameController;
 import it.polimi.ingsw.PSP48.server.model.*;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 
 import java.util.ArrayList;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Atlas extends Divinity {
@@ -76,7 +77,7 @@ public class Atlas extends Divinity {
      * @author Daniele Mammone
      */
     @Override
-    public Consumer<GameController> dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, DivinityPowerException {
+    public GameControllerState dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, DivinityPowerException {
         //first check: the two cells must be adjacent
         if (!(adjacentCellVerifier(workerRow, workerColumn, domeRow, domeColumn)))
             throw new NotAdjacentCellException("Celle non adiacenti");
@@ -102,7 +103,7 @@ public class Atlas extends Divinity {
         changedCell.add((Cell) gd.getCell(domeRow, domeColumn).clone());
         gd.notifyObservers(x -> x.changedBoard(changedCell));
 
-        return GameController::turnEnd;
+        return new TurnEnd();
     }
 
 
