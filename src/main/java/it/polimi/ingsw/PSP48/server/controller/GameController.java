@@ -58,7 +58,6 @@ public class GameController implements ViewObserver {
      * @author Daniele Mammone
      */
     public void addPlayer(String name, Calendar birthday) {
-        System.out.println("adding player");
         model.addPlayer(name, model.getNextColour(), birthday);
 
         if (model.getPlayersInGame().size() == model.getGamePlayerNumber()) {
@@ -184,7 +183,6 @@ public class GameController implements ViewObserver {
      */
     @Override
     public void putWorkerOnTable(Position p) {
-        System.out.println("positioning worker");
         try {
             model.getCurrentPlayer().getDivinity().putWorkerOnBoard(p, model).nextState().accept(this);
         } catch (OccupiedCellException e) {
@@ -207,7 +205,10 @@ public class GameController implements ViewObserver {
     //@ requires (\exists int x; 0 <= x && x<= model.getAvailableDivinities().size(); model.getAvailableDivinities().get(x).getName().equals(divinity))
     @Override
     public void registerPlayerDivinity(String divinity) {
-        System.out.println("associating player divinity");
+        for (Player p : model.getPlayersInGame()) {
+            if (p != model.getCurrentPlayer())
+                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " chose " + divinity + "!. \n Wait for your turn.");
+        }
         model.setPlayerDivinity(model.getCurrentPlayer().getName(), divinity);
         //if the current player is the chosen, all divinities has benn selected, and the game must start
         if (model.getPlayersInGame().indexOf(model.getCurrentPlayer()) == model.getChallengerIndex())
@@ -227,7 +228,6 @@ public class GameController implements ViewObserver {
      */
     @Override
     public void selectAvailableDivinities(ArrayList<String> divinities) {
-        System.out.println("arrived divinities from challenger");
         model.challengerDivinityChoice(divinities);
         model.setNextPlayer();
         this.requestDivinitySelection();
@@ -240,7 +240,6 @@ public class GameController implements ViewObserver {
      */
     @Override
     public void selectFirstPlayer(String playerName) {
-        System.out.println("setting first player");
         model.setNextPlayer(playerName);
         model.setFirstPlayerIndex(model.getPlayersInGame().indexOf(model.getPlayer(playerName)));
         this.requestInitialPositioning();
@@ -253,6 +252,10 @@ public class GameController implements ViewObserver {
      * @author Daniele Mammone
      */
     public void requestBuildDome() {
+        for (Player p : model.getPlayersInGame()) {
+            if (p != model.getCurrentPlayer())
+                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is doing a build action. Wait for your turn!");
+        }
         ArrayList<Divinity> otherDivinities = new ArrayList<>();
         for (Player p : model.getPlayersInGame()) {
             if (!p.getName().equals(model.getCurrentPlayer().getName())) otherDivinities.add(p.getDivinity());
@@ -276,6 +279,10 @@ public class GameController implements ViewObserver {
      * Obtains valid cells for worker's moving, and requires the player to move his player
      */
     public void requestMove() {
+        for (Player p : model.getPlayersInGame()) {
+            if (p != model.getCurrentPlayer())
+                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is doing a move action! \n Wait for your turn.");
+        }
         ArrayList<WorkerValidCells> validCells = new ArrayList<>();
         ArrayList<Position> workersPosition = model.getPlayerPositionsInMap(model.getCurrentPlayer().getName());
         ArrayList<Divinity> otherDivinities = new ArrayList<>();
@@ -353,7 +360,6 @@ public class GameController implements ViewObserver {
      * Starts the game, so, randomically, chose the "chosen", sets the chosen as last player to chose divinities, and asks the chosen to select a set of divinities
      */
     public void startGameWithDivinities() {
-        System.out.println("starting game");
         //i must choose randomically the challenger, than request him to choose divinities
         int i = new Random().nextInt(model.getNumberOfPlayers());
         model.setChallengerIndex(i);
@@ -368,12 +374,12 @@ public class GameController implements ViewObserver {
      */
     public void startGameWithoutDivinities() {
         for (Player p : model.getPlayersInGame()) {
-            getPlayerView(p.getName()).printMessage("Game started. Waiting for your turn to put your workers on the board");
+            getPlayerView(p.getName()).printMessage("Game started. Waiting for your turn \n to put your workers on the board");
         }
 
         Player firstPlayer = model.getPlayersInGame().get(0);
         for (Player p : model.getPlayersInGame()) {
-            if (p.getBirthday().compareTo(firstPlayer.getBirthday()) < 0) firstPlayer = p;
+            if (p.getBirthday().compareTo(firstPlayer.getBirthday()) > 0) firstPlayer = p;
         }
         //found the younger player, I need to set him as the first player
         model.setNextPlayer(model.getPlayersInGame().indexOf(firstPlayer));
@@ -414,7 +420,7 @@ public class GameController implements ViewObserver {
     public void requestInitialPositioning() {
         for (Player p : model.getPlayersInGame()) {
             if (p != model.getCurrentPlayer())
-                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is putting his workers on the board!");
+                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is putting \n his workers on the board!");
         }
         getPlayerView(model.getCurrentPlayer().getName()).requestInitialPositioning(model.getCurrentPlayer().getDivinity().validCellsForInitialPositioning(model.getGameBoard()));
     }
@@ -430,10 +436,8 @@ public class GameController implements ViewObserver {
         //Must check if all the players completed the initial positioning
         if (model.getPlayersInGame().indexOf(model.getCurrentPlayer()) == model.getFirstPlayerIndex()) {
             //it means all the workers are on the board, so I must request the turn begin to the first player
-            System.out.println("starting game");
             nextAction = model.getCurrentPlayer().getDivinity().turnBegin(model);
         } else {
-            System.out.println("changing initial positioning turn");
             nextAction = new RequestInitialPositioning();
         }
         nextAction();
@@ -460,6 +464,10 @@ public class GameController implements ViewObserver {
      * Checks if the optional building is possible. If yes, asks for the player to perform (or skip) the optional building; else, requests the next thing to do
      */
     public void requestOptionalBuilding() {
+        for (Player p : model.getPlayersInGame()) {
+            if (p != model.getCurrentPlayer())
+                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is doing an optional build action! \n Wait for your turn.");
+        }
         Position lastWorker = model.getCurrentPlayer().getLastWorkerMoved();
         ArrayList<Divinity> otherDivinities = new ArrayList<>();
         for (Player p : model.getPlayersInGame()) {
@@ -495,6 +503,10 @@ public class GameController implements ViewObserver {
      * Request the player to perform an optional move, but first checks if it's possible
      */
     public void requestOptionalMove() {
+        for (Player p : model.getPlayersInGame()) {
+            if (p != model.getCurrentPlayer())
+                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is doing an optional move action. \n Wait for your turn!");
+        }
         //first, I must check if the optional move is possible
         //the player must use the already moved worker
         ArrayList<Divinity> otherDivinities = new ArrayList<>();
@@ -522,6 +534,10 @@ public class GameController implements ViewObserver {
      * build is at the beginning of the turn and the player can use all of his workers to do the build action.
      */
     public void PrometheusInitialOptionalBuild() {
+        for (Player p : model.getPlayersInGame()) {
+            if (p != model.getCurrentPlayer())
+                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is doing an optional build action! \n Wait for your turn.");
+        }
         ArrayList<WorkerValidCells> build = new ArrayList<>();
         ArrayList<WorkerValidCells> dome = new ArrayList<>();
 
@@ -546,6 +562,10 @@ public class GameController implements ViewObserver {
      * can't use all his workers to move, but only the one who completed the build.
      */
     public void PrometheusMovePostOptionalBuild() {
+        for (Player p : model.getPlayersInGame()) {
+            if (p != model.getCurrentPlayer())
+                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is doing a move action! \n Wait for your turn.");
+        }
         ArrayList<Divinity> otherDivinities = new ArrayList<>();
         for (Player p : model.getPlayersInGame()) {
             if (!p.getName().equals(model.getCurrentPlayer().getName())) otherDivinities.add(p.getDivinity());

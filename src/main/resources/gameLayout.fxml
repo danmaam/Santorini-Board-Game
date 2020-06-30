@@ -182,10 +182,11 @@
                 <Image url="@unnamed.png"/>
             </image>
         </ImageView>
-        <Text fx:id="gameMessage" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome!" textAlignment="CENTER"
-              wrappingWidth="578.0" AnchorPane.leftAnchor="45.0" AnchorPane.topAnchor="640.0">
+        <Text fx:id="gameMessage" layoutX="21.0" layoutY="663.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome!"
+              textAlignment="CENTER" wrappingWidth="578.0" AnchorPane.leftAnchor="21.0"
+              AnchorPane.topAnchor="638.03515625">
             <font>
-                <Font name="LillyBelle" size="28.0"/>
+                <Font name="LillyBelle" size="22.0"/>
             </font>
         </Text>
         <StackPane fx:id="multifunctionalPane" layoutX="661.0" layoutY="101.0" prefHeight="524.0" prefWidth="344.0"

@@ -19,4 +19,9 @@
     -fx-background-position: center center;
 }
 
+@font-face {
+    font-family: "LillyBelle";
+    src: url("LillyBelle.ttf");
+}
+
 

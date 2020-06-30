@@ -13,7 +13,10 @@ import it.polimi.ingsw.PSP48.server.model.Position;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -545,6 +548,10 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
             String input;
             Scanner s = new Scanner(System.in);
             boolean validDivinity = false;
+            if (availableDivinities.size() == 1) {
+                notifyObserver(x -> x.registerPlayerDivinity(availableDivinities.get(0).getName()));
+                return;
+            }
             do {
                 System.out.println("Choose your divinity out of the following list: ");
                 for (DivinitiesWithDescription d : availableDivinities) {
@@ -913,9 +920,25 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
             System.out.println("Choose a game mode");
             System.out.println("2D for two player game with divinities;");
             System.out.println("3D for two player game with divinities;");
-            System.out.println("2ND for two player game without divinities, followed by your birthday in the form dd-mm-aaaa;");
-            System.out.println("3ND for two player game without divinities, followed by your birthday in the form dd-mm-aaaa;");
+            System.out.println("2ND for two player game without divinities");
+            System.out.println("3ND for two player game without divinities");
             String nextMessage = scanner.nextLine();
+            if (nextMessage.contains("ND")) {
+                while (true) {
+                    System.out.println("Insert your birthday in the format dd-mm-yyyy");
+                    SimpleDateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy");
+                    String birthday = scanner.nextLine();
+
+                    try {
+                        Date date = dateformat.parse(birthday);
+                        nextMessage = nextMessage + " " + birthday;
+                        break;
+                    } catch (ParseException e) {
+                        System.out.println("The date is invalid. Retry");
+                    }
+                }
+
+            }
             cA.setGameMode(nextMessage);
         });
 
