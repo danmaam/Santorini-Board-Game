@@ -9,4 +9,9 @@ public class PostMove implements GameControllerState {
     public Consumer<GameController> nextState() {
         return GameController::postMove;
     }
+
+    @Override
+    public String toString() {
+        return "PostMove{}";
+    }
 }

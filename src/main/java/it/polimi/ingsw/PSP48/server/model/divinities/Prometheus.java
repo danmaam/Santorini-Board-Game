@@ -206,7 +206,7 @@ public class Prometheus extends Divinity {
             gameBoard[mR][mC].addDome();
             previousBuild = true;
         } catch (Exception e) {
-            System.out.println("Fatal error");
+            System.out.println("Already domed");
         }
 
         boolean can = !getValidCellForMove(wR, wC, gameBoard, otherDiv).isEmpty();

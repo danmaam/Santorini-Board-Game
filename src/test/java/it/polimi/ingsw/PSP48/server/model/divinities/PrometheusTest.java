@@ -46,7 +46,7 @@ public class PrometheusTest {
         model.getCell(2, 1).setPlayer(p2.getName());
 
         model.getCell(1, 1).setActualLevel(1);
-        model.getCell(0,1 ).setActualLevel(0);
+        model.getCell(0, 1).setActualLevel(0);
     }
 
     @Test
@@ -56,31 +56,60 @@ public class PrometheusTest {
         ArrayList<Divinity> div = new ArrayList<>();
         div.add(p2.getDivinity());
         GameControllerState nextState = p1.getDivinity().turnBegin(model);
-        assertTrue(nextState instanceof RequestMove);
+        assertEquals("RequestMove{}", nextState.toString());
         assertTrue(p1.getDivinity().getValidCellForBuilding(0, 1, div, model.getGameBoard()).isEmpty());
     }
 
     @Test
-    public void turnBegin_cannotPerformOptionalDome_baseDivinityBehaviour() {
+    public void turnBegin_cannotEndTurn_baseDivinityBehaviour() {
+        model.getCell(0, 2).addDome();
+        model.getCell(1, 2).addDome();
+        model.getCell(1, 1).addDome();
         ArrayList<Divinity> div = new ArrayList<>();
         div.add(p2.getDivinity());
-        p1.getDivinity().turnBegin(model);
+        GameControllerState nextState = p1.getDivinity().turnBegin(model);
+        assertEquals("CurrentPlayerCantEndTurn{}", nextState.toString());
+        assertTrue(p1.getDivinity().getValidCellForBuilding(0, 1, div, model.getGameBoard()).isEmpty());
+    }
+
+    @Test
+    public void turnBegin_cannotPerformOptionalDomeButOptionalBuild_canDoTheOptionalBuild() {
+        ArrayList<Divinity> div = new ArrayList<>();
+        div.add(p2.getDivinity());
+
+        assertEquals("PrometheusInitialOptionalBuild{}", p1.getDivinity().turnBegin(model).toString());
         assertTrue(p1.getDivinity().getValidCellsToPutDome(0, 1, model.getGameBoard(), div).isEmpty());
     }
 
     @Test
-    public void turnBegin_canPerformOptionalBuild() {
-        model.getCell(1, 1).addDome();
+    public void turnBegin_onlyOptionalDome_canDoTheOptionalBuild() {
+        model.getCell(0, 2).setActualLevel(3);
         model.getCell(1, 2).addDome();
+        model.getCell(2, 2).addDome();
         ArrayList<Divinity> div = new ArrayList<>();
         div.add(p2.getDivinity());
-        ArrayList<Position> valid = new ArrayList<>();
-        p1.getDivinity().turnBegin(model);
-        assertEquals(p1.getDivinity().getValidCellForBuilding(0, 1, div, model.getGameBoard()), valid);
+        model.getCell(0, 1).setActualLevel(1);
+        assertEquals("PrometheusInitialOptionalBuild{}", p1.getDivinity().turnBegin(model).toString());
+        assertEquals(1, p1.getDivinity().getValidCellsToPutDome(0, 1, model.getGameBoard(), div).size());
+        assertTrue(p1.getDivinity().getValidCellsToPutDome(0, 1, model.getGameBoard(), div).contains(new Position(0, 2)));
+        assertTrue(p1.getDivinity().getValidCellForBuilding(0, 1, div, model.getGameBoard()).isEmpty());
     }
 
     @Test
-    public void turnBegin_canPerformOptionalDome() {
+    public void turnBegin_cantMove() {
+        model.getCell(1, 1).addDome();
+        model.getCell(1, 2).addDome();
+        model.getCell(0, 2).setActualLevel(3);
+        ArrayList<Divinity> div = new ArrayList<>();
+        div.add(p2.getDivinity());
+        ArrayList<Position> valid = new ArrayList<>();
+        assertEquals("CurrentPlayerCantEndTurn{}", p1.getDivinity().turnBegin(model).toString());
+        assertEquals(p1.getDivinity().getValidCellForBuilding(0, 1, div, model.getGameBoard()), valid);
+
+    }
+
+    @Test
+    public void turnBegin_cantPerformOptionalDome() {
         model.getCell(0, 2).setActualLevel(3);
         model.getCell(1, 2).addDome();
         model.getCell(1, 1).addDome();
@@ -92,12 +121,10 @@ public class PrometheusTest {
     }
 
     @Test
-    public void moveNotGrowingUpWithoutPreviousBuildingOrDome_baseDivinityBehaviour() throws DomedCellException, OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, NoTurnEndException {
-        p1.getDivinity().turnBegin(model);
-        model.getCell(1, 2).addDome();
-        model.getCell(1, 1).addDome();
-        model.getCell(0, 2).setActualLevel(0);
-        p1.getDivinity().move(0, 1, 0, 2, model);
+    public void moveNotGrowingUpWithoutPreviousBuildingOrDome_baseDivinityBehaviour() throws DomedCellException, OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, NoTurnEndException, MaximumLevelReachedException {
+        assertEquals("PrometheusInitialOptionalBuild{}", p1.getDivinity().turnBegin(model).toString());
+        assertEquals("RequestMove{}", p1.getDivinity().build(-1, -1, -1, -1, model).toString());
+        assertEquals("RequestBuildDome{}", p1.getDivinity().move(0, 1, 0, 2, model).toString());
         assertEquals(model.getCell(0, 1).getLevel(), model.getCell(0, 2).getLevel());
         assertTrue((model.getCell(0, 1).getPlayer() == null) && (model.getCell(0, 2).getPlayer().equals(p1.getName())));
     }
@@ -108,7 +135,7 @@ public class PrometheusTest {
         model.getCell(1, 2).addDome();
         model.getCell(1, 1).addDome();
         model.getCell(0, 2).setActualLevel(1);
-        p1.getDivinity().move(0, 1, 0, 2, model);
+        assertEquals("RequestBuildDome{}", p1.getDivinity().move(0, 1, 0, 2, model).toString());
         assertTrue(model.getCell(0, 1).getLevel() < model.getCell(0, 2).getLevel());
         assertTrue((model.getCell(0, 1).getPlayer() == null) && (model.getCell(0, 2).getPlayer().equals(p1.getName())));
     }
@@ -116,31 +143,23 @@ public class PrometheusTest {
     @Test(expected = DivinityPowerException.class)
     public void moveGrowingUpWithPreviousBuilding() throws MaximumLevelReachedException, OccupiedCellException, NotAdjacentCellException, DomedCellException, DivinityPowerException, NoTurnEndException, IncorrectLevelException {
         model.getCell(0, 2).setActualLevel(0);
-        p1.getDivinity().turnBegin(model);
-        p1.getDivinity().build(0, 1, 0, 2, model);
+        assertEquals("PrometheusInitialOptionalBuild{}", p1.getDivinity().turnBegin(model).toString());
+        assertEquals("PrometheusMovePostOptionalBuild{}", p1.getDivinity().build(0, 1, 0, 2, model).toString());
         p1.getDivinity().move(0, 1, 0, 2, model);
     }
 
     @Test
     public void moveNotGrowingUpWithPreviousBuilding() throws MaximumLevelReachedException, OccupiedCellException, NotAdjacentCellException, DomedCellException, DivinityPowerException, NoTurnEndException, IncorrectLevelException {
         model.getCell(0, 2).setActualLevel(0);
-        model.getCell(0,1).setActualLevel(1);
+        model.getCell(0, 1).setActualLevel(1);
         model.getCell(1, 1).setActualLevel(1);
-        p1.getDivinity().turnBegin(model);
-        p1.getDivinity().build(0, 1, 0, 2, model);
-        p1.getDivinity().move(0, 1, 0, 2, model);
+        assertEquals("PrometheusInitialOptionalBuild{}", p1.getDivinity().turnBegin(model).toString());
+        assertEquals("PrometheusMovePostOptionalBuild{}", p1.getDivinity().build(0, 1, 0, 2, model).toString());
+        assertEquals("RequestBuildDome{}", p1.getDivinity().move(0, 1, 0, 2, model).toString());
         assertEquals(model.getCell(0, 1).getLevel(), model.getCell(0, 2).getLevel());
         assertTrue((model.getCell(0, 1).getPlayer() == null) && (model.getCell(0, 2).getPlayer().equals(p1.getName())));
     }
 
-    @Test(expected = DivinityPowerException.class)
-    public void moveGrowingUpWithPreviousDome() throws OccupiedCellException, NotAdjacentCellException, DomedCellException, DivinityPowerException, NoTurnEndException, IncorrectLevelException, MaximumLevelNotReachedException {
-        model.getCell(0, 2).setActualLevel(1);
-        model.getCell(1, 1).setActualLevel(3);
-        p1.getDivinity().turnBegin(model);
-        p1.getDivinity().dome(0, 1, 1, 1, model);
-        p1.getDivinity().move(0, 1, 0, 2, model);
-    }
 
     @Test
     public void moveNotGrowingUpWithPreviousDome() throws OccupiedCellException, NotAdjacentCellException, DomedCellException, DivinityPowerException, NoTurnEndException, IncorrectLevelException, MaximumLevelNotReachedException {
@@ -193,6 +212,14 @@ public class PrometheusTest {
         assertTrue(model.getCell(1, 3).isDomed());
         assertNull(model.getCell(0, 1).getPlayer());
         assertEquals(model.getCell(1, 2).getPlayer(), "Sora");
+    }
+
+    @Test
+    public void someExceptionsInMoveCheck() {
+        model.getCell(1, 1).setActualLevel(0);
+        model.getCell(0, 2).addDome();
+        model.getCell(1, 2).setActualLevel(3);
+        assertEquals(0, p1.getDivinity().getValidCellForBuilding(0, 1, new ArrayList<>(), model.getGameBoard()).size());
     }
 
 

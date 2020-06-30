@@ -9,4 +9,9 @@ public class RequestInitialPositioning implements GameControllerState {
     public Consumer<GameController> nextState() {
         return GameController::requestInitialPositioning;
     }
+
+    @Override
+    public String toString() {
+        return "RequestInitialPositioning{}";
+    }
 }

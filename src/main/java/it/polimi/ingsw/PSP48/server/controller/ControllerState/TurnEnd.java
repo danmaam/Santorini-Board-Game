@@ -9,4 +9,9 @@ public class TurnEnd implements GameControllerState {
     public Consumer<GameController> nextState() {
         return GameController::turnEnd;
     }
+
+    @Override
+    public String toString() {
+        return "TurnEnd{}";
+    }
 }

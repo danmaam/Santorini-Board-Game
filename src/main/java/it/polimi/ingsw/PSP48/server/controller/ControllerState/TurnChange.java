@@ -9,4 +9,9 @@ public class TurnChange implements GameControllerState {
     public Consumer<GameController> nextState() {
         return GameController::turnChange;
     }
+
+    @Override
+    public String toString() {
+        return "TurnChange{}";
+    }
 }

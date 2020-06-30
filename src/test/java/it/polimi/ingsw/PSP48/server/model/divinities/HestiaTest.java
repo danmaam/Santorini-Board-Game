@@ -33,7 +33,7 @@ public class HestiaTest {
     }
 
     @Test
-    public void validCellsForBuildingandDoming_firstBuildingOrDoming() {
+    public void validCellsForBuildingAndDoming_firstBuildingOrDoming() {
         ArrayList<Position> validCells = new ArrayList<>();
 
         player1.getDivinity().turnBegin(game_database);
@@ -61,7 +61,7 @@ public class HestiaTest {
     @Test
     public void validCellsForBuildingAndDoming_afterBuilding() throws MaximumLevelReachedException, DivinityPowerException, OccupiedCellException, NotAdjacentCellException, DomedCellException{
         player1.getDivinity().turnBegin(game_database);
-        player1.getDivinity().build(3, 3, 3, 4, game_database);
+        assertEquals("RequestOptionalBuild{}", player1.getDivinity().build(3, 3, 3, 4, game_database).toString());
 
         ArrayList<Position> vB = new ArrayList<>();
         vB.add(new Position(2, 2));
@@ -80,7 +80,7 @@ public class HestiaTest {
         game_database.getCell(4, 3).setActualLevel(3);
         game_database.getCell(4, 4).setActualLevel(3);
 
-        player1.getDivinity().dome(3, 3, 3, 4, game_database);
+        assertEquals("RequestOptionalBuild{}", player1.getDivinity().dome(3, 3, 3, 4, game_database).toString());
 
         ArrayList<Position> vB = new ArrayList<>();
         vB.add(new Position(2, 2));
@@ -94,7 +94,7 @@ public class HestiaTest {
 
     @Test(expected = DivinityPowerException.class)
     public void buildSecondBuildingOnPerimetralCell_throwsException() throws MaximumLevelReachedException, DivinityPowerException, OccupiedCellException, NotAdjacentCellException, DomedCellException{
-        player1.getDivinity().build(3, 3, 3, 4, game_database);
+        assertEquals("RequestOptionalBuild{}", player1.getDivinity().build(3, 3, 3, 4, game_database).toString());
         player1.getDivinity().build(3, 3, 4, 4, game_database);
 
     }
@@ -102,7 +102,7 @@ public class HestiaTest {
     @Test(expected = DivinityPowerException.class)
     public void buildSecondDomeOnPerimetralCell_throwsException() throws MaximumLevelReachedException, DivinityPowerException, OccupiedCellException, NotAdjacentCellException, DomedCellException{
         game_database.getCell(4, 3).setActualLevel(3);
-        player1.getDivinity().build(3, 3, 3, 4, game_database);
+        assertEquals("RequestOptionalBuild{}", player1.getDivinity().build(3, 3, 3, 4, game_database).toString());
         player1.getDivinity().build(3, 3, 4, 3, game_database);
 
     }
@@ -129,27 +129,27 @@ public class HestiaTest {
     }
 
     @Test
-    public void correctSecondDoming() throws DivinityPowerException, OccupiedCellException, NotAdjacentCellException, DomedCellException, MaximumLevelNotReachedException{
+    public void correctSecondDoming() throws DivinityPowerException, OccupiedCellException, NotAdjacentCellException, DomedCellException, MaximumLevelNotReachedException {
         game_database.getCell(3, 4).setActualLevel(3);
         game_database.getCell(2, 2).setActualLevel(3);
 
-        player1.getDivinity().dome(3, 3, 3, 4, game_database);
-        player1.getDivinity().dome(3, 3, 2, 2, game_database);
+        assertEquals("RequestOptionalBuild{}", player1.getDivinity().dome(3, 3, 3, 4, game_database).toString());
+        assertEquals("TurnEnd{}", player1.getDivinity().dome(3, 3, 2, 2, game_database).toString());
     }
 
     @Test
-    public void correctSecondDomingAfterFirstBuilding() throws MaximumLevelReachedException, DivinityPowerException, OccupiedCellException, NotAdjacentCellException, DomedCellException, MaximumLevelNotReachedException{
+    public void correctSecondDomingAfterFirstBuilding() throws MaximumLevelReachedException, DivinityPowerException, OccupiedCellException, NotAdjacentCellException, DomedCellException, MaximumLevelNotReachedException {
         game_database.getCell(2, 2).setActualLevel(3);
 
-        player1.getDivinity().build(3, 3, 3, 4, game_database);
-        player1.getDivinity().dome(3, 3, 2, 2, game_database);
+        assertEquals("RequestOptionalBuild{}", player1.getDivinity().build(3, 3, 3, 4, game_database).toString());
+        assertEquals("TurnEnd{}", player1.getDivinity().dome(3, 3, 2, 2, game_database).toString());
     }
 
     @Test
-    public void correctSecondBuildingAfterFirstDoming() throws MaximumLevelReachedException, DivinityPowerException, OccupiedCellException, NotAdjacentCellException, DomedCellException, MaximumLevelNotReachedException{
+    public void correctSecondBuildingAfterFirstDoming() throws MaximumLevelReachedException, DivinityPowerException, OccupiedCellException, NotAdjacentCellException, DomedCellException, MaximumLevelNotReachedException {
         game_database.getCell(3, 4).setActualLevel(3);
 
-        player1.getDivinity().dome(3, 3, 3, 4, game_database);
-        player1.getDivinity().build(3, 3, 2, 2, game_database);
+        assertEquals("RequestOptionalBuild{}", player1.getDivinity().dome(3, 3, 3, 4, game_database).toString());
+        assertEquals("TurnEnd{}", player1.getDivinity().build(3, 3, 2, 2, game_database).toString());
     }
 }

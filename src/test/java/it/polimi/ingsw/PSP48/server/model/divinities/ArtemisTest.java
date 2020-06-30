@@ -49,13 +49,13 @@ public class ArtemisTest {
     //3) trows an exception trying to move on his previous cell
 
     public void validCellsTest() throws DomedCellException, OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, NoTurnEndException {
-        player1.getDivinity().turnBegin(game_database);
+        assertEquals("RequestMove{}", player1.getDivinity().turnBegin(game_database).toString());
         ArrayList<Position> valid = new ArrayList<>();
         valid.add(new Position(0, 2));
         valid.add(new Position(1, 2));
         assertEquals(valid, player1.getDivinity().getValidCellForMove(1, 1, game_database.getGameBoard(), new ArrayList<Divinity>()));
 
-        player1.getDivinity().move(1, 1, 1, 2, game_database);
+        assertEquals("RequestOptionalMove{}", player1.getDivinity().move(1, 1, 1, 2, game_database).toString());
 
         valid = new ArrayList<>();
         valid.add(new Position(0, 2));
@@ -67,6 +67,6 @@ public class ArtemisTest {
         assertTrue(valid.containsAll(player1.getDivinity().getValidCellForMove(1, 2, game_database.getGameBoard(), new ArrayList<>())));
         assertEquals(valid.size(), player1.getDivinity().getValidCellForMove(1, 2, game_database.getGameBoard(), new ArrayList<>()).size());
 
-        player1.getDivinity().move(1, 2, 1, 1, game_database);
+        assertEquals("RequestBuildOrDome{}", player1.getDivinity().move(1, 2, 1, 1, game_database).toString());
     }
 }

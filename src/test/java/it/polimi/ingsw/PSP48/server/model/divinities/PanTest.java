@@ -48,7 +48,7 @@ public class PanTest {
 
     @Test
     public void notWin() {
-        assertTrue(!game_database.getCurrentPlayer().getDivinity().postMoveWinCondition(game_database));
+        assertFalse(game_database.getCurrentPlayer().getDivinity().postMoveWinCondition(game_database));
     }
 
 }

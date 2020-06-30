@@ -9,4 +9,9 @@ public class PostBuild implements GameControllerState {
     public Consumer<GameController> nextState() {
         return GameController::postBuild;
     }
+
+    @Override
+    public String toString() {
+        return "PostBuild{}";
+    }
 }

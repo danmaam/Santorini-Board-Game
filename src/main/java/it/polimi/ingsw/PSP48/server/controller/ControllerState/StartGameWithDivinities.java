@@ -9,4 +9,9 @@ public class StartGameWithDivinities implements GameControllerState {
     public Consumer<GameController> nextState() {
         return GameController::startGameWithDivinities;
     }
+
+    @Override
+    public String toString() {
+        return "StartGameWithDivinities{}";
+    }
 }

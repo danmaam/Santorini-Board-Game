@@ -10,4 +10,9 @@ public class CurrentPlayerCantEndTurn implements GameControllerState {
     public Consumer<GameController> nextState() {
         return GameController::currentPlayerCantEndTurn;
     }
+
+    @Override
+    public String toString() {
+        return "CurrentPlayerCantEndTurn{}";
+    }
 }

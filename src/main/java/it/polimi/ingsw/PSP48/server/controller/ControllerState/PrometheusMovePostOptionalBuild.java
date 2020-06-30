@@ -10,4 +10,9 @@ public class PrometheusMovePostOptionalBuild implements GameControllerState {
     public Consumer<GameController> nextState() {
         return GameController::PrometheusMovePostOptionalBuild;
     }
+
+    @Override
+    public String toString() {
+        return "PrometheusMovePostOptionalBuild{}";
+    }
 }

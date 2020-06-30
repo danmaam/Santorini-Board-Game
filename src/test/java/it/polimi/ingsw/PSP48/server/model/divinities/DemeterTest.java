@@ -51,7 +51,7 @@ public class DemeterTest {
         assertEquals(validForDoming, player1.getDivinity().getValidCellsToPutDome(0, 0, game_database.getGameBoard(), new ArrayList<Divinity>()));
         assertEquals(validForBuild, player1.getDivinity().getValidCellForBuilding(0, 0, new ArrayList<Divinity>(), game_database.getGameBoard()));
 
-        player1.getDivinity().build(0, 0, 1, 0, game_database);
+        assertEquals("RequestOptionalBuild{}", player1.getDivinity().build(0, 0, 1, 0, game_database).toString());
 
         validForBuild.removeIf(x->(x.getRow()==1 && x.getColumn()==0));
 
@@ -74,7 +74,7 @@ public class DemeterTest {
         assertEquals(validForDoming, player1.getDivinity().getValidCellsToPutDome(0, 0, game_database.getGameBoard(), new ArrayList<Divinity>()));
         assertEquals(validForBuild, player1.getDivinity().getValidCellForBuilding(0, 0, new ArrayList<Divinity>(), game_database.getGameBoard()));
 
-        player1.getDivinity().dome(0, 0, 1, 1, game_database);
+        assertEquals("RequestOptionalBuild{}", player1.getDivinity().dome(0, 0, 1, 1, game_database).toString());
 
         validForDoming.removeIf(x->(x.getRow()==1 && x.getColumn()==1));
 
@@ -85,7 +85,7 @@ public class DemeterTest {
     @Test(expected = DivinityPowerException.class)
     public void reBuildOnTheSameCell_throwException() throws DivinityPowerException, OccupiedCellException,NotAdjacentCellException, DomedCellException, MaximumLevelReachedException {
 
-        player1.getDivinity().build(0, 0, 1, 0, game_database);
+        assertEquals("RequestOptionalBuild{}", player1.getDivinity().build(0, 0, 1, 0, game_database).toString());
         player1.getDivinity().build(0, 0, 1, 0, game_database);
     }
 
@@ -99,7 +99,7 @@ public class DemeterTest {
     @Test
     public void dome_secondDomeOnOtherCell() throws OccupiedCellException, NotAdjacentCellException, MaximumLevelNotReachedException, DomedCellException, DivinityPowerException {
         game_database.getCell(1, 0).setActualLevel(3);
-        player1.getDivinity().dome(0, 0, 1, 1, game_database);
+        assertEquals("RequestOptionalBuild{}", player1.getDivinity().dome(0, 0, 1, 1, game_database).toString());
         player1.getDivinity().dome(0, 0, 1, 0, game_database);
         assertTrue(game_database.getCell(1, 0).isDomed());
     }
@@ -107,9 +107,9 @@ public class DemeterTest {
     @Test
     public void build_secondBuildOnOtherCell() throws OccupiedCellException, NotAdjacentCellException, MaximumLevelNotReachedException, DomedCellException, DivinityPowerException, MaximumLevelReachedException {
         game_database.getCell(1, 1).setActualLevel(2);
-        player1.getDivinity().build(0, 0, 1, 1, game_database);
-        player1.getDivinity().build(0, 0, 1, 0, game_database);
-        assertTrue(game_database.getCell(1, 0).getLevel() == 2);
+        assertEquals("RequestOptionalBuild{}", player1.getDivinity().build(0, 0, 1, 1, game_database).toString());
+        assertEquals("TurnEnd{}", player1.getDivinity().build(0, 0, 1, 0, game_database).toString());
+        assertEquals(2, game_database.getCell(1, 0).getLevel());
     }
 
 

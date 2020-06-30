@@ -9,4 +9,9 @@ public class RequestMove implements GameControllerState {
     public Consumer<GameController> nextState() {
         return GameController::requestMove;
     }
+
+    @Override
+    public String toString() {
+        return "RequestMove{}";
+    }
 }

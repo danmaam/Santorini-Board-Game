@@ -9,4 +9,9 @@ public class PrometheusInitialOptionalBuild implements GameControllerState {
     public Consumer<GameController> nextState() {
         return GameController::PrometheusInitialOptionalBuild;
     }
+
+    @Override
+    public String toString() {
+        return "PrometheusInitialOptionalBuild{}";
+    }
 }

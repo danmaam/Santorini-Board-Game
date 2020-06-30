@@ -9,4 +9,9 @@ public class RequestOptionalBuild implements GameControllerState {
     public Consumer<GameController> nextState() {
         return GameController::requestOptionalBuilding;
     }
+
+    @Override
+    public String toString() {
+        return "RequestOptionalBuild{}";
+    }
 }

@@ -9,4 +9,9 @@ public class RequestChallengerDivinitiesSelection implements GameControllerState
     public Consumer<GameController> nextState() {
         return GameController::requestChallengerDivinitiesSelection;
     }
+
+    @Override
+    public String toString() {
+        return "RequestChallengerDivinitiesSelection{}";
+    }
 }

@@ -9,4 +9,9 @@ public class RequestFirstPlayerSelection implements GameControllerState {
     public Consumer<GameController> nextState() {
         return GameController::requestFirstPlayerSelection;
     }
+
+    @Override
+    public String toString() {
+        return "RequestFirstPlayerSelection{}";
+    }
 }

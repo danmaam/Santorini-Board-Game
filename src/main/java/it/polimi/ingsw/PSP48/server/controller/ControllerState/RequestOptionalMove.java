@@ -9,4 +9,9 @@ public class RequestOptionalMove implements GameControllerState {
     public Consumer<GameController> nextState() {
         return GameController::requestOptionalMove;
     }
+
+    @Override
+    public String toString() {
+        return "RequestOptionalMove{}";
+    }
 }

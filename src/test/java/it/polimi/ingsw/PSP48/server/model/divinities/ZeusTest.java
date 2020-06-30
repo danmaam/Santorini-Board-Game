@@ -78,7 +78,7 @@ public class ZeusTest {
     }
 
     @Test(expected = NotAdjacentCellException.class)
-    public void notAdiacentCellTest_throwException() throws MaximumLevelReachedException, DivinityPowerException, OccupiedCellException, NotAdjacentCellException, DomedCellException {
+    public void notAdjacentCellTest_throwException() throws MaximumLevelReachedException, DivinityPowerException, OccupiedCellException, NotAdjacentCellException, DomedCellException {
         player1.getDivinity().build(4, 4, 0, 0, game_database);
     }
 

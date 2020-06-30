@@ -9,4 +9,9 @@ public class RequestBuildDome implements GameControllerState {
     public Consumer<GameController> nextState() {
         return GameController::requestBuildDome;
     }
+
+    @Override
+    public String toString() {
+        return "RequestBuildDome{}";
+    }
 }

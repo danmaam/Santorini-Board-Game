@@ -63,7 +63,7 @@ public class HephaestusTest {
         assertTrue(vD.size() == player1.getDivinity().getValidCellsToPutDome(1, 3, game_database.getGameBoard(), new ArrayList<>()).size());
         assertTrue(vD.containsAll(player1.getDivinity().getValidCellsToPutDome(1, 3, game_database.getGameBoard(), new ArrayList<>())));
 
-        player1.getDivinity().build(1, 3, 1, 4, game_database);
+        assertEquals("RequestOptionalBuild{}", player1.getDivinity().build(1, 3, 1, 4, game_database).toString());
 
         vB = new ArrayList<>();
         vB.add(new Position(1, 4));
@@ -74,7 +74,7 @@ public class HephaestusTest {
     }
 
     @Test
-    public void validCellsAfterDoubleBuildingTheThirdLevel() throws MaximumLevelReachedException, DivinityPowerException, OccupiedCellException, NotAdjacentCellException, DomedCellException {
+    public void validCellsAfterFirstBuilding() throws MaximumLevelReachedException, DivinityPowerException, OccupiedCellException, NotAdjacentCellException, DomedCellException {
         ArrayList<Position> vB = new ArrayList<>();
         ArrayList<Position> vD = new ArrayList<>();
 
@@ -91,14 +91,14 @@ public class HephaestusTest {
         vD.add(new Position(0, 4));
 
 
-        assertTrue(vB.size() == player1.getDivinity().getValidCellForBuilding(1, 3, new ArrayList<>(), game_database.getGameBoard()).size());
+        assertEquals(vB.size(), player1.getDivinity().getValidCellForBuilding(1, 3, new ArrayList<>(), game_database.getGameBoard()).size());
         assertTrue(vB.containsAll(player1.getDivinity().getValidCellForBuilding(1, 3, new ArrayList<>(), game_database.getGameBoard())));
 
 
-        assertTrue(vD.size() == player1.getDivinity().getValidCellsToPutDome(1, 3, game_database.getGameBoard(), new ArrayList<>()).size());
+        assertEquals(vD.size(), player1.getDivinity().getValidCellsToPutDome(1, 3, game_database.getGameBoard(), new ArrayList<>()).size());
         assertTrue(vD.containsAll(player1.getDivinity().getValidCellsToPutDome(1, 3, game_database.getGameBoard(), new ArrayList<>())));
 
-        player1.getDivinity().build(1, 3, 0, 3, game_database);
+        assertEquals("RequestOptionalBuild{}", player1.getDivinity().build(1, 3, 0, 3, game_database).toString());
 
         vB = new ArrayList<>();
         vB.add(new Position(0, 3));
@@ -111,13 +111,14 @@ public class HephaestusTest {
 
     @Test(expected = DivinityPowerException.class)
     public void buildOnDifferentCellThanTheFirst_excpetionThrown() throws MaximumLevelReachedException, DivinityPowerException, OccupiedCellException, NotAdjacentCellException, DomedCellException {
-        player1.getDivinity().build(1, 3, 1, 4, game_database);
+        assertEquals("RequestOptionalBuild{}", player1.getDivinity().build(1, 3, 1, 4, game_database).toString());
         player1.getDivinity().build(1, 3, 0, 3, game_database);
     }
 
     @Test(expected = DivinityPowerException.class)
     public void domeCellBuilt_exception() throws MaximumLevelReachedException, DivinityPowerException, OccupiedCellException, NotAdjacentCellException, DomedCellException, MaximumLevelNotReachedException {
-        player1.getDivinity().build(1, 3, 0, 3, game_database);
+        game_database.getCell(0, 3).setActualLevel(2);
+        assertEquals("TurnEnd{}", player1.getDivinity().build(1, 3, 0, 3, game_database).toString());
         player1.getDivinity().dome(1, 3, 0, 3, game_database);
     }
 
@@ -129,22 +130,22 @@ public class HephaestusTest {
 
     @Test
     public void buildForTheSecondTime() throws MaximumLevelReachedException, OccupiedCellException, NotAdjacentCellException, DomedCellException, DivinityPowerException {
-        player1.getDivinity().build(1, 3, 0, 3, game_database);
-        player1.getDivinity().build(1, 3, 0, 3, game_database);
+        assertEquals("RequestOptionalBuild{}", player1.getDivinity().build(1, 3, 0, 3, game_database).toString());
+        assertEquals("TurnEnd{}", player1.getDivinity().build(1, 3, 0, 3, game_database).toString());
         assertEquals(game_database.getCell(0, 3).getLevel(), 3);
     }
 
     @Test
     public void buildOnThirdLevel_requestTurnChange() throws MaximumLevelReachedException, OccupiedCellException, NotAdjacentCellException, DomedCellException, DivinityPowerException {
         game_database.getCell(0, 3).setActualLevel(2);
-        game_database.getCurrentPlayer().getDivinity().build(1, 3, 0, 3, game_database);
+        assertEquals("TurnEnd{}", game_database.getCurrentPlayer().getDivinity().build(1, 3, 0, 3, game_database).toString());
         assertEquals(game_database.getCell(0, 3).getLevel(), 3);
     }
 
     @Test
     public void dome() throws OccupiedCellException, NotAdjacentCellException, MaximumLevelNotReachedException, DomedCellException, DivinityPowerException {
         game_database.getCell(2, 3).setActualLevel(3);
-        player1.getDivinity().dome(1, 3, 2, 3, game_database);
+        assertEquals("TurnEnd{}", player1.getDivinity().dome(1, 3, 2, 3, game_database).toString());
         assertTrue(game_database.getCell(2, 3).isDomed());
     }
 }
