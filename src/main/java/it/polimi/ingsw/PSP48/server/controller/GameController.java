@@ -253,7 +253,6 @@ public class GameController implements ViewObserver {
      * @author Daniele Mammone
      */
     public void requestBuildDome() {
-        System.out.println("requesting build or dome");
         ArrayList<Divinity> otherDivinities = new ArrayList<>();
         for (Player p : model.getPlayersInGame()) {
             if (!p.getName().equals(model.getCurrentPlayer().getName())) otherDivinities.add(p.getDivinity());
@@ -277,7 +276,6 @@ public class GameController implements ViewObserver {
      * Obtains valid cells for worker's moving, and requires the player to move his player
      */
     public void requestMove() {
-        System.out.println("requesting build or move");
         ArrayList<WorkerValidCells> validCells = new ArrayList<>();
         ArrayList<Position> workersPosition = model.getPlayerPositionsInMap(model.getCurrentPlayer().getName());
         ArrayList<Divinity> otherDivinities = new ArrayList<>();
@@ -324,6 +322,7 @@ public class GameController implements ViewObserver {
         }
 
         if (playerThatWon != null) {
+            nextAction = new EndGame();
             Server.destroyGameRoom(roomID, playerThatWon, EndReason.win);
         } else this.nextAction();
     }
@@ -417,7 +416,6 @@ public class GameController implements ViewObserver {
             if (p != model.getCurrentPlayer())
                 getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is putting his workers on the board!");
         }
-        System.out.println("requesting initial positioning");
         getPlayerView(model.getCurrentPlayer().getName()).requestInitialPositioning(model.getCurrentPlayer().getDivinity().validCellsForInitialPositioning(model.getGameBoard()));
     }
 
@@ -562,7 +560,7 @@ public class GameController implements ViewObserver {
      */
     public void currentPlayerCantEndTurn() {
         if (model.getPlayersInGame().size() == 2) {
-
+            nextAction = new EndGame();
             Server.destroyGameRoom(roomID, model.getCurrentPlayer().getName(), EndReason.lose);
             return;
         } else {
@@ -578,5 +576,9 @@ public class GameController implements ViewObserver {
             nextAction = new TurnChange();
         }
         nextAction();
+    }
+
+    public GameControllerState nextState() {
+        return nextAction;
     }
 }
