@@ -10,8 +10,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Santorini" />
-        <module name="ing-sw-2020-mammone-marelli-massa" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ing-sw-2020-mammone-marelli-massa" target="9" />
+    </bytecodeTargetLevel>
   </component>
 </project>

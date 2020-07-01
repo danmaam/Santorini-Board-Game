@@ -24,6 +24,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
@@ -43,6 +44,7 @@ public class GameBoardController {
     }
 
     private final GUI view;
+
 
     @FXML
     private Text gameMessage;
@@ -831,6 +833,7 @@ public class GameBoardController {
     public void printMessage(String s) {
         gameLog.getItems().add(s);
         gameMessage.setText(s);
+
     }
 
     /**
@@ -1147,8 +1150,6 @@ public class GameBoardController {
         playersName.add(secondPlayerName);
         playersName.add(thirdPlayerName);
         boardPane.setAlignment(Pos.CENTER);
-
-
     }
 
 

@@ -120,7 +120,7 @@
                       GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1"
                       GridPane.valignment="CENTER">
                     <font>
-                        <Font name="LillyBelle" size="12.0"/>
+                        <Font size="14.0"/>
                     </font>
                     <GridPane.margin>
                         <Insets top="-10.0"/>
@@ -137,7 +137,7 @@
                       textAlignment="CENTER" wrappingWidth="132.22900390625" GridPane.columnIndex="2"
                       GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                     <font>
-                        <Font name="LillyBelle" size="12.0"/>
+                        <Font size="14.0"/>
                     </font>
                     <GridPane.margin>
                         <Insets top="-10.0"/>
@@ -147,7 +147,7 @@
                       textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3"
                       GridPane.valignment="CENTER">
                     <font>
-                        <Font name="LillyBelle" size="12.0"/>
+                        <Font size="14.0"/>
                     </font>
                     <GridPane.margin>
                         <Insets top="-15.0"/>
@@ -186,7 +186,7 @@
               textAlignment="CENTER" wrappingWidth="578.0" AnchorPane.leftAnchor="21.0"
               AnchorPane.topAnchor="638.03515625">
             <font>
-                <Font name="LillyBelle" size="22.0"/>
+                <Font size="25.0"/>
             </font>
         </Text>
         <StackPane fx:id="multifunctionalPane" layoutX="661.0" layoutY="101.0" prefHeight="524.0" prefWidth="344.0"

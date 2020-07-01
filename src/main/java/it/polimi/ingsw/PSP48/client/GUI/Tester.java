@@ -34,6 +34,9 @@ public class Tester extends GUI {
     private GameBoardController boardController;
     private Scene board = null;
 
+    public static void main(String[] args) {
+        Application.launch(Tester.class, args);
+    }
 
     @Override
     public void start(Stage stage) {
