@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: ChallengerDivinitiesSelectionRequest</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">it.polimi.ingsw.PSP48.networkMessagesToClient</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: ChallengerDivinitiesSelectionRequest
+        (it.polimi.ingsw.PSP48.networkMessagesToClient)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">ChallengerDivinitiesSelectionRequest</td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 2)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 4)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.networkMessagesToClient;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
+        <i>4</i>&nbsp;import it.polimi.ingsw.PSP48.ViewInterface;
+        <i>5</i>&nbsp;
+        <i>6</i>&nbsp;import java.util.ArrayList;
+        <i>7</i>&nbsp;
+        <i>8</i>&nbsp;/**
+        <i>9</i>&nbsp; * Network message used to request the challenger to choose the available divinities in the game.
+        <i>10</i>&nbsp; * It contains the divinities available for the specific type of game in progress;
+        <i>11</i>&nbsp; */
+        <i>12</i>&nbsp;public class ChallengerDivinitiesSelectionRequest extends NetworkMessagesToClient {
+        <i>13</i>&nbsp; private ArrayList&lt;DivinitiesWithDescription&gt; div;
+        <i>14</i>&nbsp; private int playerNumber;
+        <i>15</i>&nbsp;
+        <i>16</i>&nbsp; /**
+        <i>17</i>&nbsp; * Invokes the request of challenger&#39;s divinities selection
+        <i>18</i>&nbsp; *
+        <i>19</i>&nbsp; * @param v the view interface where the method must be invoked
+        <i>20</i>&nbsp; */
+        <i>21</i>&nbsp; @Override
+        <i>22</i>&nbsp; public void doAction(ViewInterface v) {
+        <b class="nc"><i>23</i>&nbsp; v.requestChallengerDivinitiesSelection(div, playerNumber);</b>
+        <i>24</i>&nbsp; }
+        <i>25</i>&nbsp;
+        <i>26</i>&nbsp; /**
+        <i>27</i>&nbsp; * Initializes the network message
+        <i>28</i>&nbsp; *
+        <i>29</i>&nbsp; * @param div the available divinities
+        <i>30</i>&nbsp; * @param playerNumber the number of players
+        <i>31</i>&nbsp; */
+        <b class="nc"><i>32</i>&nbsp; public ChallengerDivinitiesSelectionRequest(ArrayList&lt;DivinitiesWithDescription&gt;
+            div, int playerNumber) {</b>
+        <b class="nc"><i>33</i>&nbsp; this.div = (ArrayList&lt;DivinitiesWithDescription&gt;) div.clone();</b>
+        <b class="nc"><i>34</i>&nbsp; this.playerNumber = playerNumber;</b>
+        <i>35</i>&nbsp; }
+        <i>36</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2020-07-01 19:47</div>
+</div>
+</body>
+</html>

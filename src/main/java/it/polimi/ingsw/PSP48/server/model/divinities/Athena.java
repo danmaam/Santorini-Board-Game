@@ -8,10 +8,19 @@ import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.Model;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 
+/**
+ * Implementation of Athena Divinity
+ */
 public class Athena extends Divinity {
 
     private Boolean lastTurnLevelUp = false;
 
+    /**
+     * Checks if Athena is allowed for a certain number of players
+     *
+     * @param pNum the number of players
+     * @return if the divinity is allowed for the specified number of players
+     */
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
             case 2:
@@ -25,7 +34,7 @@ public class Athena extends Divinity {
     /**
      * Resets the flag if the player went level up on the last turn
      *
-     * @return
+     * @return the next controller FSM state
      */
     @Override
     public GameControllerState turnBegin(Model gd) {
@@ -34,6 +43,7 @@ public class Athena extends Divinity {
     }
 
     /**
+     * Process the move updating if the player is going on a higher level.
      * @param workerRow    the row of the cell where the worker is
      * @param workerColumn the column of the cell where the worker is
      * @param moveRow      the row of the board where the worker wants to move
@@ -71,12 +81,21 @@ public class Athena extends Divinity {
         return true;
     }
 
-
+    /**
+     * Getter of name
+     *
+     * @return the divinity's name
+     */
     @Override
     public String getName() {
         return "Athena";
     }
 
+    /**
+     * Getter of divinity's description
+     *
+     * @return the description of the divinity power
+     */
     @Override
     public String getDescription() {
         return "If one of your Workers moved up on your last turn, opponent Workers cannot move up this turn.";

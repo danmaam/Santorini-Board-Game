@@ -12,8 +12,17 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of Eros divinity
+ */
 public class Eros extends Divinity {
 
+    /**
+     * Checks if Eros is allowed for a certain number of players
+     *
+     * @param pNum the number of players
+     * @return if the divinity is allowed for the specified number of players
+     */
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
             case 2:
@@ -60,7 +69,11 @@ public class Eros extends Divinity {
 
     }
 
-
+    /**
+     * Getter of name
+     *
+     * @return the divinity's name
+     */
     @Override
     public String getName() {
         return "Eros";
@@ -127,6 +140,11 @@ public class Eros extends Divinity {
         return nextAction;
     }
 
+    /**
+     * Getter of divinity's description
+     *
+     * @return the description of the divinity power
+     */
     @Override
     public String getDescription() {
         return "Place your Workers anywhere along opposite edges of the board. You also win if one of your Workers moves to a space neighboring your other Worker and both are on the first level (or the same level in a 3-player game).";

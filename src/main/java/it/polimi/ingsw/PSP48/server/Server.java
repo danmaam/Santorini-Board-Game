@@ -10,8 +10,14 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+/**
+ * The game server class
+ */
 public class Server {
     private static final ArrayList<String> playersConnectedToTheGame = new ArrayList<>();
+    /**
+     * The port on which the server is hosted
+     */
     public final static int TCP_PORT = 7777;
     private static final ArrayList<GameRoom> roomsOnTheServer = new ArrayList<>();
     private static int nextRoomID = 0;

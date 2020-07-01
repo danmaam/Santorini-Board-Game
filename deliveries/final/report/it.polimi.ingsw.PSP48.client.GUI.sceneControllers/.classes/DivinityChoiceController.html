@@ -1,0 +1,344 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: DivinityChoiceController</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">it.polimi.ingsw.PSP48.client.GUI.sceneControllers</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: DivinityChoiceController (it.polimi.ingsw.PSP48.client.GUI.sceneControllers)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">DivinityChoiceController</td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 13)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 97)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.client.GUI.sceneControllers;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
+        <i>4</i>&nbsp;import javafx.fxml.FXML;
+        <i>5</i>&nbsp;import javafx.scene.image.Image;
+        <i>6</i>&nbsp;import javafx.scene.image.ImageView;
+        <i>7</i>&nbsp;import javafx.scene.text.Text;
+        <i>8</i>&nbsp;
+        <i>9</i>&nbsp;import java.util.ArrayList;
+        <i>10</i>&nbsp;
+        <i>11</i>&nbsp;/**
+        <i>12</i>&nbsp; * The controller for divinity chooser Pane
+        <i>13</i>&nbsp; * @author Daniele Mammone
+        <i>14</i>&nbsp; */
+        <i>15</i>&nbsp;public class DivinityChoiceController {
+        <i>16</i>&nbsp; @FXML
+        <i>17</i>&nbsp; private ImageView prev;
+        <i>18</i>&nbsp; @FXML
+        <i>19</i>&nbsp; private ImageView next;
+        <i>20</i>&nbsp; @FXML
+        <i>21</i>&nbsp; private ImageView choose;
+        <i>22</i>&nbsp; @FXML
+        <i>23</i>&nbsp; private ImageView divinityCard;
+        <i>24</i>&nbsp; @FXML
+        <i>25</i>&nbsp; private Text divinityDescription;
+        <i>26</i>&nbsp; @FXML
+        <i>27</i>&nbsp; private Text divinityName;
+        <i>28</i>&nbsp; @FXML
+        <i>29</i>&nbsp; private Text nextName;
+        <i>30</i>&nbsp; @FXML
+        <i>31</i>&nbsp; private Text prevName;
+        <i>32</i>&nbsp; @FXML
+        <i>33</i>&nbsp; private Text infoText;
+        <i>34</i>&nbsp;
+        <b class="nc"><i>35</i>&nbsp; private int currentDivinity = 0;</b>
+        <i>36</i>&nbsp; private final GameBoardController outerController;
+        <i>37</i>&nbsp;
+        <i>38</i>&nbsp; private final ArrayList&lt;DivinitiesWithDescription&gt; divinities;
+        <b class="nc"><i>39</i>&nbsp; private final ArrayList&lt;String&gt; chosenDivinities = new ArrayList&lt;&gt;();</b>
+        <i>40</i>&nbsp; private final int numberToBeChosen;
+        <i>41</i>&nbsp;
+        <i>42</i>&nbsp;
+        <i>43</i>&nbsp; /**
+        <i>44</i>&nbsp; * Initialized the controller
+        <i>45</i>&nbsp; *
+        <i>46</i>&nbsp; * @param divinityList the list of divinities from which the player can choose
+        <i>47</i>&nbsp; * @param numberToBeChosen the number of divinities to be chosen
+        <i>48</i>&nbsp; * @param outerController the controller of the game board&#39;s scene
+        <i>49</i>&nbsp; */
+        <b class="nc"><i>50</i>&nbsp; public DivinityChoiceController(ArrayList&lt;DivinitiesWithDescription&gt;
+            divinityList, int numberToBeChosen, GameBoardController outerController) {</b>
+        <b class="nc"><i>51</i>&nbsp; this.divinities = divinityList;</b>
+        <b class="nc"><i>52</i>&nbsp; this.numberToBeChosen = numberToBeChosen;</b>
+        <b class="nc"><i>53</i>&nbsp; this.outerController = outerController;</b>
+        <i>54</i>&nbsp; }
+        <i>55</i>&nbsp;
+        <i>56</i>&nbsp; /**
+        <i>57</i>&nbsp; * Initializer method for FXML load, sets visible the first divinity, and then updates the next
+        button with the next divinity (if
+        <i>58</i>&nbsp; * there are more than one divinities)
+        <i>59</i>&nbsp; */
+        <i>60</i>&nbsp; public void initialize() {
+        <i>61</i>&nbsp; //must import first divinity
+        <b class="nc"><i>62</i>&nbsp; currentDivinity = 0;</b>
+        <b class="nc"><i>63</i>&nbsp; Image card = new Image(&quot;santorini_risorse-grafiche-2/Sprite/Cards/Full/&quot;
+            + divinities.get(0).getName() + &quot;.png&quot;);</b>
+        <b class="nc"><i>64</i>&nbsp; divinityCard.setImage(card);</b>
+        <b class="nc"><i>65</i>&nbsp; divinityName.setText(divinities.get(0).getName());</b>
+        <b class="nc"><i>66</i>&nbsp; divinityDescription.setText(divinities.get(0).getDescription());</b>
+        <b class="nc"><i>67</i>&nbsp; if (divinities.size() &gt; 1) nextName.setText(divinities.get(1).getName());</b>
+        <i>68</i>&nbsp; else {
+        <b class="nc"><i>69</i>&nbsp; nextName.setVisible(false);</b>
+        <b class="nc"><i>70</i>&nbsp; next.setVisible(false);</b>
+        <i>71</i>&nbsp; }
+        <b class="nc"><i>72</i>&nbsp; prevName.setText(&quot;&quot;);</b>
+        <b class="nc"><i>73</i>&nbsp; prevName.setVisible(false);</b>
+        <b class="nc"><i>74</i>&nbsp; prev.setVisible(false);</b>
+        <b class="nc"><i>75</i>&nbsp; if (numberToBeChosen &gt; 1)</b>
+        <b class="nc"><i>76</i>&nbsp; infoText.setText(&quot;Remaining &quot; + (numberToBeChosen -
+            chosenDivinities.size()) + &quot; divinities to be chosen&quot;);</b>
+        <b class="nc"><i>77</i>&nbsp; else infoText.setText(&quot;Choose your divinity!&quot;);</b>
+        <i>78</i>&nbsp; }
+        <i>79</i>&nbsp;
+        <i>80</i>&nbsp; /**
+        <i>81</i>&nbsp; * Set the next divinity in the divinity list as the visible, and:
+        <i>82</i>&nbsp; * -if the new current divinity isn&#39;t neither the last or the first, sets the new previous
+        and new next divinities name on next and previous buttons;
+        <i>83</i>&nbsp; * -if the new current divinity is the last divinity in the list, updates only the previous
+        button, hiding the next button
+        <i>84</i>&nbsp; */
+        <i>85</i>&nbsp; public void nextDivinity() {
+        <b class="nc"><i>86</i>&nbsp; if (currentDivinity + 1 &lt; divinities.size()) {</b>
+        <b class="nc"><i>87</i>&nbsp; currentDivinity++;</b>
+        <b class="nc"><i>88</i>&nbsp; Image card = new Image(&quot;santorini_risorse-grafiche-2/Sprite/Cards/Full/&quot;
+            + divinities.get(currentDivinity).getName() + &quot;.png&quot;);</b>
+        <b class="nc"><i>89</i>&nbsp; divinityCard.setImage(card);</b>
+        <b class="nc"><i>90</i>&nbsp; divinityName.setText(divinities.get(currentDivinity).getName());</b>
+        <b class="nc"><i>91</i>&nbsp; divinityDescription.setText(divinities.get(currentDivinity).getDescription());</b>
+        <b class="nc"><i>92</i>&nbsp; prevName.setText(divinities.get(currentDivinity - 1).getName());</b>
+        <b class="nc"><i>93</i>&nbsp; prevName.setVisible(true);</b>
+        <b class="nc"><i>94</i>&nbsp; prev.setVisible(true);</b>
+        <b class="nc"><i>95</i>&nbsp; if (currentDivinity != divinities.size() - 1) {</b>
+        <b class="nc"><i>96</i>&nbsp; nextName.setText(divinities.get(currentDivinity + 1).getName());</b>
+        <b class="nc"><i>97</i>&nbsp; next.setVisible(true);</b>
+        <b class="nc"><i>98</i>&nbsp; nextName.setVisible(true);</b>
+        <i>99</i>&nbsp; } else {
+        <b class="nc"><i>100</i>&nbsp; nextName.setText(&quot;&quot;);</b>
+        <b class="nc"><i>101</i>&nbsp; next.setVisible(false);</b>
+        <b class="nc"><i>102</i>&nbsp; nextName.setVisible(false);</b>
+        <i>103</i>&nbsp; }
+        <i>104</i>&nbsp; }
+        <i>105</i>&nbsp; }
+        <i>106</i>&nbsp;
+        <i>107</i>&nbsp; /**
+        <i>108</i>&nbsp; * Set the previous divinity in the divinity list as the visible, and:
+        <i>109</i>&nbsp; * -if the new current divinity isn&#39;t neither the last or the first, sets the new previous
+        and new next divinities name on next and previous buttons;
+        <i>110</i>&nbsp; * -if the new current divinity is the first divinity in the list, updates only the next button,
+        hiding the previous button
+        <i>111</i>&nbsp; */
+        <i>112</i>&nbsp; public void prevDivinity() {
+        <b class="nc"><i>113</i>&nbsp; if (currentDivinity &gt; 0) {</b>
+        <b class="nc"><i>114</i>&nbsp; currentDivinity--;</b>
+        <b class="nc"><i>115</i>&nbsp; Image card = new Image(&quot;santorini_risorse-grafiche-2/Sprite/Cards/Full/&quot;
+            + divinities.get(currentDivinity).getName() + &quot;.png&quot;);</b>
+        <b class="nc"><i>116</i>&nbsp; divinityCard.setImage(card);</b>
+        <b class="nc"><i>117</i>&nbsp; divinityName.setText(divinities.get(currentDivinity).getName());</b>
+        <b class="nc"><i>118</i>&nbsp;
+            divinityDescription.setText(divinities.get(currentDivinity).getDescription());</b>
+        <b class="nc"><i>119</i>&nbsp; nextName.setText(divinities.get(currentDivinity + 1).getName());</b>
+        <b class="nc"><i>120</i>&nbsp; nextName.setVisible(true);</b>
+        <b class="nc"><i>121</i>&nbsp; next.setVisible(true);</b>
+        <b class="nc"><i>122</i>&nbsp; if (currentDivinity != 0) {</b>
+        <b class="nc"><i>123</i>&nbsp; prevName.setText(divinities.get(currentDivinity - 1).getName());</b>
+        <b class="nc"><i>124</i>&nbsp; prevName.setVisible(true);</b>
+        <b class="nc"><i>125</i>&nbsp; prev.setVisible(true);</b>
+        <i>126</i>&nbsp; } else {
+        <b class="nc"><i>127</i>&nbsp; prevName.setVisible(false);</b>
+        <b class="nc"><i>128</i>&nbsp; prev.setVisible(false);</b>
+        <b class="nc"><i>129</i>&nbsp; prevName.setText(&quot;&quot;);</b>
+        <i>130</i>&nbsp; }
+        <i>131</i>&nbsp; }
+        <i>132</i>&nbsp; }
+        <i>133</i>&nbsp;
+        <i>134</i>&nbsp; /**
+        <i>135</i>&nbsp; * Changes next button image until mouse isn&#39;t released, to make pressed button effect
+        <i>136</i>&nbsp; */
+        <i>137</i>&nbsp; public void clickedNext() {
+        <b class="nc"><i>138</i>&nbsp; Image pressedButton = new Image(&quot;/santorini_risorse-grafiche-2/Sprite/Buttons/btn_blue_pressed.png&quot;);</b>
+        <b class="nc"><i>139</i>&nbsp; next.setImage(pressedButton);</b>
+        <i>140</i>&nbsp; }
+        <i>141</i>&nbsp;
+        <i>142</i>&nbsp; /**
+        <i>143</i>&nbsp; * Restore next button background when the mouse is released
+        <i>144</i>&nbsp; */
+        <i>145</i>&nbsp; public void releasedNext() {
+        <b class="nc"><i>146</i>&nbsp; Image pressedButton = new Image(&quot;/santorini_risorse-grafiche-2/Sprite/Buttons/btn_blue.png&quot;);</b>
+        <b class="nc"><i>147</i>&nbsp; next.setImage(pressedButton);</b>
+        <i>148</i>&nbsp; }
+        <i>149</i>&nbsp;
+        <i>150</i>&nbsp; /**
+        <i>151</i>&nbsp; * Changes prev button image until mouse isn&#39;t released, to make pressed button effect
+        <i>152</i>&nbsp; */
+        <i>153</i>&nbsp; public void clickedPrev() {
+        <b class="nc"><i>154</i>&nbsp; Image pressedButton = new Image(&quot;/santorini_risorse-grafiche-2/Sprite/Buttons/btn_coral_pressed.png&quot;);</b>
+        <b class="nc"><i>155</i>&nbsp; prev.setImage(pressedButton);</b>
+        <i>156</i>&nbsp; }
+        <i>157</i>&nbsp;
+        <i>158</i>&nbsp; /**
+        <i>159</i>&nbsp; * Restore prev button background when the mouse is released
+        <i>160</i>&nbsp; */
+        <i>161</i>&nbsp; public void releasedPrev() {
+        <b class="nc"><i>162</i>&nbsp; Image pressedButton = new Image(&quot;/santorini_risorse-grafiche-2/Sprite/Buttons/btn_coral.png&quot;);</b>
+        <b class="nc"><i>163</i>&nbsp; prev.setImage(pressedButton);</b>
+        <i>164</i>&nbsp; }
+        <i>165</i>&nbsp;
+        <i>166</i>&nbsp; /**
+        <i>167</i>&nbsp; * Saves in a list the selected divinity, deletes the chosen divinity from the list of available
+        divinities and
+        <i>168</i>&nbsp; * - if there are other divinities to be selected, changes the visible divinity and asks player
+        to choose another divinity
+        <i>169</i>&nbsp; * - else notify the view that the player completed divinities selection
+        <i>170</i>&nbsp; */
+        <i>171</i>&nbsp; public void choose() {
+        <b class="nc"><i>172</i>&nbsp; String chosenDivinity = divinityName.getText();</b>
+        <b class="nc"><i>173</i>&nbsp; chosenDivinities.add(chosenDivinity);</b>
+        <b class="nc"><i>174</i>&nbsp; divinities.remove(currentDivinity);</b>
+        <i>175</i>&nbsp;
+        <b class="nc"><i>176</i>&nbsp; if (chosenDivinities.size() == numberToBeChosen) {</b>
+        <b class="nc"><i>177</i>&nbsp; if (numberToBeChosen &gt; 1)
+            outerController.sendChallengerDivinities(chosenDivinities);</b>
+        <b class="nc"><i>178</i>&nbsp; else outerController.sendPlayerDivinity(chosenDivinity);</b>
+        <i>179</i>&nbsp; } else {
+        <b class="nc"><i>180</i>&nbsp; if (currentDivinity == 0) {</b>
+        <b class="nc"><i>181</i>&nbsp; firstDivinity();</b>
+        <b class="nc"><i>182</i>&nbsp; } else if (currentDivinity == divinities.size() || currentDivinity ==
+            divinities.size() - 1) {</b>
+        <b class="nc"><i>183</i>&nbsp; lastDivinity();</b>
+        <b class="nc"><i>184</i>&nbsp; } else nextDivinity();</b>
+        <b class="nc"><i>185</i>&nbsp; infoText.setText(&quot;Remaining &quot; + (numberToBeChosen -
+            chosenDivinities.size()) + &quot; divinities to be chosen&quot;);</b>
+        <i>186</i>&nbsp; }
+        <i>187</i>&nbsp;
+        <i>188</i>&nbsp; }
+        <i>189</i>&nbsp;
+        <i>190</i>&nbsp; /**
+        <i>191</i>&nbsp; * Set as visible the first divinity in the list, hides prev button and updates next button
+        <i>192</i>&nbsp; */
+        <i>193</i>&nbsp; public void firstDivinity() {
+        <b class="nc"><i>194</i>&nbsp; Image card = new Image(&quot;santorini_risorse-grafiche-2/Sprite/Cards/Full/&quot;
+            + divinities.get(0).getName() + &quot;.png&quot;);</b>
+        <b class="nc"><i>195</i>&nbsp; divinityCard.setImage(card);</b>
+        <b class="nc"><i>196</i>&nbsp; divinityName.setText(divinities.get(0).getName());</b>
+        <b class="nc"><i>197</i>&nbsp; divinityDescription.setText(divinities.get(0).getDescription());</b>
+        <b class="nc"><i>198</i>&nbsp; if (divinities.size() &gt; 1) nextName.setText(divinities.get(1).getName());</b>
+        <i>199</i>&nbsp; else {
+        <b class="nc"><i>200</i>&nbsp; nextName.setVisible(false);</b>
+        <b class="nc"><i>201</i>&nbsp; next.setVisible(false);</b>
+        <i>202</i>&nbsp; }
+        <b class="nc"><i>203</i>&nbsp; prevName.setText(&quot;&quot;);</b>
+        <b class="nc"><i>204</i>&nbsp; prevName.setVisible(false);</b>
+        <b class="nc"><i>205</i>&nbsp; prev.setVisible(false);</b>
+        <i>206</i>&nbsp; }
+        <i>207</i>&nbsp;
+        <i>208</i>&nbsp; /**
+        <i>209</i>&nbsp; * Set as visible the last divinity in the list, hides next button and updates prev button
+        <i>210</i>&nbsp; */
+        <i>211</i>&nbsp; public void lastDivinity() {
+        <b class="nc"><i>212</i>&nbsp; currentDivinity = divinities.size() - 1;</b>
+        <b class="nc"><i>213</i>&nbsp; Image card = new Image(&quot;santorini_risorse-grafiche-2/Sprite/Cards/Full/&quot;
+            + divinities.get(currentDivinity).getName() + &quot;.png&quot;);</b>
+        <b class="nc"><i>214</i>&nbsp; divinityCard.setImage(card);</b>
+        <b class="nc"><i>215</i>&nbsp; divinityName.setText(divinities.get(currentDivinity).getName());</b>
+        <b class="nc"><i>216</i>&nbsp;
+            divinityDescription.setText(divinities.get(currentDivinity).getDescription());</b>
+        <b class="nc"><i>217</i>&nbsp; if (divinities.size() &gt; 1) prevName.setText(divinities.get(currentDivinity -
+            1).getName());</b>
+        <i>218</i>&nbsp; else {
+        <b class="nc"><i>219</i>&nbsp; prevName.setVisible(false);</b>
+        <b class="nc"><i>220</i>&nbsp; prev.setVisible(false);</b>
+        <i>221</i>&nbsp; }
+        <b class="nc"><i>222</i>&nbsp; nextName.setText(&quot;&quot;);</b>
+        <b class="nc"><i>223</i>&nbsp; nextName.setVisible(false);</b>
+        <b class="nc"><i>224</i>&nbsp; next.setVisible(false);</b>
+        <i>225</i>&nbsp; }
+        <i>226</i>&nbsp;
+        <i>227</i>&nbsp;
+        <i>228</i>&nbsp; /**
+        <i>229</i>&nbsp; * Changes choose button image until mouse isn&#39;t released, to make pressed button effect
+        <i>230</i>&nbsp; */
+        <i>231</i>&nbsp; public void clickedChoose() {
+        <b class="nc"><i>232</i>&nbsp; Image pressedButton = new Image(&quot;/santorini_risorse-grafiche-2/Sprite/Buttons/btn_green_pressed.png&quot;);</b>
+        <b class="nc"><i>233</i>&nbsp; choose.setImage(pressedButton);</b>
+        <i>234</i>&nbsp; }
+        <i>235</i>&nbsp;
+        <i>236</i>&nbsp; /**
+        <i>237</i>&nbsp; * Restore choose button background when the mouse is released
+        <i>238</i>&nbsp; */
+        <i>239</i>&nbsp; public void releasedChoose() {
+        <b class="nc"><i>240</i>&nbsp; Image pressedButton = new Image(&quot;/santorini_risorse-grafiche-2/Sprite/Buttons/btn_green.png&quot;);</b>
+        <b class="nc"><i>241</i>&nbsp; choose.setImage(pressedButton);</b>
+        <i>242</i>&nbsp; }
+        <i>243</i>&nbsp;
+        <i>244</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2020-07-01 19:47</div>
+</div>
+</body>
+</html>

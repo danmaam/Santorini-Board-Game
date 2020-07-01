@@ -2,6 +2,9 @@ package it.polimi.ingsw.PSP48.setupMessagesToClient;
 
 import it.polimi.ingsw.PSP48.observers.ClientNetworkObserver;
 
+/**
+ * Message used to request the client to send the chosen nickname
+ */
 public class NicknameRequest implements ClientSetupMessages {
     private final String result;
 

@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: ViewObserver</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">it.polimi.ingsw.PSP48.observers</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: ViewObserver (it.polimi.ingsw.PSP48.observers)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+        </tr>
+        <tr>
+            <td class="name">ViewObserver</td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.observers;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
+        <i>4</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Position;
+        <i>5</i>&nbsp;
+        <i>6</i>&nbsp;import java.util.ArrayList;
+        <i>7</i>&nbsp;
+        <i>8</i>&nbsp;/**
+        <i>9</i>&nbsp; * The interface of an observer of the view
+        <i>10</i>&nbsp; */
+        <i>11</i>&nbsp;public interface ViewObserver {
+        <i>12</i>&nbsp; /**
+        <i>13</i>&nbsp; * Request the observer to process a move action
+        <i>14</i>&nbsp; *
+        <i>15</i>&nbsp; * @param p the coordinates of the move
+        <i>16</i>&nbsp; */
+        <i>17</i>&nbsp; void move(ActionCoordinates p);
+        <i>18</i>&nbsp;
+        <i>19</i>&nbsp; /**
+        <i>20</i>&nbsp; * Request the observer to process a build action
+        <i>21</i>&nbsp; *
+        <i>22</i>&nbsp; * @param p the coordinates of the build
+        <i>23</i>&nbsp; */
+        <i>24</i>&nbsp; void build(ActionCoordinates p);
+        <i>25</i>&nbsp;
+        <i>26</i>&nbsp; /**
+        <i>27</i>&nbsp; * Request the observer to process a dome action
+        <i>28</i>&nbsp; *
+        <i>29</i>&nbsp; * @param p the coordinates of the dome
+        <i>30</i>&nbsp; */
+        <i>31</i>&nbsp; void dome(ActionCoordinates p);
+        <i>32</i>&nbsp;
+        <i>33</i>&nbsp; /**
+        <i>34</i>&nbsp; * Requests the observer to process a worker positioning on the board
+        <i>35</i>&nbsp; *
+        <i>36</i>&nbsp; * @param p the position where the player wants to put one of his workers on the board
+        <i>37</i>&nbsp; */
+        <i>38</i>&nbsp; void putWorkerOnTable(Position p);
+        <i>39</i>&nbsp;
+        <i>40</i>&nbsp; /**
+        <i>41</i>&nbsp; * Requests the observer to process the choose of a divinity by the player
+        <i>42</i>&nbsp; *
+        <i>43</i>&nbsp; * @param divinity the divinity choose by the player
+        <i>44</i>&nbsp; */
+        <i>45</i>&nbsp; void registerPlayerDivinity(String divinity);
+        <i>46</i>&nbsp;
+        <i>47</i>&nbsp; /**
+        <i>48</i>&nbsp; * Requests the observer to process the divinity chosen by the challenger
+        <i>49</i>&nbsp; *
+        <i>50</i>&nbsp; * @param divinities the divinities chosen by the challenger
+        <i>51</i>&nbsp; */
+        <i>52</i>&nbsp; void selectAvailableDivinities(ArrayList&lt;String&gt; divinities);
+        <i>53</i>&nbsp;
+        <i>54</i>&nbsp; /**
+        <i>55</i>&nbsp; * Requests the observer to process the challenger&#39;s first player choose
+        <i>56</i>&nbsp; *
+        <i>57</i>&nbsp; * @param playerName the player chosen by the challenger
+        <i>58</i>&nbsp; */
+        <i>59</i>&nbsp; void selectFirstPlayer(String playerName);
+        <i>60</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2020-07-01 19:47</div>
+</div>
+</body>
+</html>

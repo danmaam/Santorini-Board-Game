@@ -21,6 +21,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * The server's message listener for a certain player.. Waits for messages from the client, and when one arrives, notifies its observers to complete some action.
+ * If detects a connection lost, stops from listening messages and put the message sender of the same player in shutdown mode.
+ */
 public class ClientHandlerListener implements Runnable {
 
     private Object nextMessage;

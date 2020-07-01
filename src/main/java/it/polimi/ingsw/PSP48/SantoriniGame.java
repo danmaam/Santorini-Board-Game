@@ -16,6 +16,11 @@ import javafx.stage.Stage;
  * --gui: starts the game client in gui mode
  */
 public class SantoriniGame {
+    /**
+     * Main method of the game
+     *
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         if (args.length == 0) {
             Application.launch(GUI.class, args);

@@ -30,6 +30,8 @@ public class GameRoom {
     }
 
     /**
+     * Getter of the maximum number of players allowed in the match
+     *
      * @return the maximum number of player allowed in this room
      */
     public int getRoomPlayerNumber() {
@@ -37,6 +39,8 @@ public class GameRoom {
     }
 
     /**
+     * Getter of the players actually in the room
+     *
      * @return the number of players actually in the room
      */
     public int getPlayersInTheRoom() {
@@ -44,6 +48,8 @@ public class GameRoom {
     }
 
     /**
+     * Checks if the game is with divinities
+     *
      * @return true if the room contains a game with divinities, false otherwise
      */
     public boolean isGameWithDivinities() {
@@ -66,6 +72,7 @@ public class GameRoom {
     }
 
     /**
+     * Getter of game room id
      * @return the ID of the game room
      */
     public int getGameRoomID() {

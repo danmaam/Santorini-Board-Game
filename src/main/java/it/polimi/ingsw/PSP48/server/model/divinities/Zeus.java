@@ -60,7 +60,7 @@ public class Zeus extends Divinity {
      * @throws MaximumLevelReachedException if the cell contains a level 3 building
      * @throws DivinityPowerException       if another divinity blocks the increment of the level
      * @author Daniele Mammone
-     * @return
+     * @return the next controller fsm state
      */
     @Override
     public GameControllerState build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws

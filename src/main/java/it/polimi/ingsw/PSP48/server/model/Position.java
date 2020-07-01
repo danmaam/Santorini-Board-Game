@@ -6,8 +6,8 @@ import java.io.Serializable;
  * Class used to represent a position on the game board.
  */
 public class Position implements Serializable {
-    public int row;
-    public int column;
+    private int row;
+    private int column;
 
     /**
      * Class constructor

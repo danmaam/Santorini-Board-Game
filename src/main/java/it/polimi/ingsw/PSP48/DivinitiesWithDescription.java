@@ -21,6 +21,8 @@ public class DivinitiesWithDescription implements Serializable {
     }
 
     /**
+     * Divinity's name getter
+     *
      * @return the divinity's name
      */
     public String getName() {
@@ -28,6 +30,8 @@ public class DivinitiesWithDescription implements Serializable {
     }
 
     /**
+     * Divinity's description getter
+     *
      * @return the divinity's description
      */
     public String getDescription() {

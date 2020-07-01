@@ -8,8 +8,17 @@ import it.polimi.ingsw.PSP48.server.model.Position;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of Circe Divinity
+ */
 public class Circe extends Divinity {
 
+    /**
+     * Checks if Circe is allowed for a certain number of players
+     *
+     * @param pNum the number of players
+     * @return if the divinity is allowed for the specified number of players
+     */
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
             case 2:
@@ -20,6 +29,11 @@ public class Circe extends Divinity {
         return false;
     }
 
+    /**
+     * Getter of name
+     *
+     * @return the divinity's name
+     */
     @Override
     public String getName() {
         return "Circe";
@@ -56,6 +70,11 @@ public class Circe extends Divinity {
         return super.turnBegin(gd);
     }
 
+    /**
+     * Getter of divinity's description
+     *
+     * @return the description of the divinity power
+     */
     @Override
     public String getDescription() {
         return "If an opponent's Workers do not neighbor each other, you alone have use of their power until your next turn.";

@@ -64,7 +64,9 @@ public class Cell implements Cloneable, Serializable {
 
     /**
      * Method that increases by one the level of the building on the cell
+     *
      * @return true if the level has been built
+     * @throws MaximumLevelReachedException if trying to add another level over the maximum allowed (in this case, 3)
      */
     public boolean addLevel() throws MaximumLevelReachedException {
         if (this.getLevel() == 3) throw new MaximumLevelReachedException("Maximum Level Reached");

@@ -15,6 +15,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * The client's message listener. Waits for messages from the server, and notifies its observers to complete some action
+ * when a message arrives, using the command pattern.
+ * If a connection lost is detected, notifies the player view that the game ended.
+ */
 public class ClientNetworkIncoming implements Runnable {
     private final ViewInterface playerView;
     private ObjectInputStream in;
@@ -27,10 +32,20 @@ public class ClientNetworkIncoming implements Runnable {
 
     private final ArrayList<ClientNetworkObserver> observers = new ArrayList<>();
 
+    /**
+     * Registers an observer of message listener
+     *
+     * @param n the observer to be registered
+     */
     public void addObserver(ClientNetworkObserver n) {
         observers.add(n);
     }
 
+    /**
+     * Stops an observer from observing the message handler
+     *
+     * @param n the observer to be unregistered
+     */
     public void removeObserver(ClientNetworkObserver n) {
         observers.remove(n);
     }

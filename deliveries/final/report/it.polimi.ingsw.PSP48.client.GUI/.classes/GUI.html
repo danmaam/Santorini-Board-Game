@@ -1,0 +1,532 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: GUI</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">it.polimi.ingsw.PSP48.client.GUI</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: GUI (it.polimi.ingsw.PSP48.client.GUI)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">GUI</td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 31)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 96)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.client.GUI;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import it.polimi.ingsw.PSP48.DivinitiesWithDescription;
+        <i>4</i>&nbsp;import it.polimi.ingsw.PSP48.ViewInterface;
+        <i>5</i>&nbsp;import it.polimi.ingsw.PSP48.WorkerValidCells;
+        <i>6</i>&nbsp;import it.polimi.ingsw.PSP48.client.GUI.sceneControllers.GameBoardController;
+        <i>7</i>&nbsp;import it.polimi.ingsw.PSP48.client.GUI.sceneControllers.LoginScreenController;
+        <i>8</i>&nbsp;import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkIncoming;
+        <i>9</i>&nbsp;import it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkOutcoming;
+        <i>10</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ClientNetworkObserver;
+        <i>11</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ViewObserver;
+        <i>12</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Cell;
+        <i>13</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Position;
+        <i>14</i>&nbsp;import javafx.application.Application;
+        <i>15</i>&nbsp;import javafx.application.Platform;
+        <i>16</i>&nbsp;import javafx.fxml.FXMLLoader;
+        <i>17</i>&nbsp;import javafx.scene.Parent;
+        <i>18</i>&nbsp;import javafx.scene.Scene;
+        <i>19</i>&nbsp;import javafx.scene.control.Alert;
+        <i>20</i>&nbsp;import javafx.scene.layout.Pane;
+        <i>21</i>&nbsp;import javafx.scene.text.Font;
+        <i>22</i>&nbsp;import javafx.stage.Stage;
+        <i>23</i>&nbsp;
+        <i>24</i>&nbsp;import java.io.IOException;
+        <i>25</i>&nbsp;import java.net.Socket;
+        <i>26</i>&nbsp;import java.util.ArrayList;
+        <i>27</i>&nbsp;import java.util.function.Consumer;
+        <i>28</i>&nbsp;
+        <i>29</i>&nbsp;/**
+        <i>30</i>&nbsp; * class used to call the methods of the various scene controllers, which implement the
+        operations of the gui
+        <i>31</i>&nbsp; * @author Daniele Mammone, Rebecca Marelli
+        <i>32</i>&nbsp; */
+        <b class="nc"><i>33</i>&nbsp;public class GUI extends Application implements ClientNetworkObserver,
+            ViewInterface {</b>
+        <i>34</i>&nbsp;
+        <i>35</i>&nbsp;
+        <i>36</i>&nbsp; private ClientNetworkOutcoming cA;
+        <i>37</i>&nbsp; private Socket server;
+        <i>38</i>&nbsp; private ClientNetworkIncoming cI;
+        <i>39</i>&nbsp; private static Stage primaryStage;
+        <b class="nc"><i>40</i>&nbsp; private final ArrayList&lt;ViewObserver&gt; observers = new
+            ArrayList&lt;&gt;();</b>
+        <i>41</i>&nbsp; private int playersInGame;
+        <i>42</i>&nbsp; private LoginScreenController loginController;
+        <i>43</i>&nbsp; private GameBoardController boardController;
+        <b class="nc"><i>44</i>&nbsp; private Scene board = null;</b>
+        <i>45</i>&nbsp;
+        <i>46</i>&nbsp;
+        <i>47</i>&nbsp; /**
+        <i>48</i>&nbsp; * Requests the board controller to request the player to complete a move action
+        <i>49</i>&nbsp; *
+        <i>50</i>&nbsp; * @param validCellsForMove an associations between workers that can move, and the cells where
+        they can be moved
+        <i>51</i>&nbsp; */
+        <i>52</i>&nbsp; @Override
+        <i>53</i>&nbsp; public void requestMove(ArrayList&lt;WorkerValidCells&gt; validCellsForMove) {
+        <b class="nc"><i>54</i>&nbsp; Platform.runLater(() -&gt; boardController.requestMove(validCellsForMove));</b>
+        <i>55</i>&nbsp; }
+        <i>56</i>&nbsp;
+        <i>57</i>&nbsp; /**
+        <i>58</i>&nbsp; * Requests the board controller to request the player to complete a construction action.
+        <i>59</i>&nbsp; *
+        <i>60</i>&nbsp; * @param validForBuild an associations between workers that can build, and the cells where they
+        can build
+        <i>61</i>&nbsp; * @param validForDome an associations between workers that can put a dome on the board, and the
+        cells where they can put a dome
+        <i>62</i>&nbsp; */
+        <i>63</i>&nbsp; @Override
+        <i>64</i>&nbsp; public void requestDomeOrBuild(ArrayList&lt;WorkerValidCells&gt; validForBuild, ArrayList&lt;WorkerValidCells&gt;
+        validForDome) {
+        <b class="nc"><i>65</i>&nbsp; Platform.runLater(() -&gt; boardController.requestDomeOrBuild(validForBuild,
+            validForDome));</b>
+        <i>66</i>&nbsp; }
+        <i>67</i>&nbsp;
+        <i>68</i>&nbsp; /**
+        <i>69</i>&nbsp; * Closes the game process and shows a alert message with the reason of the end of the game
+        <i>70</i>&nbsp; *
+        <i>71</i>&nbsp; * @param messageOfEndGame the reason of the end of the game
+        <i>72</i>&nbsp; */
+        <i>73</i>&nbsp; @Override
+        <i>74</i>&nbsp; public void endgame(String messageOfEndGame) {
+        <b class="nc"><i>75</i>&nbsp; Platform.runLater(() -&gt; {</b>
+        <b class="nc"><i>76</i>&nbsp; primaryStage.close();</b>
+        <b class="nc"><i>77</i>&nbsp; Alert alert = new Alert(Alert.AlertType.INFORMATION);</b>
+        <b class="nc"><i>78</i>&nbsp; alert.setTitle(&quot;End of game&quot;);</b>
+        <b class="nc"><i>79</i>&nbsp; alert.setHeaderText(&quot;Oh! The game finished!&quot;);</b>
+        <b class="nc"><i>80</i>&nbsp; alert.setContentText(messageOfEndGame);</b>
+        <b class="nc"><i>81</i>&nbsp; alert.showAndWait();</b>
+        <b class="nc"><i>82</i>&nbsp; System.exit(0);</b>
+        <i>83</i>&nbsp; });
+        <i>84</i>&nbsp;
+        <i>85</i>&nbsp; }
+        <i>86</i>&nbsp;
+        <i>87</i>&nbsp; /**
+        <i>88</i>&nbsp; * Requests the board controller to request the player to select his divinity
+        <i>89</i>&nbsp; *
+        <i>90</i>&nbsp; * @param availableDivinities the divinities from which the player can choose
+        <i>91</i>&nbsp; */
+        <i>92</i>&nbsp; @Override
+        <i>93</i>&nbsp; public void requestDivinitySelection(ArrayList&lt;DivinitiesWithDescription&gt;
+        availableDivinities) {
+        <i>94</i>&nbsp;
+        <i>95</i>&nbsp; /*
+        <i>96</i>&nbsp; synchronized (lock) {
+        <i>97</i>&nbsp; while (!loadedBoard) {
+        <i>98</i>&nbsp; try {
+        <i>99</i>&nbsp; lock.wait();
+        <i>100</i>&nbsp; } catch (InterruptedException e) {
+        <i>101</i>&nbsp; e.printStackTrace();
+        <i>102</i>&nbsp; }
+        <i>103</i>&nbsp; }
+        <i>104</i>&nbsp; }
+        <i>105</i>&nbsp;*/
+        <i>106</i>&nbsp;
+        <b class="nc"><i>107</i>&nbsp; Platform.runLater(() -&gt;
+            boardController.requestDivinitySelection(availableDivinities));</b>
+        <i>108</i>&nbsp; }
+        <i>109</i>&nbsp;
+        <i>110</i>&nbsp; /**
+        <i>111</i>&nbsp; * Requests the board controller to request the challenger to choose the first player
+        <i>112</i>&nbsp; *
+        <i>113</i>&nbsp; * @param players the list of players
+        <i>114</i>&nbsp; */
+        <i>115</i>&nbsp; @Override
+        <i>116</i>&nbsp; public void requestInitialPlayerSelection(ArrayList&lt;String&gt; players) {
+        <b class="nc"><i>117</i>&nbsp; Platform.runLater(() -&gt;
+            boardController.requestInitialPlayerSelection(players));</b>
+        <i>118</i>&nbsp; }
+        <i>119</i>&nbsp;
+        <i>120</i>&nbsp; /**
+        <i>121</i>&nbsp; * method handling the choice of the positions of the workers on the board
+        <i>122</i>&nbsp; *
+        <i>123</i>&nbsp; * @param validCells is the list of valid positions to put the worker on the board
+        <i>124</i>&nbsp; */
+        <i>125</i>&nbsp; @Override
+        <i>126</i>&nbsp; public void requestInitialPositioning(ArrayList&lt;Position&gt; validCells) {
+        <b class="nc"><i>127</i>&nbsp; Platform.runLater(() -&gt;
+            boardController.requestInitialPositioning(validCells)); //we call the right controller to handle the actions</b>
+        <i>128</i>&nbsp; }
+        <i>129</i>&nbsp;
+        <i>130</i>&nbsp; /**
+        <i>131</i>&nbsp; * Requests the board controller to request the challenger to select the divinities availabe to
+        be chosen for the game
+        <i>132</i>&nbsp; *
+        <i>133</i>&nbsp; * @param div the available divinities
+        <i>134</i>&nbsp; * @param playerNumber the number of players in game
+        <i>135</i>&nbsp; */
+        <i>136</i>&nbsp; @Override
+        <i>137</i>&nbsp; public void requestChallengerDivinitiesSelection(ArrayList&lt;DivinitiesWithDescription&gt;
+        div, int playerNumber) {
+        <i>138</i>&nbsp; /*
+        <i>139</i>&nbsp; synchronized (lock) {
+        <i>140</i>&nbsp; while (!loadedBoard) {
+        <i>141</i>&nbsp;
+        <i>142</i>&nbsp; try {
+        <i>143</i>&nbsp; lock.wait();
+        <i>144</i>&nbsp; } catch (InterruptedException e) {
+        <i>145</i>&nbsp; e.printStackTrace();
+        <i>146</i>&nbsp; }
+        <i>147</i>&nbsp; }
+        <i>148</i>&nbsp;
+        <i>149</i>&nbsp; }
+        <i>150</i>&nbsp;
+        <i>151</i>&nbsp; */
+        <b class="nc"><i>152</i>&nbsp; Platform.runLater(() -&gt;
+            boardController.requestChallengerDivinitiesSelection(div));</b>
+        <i>153</i>&nbsp; }
+        <i>154</i>&nbsp;
+        <i>155</i>&nbsp; /**
+        <i>156</i>&nbsp; * Prints a message in the left-down corner of the gui
+        <i>157</i>&nbsp; *
+        <i>158</i>&nbsp; * @param s the message to be printed
+        <i>159</i>&nbsp; */
+        <i>160</i>&nbsp; @Override
+        <i>161</i>&nbsp; public void printMessage(String s) {
+        <i>162</i>&nbsp; /*
+        <i>163</i>&nbsp; synchronized (lock) {
+        <i>164</i>&nbsp; while (!loadedBoard) {
+        <i>165</i>&nbsp; try {
+        <i>166</i>&nbsp; lock.wait();
+        <i>167</i>&nbsp; } catch (InterruptedException e) {
+        <i>168</i>&nbsp; e.printStackTrace();
+        <i>169</i>&nbsp; }
+        <i>170</i>&nbsp; }
+        <i>171</i>&nbsp;
+        <i>172</i>&nbsp; }
+        <i>173</i>&nbsp;
+        <i>174</i>&nbsp; */
+        <b class="nc"><i>175</i>&nbsp; Platform.runLater(() -&gt; boardController.printMessage(s));</b>
+        <i>176</i>&nbsp; }
+        <i>177</i>&nbsp;
+        <i>178</i>&nbsp; /**
+        <i>179</i>&nbsp; * Requests the board controller to request the player to complete an optional move action, or
+        to skip it.
+        <i>180</i>&nbsp; *
+        <i>181</i>&nbsp; * @param validCellsForMove an association between workers that can perform the move and the
+        cells where they can move
+        <i>182</i>&nbsp; */
+        <i>183</i>&nbsp; @Override
+        <i>184</i>&nbsp; public void requestOptionalMove(ArrayList&lt;WorkerValidCells&gt; validCellsForMove) {
+        <b class="nc"><i>185</i>&nbsp; Platform.runLater(() -&gt;
+            boardController.requestOptionalMove(validCellsForMove));</b>
+        <i>186</i>&nbsp; }
+        <i>187</i>&nbsp;
+        <i>188</i>&nbsp; /**
+        <i>189</i>&nbsp; * Requests the board controller to request the player to complete an optional construction
+        action, or to skip it.
+        <i>190</i>&nbsp; *
+        <i>191</i>&nbsp; * @param build an association between workers that can build on the board, and the cells where
+        they can build
+        <i>192</i>&nbsp; * @param dome an association between workers that can put a dome on the board, and the cells
+        where they can put a dome
+        <i>193</i>&nbsp; */
+        <i>194</i>&nbsp; @Override
+        <i>195</i>&nbsp; public void requestOptionalBuild(ArrayList&lt;WorkerValidCells&gt; build, ArrayList&lt;WorkerValidCells&gt;
+        dome) {
+        <b class="nc"><i>196</i>&nbsp; Platform.runLater(() -&gt; boardController.requestOptionalBuild(build,
+            dome));</b>
+        <i>197</i>&nbsp; }
+        <i>198</i>&nbsp;
+        <i>199</i>&nbsp; /**
+        <i>200</i>&nbsp; * Registers an observer of the View
+        <i>201</i>&nbsp; *
+        <i>202</i>&nbsp; * @param obv the observer to be unregistered
+        <i>203</i>&nbsp; */
+        <i>204</i>&nbsp; @Override
+        <i>205</i>&nbsp; public void registerObserver(ViewObserver obv) {
+        <b class="nc"><i>206</i>&nbsp; observers.add(obv);</b>
+        <i>207</i>&nbsp; }
+        <i>208</i>&nbsp;
+        <i>209</i>&nbsp; /**
+        <i>210</i>&nbsp; * Unregister a view observer
+        <i>211</i>&nbsp; *
+        <i>212</i>&nbsp; * @param obv the observer to be unregistered
+        <i>213</i>&nbsp; */
+        <i>214</i>&nbsp; @Override
+        <i>215</i>&nbsp; public void unregisterObserver(ViewObserver obv) {
+        <b class="nc"><i>216</i>&nbsp; observers.remove(obv);</b>
+        <i>217</i>&nbsp; }
+        <i>218</i>&nbsp;
+        <i>219</i>&nbsp; /**
+        <i>220</i>&nbsp; * Notifies all observers to do something defined in the lambda expression parameter
+        <i>221</i>&nbsp; *
+        <i>222</i>&nbsp; * @param lambda the method to be invoked by the observer
+        <i>223</i>&nbsp; */
+        <i>224</i>&nbsp; @Override
+        <i>225</i>&nbsp; public void notifyObserver(Consumer&lt;ViewObserver&gt; lambda) {
+        <b class="nc"><i>226</i>&nbsp; for (ViewObserver o : observers) {</b>
+        <b class="nc"><i>227</i>&nbsp; lambda.accept(o);</b>
+        <b class="nc"><i>228</i>&nbsp; }</b>
+        <i>229</i>&nbsp; }
+        <i>230</i>&nbsp;
+        <i>231</i>&nbsp;
+        <i>232</i>&nbsp; /**
+        <i>233</i>&nbsp; * Updates the game cells which content has changed in model
+        <i>234</i>&nbsp; *
+        <i>235</i>&nbsp; * @param newCells the changed cells
+        <i>236</i>&nbsp; */
+        <i>237</i>&nbsp; @Override
+        <i>238</i>&nbsp; public void changedBoard(ArrayList&lt;Cell&gt; newCells) {
+        <b class="nc"><i>239</i>&nbsp; Platform.runLater(() -&gt; boardController.changedBoard(newCells));</b>
+        <i>240</i>&nbsp; }
+        <i>241</i>&nbsp;
+        <i>242</i>&nbsp; /**
+        <i>243</i>&nbsp; * Updates the player list displayed in the window, with the new player-divinities association
+        list
+        <i>244</i>&nbsp; *
+        <i>245</i>&nbsp; * @param newPlayerList the new player-divinity association list
+        <i>246</i>&nbsp; */
+        <i>247</i>&nbsp; @Override
+        <i>248</i>&nbsp; public void changedPlayerList(ArrayList&lt;String&gt; newPlayerList) {
+        <b class="nc"><i>249</i>&nbsp; Platform.runLater(() -&gt; boardController.changedPlayerList(newPlayerList));</b>
+        <i>250</i>&nbsp; }
+        <i>251</i>&nbsp;
+        <i>252</i>&nbsp;
+        <i>253</i>&nbsp; /**
+        <i>254</i>&nbsp; * Starts the gui thread, initialize the main stage with the login screen scene
+        <i>255</i>&nbsp; *
+        <i>256</i>&nbsp; * @param stage the primary stage of the gui
+        <i>257</i>&nbsp; */
+        <i>258</i>&nbsp; @Override
+        <i>259</i>&nbsp; public void start(Stage stage) {
+        <b class="nc"><i>260</i>&nbsp; System.out.println(this);</b>
+        <b class="nc"><i>261</i>&nbsp; FXMLLoader loginLoader = new FXMLLoader(getClass().getResource(&quot;/SantoriniGUI.fxml&quot;));</b>
+        <b class="nc"><i>262</i>&nbsp; loginController = new LoginScreenController(this);</b>
+        <b class="nc"><i>263</i>&nbsp; loginLoader.setController(loginController);</b>
+        <b class="nc"><i>264</i>&nbsp; Parent root = null;</b>
+        <i>265</i>&nbsp; try {
+        <b class="nc"><i>266</i>&nbsp; root = loginLoader.load();</b>
+        <b class="nc"><i>267</i>&nbsp; } catch (IOException e) {</b>
+        <b class="nc"><i>268</i>&nbsp; e.printStackTrace();</b>
+        <b class="nc"><i>269</i>&nbsp; }</b>
+        <b class="nc"><i>270</i>&nbsp; Scene scene = new Scene(root, 467, 653);</b>
+        <b class="nc"><i>271</i>&nbsp; primaryStage = stage;</b>
+        <i>272</i>&nbsp;
+        <b class="nc"><i>273</i>&nbsp; FXMLLoader controllerLoader = new FXMLLoader(getClass().getResource(&quot;/gameLayout.fxml&quot;));</b>
+        <b class="nc"><i>274</i>&nbsp; boardController = new GameBoardController(this);</b>
+        <b class="nc"><i>275</i>&nbsp; controllerLoader.setController(boardController);</b>
+        <i>276</i>&nbsp; Pane boardRoot;
+        <i>277</i>&nbsp; try {
+        <b class="nc"><i>278</i>&nbsp; boardRoot = controllerLoader.load();</b>
+        <b class="nc"><i>279</i>&nbsp; board = new Scene(boardRoot, 1280, 720);</b>
+        <b class="nc"><i>280</i>&nbsp; } catch (IOException e) {</b>
+        <b class="nc"><i>281</i>&nbsp; e.printStackTrace();</b>
+        <b class="nc"><i>282</i>&nbsp; }</b>
+        <i>283</i>&nbsp;
+        <b class="nc"><i>284</i>&nbsp; stage.setTitle(&quot;Santorini Log-In&quot;);</b>
+        <b class="nc"><i>285</i>&nbsp; stage.setResizable(false);</b>
+        <b class="nc"><i>286</i>&nbsp; stage.setScene(scene);</b>
+        <b class="nc"><i>287</i>&nbsp; stage.show();</b>
+        <b class="nc"><i>288</i>&nbsp; System.out.println(&quot;Initialized stage&quot;);</b>
+        <i>289</i>&nbsp; }
+        <i>290</i>&nbsp;
+        <i>291</i>&nbsp; /**
+        <i>292</i>&nbsp; * Used by server to notify that the game setup has ended. The login screen is closed, and the
+        board scene is loaded.
+        <i>293</i>&nbsp; *
+        <i>294</i>&nbsp; * @param message the message of completed setup
+        <i>295</i>&nbsp; */
+        <i>296</i>&nbsp; @Override
+        <i>297</i>&nbsp; public void completedSetup(String message) {
+        <i>298</i>&nbsp;
+        <b class="nc"><i>299</i>&nbsp; Platform.runLater(() -&gt; {</b>
+        <b class="nc"><i>300</i>&nbsp; primaryStage.setOnCloseRequest((e) -&gt; manageWindowClose());</b>
+        <b class="nc"><i>301</i>&nbsp; primaryStage.setScene(board);</b>
+        <b class="nc"><i>302</i>&nbsp; primaryStage.setTitle(&quot;Santorini&quot;);</b>
+        <b class="nc"><i>303</i>&nbsp; primaryStage.show();</b>
+        <i>304</i>&nbsp; });
+        <i>305</i>&nbsp;
+        <i>306</i>&nbsp; }
+        <i>307</i>&nbsp;
+        <i>308</i>&nbsp; /**
+        <i>309</i>&nbsp; * Kills all client processes when the game window is closed by the user
+        <i>310</i>&nbsp; */
+        <i>311</i>&nbsp; public void manageWindowClose() {
+        <b class="nc"><i>312</i>&nbsp; Platform.exit();</b>
+        <b class="nc"><i>313</i>&nbsp; System.exit(0);</b>
+        <i>314</i>&nbsp; }
+        <i>315</i>&nbsp;
+        <i>316</i>&nbsp; /**
+        <i>317</i>&nbsp; * Sets the number of players in game, after the game mode is chosen by the player
+        <i>318</i>&nbsp; *
+        <i>319</i>&nbsp; * @param number the number of players in game
+        <i>320</i>&nbsp; */
+        <i>321</i>&nbsp; public void setNumberOfPlayers(int number) {
+        <b class="nc"><i>322</i>&nbsp; playersInGame = number;</b>
+        <i>323</i>&nbsp; }
+        <i>324</i>&nbsp;
+        <i>325</i>&nbsp; /**
+        <i>326</i>&nbsp; * Getter of network message sender
+        <i>327</i>&nbsp; * @return the network handler used to send messages over the network
+        <i>328</i>&nbsp; */
+        <i>329</i>&nbsp; public ClientNetworkOutcoming getUploader() {
+        <b class="nc"><i>330</i>&nbsp; return cA;</b>
+        <i>331</i>&nbsp; }
+        <i>332</i>&nbsp;
+        <i>333</i>&nbsp; /**
+        <i>334</i>&nbsp; * Closes network connection to server, stops all network handler threads, closes the connection
+        socket, maintaining the process of the GUI running
+        <i>335</i>&nbsp; */
+        <i>336</i>&nbsp; public void stopNetwork() {
+        <b class="nc"><i>337</i>&nbsp; if (cI != null) cI.shutdown();</b>
+        <b class="nc"><i>338</i>&nbsp; if (cA != null) cA.shutDown();</b>
+        <i>339</i>&nbsp;
+        <i>340</i>&nbsp; try {
+        <b class="nc"><i>341</i>&nbsp; if (server != null) server.close();</b>
+        <b class="nc"><i>342</i>&nbsp; } catch (IOException e) {</b>
+        <b class="nc"><i>343</i>&nbsp; e.printStackTrace();</b>
+        <b class="nc"><i>344</i>&nbsp; }</b>
+        <i>345</i>&nbsp; }
+        <i>346</i>&nbsp;
+        <i>347</i>&nbsp; /**
+        <i>348</i>&nbsp; * Opens the socket to the server, and network handler threads.
+        <i>349</i>&nbsp; *
+        <i>350</i>&nbsp; * @param IP the server IP
+        <i>351</i>&nbsp; */
+        <i>352</i>&nbsp; public void startNetwork(String IP) {
+        <i>353</i>&nbsp; try {
+        <b class="nc"><i>354</i>&nbsp; server = new Socket(IP, 7777);</b>
+        <b class="nc"><i>355</i>&nbsp; } catch (IOException e) {</b>
+        <b class="nc"><i>356</i>&nbsp; Alert alert = new Alert(Alert.AlertType.ERROR);</b>
+        <b class="nc"><i>357</i>&nbsp; alert.setTitle(&quot;Error&quot;);</b>
+        <b class="nc"><i>358</i>&nbsp; alert.setHeaderText(&quot;Login Error&quot;);</b>
+        <b class="nc"><i>359</i>&nbsp; alert.setContentText(&quot;Can&#39;t connect to the server&quot;);</b>
+        <b class="nc"><i>360</i>&nbsp; alert.showAndWait();</b>
+        <b class="nc"><i>361</i>&nbsp; server = null;</b>
+        <i>362</i>&nbsp; return;
+        <b class="nc"><i>363</i>&nbsp; }</b>
+        <i>364</i>&nbsp; //primaryStage.close();
+        <i>365</i>&nbsp;
+        <b class="nc"><i>366</i>&nbsp; cA = new ClientNetworkOutcoming(server);</b>
+        <b class="nc"><i>367</i>&nbsp; Thread cAThread = new Thread(cA);</b>
+        <i>368</i>&nbsp;
+        <b class="nc"><i>369</i>&nbsp; this.registerObserver(cA);</b>
+        <i>370</i>&nbsp;
+        <b class="nc"><i>371</i>&nbsp; cI = new ClientNetworkIncoming(this, server);</b>
+        <b class="nc"><i>372</i>&nbsp; cI.setOutHandler(cA);</b>
+        <b class="nc"><i>373</i>&nbsp; cI.addObserver(this);</b>
+        <b class="nc"><i>374</i>&nbsp; Thread cIThread = new Thread(cI);</b>
+        <i>375</i>&nbsp;
+        <b class="nc"><i>376</i>&nbsp; cIThread.start();</b>
+        <b class="nc"><i>377</i>&nbsp; cAThread.start();</b>
+        <i>378</i>&nbsp;
+        <b class="nc"><i>379</i>&nbsp; System.out.println(&quot;Correctly connected to the server!&quot;);</b>
+        <i>380</i>&nbsp; }
+        <i>381</i>&nbsp;
+        <i>382</i>&nbsp; /**
+        <i>383</i>&nbsp; * Request the login controller to send to the server the chosen gamemode, with player&#39;s
+        birthday if decided to play without divinities
+        <i>384</i>&nbsp; *
+        <i>385</i>&nbsp; * @param message the game mode chosen by the player
+        <i>386</i>&nbsp; */
+        <i>387</i>&nbsp; @Override
+        <i>388</i>&nbsp; public void requestGameModeSend(String message) {
+        <b class="nc"><i>389</i>&nbsp; loginController.requestGameModeSend();</b>
+        <i>390</i>&nbsp; }
+        <i>391</i>&nbsp;
+        <i>392</i>&nbsp;
+        <i>393</i>&nbsp; /**
+        <i>394</i>&nbsp; * Request the login controller to send to the server the chosen nickname
+        <i>395</i>&nbsp; * If the server requests again the nickname due to nickname unavailability, the connection to
+        the server is closed
+        <i>396</i>&nbsp; *
+        <i>397</i>&nbsp; * @param message the request made by the server
+        <i>398</i>&nbsp; */
+        <i>399</i>&nbsp; @Override
+        <i>400</i>&nbsp; public void requestNicknameSend(String message) {
+        <b class="nc"><i>401</i>&nbsp; if (!message.equals(&quot;Invalid nickname. Retry&quot;)) {</b>
+        <b class="nc"><i>402</i>&nbsp; Platform.runLater(() -&gt; loginController.requestNicknameSend());</b>
+        <i>403</i>&nbsp; } else {
+        <b class="nc"><i>404</i>&nbsp; Platform.runLater(() -&gt; {</b>
+        <b class="nc"><i>405</i>&nbsp; stopNetwork();</b>
+        <b class="nc"><i>406</i>&nbsp; Alert alert = new Alert(Alert.AlertType.ERROR);</b>
+        <b class="nc"><i>407</i>&nbsp; alert.setTitle(&quot;Login Error&quot;);</b>
+        <b class="nc"><i>408</i>&nbsp; alert.setHeaderText(&quot;Invalid nickname&quot;);</b>
+        <b class="nc"><i>409</i>&nbsp; alert.setContentText(&quot;Nickname already in use or invalid. \n
+            Retry&quot;);</b>
+        <b class="nc"><i>410</i>&nbsp; alert.showAndWait();</b>
+        <i>411</i>&nbsp;
+        <i>412</i>&nbsp; });
+        <i>413</i>&nbsp; }
+        <i>414</i>&nbsp; }
+        <i>415</i>&nbsp;
+        <i>416</i>&nbsp; /**
+        <i>417</i>&nbsp; * Getter of the number of players in game
+        <i>418</i>&nbsp; * @return the number of players in the game
+        <i>419</i>&nbsp; */
+        <i>420</i>&nbsp; public int getPlayersInGame() {
+        <b class="nc"><i>421</i>&nbsp; return playersInGame;</b>
+        <i>422</i>&nbsp; }
+        <i>423</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2020-07-01 19:47</div>
+</div>
+</body>
+</html>

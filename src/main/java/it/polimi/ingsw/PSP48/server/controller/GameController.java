@@ -15,7 +15,6 @@ import java.util.*;
 import java.util.function.Consumer;
 
 /**
- * @author Daniele Mammone
  * the entire game controller in his magnificence
  * it's an observer f the view, invokes methods on view and model
  */
@@ -37,6 +36,12 @@ public class GameController implements ViewObserver {
         playersViews.put(name, view);
     }
 
+    /**
+     * Initializes the game controller
+     *
+     * @param m  the game model
+     * @param ID the game room id of the match
+     */
     public GameController(Model m, int ID) {
         model = m;
         roomID = ID;
@@ -55,6 +60,8 @@ public class GameController implements ViewObserver {
     /**
      * Adds a player in the game; if the game's player number is reached, the controller starts the game.
      *
+     * @param birthday the player's birthday
+     * @param name     the player's name
      * @author Daniele Mammone
      */
     public void addPlayer(String name, Calendar birthday) {
@@ -198,9 +205,10 @@ public class GameController implements ViewObserver {
 
 
     /**
+     * method to associate current player with his chosen divinity
+     *
      * @param divinity the name of the divinity chosen by the current player
      * @author Daniele Mammone
-     * method to associate current player with his chosen divinity
      */
     //@ requires (\exists int x; 0 <= x && x<= model.getAvailableDivinities().size(); model.getAvailableDivinities().get(x).getName().equals(divinity))
     @Override
@@ -222,9 +230,10 @@ public class GameController implements ViewObserver {
 
 
     /**
+     * method invoked when the challenger has chosen his divinities
+     *
      * @param divinities the divinities chosen by the challenger
      * @author Daniele Mammone
-     * method invoked when the challenger has chosen his divinities
      */
     @Override
     public void selectAvailableDivinities(ArrayList<String> divinities) {
@@ -275,8 +284,9 @@ public class GameController implements ViewObserver {
     }
 
     /**
-     * @author Daniele Mammone
      * Obtains valid cells for worker's moving, and requires the player to move his player
+     *
+     * @author Daniele Mammone
      */
     public void requestMove() {
         for (Player p : model.getPlayersInGame()) {
@@ -317,6 +327,8 @@ public class GameController implements ViewObserver {
 
 
     /**
+     * Checks after a build if s player in game has won
+     *
      * @author Daniele Mammone
      */
     public void postBuild() {
@@ -335,8 +347,8 @@ public class GameController implements ViewObserver {
     }
 
     /**
-     * @author Rebecca Marelli
      * method that handles the activities related to the end of the turn
+     * * @author Rebecca Marelli
      */
     public void turnEnd() {
         nextAction = model.getCurrentPlayer().getDivinity().turnEnd();
@@ -356,8 +368,9 @@ public class GameController implements ViewObserver {
 
 
     /**
-     * @author Daniele Mammone
      * Starts the game, so, randomically, chose the "chosen", sets the chosen as last player to chose divinities, and asks the chosen to select a set of divinities
+     *
+     * @author Daniele Mammone
      */
     public void startGameWithDivinities() {
         //i must choose randomically the challenger, than request him to choose divinities
@@ -369,8 +382,9 @@ public class GameController implements ViewObserver {
     }
 
     /**
-     * @author Daniele Mammone
      * starts the game without divinites, so set the first player the younger player, and then requests it's first move
+     *
+     * @author Daniele Mammone
      */
     public void startGameWithoutDivinities() {
         for (Player p : model.getPlayersInGame()) {
@@ -390,8 +404,9 @@ public class GameController implements ViewObserver {
     }
 
     /**
-     * @author Daniele Mammone
      * Request the current player to choose his divinity
+     *
+     * @author Daniele Mammone
      */
     public void requestDivinitySelection() {
         for (Player p : model.getPlayersInGame()) {
@@ -426,9 +441,10 @@ public class GameController implements ViewObserver {
     }
 
     /**
-     * @author Daniele Mammone
      * If all players put their workers on the board, starts the game requesting the first player to do something depending on
      * his divinity; else, changes the current player and asks the next to perform initial positioning
+     *
+     * @author Daniele Mammone
      */
     public void initialPositioningTurnChange() {
 
@@ -460,9 +476,11 @@ public class GameController implements ViewObserver {
 
 
     /**
-     * @author Daniele Mammone
      * Checks if the optional building is possible. If yes, asks for the player to perform (or skip) the optional building; else, requests the next thing to do
+     *
+     * @author Daniele Mammone
      */
+
     public void requestOptionalBuilding() {
         for (Player p : model.getPlayersInGame()) {
             if (p != model.getCurrentPlayer())
@@ -499,8 +517,9 @@ public class GameController implements ViewObserver {
     //SPECIFIC DIVINITY BEHAVIOUR
 
     /**
-     * @author Daniele Mammone
      * Request the player to perform an optional move, but first checks if it's possible
+     *
+     * @author Daniele Mammone
      */
     public void requestOptionalMove() {
         for (Player p : model.getPlayersInGame()) {
@@ -598,6 +617,11 @@ public class GameController implements ViewObserver {
         nextAction();
     }
 
+    /**
+     * Returns the controller's next state. Used for debugging purposes
+     *
+     * @return the next controller state
+     */
     public GameControllerState nextState() {
         return nextAction;
     }

@@ -6,9 +6,8 @@ import it.polimi.ingsw.PSP48.WorkerValidCells;
 import java.util.ArrayList;
 
 /**
- * /**
- * * Network messages sent to client to request the player to complete an optional move action, or to skip it. It contains the coordinates of possible
- * * move action
+ * Network messages sent to client to request the player to complete an optional move action, or to skip it. It contains the coordinates of possible
+ * move action
  */
 public class OptionalMoveRequest extends NetworkMessagesToClient {
     ArrayList<WorkerValidCells> validCells;

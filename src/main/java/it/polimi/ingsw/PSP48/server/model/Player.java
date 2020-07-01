@@ -69,8 +69,11 @@ public class Player {
 
     /**
      * Class constructor
-     * @param name     String that contains the player's name.
-     * @param birthday The player's birthday.
+     *
+     * @param name       String that contains the player's name.
+     * @param birthday   The player's birthday.
+     * @param c          the colour of the player
+     * @param divinities if the player wants to play with divinities
      * @throws IllegalArgumentException if name or birthday are null.
      */
     public Player(String name, Calendar birthday, boolean divinities, Colour c) {

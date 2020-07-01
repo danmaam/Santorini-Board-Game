@@ -1,0 +1,244 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: Eros</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">it.polimi.ingsw.PSP48.server.model.divinities</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: Eros (it.polimi.ingsw.PSP48.server.model.divinities)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">Eros</td>
+            <td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+                <span class="absValue">
+    (1/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    85,7%
+  </span>
+                <span class="absValue">
+    (6/ 7)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    95,7%
+  </span>
+                <span class="absValue">
+    (45/ 47)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.server.model.divinities;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import it.polimi.ingsw.PSP48.server.controller.ControllerState.GameControllerState;
+        <i>4</i>&nbsp;import it.polimi.ingsw.PSP48.server.controller.GameController;
+        <i>5</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Cell;
+        <i>6</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Model;
+        <i>7</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Position;
+        <i>8</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.exceptions.DivinityPowerException;
+        <i>9</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.exceptions.OccupiedCellException;
+        <i>10</i>&nbsp;
+        <i>11</i>&nbsp;import java.util.ArrayList;
+        <i>12</i>&nbsp;import java.util.function.Consumer;
+        <i>13</i>&nbsp;import java.util.stream.Collectors;
+        <i>14</i>&nbsp;
+        <i>15</i>&nbsp;/**
+        <i>16</i>&nbsp; * Implementation of Eros divinity
+        <i>17</i>&nbsp; */
+        <b class="fc"><i>18</i>&nbsp;public class Eros extends Divinity {</b>
+        <i>19</i>&nbsp;
+        <i>20</i>&nbsp; /**
+        <i>21</i>&nbsp; * Checks if Eros is allowed for a certain number of players
+        <i>22</i>&nbsp; *
+        <i>23</i>&nbsp; * @param pNum the number of players
+        <i>24</i>&nbsp; * @return if the divinity is allowed for the specified number of players
+        <i>25</i>&nbsp; */
+        <i>26</i>&nbsp; public static Boolean supportedDivinity(int pNum) {
+        <b class="fc"><i>27</i>&nbsp; switch (pNum) {</b>
+        <i>28</i>&nbsp; case 2:
+        <b class="fc"><i>29</i>&nbsp; return true;</b>
+        <i>30</i>&nbsp; case 3:
+        <b class="fc"><i>31</i>&nbsp; return true;</b>
+        <i>32</i>&nbsp; }
+        <b class="nc"><i>33</i>&nbsp; return false;</b>
+        <i>34</i>&nbsp; }
+        <i>35</i>&nbsp;
+        <b class="fc"><i>36</i>&nbsp; private int previousRow = -1;</b>
+        <b class="fc"><i>37</i>&nbsp; private int previousColumn = -1;</b>
+        <i>38</i>&nbsp;
+        <i>39</i>&nbsp;
+        <i>40</i>&nbsp; /**
+        <i>41</i>&nbsp; * Generates a list of cells where a player can put his initial worker according to Eros&#39;
+        power
+        <i>42</i>&nbsp; *
+        <i>43</i>&nbsp; * @param gameCells the actual game board state
+        <i>44</i>&nbsp; * @return an array list of cells valid for the positioning
+        <i>45</i>&nbsp; */
+        <i>46</i>&nbsp; @Override
+        <i>47</i>&nbsp; public ArrayList&lt;Position&gt; validCellsForInitialPositioning(Cell[][] gameCells) {
+        <b class="fc"><i>48</i>&nbsp; ArrayList&lt;Position&gt; validCells =
+            super.validCellsForInitialPositioning(gameCells);</b>
+        <b class="fc"><i>49</i>&nbsp; validCells = validCells.stream()</b>
+        <b class="fc"><i>50</i>&nbsp; .filter(cell -&gt; cell.getColumn() == 0 || cell.getColumn() == 4 || cell.getRow()
+            == 0 || cell.getRow() == 4)</b>
+        <b class="fc"><i>51</i>&nbsp; .collect(Collectors.toCollection(ArrayList::new));</b>
+        <b class="fc"><i>52</i>&nbsp; ArrayList&lt;Position&gt; tbr = new ArrayList&lt;&gt;();</b>
+        <b class="fc"><i>53</i>&nbsp; for (Position c : validCells) {</b>
+        <b class="fc"><i>54</i>&nbsp; if (previousRow != -1 || previousColumn != -1) {</b>
+        <b class="fc"><i>55</i>&nbsp; if (previousRow == -1) {</b>
+        <b class="fc"><i>56</i>&nbsp; if (c.getColumn() != 4 - previousColumn) tbr.add(c);</b>
+        <i>57</i>&nbsp; } else {
+        <b class="fc"><i>58</i>&nbsp; if (previousColumn == -1) {</b>
+        <b class="fc"><i>59</i>&nbsp; if (c.getRow() != 4 - previousRow) tbr.add(c);</b>
+        <i>60</i>&nbsp; } else {
+        <b class="fc"><i>61</i>&nbsp; if (c.getRow() != 4 - previousRow &amp;&amp; c.getColumn() != 4 - previousColumn)
+            tbr.add(c);</b>
+        <i>62</i>&nbsp; }
+        <i>63</i>&nbsp; }
+        <i>64</i>&nbsp; }
+        <b class="fc"><i>65</i>&nbsp; }</b>
+        <i>66</i>&nbsp;
+        <b class="fc"><i>67</i>&nbsp; for (Position c : tbr) validCells.remove(c);</b>
+        <b class="fc"><i>68</i>&nbsp; return validCells;</b>
+        <i>69</i>&nbsp;
+        <i>70</i>&nbsp; }
+        <i>71</i>&nbsp;
+        <i>72</i>&nbsp; /**
+        <i>73</i>&nbsp; * Getter of name
+        <i>74</i>&nbsp; * @return the divinity&#39;s name
+        <i>75</i>&nbsp; */
+        <i>76</i>&nbsp; @Override
+        <i>77</i>&nbsp; public String getName() {
+        <b class="fc"><i>78</i>&nbsp; return &quot;Eros&quot;;</b>
+        <i>79</i>&nbsp; }
+        <i>80</i>&nbsp;
+        <i>81</i>&nbsp; /**
+        <i>82</i>&nbsp; * Calculate Eros&#39; win condition according to the game rules
+        <i>83</i>&nbsp; *
+        <i>84</i>&nbsp; * @param gd the state of the game
+        <i>85</i>&nbsp; * @return true if the actual player has won, false if the game must go on
+        <i>86</i>&nbsp; */
+        <i>87</i>&nbsp; @Override
+        <i>88</i>&nbsp; public boolean postMoveWinCondition(Model gd) {
+        <b class="fc"><i>89</i>&nbsp; boolean divinityWinCondition = false;</b>
+        <i>90</i>&nbsp; //first, we have to check if the player has two workers in game
+        <b class="fc"><i>91</i>&nbsp; String playerName = gd.getCurrentPlayer().getName();</b>
+        <b class="fc"><i>92</i>&nbsp; ArrayList&lt;Position&gt; positions = gd.getPlayerPositionsInMap(playerName);</b>
+        <i>93</i>&nbsp; //check if the player has at least two workers in game, and if they are adjacent
+        <b class="fc"><i>94</i>&nbsp; if (!(positions.size() &lt;= 1 || !adjacentCellVerifier(positions.get(0).getRow(),
+            positions.get(0).getColumn(), positions.get(1).getRow(), positions.get(1).getColumn()))) {</b>
+        <b class="fc"><i>95</i>&nbsp; if (gd.getNumberOfPlayers() == 2) {</b>
+        <b class="fc"><i>96</i>&nbsp; if (gd.getCell(positions.get(0).getRow(), positions.get(0).getColumn()).getLevel()
+            == 1 &amp;&amp; gd.getCell(positions.get(1).getRow(), positions.get(1).getColumn()).getLevel() == 1)</b>
+        <b class="fc"><i>97</i>&nbsp; divinityWinCondition = true;</b>
+        <i>98</i>&nbsp; } else {
+        <b class="fc"><i>99</i>&nbsp; if (gd.getCell(positions.get(0).getRow(), positions.get(0).getColumn()).getLevel()
+            == gd.getCell(positions.get(1).getRow(), positions.get(1).getColumn()).getLevel())</b>
+        <b class="fc"><i>100</i>&nbsp; divinityWinCondition = true;</b>
+        <i>101</i>&nbsp; }
+        <i>102</i>&nbsp; }
+        <i>103</i>&nbsp; //now, i have to verify the win condition depending on the number of player in game, cause they
+        are adjacent
+        <i>104</i>&nbsp;
+        <b class="fc"><i>105</i>&nbsp; return super.postMoveWinCondition(gd) || divinityWinCondition;</b>
+        <i>106</i>&nbsp; }
+        <i>107</i>&nbsp;
+        <i>108</i>&nbsp; /**
+        <i>109</i>&nbsp; * Puts player&#39;s workers on the board, according to Eros&#39; power, so only on the board
+        margin, and on board
+        <i>110</i>&nbsp; * opposite sides.
+        <i>111</i>&nbsp; *
+        <i>112</i>&nbsp; * @param p the position where the player would put the worker on the board
+        <i>113</i>&nbsp; * @param gd the model
+        <i>114</i>&nbsp; * @return the next controller FSM state
+        <i>115</i>&nbsp; * @throws OccupiedCellException if the desidered cell is occupied
+        <i>116</i>&nbsp; * @throws DivinityPowerException if the positioning isn&#39;t complain to eros&#39; power
+        <i>117</i>&nbsp; */
+        <i>118</i>&nbsp; @Override
+        <i>119</i>&nbsp; public GameControllerState putWorkerOnBoard(Position p, Model gd) throws OccupiedCellException,
+        DivinityPowerException {
+        <b class="fc"><i>120</i>&nbsp; if (!(p.getRow() == 0 || p.getRow() == 4 || p.getColumn() == 0 || p.getColumn()
+            == 4)) {</b>
+        <b class="fc"><i>121</i>&nbsp; throw new DivinityPowerException(&quot;Can&#39;t put the worker on this cell due
+            to divinity power&quot;);</b>
+        <i>122</i>&nbsp; }
+        <i>123</i>&nbsp;
+        <b class="fc"><i>124</i>&nbsp; if (previousRow != -1 || previousColumn != -1) {</b>
+        <b class="fc"><i>125</i>&nbsp; if (previousRow == -1) {</b>
+        <b class="fc"><i>126</i>&nbsp; if (p.getColumn() != 4 - previousColumn) throw new DivinityPowerException(&quot;&quot;);</b>
+        <i>127</i>&nbsp; } else {
+        <b class="fc"><i>128</i>&nbsp; if (previousColumn == -1) {</b>
+        <b class="fc"><i>129</i>&nbsp; if (p.getRow() != 4 - previousRow) throw new DivinityPowerException(&quot;&quot;);</b>
+        <i>130</i>&nbsp; } else {
+        <b class="fc"><i>131</i>&nbsp; if (p.getRow() != 4 - previousRow &amp;&amp; p.getColumn() != 4 - previousColumn)</b>
+        <b class="fc"><i>132</i>&nbsp; throw new DivinityPowerException(&quot;&quot;);</b>
+        <i>133</i>&nbsp; }
+        <i>134</i>&nbsp; }
+        <i>135</i>&nbsp; }
+        <b class="fc"><i>136</i>&nbsp; GameControllerState nextAction = super.putWorkerOnBoard(p, gd);</b>
+        <b class="fc"><i>137</i>&nbsp; if (p.getRow() == 0 || p.getRow() == 4) previousRow = p.getRow();</b>
+        <b class="fc"><i>138</i>&nbsp; if (p.getColumn() == 0 || p.getColumn() == 4) previousColumn = p.getColumn();</b>
+        <b class="fc"><i>139</i>&nbsp; return nextAction;</b>
+        <i>140</i>&nbsp; }
+        <i>141</i>&nbsp;
+        <i>142</i>&nbsp; /**
+        <i>143</i>&nbsp; * Getter of divinity&#39;s description
+        <i>144</i>&nbsp; * @return the description of the divinity power
+        <i>145</i>&nbsp; */
+        <i>146</i>&nbsp; @Override
+        <i>147</i>&nbsp; public String getDescription() {
+        <b class="nc"><i>148</i>&nbsp; return &quot;Place your Workers anywhere along opposite edges of the board. You
+            also win if one of your Workers moves to a space neighboring your other Worker and both are on the first
+            level (or the same level in a 3-player game).&quot;;</b>
+        <i>149</i>&nbsp; }
+        <i>150</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2020-07-01 19:47</div>
+</div>
+</body>
+</html>

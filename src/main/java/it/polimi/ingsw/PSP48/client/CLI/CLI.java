@@ -841,8 +841,9 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
     }
 
     /**
-     * @author Daniele Mammone
      * Starts The Player Client, and initialize the network connection
+     *
+     * @author Daniele Mammone
      */
     @Override
     public void run() {

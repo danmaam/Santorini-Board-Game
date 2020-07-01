@@ -24,6 +24,13 @@ public class FirstPlayerSelectionController {
     private final GameBoardController outerController;
     private final ArrayList<String> players;
 
+    /**
+     * Initializes the controller of the first player selector
+     *
+     * @param playersInGame   the number of players in game
+     * @param outerController the board controller
+     * @param players         the number of players in game
+     */
     public FirstPlayerSelectionController(int playersInGame, GameBoardController outerController, ArrayList<String> players) {
         this.outerController = outerController;
         this.playersInGame = playersInGame;

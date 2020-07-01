@@ -12,6 +12,9 @@ import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of Hephaestus divinity
+ */
 public class Hephaestus extends Divinity {
 
     private int prevBuildRow = -1;
@@ -19,6 +22,12 @@ public class Hephaestus extends Divinity {
 
     private boolean prevBuild = false;
 
+    /**
+     * Checks if a divinity is allowed for a certain number of players
+     *
+     * @param pNum the number of players
+     * @return if the divinity is allowed for the specified number of players
+     */
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
             case 2:
@@ -116,7 +125,7 @@ public class Hephaestus extends Divinity {
      * @throws NotAdjacentCellException        if player is trying to put a dome on a cell not adjacent to the worker
      * @throws OccupiedCellException           if player is trying to put a dome on a occupied cell
      * @throws DomedCellException              if player is trying to put a dome on an already domed cell
-     * @throws MaximumLevelNotReachedException if the player is trying to put a dome on a cell with level <= 2
+     * @throws MaximumLevelNotReachedException if the player is trying to put a dome on a cell with level lower than 2
      * @throws DivinityPowerException          if another divinity blocks the dome, or if the player is trying to put a dome as second operation.
      */
     @Override
@@ -125,11 +134,21 @@ public class Hephaestus extends Divinity {
         return super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
     }
 
+    /**
+     * Getter of name
+     *
+     * @return the divinity's name
+     */
     @Override
     public String getName() {
         return "Hephaestus";
     }
 
+    /**
+     * Getter of divinity's description
+     *
+     * @return the description of the divinity power
+     */
     @Override
     public String getDescription() {
         return "Your Worker may build one additional block (not dome) on top of your first block.";

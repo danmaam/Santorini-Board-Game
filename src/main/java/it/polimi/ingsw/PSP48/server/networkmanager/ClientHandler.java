@@ -33,6 +33,8 @@ public class ClientHandler implements Runnable {
 
 
     /**
+     * Initializes the handler object
+     *
      * @param client the socket of the remote client
      * @param i      the handler that waits for client messages
      *               Initializes the handler

@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: ColoursForPrinting</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">it.polimi.ingsw.PSP48.client.CLI</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: ColoursForPrinting (it.polimi.ingsw.PSP48.client.CLI)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">ColoursForPrinting</td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 5)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 15)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.client.CLI;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;/**
+        <i>4</i>&nbsp; * enum class containing the ansi codes used to colour the board, so that we can use the names of
+        colours instead of their code
+        <i>5</i>&nbsp; *
+        <i>6</i>&nbsp; * @author Rebecca Marelli, Annalaura Massa
+        <i>7</i>&nbsp; */
+        <b class="nc"><i>8</i>&nbsp;public enum ColoursForPrinting {</b>
+        <b class="nc"><i>9</i>&nbsp; reset(&quot;\033[0m&quot;),</b>
+        <b class="nc"><i>10</i>&nbsp; black(&quot;\033[30m&quot;), //codes for the brighter version of the colours, to
+            better see them on the terminal</b>
+        <b class="nc"><i>11</i>&nbsp; red(&quot;\033[91m&quot;),</b>
+        <b class="nc"><i>12</i>&nbsp; green(&quot;\033[92m&quot;),</b>
+        <b class="nc"><i>13</i>&nbsp; yellow(&quot;\033[93m&quot;),</b>
+        <b class="nc"><i>14</i>&nbsp; blue(&quot;\033[94m&quot;),</b>
+        <b class="nc"><i>15</i>&nbsp; gray(&quot;\033[95m&quot;), //we print the gray worker as purple, but we associate
+            the code of purple to colour gray</b>
+        <b class="nc"><i>16</i>&nbsp; cyan(&quot;\033[96m&quot;),</b>
+        <b class="nc"><i>17</i>&nbsp; white(&quot;\033[37m&quot;);</b>
+        <i>18</i>&nbsp;
+        <i>19</i>&nbsp; private String colour;
+        <i>20</i>&nbsp;
+        <i>21</i>&nbsp; /**
+        <i>22</i>&nbsp; * class constructor
+        <i>23</i>&nbsp; * @param initialColour is the field we need to initialise (the codes of the colours)
+        <i>24</i>&nbsp; */
+        <b class="nc"><i>25</i>&nbsp; ColoursForPrinting(String initialColour) {</b>
+        <b class="nc"><i>26</i>&nbsp; this.colour = initialColour;</b>
+        <i>27</i>&nbsp; }
+        <i>28</i>&nbsp;
+        <i>29</i>&nbsp; /**
+        <i>30</i>&nbsp; * getter of a colour code
+        <i>31</i>&nbsp; * @return the sting containing the ansi code of the colour
+        <i>32</i>&nbsp; */
+        <i>33</i>&nbsp; public String getColour()
+        <i>34</i>&nbsp; {
+        <b class="nc"><i>35</i>&nbsp; return(this.colour);</b>
+        <i>36</i>&nbsp; }
+        <i>37</i>&nbsp;
+        <i>38</i>&nbsp; /**
+        <i>39</i>&nbsp; * method used to change colour
+        <i>40</i>&nbsp; * @param changedColour is a new string we use for the colour
+        <i>41</i>&nbsp; */
+        <i>42</i>&nbsp; public void setColour(String changedColour) //we need this method because some elements might
+        change colour during the game, for example to highlight them to the player
+        <i>43</i>&nbsp; {
+        <b class="nc"><i>44</i>&nbsp; this.colour=changedColour;</b>
+        <i>45</i>&nbsp; }
+        <i>46</i>&nbsp;
+        <i>47</i>&nbsp;
+        <i>48</i>&nbsp; /**
+        <i>49</i>&nbsp; * we need to convert objects into strings in order to print them
+        <i>50</i>&nbsp; */
+        <i>51</i>&nbsp; @Override
+        <i>52</i>&nbsp; public String toString()
+        <i>53</i>&nbsp; {
+        <b class="nc"><i>54</i>&nbsp; return(this.colour);</b>
+        <i>55</i>&nbsp; }
+        <i>56</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2020-07-01 19:47</div>
+</div>
+</body>
+</html>

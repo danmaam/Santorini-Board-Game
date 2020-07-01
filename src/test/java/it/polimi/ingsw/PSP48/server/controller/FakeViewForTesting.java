@@ -10,6 +10,9 @@ import it.polimi.ingsw.PSP48.server.model.Position;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
+/**
+ * Used only for debugging purposed. Every method don't do anything
+ */
 public class FakeViewForTesting implements ViewInterface {
     @Override
     public void requestMove(ArrayList<WorkerValidCells> validCellsForMove) {

@@ -11,6 +11,8 @@ public class ActionCoordinates implements Serializable {
     private final int moveRow;
 
     /**
+     * Getter of worker row
+     *
      * @return the row of the worker chosen for the action
      */
     public int getWorkerRow() {
@@ -18,6 +20,8 @@ public class ActionCoordinates implements Serializable {
     }
 
     /**
+     * Getter of worker column
+     *
      * @return the column of the worker chosen for the action
      */
     public int getWorkerColumn() {
@@ -25,6 +29,8 @@ public class ActionCoordinates implements Serializable {
     }
 
     /**
+     * Getter of destination row
+     *
      * @return the row where the player wants to do the action
      */
     public int getMoveRow() {
@@ -32,6 +38,7 @@ public class ActionCoordinates implements Serializable {
     }
 
     /**
+     * Getter of destination column
      * @return the column where the player wants to do the action
      */
     public int getMoveColumn() {
@@ -56,6 +63,11 @@ public class ActionCoordinates implements Serializable {
 
     private final int moveColumn;
 
+    /**
+     * Clones the object
+     *
+     * @return a cloned coordinates object
+     */
     public ActionCoordinates clone() {
         return new ActionCoordinates(workerRow, workerColumn, moveRow, moveColumn);
     }

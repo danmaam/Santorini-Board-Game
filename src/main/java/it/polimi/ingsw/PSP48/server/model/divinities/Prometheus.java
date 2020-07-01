@@ -13,8 +13,17 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of Prometheus DIvinity
+ */
 public class Prometheus extends Divinity {
 
+    /**
+     * Checks if Prometheus is allowed for a certain number of players
+     *
+     * @param pNum the number of players
+     * @return if the divinity is allowed for the specified number of players
+     */
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
             case 2:
@@ -33,7 +42,7 @@ public class Prometheus extends Divinity {
      * Calculates if Prometheus can do a first optional build allowing him to complete the turn. If not, checks if he can normally end the turn.
      *
      * @param gd the model
-     * @return
+     * @return the next controller fsm state
      */
     @Override
     public GameControllerState turnBegin(Model gd) {
@@ -184,6 +193,11 @@ public class Prometheus extends Divinity {
         return nextAction;
     }
 
+    /**
+     * Getter of name
+     *
+     * @return the divinity's name
+     */
     @Override
     public String getName() {
         return "Prometheus";
@@ -215,6 +229,11 @@ public class Prometheus extends Divinity {
         return can;
     }
 
+    /**
+     * Getter of divinity's description
+     *
+     * @return the description of the divinity power
+     */
     @Override
     public String getDescription() {
         return "If your Worker does not move up, it may build both before and after moving.";

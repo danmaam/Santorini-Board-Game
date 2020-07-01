@@ -13,11 +13,20 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of Artemis divinity
+ */
 public class Artemis extends Divinity {
 
     private int oldRowMove = -1;
     private int oldColumnMove = -1;
 
+    /**
+     * Checks if Artemis is allowed for a certain number of players
+     *
+     * @param pNum the number of players
+     * @return if the divinity is allowed for the specified number of players
+     */
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
             case 2:
@@ -31,7 +40,7 @@ public class Artemis extends Divinity {
     /**
      * Resets the last move coordinate and the super method to check if the player can end his turn.
      *
-     * @return
+     * @return the next controller FSM state
      */
     @Override
     public GameControllerState turnBegin(Model gd) {
@@ -41,6 +50,8 @@ public class Artemis extends Divinity {
     }
 
     /**
+     * Generates a list of valid cells for move. At the second move, Artemis can't turn on the previous cell
+     *
      * @param workerRow        the row where the worker is
      * @param workerColumn     the column where the worker is
      * @param gameCells        the actual board state
@@ -55,7 +66,7 @@ public class Artemis extends Divinity {
     }
 
     /**
-     * Overriden since Artemis allows a second move, but not on the previous cell
+     * Process the move. Artemis allows a second move, but not on the previous cell
      *
      * @param workerRow    the row of the cell where the worker is
      * @param workerColumn the column of the cell where the worker is
@@ -89,14 +100,23 @@ public class Artemis extends Divinity {
         return nextAction;
     }
 
-
+    /**
+     * Getter of name
+     *
+     * @return the divinity's name
+     */
     @Override
     public String getName() {
         return "Artemis";
     }
 
+    /**
+     * Getter of divinity's description
+     *
+     * @return the description of the divinity power
+     */
     @Override
-    public String getDescription(){
+    public String getDescription() {
         return "Your Worker may move one additional time, but not back to its initial space.";
     }
 }

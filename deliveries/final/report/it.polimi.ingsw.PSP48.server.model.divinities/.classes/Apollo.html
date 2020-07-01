@@ -1,0 +1,306 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: Apollo</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">it.polimi.ingsw.PSP48.server.model.divinities</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: Apollo (it.polimi.ingsw.PSP48.server.model.divinities)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">Apollo</td>
+            <td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+                <span class="absValue">
+    (1/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    87,5%
+  </span>
+                <span class="absValue">
+    (7/ 8)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    96,9%
+  </span>
+                <span class="absValue">
+    (63/ 65)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.server.model.divinities;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import it.polimi.ingsw.PSP48.server.controller.ControllerState.GameControllerState;
+        <i>4</i>&nbsp;import it.polimi.ingsw.PSP48.server.controller.ControllerState.RequestBuildDome;
+        <i>5</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
+        <i>6</i>&nbsp;import it.polimi.ingsw.PSP48.server.controller.GameController;
+        <i>7</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.*;
+        <i>8</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.exceptions.*;
+        <i>9</i>&nbsp;
+        <i>10</i>&nbsp;import java.util.ArrayList;
+        <i>11</i>&nbsp;import java.util.stream.Collectors;
+        <i>12</i>&nbsp;
+        <i>13</i>&nbsp;/**
+        <i>14</i>&nbsp; * Implements Apollo Divinity
+        <i>15</i>&nbsp; */
+        <b class="fc"><i>16</i>&nbsp;public class Apollo extends Divinity {</b>
+        <i>17</i>&nbsp;
+        <i>18</i>&nbsp; /**
+        <i>19</i>&nbsp; * Checks if Apollo is allowed for a certain number of players
+        <i>20</i>&nbsp; * @param pNum the number of players
+        <i>21</i>&nbsp; * @return if the divinity is allowed for the specified number of players
+        <i>22</i>&nbsp; */
+        <i>23</i>&nbsp; public static Boolean supportedDivinity(int pNum) {
+        <b class="fc"><i>24</i>&nbsp; switch (pNum) {</b>
+        <i>25</i>&nbsp; case 2:
+        <b class="fc"><i>26</i>&nbsp; return true;</b>
+        <i>27</i>&nbsp; case 3:
+        <b class="fc"><i>28</i>&nbsp; return true;</b>
+        <i>29</i>&nbsp; }
+        <b class="nc"><i>30</i>&nbsp; return false;</b>
+        <i>31</i>&nbsp; }
+        <i>32</i>&nbsp;
+        <i>33</i>&nbsp; /**
+        <i>34</i>&nbsp; * Getter of name
+        <i>35</i>&nbsp; * @return the divinity&#39;s name
+        <i>36</i>&nbsp; */
+        <i>37</i>&nbsp; @Override
+        <i>38</i>&nbsp; public String getName() {
+        <b class="fc"><i>39</i>&nbsp; return &quot;Apollo&quot;;</b>
+        <i>40</i>&nbsp; }
+        <i>41</i>&nbsp;
+        <i>42</i>&nbsp;
+        <i>43</i>&nbsp; /**
+        <i>44</i>&nbsp; * re-implements getValidCellForMove since also occupied Cells are valid
+        <i>45</i>&nbsp; *
+        <i>46</i>&nbsp; * @param workerRow the row where the worker is
+        <i>47</i>&nbsp; * @param workerColumn the column where the worker is
+        <i>48</i>&nbsp; * @param gameCells the actual board state
+        <i>49</i>&nbsp; * @param divinitiesInGame the divinities in game
+        <i>50</i>&nbsp; * @return a list of cells valid for the move of the worker
+        <i>51</i>&nbsp; */
+        <i>52</i>&nbsp; @Override
+        <i>53</i>&nbsp; public ArrayList&lt;Position&gt; getValidCellForMove(int workerRow, int workerColumn, Cell[][]
+        gameCells, ArrayList&lt;Divinity&gt; divinitiesInGame) {
+        <b class="fc"><i>54</i>&nbsp; Cell actualWorkerCell = gameCells[workerRow][workerColumn];</b>
+        <b class="fc"><i>55</i>&nbsp; ArrayList&lt;Cell&gt; validCells = new ArrayList&lt;&gt;();</b>
+        <i>56</i>&nbsp;
+        <i>57</i>&nbsp; //with the for loop, i&#39;m adding to the arrayList the cell adjacent to the worker
+        <b class="fc"><i>58</i>&nbsp; for (int i = -1; i &lt;= 1; i++) {</b>
+        <b class="fc"><i>59</i>&nbsp; for (int j = -1; j &lt;= 1; j++) {</b>
+        <b class="fc"><i>60</i>&nbsp; if (!(i == 0 &amp;&amp; j == 0) &amp;&amp; 0 &lt;= workerRow + i &amp;&amp;
+            workerRow + i &lt;= 4 &amp;&amp; 0 &lt;= workerColumn + j &amp;&amp; workerColumn + j &lt;= 4) {</b>
+        <b class="fc"><i>61</i>&nbsp; validCells.add(gameCells[workerRow + i][workerColumn + j]);</b>
+        <i>62</i>&nbsp; }
+        <i>63</i>&nbsp; }
+        <i>64</i>&nbsp; }
+        <i>65</i>&nbsp;
+        <i>66</i>&nbsp;
+        <b class="fc"><i>67</i>&nbsp; validCells = validCells.stream()</b>
+        <i>68</i>&nbsp; //deletes from the valid the cell which are too high or too low to be reached
+        <b class="fc"><i>69</i>&nbsp; .filter(cell -&gt; cell.getLevel() - actualWorkerCell.getLevel() &lt;= 1)</b>
+        <i>70</i>&nbsp; //deletes the domed cells
+        <b class="fc"><i>71</i>&nbsp; .filter(cell -&gt; cell.getPlayer() == null ||
+            !cell.getPlayer().equals(gameCells[workerRow][workerColumn].getPlayer()))</b>
+        <b class="fc"><i>72</i>&nbsp; .filter(cell -&gt; !cell.isDomed())</b>
+        <b class="fc"><i>73</i>&nbsp; .collect(Collectors.toCollection(ArrayList::new));</b>
+        <i>74</i>&nbsp;
+        <i>75</i>&nbsp; //now we have to remove cells where the move is impossible due to other divinity powers
+        <i>76</i>&nbsp;
+        <b class="fc"><i>77</i>&nbsp; for (Divinity d : divinitiesInGame) {</b>
+        <b class="fc"><i>78</i>&nbsp; validCells.removeIf(c -&gt; !d.getName().equals(this.getName()) &amp;&amp;
+            !d.othersMove(new ActionCoordinates(workerRow, workerColumn, c.getRow(), c.getColumn()), gameCells));</b>
+        <i>79</i>&nbsp;
+        <b class="fc"><i>80</i>&nbsp; }</b>
+        <i>81</i>&nbsp;
+        <i>82</i>&nbsp; //now in valid cells there is the list with compatible moves cells, but i must check that moving
+        in these cells doesn&#39;t
+        <i>83</i>&nbsp; //block the worker from ending the turn, possible since apollo can swap workers, while without
+        apollo these situations
+        <i>84</i>&nbsp; //aren&#39;t possible
+        <i>85</i>&nbsp;
+        <i>86</i>&nbsp;
+        <b class="fc"><i>87</i>&nbsp; validCells.removeIf(c -&gt; !checkIfCanBuildAfterTheMove(workerRow, workerColumn,
+            c.getRow(), c.getColumn(), gameCells, divinitiesInGame) &amp;&amp; !checkIfWinsAfterMove(workerRow,
+            workerColumn, c.getRow(), c.getColumn(), gameCells));</b>
+        <i>88</i>&nbsp;
+        <b class="fc"><i>89</i>&nbsp; ArrayList&lt;Position&gt; validPositions = new ArrayList&lt;&gt;();</b>
+        <b class="fc"><i>90</i>&nbsp; validCells.forEach((Cell c) -&gt; validPositions.add(new Position(c.getRow(),
+            c.getColumn())));</b>
+        <b class="fc"><i>91</i>&nbsp; return validPositions;</b>
+        <i>92</i>&nbsp; }
+        <i>93</i>&nbsp;
+        <i>94</i>&nbsp; /**
+        <i>95</i>&nbsp; * Redefined since Apollo allows to move on an occupied Cell, swapping the two workers
+        <i>96</i>&nbsp; *
+        <i>97</i>&nbsp; * @param workerRow the row of the cell where the worker is
+        <i>98</i>&nbsp; * @param workerColumn the column of the cell where the worker is
+        <i>99</i>&nbsp; * @param moveRow the row of the board where the worker wants to move
+        <i>100</i>&nbsp; * @param moveColumn the column of the board where the worker wants to move
+        <i>101</i>&nbsp; * @param gd the Game status
+        <i>102</i>&nbsp; * @return the next action of the controller
+        <i>103</i>&nbsp; * @throws NotAdjacentCellException if the destination cell is not adiacent to the worker
+        <i>104</i>&nbsp; * @throws IncorrectLevelException if the destination cell is too high to be reached
+        <i>105</i>&nbsp; * @throws OccupiedCellException if the destination cell has another worker on it
+        <i>106</i>&nbsp; * @throws DomedCellException if the destination cell has a dome on it
+        <i>107</i>&nbsp; * @author Daniele Mammone
+        <i>108</i>&nbsp; */
+        <i>109</i>&nbsp; @Override
+        <i>110</i>&nbsp; public GameControllerState move(int workerRow, int workerColumn, int moveRow, int moveColumn,
+        Model gd) throws NotAdjacentCellException, IncorrectLevelException, DomedCellException, DivinityPowerException,
+        OccupiedCellException, NoTurnEndException {
+        <i>111</i>&nbsp; //first check: the two cells must be adiacent
+        <b class="fc"><i>112</i>&nbsp; if (!(adjacentCellVerifier(workerRow, workerColumn, moveRow, moveColumn)))</b>
+        <b class="fc"><i>113</i>&nbsp; throw new NotAdjacentCellException(&quot;Celle non adiacenti&quot;);</b>
+        <i>114</i>&nbsp; //second check: the two levels must be compatible
+        <b class="fc"><i>115</i>&nbsp; int workerLevel = gd.getCell(workerRow, workerColumn).getLevel();</b>
+        <b class="fc"><i>116</i>&nbsp; int moveLevel = gd.getCell(moveRow, moveColumn).getLevel();</b>
+        <b class="fc"><i>117</i>&nbsp; if (!(moveLevel - workerLevel &lt;= 1))</b>
+        <b class="fc"><i>118</i>&nbsp; throw new IncorrectLevelException(&quot;Stai cerando di salire a un livello
+            troppo alto&quot;);</b>
+        <i>119</i>&nbsp; //fourth check: the cell must not be domed
+        <b class="fc"><i>120</i>&nbsp; if (gd.getCell(moveRow, moveColumn).isDomed())</b>
+        <b class="fc"><i>121</i>&nbsp; throw new DomedCellException(&quot;Stai cercando di salire su una cella con
+            cupola&quot;);</b>
+        <i>122</i>&nbsp; //fifth check: if another different divinity doesn&#39;t invalid this move
+        <i>123</i>&nbsp; //Apollo can exchange position with other players, but not with its workers
+        <b class="fc"><i>124</i>&nbsp; if (gd.getCell(moveRow, moveColumn).getPlayer() != null &amp;&amp;
+            gd.getCell(moveRow, moveColumn).getPlayer().equals(gd.getCurrentPlayer().getName()))</b>
+        <b class="fc"><i>125</i>&nbsp; throw new OccupiedCellException(&quot;trying to switch with another your worker&quot;);</b>
+        <i>126</i>&nbsp;
+        <b class="fc"><i>127</i>&nbsp; for (Player p : gd.getPlayersInGame()) {</b>
+        <b class="fc"><i>128</i>&nbsp; if (p != gd.getCurrentPlayer() &amp;&amp; !p.getDivinity().othersMove(new
+            ActionCoordinates(workerRow, workerColumn, moveRow, moveColumn), gd.getGameBoard()))</b>
+        <b class="fc"><i>129</i>&nbsp; throw new DivinityPowerException(&quot;Fail due to other divinity&quot;);</b>
+        <b class="fc"><i>130</i>&nbsp; }</b>
+        <i>131</i>&nbsp;
+        <i>132</i>&nbsp;
+        <i>133</i>&nbsp; //at this point, the move is valid, but we must check that the player can continue the turn
+        <b class="fc"><i>134</i>&nbsp; ArrayList&lt;Divinity&gt; otherDiv = new ArrayList&lt;&gt;();</b>
+        <b class="fc"><i>135</i>&nbsp; for (Player p : gd.getPlayersInGame()) {</b>
+        <b class="fc"><i>136</i>&nbsp; if (!p.getName().equals(gd.getCurrentPlayer().getName()))
+            otherDiv.add(p.getDivinity());</b>
+        <b class="fc"><i>137</i>&nbsp; }</b>
+        <b class="fc"><i>138</i>&nbsp; if (!checkIfCanBuildAfterTheMove(workerRow, workerColumn, moveRow, moveColumn,
+            gd.getGameBoard(), otherDiv))</b>
+        <b class="fc"><i>139</i>&nbsp; throw new NoTurnEndException(&quot;WIth this move, you can&#39;t end the turn&quot;);</b>
+        <i>140</i>&nbsp;
+        <b class="fc"><i>141</i>&nbsp; String tempWorker = gd.getCell(moveRow, moveColumn).getPlayer();</b>
+        <b class="fc"><i>142</i>&nbsp; gd.getCell(moveRow, moveColumn).setPlayer(gd.getCell(workerRow,
+            workerColumn).getPlayer());</b>
+        <b class="fc"><i>143</i>&nbsp; gd.getCell(workerRow, workerColumn).setPlayer(tempWorker);</b>
+        <b class="fc"><i>144</i>&nbsp; gd.getCurrentPlayer().setOldLevel(workerLevel);</b>
+        <b class="fc"><i>145</i>&nbsp; gd.getCurrentPlayer().setNewLevel(moveLevel);</b>
+        <b class="fc"><i>146</i>&nbsp; gd.getCurrentPlayer().setLastWorkerUsed(moveRow, moveColumn);</b>
+        <i>147</i>&nbsp;
+        <b class="fc"><i>148</i>&nbsp; ArrayList&lt;Cell&gt; changedCell = new ArrayList&lt;&gt;();</b>
+        <b class="fc"><i>149</i>&nbsp; changedCell.add((Cell) gd.getCell(workerRow, workerColumn).clone());</b>
+        <b class="fc"><i>150</i>&nbsp; changedCell.add((Cell) gd.getCell(moveRow, moveColumn).clone());</b>
+        <b class="fc"><i>151</i>&nbsp; gd.notifyObservers(x -&gt; x.changedBoard(changedCell));</b>
+        <i>152</i>&nbsp;
+        <i>153</i>&nbsp; //now, the game board has been modified
+        <b class="fc"><i>154</i>&nbsp; return new RequestBuildDome();</b>
+        <i>155</i>&nbsp; }
+        <i>156</i>&nbsp;
+        <i>157</i>&nbsp; /**
+        <i>158</i>&nbsp; * Simulates a move, and checks if the player can complete the turn after. *
+        <i>159</i>&nbsp; *
+        <i>160</i>&nbsp; * @param wR the row where the worker is
+        <i>161</i>&nbsp; * @param wC the column where the worker is
+        <i>162</i>&nbsp; * @param mR the row where the worker wants to move
+        <i>163</i>&nbsp; * @param mC the column where the worker wants to move
+        <i>164</i>&nbsp; * @param gameBoard the game board
+        <i>165</i>&nbsp; * @param otherDiv the other divinities in game
+        <i>166</i>&nbsp; * @return true if the move doesn&#39;t block the player from completing the turn, false
+        otherwise
+        <i>167</i>&nbsp; */
+        <i>168</i>&nbsp; private boolean checkIfCanBuildAfterTheMove(int wR, int wC, int mR, int mC, Cell[][] gameBoard,
+        ArrayList&lt;Divinity&gt; otherDiv) {
+        <i>169</i>&nbsp; //here i must simulate the move and then calculate the valid cells for building and doming
+        <i>170</i>&nbsp; boolean canBuild;
+        <b class="fc"><i>171</i>&nbsp; String tempPlayer = gameBoard[mR][mC].getPlayer();</b>
+        <b class="fc"><i>172</i>&nbsp; String currentPlayer = gameBoard[wR][wC].getPlayer();</b>
+        <b class="fc"><i>173</i>&nbsp; gameBoard[mR][mC].setPlayer(currentPlayer);</b>
+        <b class="fc"><i>174</i>&nbsp; gameBoard[wR][wC].setPlayer(tempPlayer);</b>
+        <b class="fc"><i>175</i>&nbsp; canBuild = !getValidCellForBuilding(mR, mC, otherDiv, gameBoard).isEmpty() ||
+            !getValidCellsToPutDome(mR, mC, gameBoard, otherDiv).isEmpty();</b>
+        <b class="fc"><i>176</i>&nbsp; gameBoard[mR][mC].setPlayer(tempPlayer);</b>
+        <b class="fc"><i>177</i>&nbsp; gameBoard[wR][wC].setPlayer(currentPlayer);</b>
+        <b class="fc"><i>178</i>&nbsp; return canBuild;</b>
+        <i>179</i>&nbsp; }
+        <i>180</i>&nbsp;
+        <i>181</i>&nbsp; /**
+        <i>182</i>&nbsp; * Checks if after a move the player wins
+        <i>183</i>&nbsp; *
+        <i>184</i>&nbsp; * @param wR the row where the worker is
+        <i>185</i>&nbsp; * @param wC the column where the worker is
+        <i>186</i>&nbsp; * @param mR the row where the worker wants to move
+        <i>187</i>&nbsp; * @param mC the column where the worker wants to move
+        <i>188</i>&nbsp; * @param gameBoard the game bord
+        <i>189</i>&nbsp; * @return true is the player wins after this move, false otherwise
+        <i>190</i>&nbsp; */
+        <i>191</i>&nbsp; private boolean checkIfWinsAfterMove(int wR, int wC, int mR, int mC, Cell[][] gameBoard) {
+        <b class="fc"><i>192</i>&nbsp; return gameBoard[mR][mC].getLevel() == 3 &amp;&amp; gameBoard[mR][mC].getLevel()
+            &gt; gameBoard[wR][wC].getLevel();</b>
+        <i>193</i>&nbsp; }
+        <i>194</i>&nbsp;
+        <i>195</i>&nbsp; /**
+        <i>196</i>&nbsp; * Getter of divinity&#39;s description
+        <i>197</i>&nbsp; * @return the description of the divinity power
+        <i>198</i>&nbsp; */
+        <i>199</i>&nbsp; @Override
+        <i>200</i>&nbsp; public String getDescription() {
+        <b class="nc"><i>201</i>&nbsp; return &quot;Your Worker may move into an opponent Worker’s space by forcing
+            their Worker to the space yours just vacated.&quot;;</b>
+        <i>202</i>&nbsp; }
+        <i>203</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2020-07-01 19:47</div>
+</div>
+</body>
+</html>

@@ -10,8 +10,16 @@ import it.polimi.ingsw.PSP48.server.model.*;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of Minotaur divinity
+ */
 public class Minotaur extends Divinity {
-
+    /**
+     * Checks if Minotaur is allowed for a certain number of players
+     *
+     * @param pNum the number of players
+     * @return if the divinity is allowed for the specified number of players
+     */
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
             case 2:
@@ -22,7 +30,11 @@ public class Minotaur extends Divinity {
         return false;
     }
 
-
+    /**
+     * Getter of name
+     *
+     * @return the divinity's name
+     */
     @Override
     public String getName() {
         return "Minotaur";
@@ -231,6 +243,11 @@ public class Minotaur extends Divinity {
         return new RequestBuildDome();
     }
 
+    /**
+     * Getter of divinity's description
+     *
+     * @return the description of the divinity power
+     */
     @Override
     public String getDescription() {
         return "Your Worker may move into an opponent Worker's space, if their Worker can be forced one space straight backwards to an unoccupied space at any level.";

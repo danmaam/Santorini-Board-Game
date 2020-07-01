@@ -1,0 +1,2924 @@
+memberSearchIndex = [{
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "ActionCoordinates",
+    "l": "ActionCoordinates(int, int, int, int)",
+    "url": "%3Cinit%3E(int,int,int,int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Cell",
+    "l": "addDome()"
+}, {"p": "it.polimi.ingsw.PSP48.server.model", "c": "Cell", "l": "addLevel()"}, {
+    "p": "it.polimi.ingsw.PSP48.server",
+    "c": "Server",
+    "l": "addNickname(String)",
+    "url": "addNickname(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.networkmanager",
+    "c": "ClientNetworkIncoming",
+    "l": "addObserver(ClientNetworkObserver)",
+    "url": "addObserver(it.polimi.ingsw.PSP48.observers.ClientNetworkObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "addPlayer(String, Calendar)",
+    "url": "addPlayer(java.lang.String,java.util.Calendar)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "addPlayer(String, Colour, Calendar)",
+    "url": "addPlayer(java.lang.String,it.polimi.ingsw.PSP48.server.model.Colour,java.util.Calendar)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server",
+    "c": "GameRoom",
+    "l": "addPlayerInRoom(String, Calendar, ViewInterface)",
+    "url": "addPlayerInRoom(java.lang.String,java.util.Calendar,it.polimi.ingsw.PSP48.ViewInterface)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Player",
+    "l": "addWorker()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Apollo",
+    "l": "Apollo()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Artemis",
+    "l": "Artemis()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "associateViewWithPlayer(String, ViewInterface)",
+    "url": "associateViewWithPlayer(java.lang.String,it.polimi.ingsw.PSP48.ViewInterface)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Athena",
+    "l": "Athena()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Atlas",
+    "l": "Atlas()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "ColoursForPrinting",
+    "l": "black"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "ColoursForPrinting",
+    "l": "blue"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Colour",
+    "l": "BLUE"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.networkmanager",
+    "c": "ClientNetworkOutcoming",
+    "l": "build(ActionCoordinates)",
+    "url": "build(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.observers",
+    "c": "ServerNetworkObserver",
+    "l": "build(ActionCoordinates)",
+    "url": "build(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.observers",
+    "c": "ViewObserver",
+    "l": "build(ActionCoordinates)",
+    "url": "build(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "build(ActionCoordinates)",
+    "url": "build(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "build(ActionCoordinates)",
+    "url": "build(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Demeter",
+    "l": "build(int, int, int, int, Model)",
+    "url": "build(int,int,int,int,it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Divinity",
+    "l": "build(int, int, int, int, Model)",
+    "url": "build(int,int,int,int,it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Hephaestus",
+    "l": "build(int, int, int, int, Model)",
+    "url": "build(int,int,int,int,it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Hestia",
+    "l": "build(int, int, int, int, Model)",
+    "url": "build(int,int,int,int,it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Prometheus",
+    "l": "build(int, int, int, int, Model)",
+    "url": "build(int,int,int,int,it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Zeus",
+    "l": "build(int, int, int, int, Model)",
+    "url": "build(int,int,int,int,it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "BuildingsForPrinting",
+    "l": "BuildingsForPrinting(int, ColoursForPrinting)",
+    "url": "%3Cinit%3E(int,it.polimi.ingsw.PSP48.client.CLI.ColoursForPrinting)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToServer",
+    "c": "BuildMessage",
+    "l": "BuildMessage(ActionCoordinates)",
+    "url": "%3Cinit%3E(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Cell",
+    "l": "Cell(int, int)",
+    "url": "%3Cinit%3E(int,int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Cell",
+    "l": "Cell(int, int, int, String, Boolean)",
+    "url": "%3Cinit%3E(int,int,int,java.lang.String,java.lang.Boolean)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CellForPrinting",
+    "l": "CellForPrinting(int, int, ColoursForPrinting)",
+    "url": "%3Cinit%3E(int,int,it.polimi.ingsw.PSP48.client.CLI.ColoursForPrinting)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToServer",
+    "c": "ChallengerDivinitiesMessage",
+    "l": "ChallengerDivinitiesMessage(ArrayList<String>)",
+    "url": "%3Cinit%3E(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "ChallengerDivinitiesSelectionRequest",
+    "l": "ChallengerDivinitiesSelectionRequest(ArrayList<DivinitiesWithDescription>, int)",
+    "url": "%3Cinit%3E(java.util.ArrayList,int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "challengerDivinityChoice(ArrayList<String>)",
+    "url": "challengerDivinityChoice(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "changedBoard(ArrayList<Cell>)",
+    "url": "changedBoard(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "changedBoard(ArrayList<Cell>)",
+    "url": "changedBoard(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "changedBoard(ArrayList<Cell>)",
+    "url": "changedBoard(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.observers",
+    "c": "ModelObserver",
+    "l": "changedBoard(ArrayList<Cell>)",
+    "url": "changedBoard(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandler",
+    "l": "changedBoard(ArrayList<Cell>)",
+    "url": "changedBoard(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "changedBoard(ArrayList<Cell>)",
+    "url": "changedBoard(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "ChangedBoard",
+    "l": "ChangedBoard(ArrayList<Cell>)",
+    "url": "%3Cinit%3E(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "changedPlayerList(ArrayList<String>)",
+    "url": "changedPlayerList(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "changedPlayerList(ArrayList<String>)",
+    "url": "changedPlayerList(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "changedPlayerList(ArrayList<String>)",
+    "url": "changedPlayerList(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.observers",
+    "c": "ModelObserver",
+    "l": "changedPlayerList(ArrayList<String>)",
+    "url": "changedPlayerList(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandler",
+    "l": "changedPlayerList(ArrayList<String>)",
+    "url": "changedPlayerList(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "changedPlayerList(ArrayList<String>)",
+    "url": "changedPlayerList(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "DivinityChoiceController",
+    "l": "choose()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Chronus",
+    "l": "Chronus()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Circe",
+    "l": "Circe()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "CLI(ColoursForPrinting)",
+    "url": "%3Cinit%3E(it.polimi.ingsw.PSP48.client.CLI.ColoursForPrinting)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "DivinityChoiceController",
+    "l": "clickedChoose()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "DivinityChoiceController",
+    "l": "clickedNext()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "DivinityChoiceController",
+    "l": "clickedPrev()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandler",
+    "l": "ClientHandler(Socket, ClientHandlerListener)",
+    "url": "%3Cinit%3E(java.net.Socket,it.polimi.ingsw.PSP48.server.networkmanager.ClientHandlerListener)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandlerListener",
+    "l": "ClientHandlerListener(Socket)",
+    "url": "%3Cinit%3E(java.net.Socket)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.networkmanager",
+    "c": "ClientNetworkIncoming",
+    "l": "ClientNetworkIncoming(ViewInterface, Socket)",
+    "url": "%3Cinit%3E(it.polimi.ingsw.PSP48.ViewInterface,java.net.Socket)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.networkmanager",
+    "c": "ClientNetworkOutcoming",
+    "l": "ClientNetworkOutcoming(Socket)",
+    "url": "%3Cinit%3E(java.net.Socket)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "ActionCoordinates",
+    "l": "clone()"
+}, {"p": "it.polimi.ingsw.PSP48.server.model", "c": "Cell", "l": "clone()"}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Position",
+    "l": "clone()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "completedSetup(String)",
+    "url": "completedSetup(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "completedSetup(String)",
+    "url": "completedSetup(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.observers",
+    "c": "ClientNetworkObserver",
+    "l": "completedSetup(String)",
+    "url": "completedSetup(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.setupMessagesToClient",
+    "c": "completedSetup",
+    "l": "completedSetup(String)",
+    "url": "%3Cinit%3E(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48",
+    "c": "WorkerValidCells",
+    "l": "contains(int, int)",
+    "url": "contains(int,int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "containsWorker(ArrayList<WorkerValidCells>, int, int)",
+    "url": "containsWorker(java.util.ArrayList,int,int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "currentPlayerCantEndTurn()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "CurrentPlayerCantEndTurn",
+    "l": "CurrentPlayerCantEndTurn()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "ColoursForPrinting",
+    "l": "cyan"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Demeter",
+    "l": "Demeter()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.observers",
+    "c": "ServerNetworkObserver",
+    "l": "destroyGame()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "destroyGame()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server",
+    "c": "Server",
+    "l": "destroyGameRoom(int, String, EndReason)",
+    "url": "destroyGameRoom(int,java.lang.String,it.polimi.ingsw.PSP48.server.EndReason)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server",
+    "c": "EndReason",
+    "l": "disconnection"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities.testingDivinities",
+    "c": "DivFalse",
+    "l": "DivFalse()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "LoginScreenController",
+    "l": "divinitiesButton()"
+}, {
+    "p": "it.polimi.ingsw.PSP48",
+    "c": "DivinitiesWithDescription",
+    "l": "DivinitiesWithDescription(String, String)",
+    "url": "%3Cinit%3E(java.lang.String,java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Divinity",
+    "l": "Divinity()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "DivinityChoiceController",
+    "l": "DivinityChoiceController(ArrayList<DivinitiesWithDescription>, int, GameBoardController)",
+    "url": "%3Cinit%3E(java.util.ArrayList,int,it.polimi.ingsw.PSP48.client.GUI.sceneControllers.GameBoardController)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities.testingDivinities",
+    "c": "DivinityFalsePower",
+    "l": "DivinityFalsePower()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.exceptions",
+    "c": "DivinityPowerException",
+    "l": "DivinityPowerException(String)",
+    "url": "%3Cinit%3E(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "DivinitySelectionRequest",
+    "l": "DivinitySelectionRequest(ArrayList<DivinitiesWithDescription>)",
+    "url": "%3Cinit%3E(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.setupMessagesToClient",
+    "c": "ClientSetupMessages",
+    "l": "doAction(ClientNetworkObserver)",
+    "url": "doAction(it.polimi.ingsw.PSP48.observers.ClientNetworkObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.setupMessagesToClient",
+    "c": "GameModeRequest",
+    "l": "doAction(ClientNetworkObserver)",
+    "url": "doAction(it.polimi.ingsw.PSP48.observers.ClientNetworkObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.setupMessagesToClient",
+    "c": "NicknameRequest",
+    "l": "doAction(ClientNetworkObserver)",
+    "url": "doAction(it.polimi.ingsw.PSP48.observers.ClientNetworkObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.setupMessagesToClient",
+    "c": "completedSetup",
+    "l": "doAction(ClientNetworkObserver)",
+    "url": "doAction(it.polimi.ingsw.PSP48.observers.ClientNetworkObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "ChallengerDivinitiesSelectionRequest",
+    "l": "doAction(ViewInterface)",
+    "url": "doAction(it.polimi.ingsw.PSP48.ViewInterface)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "ChangedBoard",
+    "l": "doAction(ViewInterface)",
+    "url": "doAction(it.polimi.ingsw.PSP48.ViewInterface)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "DivinitySelectionRequest",
+    "l": "doAction(ViewInterface)",
+    "url": "doAction(it.polimi.ingsw.PSP48.ViewInterface)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "EndGameMessage",
+    "l": "doAction(ViewInterface)",
+    "url": "doAction(it.polimi.ingsw.PSP48.ViewInterface)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "InitialPlayerRequestMessage",
+    "l": "doAction(ViewInterface)",
+    "url": "doAction(it.polimi.ingsw.PSP48.ViewInterface)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "NetworkMessagesToClient",
+    "l": "doAction(ViewInterface)",
+    "url": "doAction(it.polimi.ingsw.PSP48.ViewInterface)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "OptionalMoveRequest",
+    "l": "doAction(ViewInterface)",
+    "url": "doAction(it.polimi.ingsw.PSP48.ViewInterface)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "PositioningRequest",
+    "l": "doAction(ViewInterface)",
+    "url": "doAction(it.polimi.ingsw.PSP48.ViewInterface)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "RequestBuild",
+    "l": "doAction(ViewInterface)",
+    "url": "doAction(it.polimi.ingsw.PSP48.ViewInterface)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "RequestMessagePrint",
+    "l": "doAction(ViewInterface)",
+    "url": "doAction(it.polimi.ingsw.PSP48.ViewInterface)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "RequestMove",
+    "l": "doAction(ViewInterface)",
+    "url": "doAction(it.polimi.ingsw.PSP48.ViewInterface)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "RequestOpionalBuild",
+    "l": "doAction(ViewInterface)",
+    "url": "doAction(it.polimi.ingsw.PSP48.ViewInterface)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "UpdatedPlayerList",
+    "l": "doAction(ViewInterface)",
+    "url": "doAction(it.polimi.ingsw.PSP48.ViewInterface)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.networkmanager",
+    "c": "ClientNetworkOutcoming",
+    "l": "dome(ActionCoordinates)",
+    "url": "dome(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.observers",
+    "c": "ServerNetworkObserver",
+    "l": "dome(ActionCoordinates)",
+    "url": "dome(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.observers",
+    "c": "ViewObserver",
+    "l": "dome(ActionCoordinates)",
+    "url": "dome(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "dome(ActionCoordinates)",
+    "url": "dome(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "dome(ActionCoordinates)",
+    "url": "dome(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Atlas",
+    "l": "dome(int, int, int, int, Model)",
+    "url": "dome(int,int,int,int,it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Demeter",
+    "l": "dome(int, int, int, int, Model)",
+    "url": "dome(int,int,int,int,it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Divinity",
+    "l": "dome(int, int, int, int, Model)",
+    "url": "dome(int,int,int,int,it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Hephaestus",
+    "l": "dome(int, int, int, int, Model)",
+    "url": "dome(int,int,int,int,it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Hestia",
+    "l": "dome(int, int, int, int, Model)",
+    "url": "dome(int,int,int,int,it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Prometheus",
+    "l": "dome(int, int, int, int, Model)",
+    "url": "dome(int,int,int,int,it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.exceptions",
+    "c": "DomedCellException",
+    "l": "DomedCellException(String)",
+    "url": "%3Cinit%3E(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "DomeForPrinting",
+    "l": "DomeForPrinting(ColoursForPrinting)",
+    "url": "%3Cinit%3E(it.polimi.ingsw.PSP48.client.CLI.ColoursForPrinting)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToServer",
+    "c": "DomeMessage",
+    "l": "DomeMessage(ActionCoordinates)",
+    "url": "%3Cinit%3E(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToServer",
+    "c": "BuildMessage",
+    "l": "doThings(ServerNetworkObserver)",
+    "url": "doThings(it.polimi.ingsw.PSP48.observers.ServerNetworkObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToServer",
+    "c": "ChallengerDivinitiesMessage",
+    "l": "doThings(ServerNetworkObserver)",
+    "url": "doThings(it.polimi.ingsw.PSP48.observers.ServerNetworkObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToServer",
+    "c": "DomeMessage",
+    "l": "doThings(ServerNetworkObserver)",
+    "url": "doThings(it.polimi.ingsw.PSP48.observers.ServerNetworkObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToServer",
+    "c": "FirstPlayerSelectionMessage",
+    "l": "doThings(ServerNetworkObserver)",
+    "url": "doThings(it.polimi.ingsw.PSP48.observers.ServerNetworkObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToServer",
+    "c": "MoveMessage",
+    "l": "doThings(ServerNetworkObserver)",
+    "url": "doThings(it.polimi.ingsw.PSP48.observers.ServerNetworkObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToServer",
+    "c": "NetworkMessagesToServer",
+    "l": "doThings(ServerNetworkObserver)",
+    "url": "doThings(it.polimi.ingsw.PSP48.observers.ServerNetworkObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToServer",
+    "c": "PlayerDivinityMessage",
+    "l": "doThings(ServerNetworkObserver)",
+    "url": "doThings(it.polimi.ingsw.PSP48.observers.ServerNetworkObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToServer",
+    "c": "WorkerPositionMessage",
+    "l": "doThings(ServerNetworkObserver)",
+    "url": "doThings(it.polimi.ingsw.PSP48.observers.ServerNetworkObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "direction",
+    "l": "down"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "direction",
+    "l": "downleft"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "direction",
+    "l": "downright"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "EndGame",
+    "l": "EndGame()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48",
+    "c": "ViewInterface",
+    "l": "endgame(String)",
+    "url": "endgame(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "endgame(String)",
+    "url": "endgame(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "endgame(String)",
+    "url": "endgame(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "endgame(String)",
+    "url": "endgame(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "EndGameMessage",
+    "l": "EndGameMessage(String)",
+    "url": "%3Cinit%3E(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Cell",
+    "l": "equals(Object)",
+    "url": "equals(java.lang.Object)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Position",
+    "l": "equals(Object)",
+    "url": "equals(java.lang.Object)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Eros",
+    "l": "Eros()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "DivinityChoiceController",
+    "l": "firstDivinity()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "FirstPlayerSelectionController",
+    "l": "FirstPlayerSelectionController(int, GameBoardController, ArrayList<String>)",
+    "url": "%3Cinit%3E(int,it.polimi.ingsw.PSP48.client.GUI.sceneControllers.GameBoardController,java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToServer",
+    "c": "FirstPlayerSelectionMessage",
+    "l": "FirstPlayerSelectionMessage(String)",
+    "url": "%3Cinit%3E(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "GameBoardController(GUI)",
+    "url": "%3Cinit%3E(it.polimi.ingsw.PSP48.client.GUI.GUI)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "GameController(Model, int)",
+    "url": "%3Cinit%3E(it.polimi.ingsw.PSP48.server.model.Model,int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandler",
+    "l": "gameEndMessage(String)",
+    "url": "gameEndMessage(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.setupMessagesToClient",
+    "c": "GameModeRequest",
+    "l": "GameModeRequest(String)",
+    "url": "%3Cinit%3E(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server",
+    "c": "GameRoom",
+    "l": "GameRoom(int, boolean, int)",
+    "url": "%3Cinit%3E(int,boolean,int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "getAvailableDivinities()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Player",
+    "l": "getBirthday()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "BuildingsForPrinting",
+    "l": "getBuildingColour()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CellForPrinting",
+    "l": "getBuildings()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "BuildingsForPrinting",
+    "l": "getBuildingSymbol()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "getCell(int, int)",
+    "url": "getCell(int,int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CellForPrinting",
+    "l": "getCellColour()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CellForPrinting",
+    "l": "getCellColumn()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "getCellOnBoard(int, int)",
+    "url": "getCellOnBoard(int,int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CellForPrinting",
+    "l": "getCellRow()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "getChallengerIndex()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "ColoursForPrinting",
+    "l": "getColour()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Player",
+    "l": "getColour()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Cell",
+    "l": "getColumn()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Position",
+    "l": "getColumn()"
+}, {"p": "it.polimi.ingsw.PSP48.server.model", "c": "Model", "l": "getCurrentPlayer()"}, {
+    "p": "it.polimi.ingsw.PSP48",
+    "c": "DivinitiesWithDescription",
+    "l": "getDescription()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Apollo",
+    "l": "getDescription()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Artemis",
+    "l": "getDescription()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Athena",
+    "l": "getDescription()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Atlas",
+    "l": "getDescription()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Chronus",
+    "l": "getDescription()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Circe",
+    "l": "getDescription()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Demeter",
+    "l": "getDescription()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Divinity",
+    "l": "getDescription()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Eros",
+    "l": "getDescription()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Hephaestus",
+    "l": "getDescription()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Hestia",
+    "l": "getDescription()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Minotaur",
+    "l": "getDescription()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Pan",
+    "l": "getDescription()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Prometheus",
+    "l": "getDescription()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Zeus",
+    "l": "getDescription()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "Player",
+    "l": "getDivinity()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Player",
+    "l": "getDivinity()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CellForPrinting",
+    "l": "getDome()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "DomeForPrinting",
+    "l": "getDomeColour()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "DomeForPrinting",
+    "l": "getDomeSymbol()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CellForPrinting",
+    "l": "getEmptySpaceInCell()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "getFirstPlayerIndex()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "getGameBoard()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "getGamePlayerNumber()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server",
+    "c": "GameRoom",
+    "l": "getGameRoomID()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Player",
+    "l": "getLastWorkerMoved()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "BuildingsForPrinting",
+    "l": "getLevel()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Cell",
+    "l": "getLevel()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "ActionCoordinates",
+    "l": "getMoveColumn()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "ActionCoordinates",
+    "l": "getMoveRow()"
+}, {
+    "p": "it.polimi.ingsw.PSP48",
+    "c": "DivinitiesWithDescription",
+    "l": "getName()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "Player",
+    "l": "getName()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Player",
+    "l": "getName()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Apollo",
+    "l": "getName()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Artemis",
+    "l": "getName()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Athena",
+    "l": "getName()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Atlas",
+    "l": "getName()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Chronus",
+    "l": "getName()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Circe",
+    "l": "getName()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Demeter",
+    "l": "getName()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Divinity",
+    "l": "getName()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Eros",
+    "l": "getName()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Hephaestus",
+    "l": "getName()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Hestia",
+    "l": "getName()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Minotaur",
+    "l": "getName()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Pan",
+    "l": "getName()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Prometheus",
+    "l": "getName()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Zeus",
+    "l": "getName()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Player",
+    "l": "getNewLevel()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "getNextColour()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "getNumberOfPlayers()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Player",
+    "l": "getOldLevel()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Cell",
+    "l": "getPlayer()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "getPlayer(String)",
+    "url": "getPlayer(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "Player",
+    "l": "getPlayerColour()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "getPlayerColour(String)",
+    "url": "getPlayerColour(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "getPlayerList()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CellForPrinting",
+    "l": "getPlayerOnCell()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "getPlayerPositionsInMap(String)",
+    "url": "getPlayerPositionsInMap(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "getPlayersInGame()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "getPlayersInGame()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server",
+    "c": "GameRoom",
+    "l": "getPlayersInTheRoom()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "Player",
+    "l": "getPlayerSymbol()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "getPlayerView(String)",
+    "url": "getPlayerView(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server",
+    "c": "GameRoom",
+    "l": "getRoomPlayerNumber()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Cell",
+    "l": "getRow()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Position",
+    "l": "getRow()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Player",
+    "l": "getTempDivinity()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "getUploader()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Demeter",
+    "l": "getValidCellForBuilding(int, int, ArrayList<Divinity>, Cell[][])",
+    "url": "getValidCellForBuilding(int,int,java.util.ArrayList,it.polimi.ingsw.PSP48.server.model.Cell[][])"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Divinity",
+    "l": "getValidCellForBuilding(int, int, ArrayList<Divinity>, Cell[][])",
+    "url": "getValidCellForBuilding(int,int,java.util.ArrayList,it.polimi.ingsw.PSP48.server.model.Cell[][])"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Hephaestus",
+    "l": "getValidCellForBuilding(int, int, ArrayList<Divinity>, Cell[][])",
+    "url": "getValidCellForBuilding(int,int,java.util.ArrayList,it.polimi.ingsw.PSP48.server.model.Cell[][])"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Hestia",
+    "l": "getValidCellForBuilding(int, int, ArrayList<Divinity>, Cell[][])",
+    "url": "getValidCellForBuilding(int,int,java.util.ArrayList,it.polimi.ingsw.PSP48.server.model.Cell[][])"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Prometheus",
+    "l": "getValidCellForBuilding(int, int, ArrayList<Divinity>, Cell[][])",
+    "url": "getValidCellForBuilding(int,int,java.util.ArrayList,it.polimi.ingsw.PSP48.server.model.Cell[][])"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Zeus",
+    "l": "getValidCellForBuilding(int, int, ArrayList<Divinity>, Cell[][])",
+    "url": "getValidCellForBuilding(int,int,java.util.ArrayList,it.polimi.ingsw.PSP48.server.model.Cell[][])"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Apollo",
+    "l": "getValidCellForMove(int, int, Cell[][], ArrayList<Divinity>)",
+    "url": "getValidCellForMove(int,int,it.polimi.ingsw.PSP48.server.model.Cell[][],java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Artemis",
+    "l": "getValidCellForMove(int, int, Cell[][], ArrayList<Divinity>)",
+    "url": "getValidCellForMove(int,int,it.polimi.ingsw.PSP48.server.model.Cell[][],java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Divinity",
+    "l": "getValidCellForMove(int, int, Cell[][], ArrayList<Divinity>)",
+    "url": "getValidCellForMove(int,int,it.polimi.ingsw.PSP48.server.model.Cell[][],java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Minotaur",
+    "l": "getValidCellForMove(int, int, Cell[][], ArrayList<Divinity>)",
+    "url": "getValidCellForMove(int,int,it.polimi.ingsw.PSP48.server.model.Cell[][],java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Prometheus",
+    "l": "getValidCellForMove(int, int, Cell[][], ArrayList<Divinity>)",
+    "url": "getValidCellForMove(int,int,it.polimi.ingsw.PSP48.server.model.Cell[][],java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Atlas",
+    "l": "getValidCellsToPutDome(int, int, Cell[][], ArrayList<Divinity>)",
+    "url": "getValidCellsToPutDome(int,int,it.polimi.ingsw.PSP48.server.model.Cell[][],java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Demeter",
+    "l": "getValidCellsToPutDome(int, int, Cell[][], ArrayList<Divinity>)",
+    "url": "getValidCellsToPutDome(int,int,it.polimi.ingsw.PSP48.server.model.Cell[][],java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Divinity",
+    "l": "getValidCellsToPutDome(int, int, Cell[][], ArrayList<Divinity>)",
+    "url": "getValidCellsToPutDome(int,int,it.polimi.ingsw.PSP48.server.model.Cell[][],java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Hephaestus",
+    "l": "getValidCellsToPutDome(int, int, Cell[][], ArrayList<Divinity>)",
+    "url": "getValidCellsToPutDome(int,int,it.polimi.ingsw.PSP48.server.model.Cell[][],java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Hestia",
+    "l": "getValidCellsToPutDome(int, int, Cell[][], ArrayList<Divinity>)",
+    "url": "getValidCellsToPutDome(int,int,it.polimi.ingsw.PSP48.server.model.Cell[][],java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Prometheus",
+    "l": "getValidCellsToPutDome(int, int, Cell[][], ArrayList<Divinity>)",
+    "url": "getValidCellsToPutDome(int,int,it.polimi.ingsw.PSP48.server.model.Cell[][],java.util.ArrayList)"
+}, {"p": "it.polimi.ingsw.PSP48", "c": "WorkerValidCells", "l": "getValidPositions()"}, {
+    "p": "it.polimi.ingsw.PSP48",
+    "c": "WorkerValidCells",
+    "l": "getwC()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "ActionCoordinates",
+    "l": "getWorkerColumn()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "ActionCoordinates",
+    "l": "getWorkerRow()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Player",
+    "l": "getWorkersOnTable()"
+}, {"p": "it.polimi.ingsw.PSP48", "c": "WorkerValidCells", "l": "getwR()"}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "ColoursForPrinting",
+    "l": "gray"
+}, {"p": "it.polimi.ingsw.PSP48.server.model", "c": "Colour", "l": "GRAY"}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "ColoursForPrinting",
+    "l": "green"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "GUI()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandler",
+    "l": "handleClientDisconnection()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.networkmanager",
+    "c": "ClientNetworkOutcoming",
+    "l": "handleServerConnection()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Hephaestus",
+    "l": "Hephaestus()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Hestia",
+    "l": "Hestia()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.exceptions",
+    "c": "IncorrectLevelException",
+    "l": "IncorrectLevelException(String)",
+    "url": "%3Cinit%3E(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "DivinityChoiceController",
+    "l": "initialize()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "FirstPlayerSelectionController",
+    "l": "initialize()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "initialize()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "InitialPlayerRequestMessage",
+    "l": "InitialPlayerRequestMessage(ArrayList<String>)",
+    "url": "%3Cinit%3E(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "initialPositioningTurnChange()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "InitialPositioningTurnChange",
+    "l": "InitialPositioningTurnChange()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server",
+    "c": "Server",
+    "l": "insertPlayerInGameRoom(int, boolean, String, Calendar, ViewInterface)",
+    "url": "insertPlayerInGameRoom(int,boolean,java.lang.String,java.util.Calendar,it.polimi.ingsw.PSP48.ViewInterface)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "isAlreadyHighlighted(ArrayList<WorkerValidCells>, Position, int, int)",
+    "url": "isAlreadyHighlighted(java.util.ArrayList,it.polimi.ingsw.PSP48.server.model.Position,int,int)"
+}, {"p": "it.polimi.ingsw.PSP48.server.model", "c": "Cell", "l": "isDomed()"}, {
+    "p": "it.polimi.ingsw.PSP48.server",
+    "c": "GameRoom",
+    "l": "isGameWithDivinities()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "isGameWithDivinities()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "DivinityChoiceController",
+    "l": "lastDivinity()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "direction",
+    "l": "left"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "LoginScreenController",
+    "l": "loginButton()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "LoginScreenController",
+    "l": "LoginScreenController(GUI)",
+    "url": "%3Cinit%3E(it.polimi.ingsw.PSP48.client.GUI.GUI)"
+}, {"p": "it.polimi.ingsw.PSP48.server", "c": "EndReason", "l": "lose"}, {
+    "p": "it.polimi.ingsw.PSP48",
+    "c": "SantoriniGame",
+    "l": "main(String[])",
+    "url": "main(java.lang.String[])"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "Tester",
+    "l": "main(String[])",
+    "url": "main(java.lang.String[])"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "manageWindowClose()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.exceptions",
+    "c": "MaximumLevelNotReachedException",
+    "l": "MaximumLevelNotReachedException(String)",
+    "url": "%3Cinit%3E(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.exceptions",
+    "c": "MaximumLevelReachedException",
+    "l": "MaximumLevelReachedException(String)",
+    "url": "%3Cinit%3E(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Minotaur",
+    "l": "Minotaur()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "Model(int, boolean)",
+    "url": "%3Cinit%3E(int,boolean)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.networkmanager",
+    "c": "ClientNetworkOutcoming",
+    "l": "move(ActionCoordinates)",
+    "url": "move(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.observers",
+    "c": "ServerNetworkObserver",
+    "l": "move(ActionCoordinates)",
+    "url": "move(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.observers",
+    "c": "ViewObserver",
+    "l": "move(ActionCoordinates)",
+    "url": "move(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "move(ActionCoordinates)",
+    "url": "move(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "move(ActionCoordinates)",
+    "url": "move(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Apollo",
+    "l": "move(int, int, int, int, Model)",
+    "url": "move(int,int,int,int,it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Artemis",
+    "l": "move(int, int, int, int, Model)",
+    "url": "move(int,int,int,int,it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Athena",
+    "l": "move(int, int, int, int, Model)",
+    "url": "move(int,int,int,int,it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Divinity",
+    "l": "move(int, int, int, int, Model)",
+    "url": "move(int,int,int,int,it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Minotaur",
+    "l": "move(int, int, int, int, Model)",
+    "url": "move(int,int,int,int,it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Prometheus",
+    "l": "move(int, int, int, int, Model)",
+    "url": "move(int,int,int,int,it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToServer",
+    "c": "MoveMessage",
+    "l": "MoveMessage(ActionCoordinates)",
+    "url": "%3Cinit%3E(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "NetworkMessagesToClient",
+    "l": "NetworkMessagesToClient()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToServer",
+    "c": "NetworkMessagesToServer",
+    "l": "NetworkMessagesToServer()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "nextAction()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "nextActionFSM()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "DivinityChoiceController",
+    "l": "nextDivinity()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "nextState()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "CurrentPlayerCantEndTurn",
+    "l": "nextState()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "EndGame",
+    "l": "nextState()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "GameControllerState",
+    "l": "nextState()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "InitialPositioningTurnChange",
+    "l": "nextState()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "PostBuild",
+    "l": "nextState()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "PostMove",
+    "l": "nextState()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "PrometheusInitialOptionalBuild",
+    "l": "nextState()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "PrometheusMovePostOptionalBuild",
+    "l": "nextState()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestBuildDome",
+    "l": "nextState()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestChallengerDivinitiesSelection",
+    "l": "nextState()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestDivinitySelection",
+    "l": "nextState()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestFirstPlayerSelection",
+    "l": "nextState()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestInitialPositioning",
+    "l": "nextState()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestMove",
+    "l": "nextState()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestOptionalBuild",
+    "l": "nextState()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestOptionalMove",
+    "l": "nextState()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "StartGameWithDivinities",
+    "l": "nextState()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "StartGameWithoutDivinities",
+    "l": "nextState()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "TurnChange",
+    "l": "nextState()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "TurnEnd",
+    "l": "nextState()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.setupMessagesToClient",
+    "c": "NicknameRequest",
+    "l": "NicknameRequest(String)",
+    "url": "%3Cinit%3E(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.exceptions",
+    "c": "NotAdjacentCellException",
+    "l": "NotAdjacentCellException(String)",
+    "url": "%3Cinit%3E(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server",
+    "c": "GameRoom",
+    "l": "notifyAllPlayersOfDisconnection(String)",
+    "url": "notifyAllPlayersOfDisconnection(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server",
+    "c": "GameRoom",
+    "l": "notifyAllPlayersOfLoser(String)",
+    "url": "notifyAllPlayersOfLoser(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server",
+    "c": "GameRoom",
+    "l": "notifyAllPlayersOfWinner(String)",
+    "url": "notifyAllPlayersOfWinner(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48",
+    "c": "ViewInterface",
+    "l": "notifyObserver(Consumer<ViewObserver>)",
+    "url": "notifyObserver(java.util.function.Consumer)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "notifyObserver(Consumer<ViewObserver>)",
+    "url": "notifyObserver(java.util.function.Consumer)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "notifyObserver(Consumer<ViewObserver>)",
+    "url": "notifyObserver(java.util.function.Consumer)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "notifyObserver(Consumer<ViewObserver>)",
+    "url": "notifyObserver(java.util.function.Consumer)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandlerListener",
+    "l": "notifyObservers()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "notifyObservers(Consumer<ModelObserver>)",
+    "url": "notifyObservers(java.util.function.Consumer)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.exceptions",
+    "c": "NoTurnEndException",
+    "l": "NoTurnEndException(String)",
+    "url": "%3Cinit%3E(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.exceptions",
+    "c": "OccupiedCellException",
+    "l": "OccupiedCellException(String)",
+    "url": "%3Cinit%3E(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "OptionalMoveRequest",
+    "l": "OptionalMoveRequest(ArrayList<WorkerValidCells>)",
+    "url": "%3Cinit%3E(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Divinity",
+    "l": "othersBuilding(ActionCoordinates)",
+    "url": "othersBuilding(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities.testingDivinities",
+    "c": "DivFalse",
+    "l": "othersBuilding(ActionCoordinates)",
+    "url": "othersBuilding(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities.testingDivinities",
+    "c": "DivinityFalsePower",
+    "l": "othersBuilding(ActionCoordinates)",
+    "url": "othersBuilding(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Divinity",
+    "l": "othersDome(ActionCoordinates)",
+    "url": "othersDome(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities.testingDivinities",
+    "c": "DivFalse",
+    "l": "othersDome(ActionCoordinates)",
+    "url": "othersDome(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities.testingDivinities",
+    "c": "DivinityFalsePower",
+    "l": "othersDome(ActionCoordinates)",
+    "url": "othersDome(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Athena",
+    "l": "othersMove(ActionCoordinates, Cell[][])",
+    "url": "othersMove(it.polimi.ingsw.PSP48.server.model.ActionCoordinates,it.polimi.ingsw.PSP48.server.model.Cell[][])"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Divinity",
+    "l": "othersMove(ActionCoordinates, Cell[][])",
+    "url": "othersMove(it.polimi.ingsw.PSP48.server.model.ActionCoordinates,it.polimi.ingsw.PSP48.server.model.Cell[][])"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities.testingDivinities",
+    "c": "DivFalse",
+    "l": "othersMove(ActionCoordinates, Cell[][])",
+    "url": "othersMove(it.polimi.ingsw.PSP48.server.model.ActionCoordinates,it.polimi.ingsw.PSP48.server.model.Cell[][])"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities.testingDivinities",
+    "c": "DivinityFalsePower",
+    "l": "othersMove(ActionCoordinates, Cell[][])",
+    "url": "othersMove(it.polimi.ingsw.PSP48.server.model.ActionCoordinates,it.polimi.ingsw.PSP48.server.model.Cell[][])"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Pan",
+    "l": "Pan()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48",
+    "c": "PingMessage",
+    "l": "PingMessage()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "Player",
+    "l": "Player(String)",
+    "url": "%3Cinit%3E(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Player",
+    "l": "Player(String, Calendar, boolean, Colour)",
+    "url": "%3Cinit%3E(java.lang.String,java.util.Calendar,boolean,it.polimi.ingsw.PSP48.server.model.Colour)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "Player",
+    "l": "Player(String, ColoursForPrinting, String)",
+    "url": "%3Cinit%3E(java.lang.String,it.polimi.ingsw.PSP48.client.CLI.ColoursForPrinting,java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToServer",
+    "c": "PlayerDivinityMessage",
+    "l": "PlayerDivinityMessage(String)",
+    "url": "%3Cinit%3E(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Position",
+    "l": "Position(int, int)",
+    "url": "%3Cinit%3E(int,int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "PositioningRequest",
+    "l": "PositioningRequest(ArrayList<Position>)",
+    "url": "%3Cinit%3E(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "postBuild()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "PostBuild",
+    "l": "PostBuild()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Chronus",
+    "l": "postBuildWinCondition(Model)",
+    "url": "postBuildWinCondition(it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Divinity",
+    "l": "postBuildWinCondition(Model)",
+    "url": "postBuildWinCondition(it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "postMove()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "PostMove",
+    "l": "PostMove()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Divinity",
+    "l": "postMoveWinCondition(Model)",
+    "url": "postMoveWinCondition(it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Eros",
+    "l": "postMoveWinCondition(Model)",
+    "url": "postMoveWinCondition(it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Pan",
+    "l": "postMoveWinCondition(Model)",
+    "url": "postMoveWinCondition(it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "postWorkerChoiceBuild(ArrayList<WorkerValidCells>, ArrayList<WorkerValidCells>)",
+    "url": "postWorkerChoiceBuild(java.util.ArrayList,java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "postWorkerChoiceMove(WorkerValidCells)",
+    "url": "postWorkerChoiceMove(it.polimi.ingsw.PSP48.WorkerValidCells)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Circe",
+    "l": "preTurnSecondaryDivinityChecks(Model)",
+    "url": "preTurnSecondaryDivinityChecks(it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Divinity",
+    "l": "preTurnSecondaryDivinityChecks(Model)",
+    "url": "preTurnSecondaryDivinityChecks(it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "DivinityChoiceController",
+    "l": "prevDivinity()"
+}, {"p": "it.polimi.ingsw.PSP48.client.CLI", "c": "CLI", "l": "printBoard()"}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CellForPrinting",
+    "l": "printCellOnScreen()"
+}, {
+    "p": "it.polimi.ingsw.PSP48",
+    "c": "ViewInterface",
+    "l": "printMessage(String)",
+    "url": "printMessage(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "printMessage(String)",
+    "url": "printMessage(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "printMessage(String)",
+    "url": "printMessage(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "printMessage(String)",
+    "url": "printMessage(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "printMessage(String)",
+    "url": "printMessage(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandlerListener",
+    "l": "processGameMode(String)",
+    "url": "processGameMode(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandlerListener",
+    "l": "processNickname(String)",
+    "url": "processNickname(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Prometheus",
+    "l": "Prometheus()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "PrometheusInitialOptionalBuild()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "PrometheusInitialOptionalBuild",
+    "l": "PrometheusInitialOptionalBuild()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "PrometheusMovePostOptionalBuild()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "PrometheusMovePostOptionalBuild",
+    "l": "PrometheusMovePostOptionalBuild()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Divinity",
+    "l": "putWorkerOnBoard(Position, Model)",
+    "url": "putWorkerOnBoard(it.polimi.ingsw.PSP48.server.model.Position,it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Eros",
+    "l": "putWorkerOnBoard(Position, Model)",
+    "url": "putWorkerOnBoard(it.polimi.ingsw.PSP48.server.model.Position,it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.networkmanager",
+    "c": "ClientNetworkOutcoming",
+    "l": "putWorkerOnTable(Position)",
+    "url": "putWorkerOnTable(it.polimi.ingsw.PSP48.server.model.Position)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.observers",
+    "c": "ServerNetworkObserver",
+    "l": "putWorkerOnTable(Position)",
+    "url": "putWorkerOnTable(it.polimi.ingsw.PSP48.server.model.Position)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.observers",
+    "c": "ViewObserver",
+    "l": "putWorkerOnTable(Position)",
+    "url": "putWorkerOnTable(it.polimi.ingsw.PSP48.server.model.Position)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "putWorkerOnTable(Position)",
+    "url": "putWorkerOnTable(it.polimi.ingsw.PSP48.server.model.Position)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "putWorkerOnTable(Position)",
+    "url": "putWorkerOnTable(it.polimi.ingsw.PSP48.server.model.Position)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "ColoursForPrinting",
+    "l": "red"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "registerObserver(ModelObserver)",
+    "url": "registerObserver(it.polimi.ingsw.PSP48.observers.ModelObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandlerListener",
+    "l": "registerObserver(ServerNetworkObserver)",
+    "url": "registerObserver(it.polimi.ingsw.PSP48.observers.ServerNetworkObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48",
+    "c": "ViewInterface",
+    "l": "registerObserver(ViewObserver)",
+    "url": "registerObserver(it.polimi.ingsw.PSP48.observers.ViewObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "registerObserver(ViewObserver)",
+    "url": "registerObserver(it.polimi.ingsw.PSP48.observers.ViewObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "registerObserver(ViewObserver)",
+    "url": "registerObserver(it.polimi.ingsw.PSP48.observers.ViewObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "registerObserver(ViewObserver)",
+    "url": "registerObserver(it.polimi.ingsw.PSP48.observers.ViewObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.networkmanager",
+    "c": "ClientNetworkOutcoming",
+    "l": "registerPlayerDivinity(String)",
+    "url": "registerPlayerDivinity(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.observers",
+    "c": "ServerNetworkObserver",
+    "l": "registerPlayerDivinity(String)",
+    "url": "registerPlayerDivinity(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.observers",
+    "c": "ViewObserver",
+    "l": "registerPlayerDivinity(String)",
+    "url": "registerPlayerDivinity(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "registerPlayerDivinity(String)",
+    "url": "registerPlayerDivinity(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "registerPlayerDivinity(String)",
+    "url": "registerPlayerDivinity(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "DivinityChoiceController",
+    "l": "releasedChoose()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "DivinityChoiceController",
+    "l": "releasedNext()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "DivinityChoiceController",
+    "l": "releasedPrev()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server",
+    "c": "Server",
+    "l": "removeNickname(String)",
+    "url": "removeNickname(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.networkmanager",
+    "c": "ClientNetworkIncoming",
+    "l": "removeObserver(ClientNetworkObserver)",
+    "url": "removeObserver(it.polimi.ingsw.PSP48.observers.ClientNetworkObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "removePlayer(String)",
+    "url": "removePlayer(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.networkmanager",
+    "c": "ClientNetworkOutcoming",
+    "l": "replyPing()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandler",
+    "l": "replyPing()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandler",
+    "l": "requestBuild(ArrayList<WorkerValidCells>, ArrayList<WorkerValidCells>)",
+    "url": "requestBuild(java.util.ArrayList,java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "RequestBuild",
+    "l": "RequestBuild(ArrayList<WorkerValidCells>, ArrayList<WorkerValidCells>)",
+    "url": "%3Cinit%3E(java.util.ArrayList,java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "requestBuildDome()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestBuildDome",
+    "l": "RequestBuildDome()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "requestChallengerDivinitiesSelection()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestChallengerDivinitiesSelection",
+    "l": "RequestChallengerDivinitiesSelection()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "requestChallengerDivinitiesSelection(ArrayList<DivinitiesWithDescription>)",
+    "url": "requestChallengerDivinitiesSelection(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48",
+    "c": "ViewInterface",
+    "l": "requestChallengerDivinitiesSelection(ArrayList<DivinitiesWithDescription>, int)",
+    "url": "requestChallengerDivinitiesSelection(java.util.ArrayList,int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "requestChallengerDivinitiesSelection(ArrayList<DivinitiesWithDescription>, int)",
+    "url": "requestChallengerDivinitiesSelection(java.util.ArrayList,int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "requestChallengerDivinitiesSelection(ArrayList<DivinitiesWithDescription>, int)",
+    "url": "requestChallengerDivinitiesSelection(java.util.ArrayList,int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandler",
+    "l": "requestChallengerDivinitiesSelection(ArrayList<DivinitiesWithDescription>, int)",
+    "url": "requestChallengerDivinitiesSelection(java.util.ArrayList,int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "requestChallengerDivinitiesSelection(ArrayList<DivinitiesWithDescription>, int)",
+    "url": "requestChallengerDivinitiesSelection(java.util.ArrayList,int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "requestDivinitySelection()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestDivinitySelection",
+    "l": "RequestDivinitySelection()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48",
+    "c": "ViewInterface",
+    "l": "requestDivinitySelection(ArrayList<DivinitiesWithDescription>)",
+    "url": "requestDivinitySelection(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "requestDivinitySelection(ArrayList<DivinitiesWithDescription>)",
+    "url": "requestDivinitySelection(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "requestDivinitySelection(ArrayList<DivinitiesWithDescription>)",
+    "url": "requestDivinitySelection(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "requestDivinitySelection(ArrayList<DivinitiesWithDescription>)",
+    "url": "requestDivinitySelection(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandler",
+    "l": "requestDivinitySelection(ArrayList<DivinitiesWithDescription>)",
+    "url": "requestDivinitySelection(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "requestDivinitySelection(ArrayList<DivinitiesWithDescription>)",
+    "url": "requestDivinitySelection(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48",
+    "c": "ViewInterface",
+    "l": "requestDomeOrBuild(ArrayList<WorkerValidCells>, ArrayList<WorkerValidCells>)",
+    "url": "requestDomeOrBuild(java.util.ArrayList,java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "requestDomeOrBuild(ArrayList<WorkerValidCells>, ArrayList<WorkerValidCells>)",
+    "url": "requestDomeOrBuild(java.util.ArrayList,java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "requestDomeOrBuild(ArrayList<WorkerValidCells>, ArrayList<WorkerValidCells>)",
+    "url": "requestDomeOrBuild(java.util.ArrayList,java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "requestDomeOrBuild(ArrayList<WorkerValidCells>, ArrayList<WorkerValidCells>)",
+    "url": "requestDomeOrBuild(java.util.ArrayList,java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "requestDomeOrBuild(ArrayList<WorkerValidCells>, ArrayList<WorkerValidCells>)",
+    "url": "requestDomeOrBuild(java.util.ArrayList,java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "requestFirstPlayerSelection()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestFirstPlayerSelection",
+    "l": "RequestFirstPlayerSelection()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "LoginScreenController",
+    "l": "requestGameModeSend()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "requestGameModeSend(String)",
+    "url": "requestGameModeSend(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "requestGameModeSend(String)",
+    "url": "requestGameModeSend(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.observers",
+    "c": "ClientNetworkObserver",
+    "l": "requestGameModeSend(String)",
+    "url": "requestGameModeSend(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48",
+    "c": "ViewInterface",
+    "l": "requestInitialPlayerSelection(ArrayList<String>)",
+    "url": "requestInitialPlayerSelection(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "requestInitialPlayerSelection(ArrayList<String>)",
+    "url": "requestInitialPlayerSelection(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "requestInitialPlayerSelection(ArrayList<String>)",
+    "url": "requestInitialPlayerSelection(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "requestInitialPlayerSelection(ArrayList<String>)",
+    "url": "requestInitialPlayerSelection(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandler",
+    "l": "requestInitialPlayerSelection(ArrayList<String>)",
+    "url": "requestInitialPlayerSelection(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "requestInitialPlayerSelection(ArrayList<String>)",
+    "url": "requestInitialPlayerSelection(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "requestInitialPositioning()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestInitialPositioning",
+    "l": "RequestInitialPositioning()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48",
+    "c": "ViewInterface",
+    "l": "requestInitialPositioning(ArrayList<Position>)",
+    "url": "requestInitialPositioning(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "requestInitialPositioning(ArrayList<Position>)",
+    "url": "requestInitialPositioning(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "requestInitialPositioning(ArrayList<Position>)",
+    "url": "requestInitialPositioning(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "requestInitialPositioning(ArrayList<Position>)",
+    "url": "requestInitialPositioning(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandler",
+    "l": "requestInitialPositioning(ArrayList<Position>)",
+    "url": "requestInitialPositioning(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "requestInitialPositioning(ArrayList<Position>)",
+    "url": "requestInitialPositioning(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "RequestMessagePrint",
+    "l": "RequestMessagePrint(String)",
+    "url": "%3Cinit%3E(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandler",
+    "l": "requestMessageSend(String)",
+    "url": "requestMessageSend(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "requestMove()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestMove",
+    "l": "RequestMove()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48",
+    "c": "ViewInterface",
+    "l": "requestMove(ArrayList<WorkerValidCells>)",
+    "url": "requestMove(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "requestMove(ArrayList<WorkerValidCells>)",
+    "url": "requestMove(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "requestMove(ArrayList<WorkerValidCells>)",
+    "url": "requestMove(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "requestMove(ArrayList<WorkerValidCells>)",
+    "url": "requestMove(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandler",
+    "l": "requestMove(ArrayList<WorkerValidCells>)",
+    "url": "requestMove(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "requestMove(ArrayList<WorkerValidCells>)",
+    "url": "requestMove(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "RequestMove",
+    "l": "RequestMove(ArrayList<WorkerValidCells>)",
+    "url": "%3Cinit%3E(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "LoginScreenController",
+    "l": "requestNicknameSend()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "requestNicknameSend(String)",
+    "url": "requestNicknameSend(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "requestNicknameSend(String)",
+    "url": "requestNicknameSend(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.networkmanager",
+    "c": "ClientNetworkOutcoming",
+    "l": "requestNicknameSend(String)",
+    "url": "requestNicknameSend(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.observers",
+    "c": "ClientNetworkObserver",
+    "l": "requestNicknameSend(String)",
+    "url": "requestNicknameSend(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "RequestOpionalBuild",
+    "l": "RequestOpionalBuild(ArrayList<WorkerValidCells>, ArrayList<WorkerValidCells>)",
+    "url": "%3Cinit%3E(java.util.ArrayList,java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestOptionalBuild",
+    "l": "RequestOptionalBuild()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48",
+    "c": "ViewInterface",
+    "l": "requestOptionalBuild(ArrayList<WorkerValidCells>, ArrayList<WorkerValidCells>)",
+    "url": "requestOptionalBuild(java.util.ArrayList,java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "requestOptionalBuild(ArrayList<WorkerValidCells>, ArrayList<WorkerValidCells>)",
+    "url": "requestOptionalBuild(java.util.ArrayList,java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "requestOptionalBuild(ArrayList<WorkerValidCells>, ArrayList<WorkerValidCells>)",
+    "url": "requestOptionalBuild(java.util.ArrayList,java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "requestOptionalBuild(ArrayList<WorkerValidCells>, ArrayList<WorkerValidCells>)",
+    "url": "requestOptionalBuild(java.util.ArrayList,java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandler",
+    "l": "requestOptionalBuild(ArrayList<WorkerValidCells>, ArrayList<WorkerValidCells>)",
+    "url": "requestOptionalBuild(java.util.ArrayList,java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "requestOptionalBuild(ArrayList<WorkerValidCells>, ArrayList<WorkerValidCells>)",
+    "url": "requestOptionalBuild(java.util.ArrayList,java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "requestOptionalBuilding()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "requestOptionalMove()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestOptionalMove",
+    "l": "RequestOptionalMove()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48",
+    "c": "ViewInterface",
+    "l": "requestOptionalMove(ArrayList<WorkerValidCells>)",
+    "url": "requestOptionalMove(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "requestOptionalMove(ArrayList<WorkerValidCells>)",
+    "url": "requestOptionalMove(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "requestOptionalMove(ArrayList<WorkerValidCells>)",
+    "url": "requestOptionalMove(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "requestOptionalMove(ArrayList<WorkerValidCells>)",
+    "url": "requestOptionalMove(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandler",
+    "l": "requestOptionalMove(ArrayList<WorkerValidCells>)",
+    "url": "requestOptionalMove(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "requestOptionalMove(ArrayList<WorkerValidCells>)",
+    "url": "requestOptionalMove(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "ColoursForPrinting",
+    "l": "reset"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "resetBoard(ArrayList<Position>)",
+    "url": "resetBoard(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Player",
+    "l": "restoreTempDivinity()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.networkmanager",
+    "c": "ClientNetworkIncoming",
+    "l": "retrieveMessage()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "direction",
+    "l": "right"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "run()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.networkmanager",
+    "c": "ClientNetworkIncoming",
+    "l": "run()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.networkmanager",
+    "c": "ClientNetworkOutcoming",
+    "l": "run()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server",
+    "c": "Server",
+    "l": "run()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandler",
+    "l": "run()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandlerListener",
+    "l": "run()"
+}, {
+    "p": "it.polimi.ingsw.PSP48",
+    "c": "SantoriniGame",
+    "l": "SantoriniGame()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.networkmanager",
+    "c": "ClientNetworkOutcoming",
+    "l": "selectAvailableDivinities(ArrayList<String>)",
+    "url": "selectAvailableDivinities(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.observers",
+    "c": "ServerNetworkObserver",
+    "l": "selectAvailableDivinities(ArrayList<String>)",
+    "url": "selectAvailableDivinities(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.observers",
+    "c": "ViewObserver",
+    "l": "selectAvailableDivinities(ArrayList<String>)",
+    "url": "selectAvailableDivinities(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "selectAvailableDivinities(ArrayList<String>)",
+    "url": "selectAvailableDivinities(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "selectAvailableDivinities(ArrayList<String>)",
+    "url": "selectAvailableDivinities(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.networkmanager",
+    "c": "ClientNetworkOutcoming",
+    "l": "selectFirstPlayer(String)",
+    "url": "selectFirstPlayer(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.observers",
+    "c": "ServerNetworkObserver",
+    "l": "selectFirstPlayer(String)",
+    "url": "selectFirstPlayer(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.observers",
+    "c": "ViewObserver",
+    "l": "selectFirstPlayer(String)",
+    "url": "selectFirstPlayer(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "selectFirstPlayer(String)",
+    "url": "selectFirstPlayer(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "selectFirstPlayer(String)",
+    "url": "selectFirstPlayer(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "sendBuildChoice(ActionCoordinates)",
+    "url": "sendBuildChoice(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "sendChallengerDivinities(ArrayList<String>)",
+    "url": "sendChallengerDivinities(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "sendDomeChoice(ActionCoordinates)",
+    "url": "sendDomeChoice(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "sendFirstPlayerChoice(String)",
+    "url": "sendFirstPlayerChoice(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "sendInitialPositioningChoice(Position)",
+    "url": "sendInitialPositioningChoice(it.polimi.ingsw.PSP48.server.model.Position)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "sendMoveChoice(ActionCoordinates)",
+    "url": "sendMoveChoice(it.polimi.ingsw.PSP48.server.model.ActionCoordinates)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI.sceneControllers",
+    "c": "GameBoardController",
+    "l": "sendPlayerDivinity(String)",
+    "url": "sendPlayerDivinity(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "sendPlayerList()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server",
+    "c": "Server",
+    "l": "Server()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Cell",
+    "l": "setActualLevel(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "BuildingsForPrinting",
+    "l": "setBuildingColour(ColoursForPrinting)",
+    "url": "setBuildingColour(it.polimi.ingsw.PSP48.client.CLI.ColoursForPrinting)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CellForPrinting",
+    "l": "setBuildings(BuildingsForPrinting)",
+    "url": "setBuildings(it.polimi.ingsw.PSP48.client.CLI.BuildingsForPrinting)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CellForPrinting",
+    "l": "setCellColour(ColoursForPrinting)",
+    "url": "setCellColour(it.polimi.ingsw.PSP48.client.CLI.ColoursForPrinting)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "setChallengerIndex(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandlerListener",
+    "l": "setClosed()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Player",
+    "l": "setColour(Colour)",
+    "url": "setColour(it.polimi.ingsw.PSP48.server.model.Colour)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "ColoursForPrinting",
+    "l": "setColour(String)",
+    "url": "setColour(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Player",
+    "l": "setDivinity(Divinity)",
+    "url": "setDivinity(it.polimi.ingsw.PSP48.server.model.divinities.Divinity)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "Player",
+    "l": "setDivinity(String)",
+    "url": "setDivinity(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CellForPrinting",
+    "l": "setDome(DomeForPrinting)",
+    "url": "setDome(it.polimi.ingsw.PSP48.client.CLI.DomeForPrinting)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "DomeForPrinting",
+    "l": "setDomeColour(ColoursForPrinting)",
+    "url": "setDomeColour(it.polimi.ingsw.PSP48.client.CLI.ColoursForPrinting)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "setFirstPlayerIndex(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandlerListener",
+    "l": "setGameMode(boolean)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.networkmanager",
+    "c": "ClientNetworkOutcoming",
+    "l": "setGameMode(String)",
+    "url": "setGameMode(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Player",
+    "l": "setLastWorkerUsed(int, int)",
+    "url": "setLastWorkerUsed(int,int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "BuildingsForPrinting",
+    "l": "setLevel(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "Player",
+    "l": "setName(String)",
+    "url": "setName(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Player",
+    "l": "setNewLevel(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "setNextPlayer()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "setNextPlayer(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "setNextPlayer(String)",
+    "url": "setNextPlayer(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "setNumberOfPlayer(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "setNumberOfPlayers(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Player",
+    "l": "setOldLevel(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.networkmanager",
+    "c": "ClientNetworkIncoming",
+    "l": "setOutHandler(ClientNetworkOutcoming)",
+    "url": "setOutHandler(it.polimi.ingsw.PSP48.client.networkmanager.ClientNetworkOutcoming)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Cell",
+    "l": "setPlayer(String)",
+    "url": "setPlayer(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "Player",
+    "l": "setPlayerColour(ColoursForPrinting)",
+    "url": "setPlayerColour(it.polimi.ingsw.PSP48.client.CLI.ColoursForPrinting)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "setPlayerDivinity(String, String)",
+    "url": "setPlayerDivinity(java.lang.String,java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CellForPrinting",
+    "l": "setPlayerOnCell(Player)",
+    "url": "setPlayerOnCell(it.polimi.ingsw.PSP48.client.CLI.Player)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "setRoomID(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Player",
+    "l": "setTempDivinity(Divinity)",
+    "url": "setTempDivinity(it.polimi.ingsw.PSP48.server.model.divinities.Divinity)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandlerListener",
+    "l": "setUploader(ClientHandler)",
+    "url": "setUploader(it.polimi.ingsw.PSP48.server.networkmanager.ClientHandler)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandler",
+    "l": "setUpMessage(ClientSetupMessages)",
+    "url": "setUpMessage(it.polimi.ingsw.PSP48.setupMessagesToClient.ClientSetupMessages)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.networkmanager",
+    "c": "ClientNetworkIncoming",
+    "l": "shutdown()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.networkmanager",
+    "c": "ClientNetworkOutcoming",
+    "l": "shutDown()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "start(Stage)",
+    "url": "start(javafx.stage.Stage)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "Tester",
+    "l": "start(Stage)",
+    "url": "start(javafx.stage.Stage)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "startGameWithDivinities()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "StartGameWithDivinities",
+    "l": "StartGameWithDivinities()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "startGameWithoutDivinities()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "StartGameWithoutDivinities",
+    "l": "StartGameWithoutDivinities()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "startNetwork(String)",
+    "url": "startNetwork(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "stopNetwork()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Apollo",
+    "l": "supportedDivinity(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Artemis",
+    "l": "supportedDivinity(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Athena",
+    "l": "supportedDivinity(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Atlas",
+    "l": "supportedDivinity(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Chronus",
+    "l": "supportedDivinity(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Circe",
+    "l": "supportedDivinity(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Demeter",
+    "l": "supportedDivinity(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Divinity",
+    "l": "supportedDivinity(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Eros",
+    "l": "supportedDivinity(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Hephaestus",
+    "l": "supportedDivinity(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Hestia",
+    "l": "supportedDivinity(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Minotaur",
+    "l": "supportedDivinity(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Pan",
+    "l": "supportedDivinity(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Prometheus",
+    "l": "supportedDivinity(int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Zeus",
+    "l": "supportedDivinity(int)"
+}, {"p": "it.polimi.ingsw.PSP48.server", "c": "Server", "l": "TCP_PORT"}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "Tester",
+    "l": "Tester()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "BuildingsForPrinting",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CellForPrinting",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "ColoursForPrinting",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "DomeForPrinting",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "Player",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "CurrentPlayerCantEndTurn",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "EndGame",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "GameControllerState",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "InitialPositioningTurnChange",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "PostBuild",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "PostMove",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "PrometheusInitialOptionalBuild",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "PrometheusMovePostOptionalBuild",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestBuildDome",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestChallengerDivinitiesSelection",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestDivinitySelection",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestFirstPlayerSelection",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestInitialPositioning",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestMove",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestOptionalBuild",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "RequestOptionalMove",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "StartGameWithDivinities",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "StartGameWithoutDivinities",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "TurnChange",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "TurnEnd",
+    "l": "toString()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Artemis",
+    "l": "turnBegin(Model)",
+    "url": "turnBegin(it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Athena",
+    "l": "turnBegin(Model)",
+    "url": "turnBegin(it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Circe",
+    "l": "turnBegin(Model)",
+    "url": "turnBegin(it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Demeter",
+    "l": "turnBegin(Model)",
+    "url": "turnBegin(it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Divinity",
+    "l": "turnBegin(Model)",
+    "url": "turnBegin(it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Hephaestus",
+    "l": "turnBegin(Model)",
+    "url": "turnBegin(it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Hestia",
+    "l": "turnBegin(Model)",
+    "url": "turnBegin(it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Prometheus",
+    "l": "turnBegin(Model)",
+    "url": "turnBegin(it.polimi.ingsw.PSP48.server.model.Model)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "turnChange()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "TurnChange",
+    "l": "TurnChange()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller",
+    "c": "GameController",
+    "l": "turnEnd()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Divinity",
+    "l": "turnEnd()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.controller.ControllerState",
+    "c": "TurnEnd",
+    "l": "TurnEnd()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Model",
+    "l": "unregisterObserver(ModelObserver)",
+    "url": "unregisterObserver(it.polimi.ingsw.PSP48.observers.ModelObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandlerListener",
+    "l": "unregisterObserver(ServerNetworkObserver)",
+    "url": "unregisterObserver(it.polimi.ingsw.PSP48.observers.ServerNetworkObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48",
+    "c": "ViewInterface",
+    "l": "unregisterObserver(ViewObserver)",
+    "url": "unregisterObserver(it.polimi.ingsw.PSP48.observers.ViewObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "CLI",
+    "l": "unregisterObserver(ViewObserver)",
+    "url": "unregisterObserver(it.polimi.ingsw.PSP48.observers.ViewObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.GUI",
+    "c": "GUI",
+    "l": "unregisterObserver(ViewObserver)",
+    "url": "unregisterObserver(it.polimi.ingsw.PSP48.observers.ViewObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "unregisterObserver(ViewObserver)",
+    "url": "unregisterObserver(it.polimi.ingsw.PSP48.observers.ViewObserver)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "direction",
+    "l": "up"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToClient",
+    "c": "UpdatedPlayerList",
+    "l": "UpdatedPlayerList(ArrayList<String>)",
+    "url": "%3Cinit%3E(java.util.ArrayList)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "direction",
+    "l": "upleft"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "direction",
+    "l": "upright"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Divinity",
+    "l": "validCellsForInitialPositioning(Cell[][])",
+    "url": "validCellsForInitialPositioning(it.polimi.ingsw.PSP48.server.model.Cell[][])"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "Eros",
+    "l": "validCellsForInitialPositioning(Cell[][])",
+    "url": "validCellsForInitialPositioning(it.polimi.ingsw.PSP48.server.model.Cell[][])"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "ColoursForPrinting",
+    "l": "valueOf(String)",
+    "url": "valueOf(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server",
+    "c": "EndReason",
+    "l": "valueOf(String)",
+    "url": "valueOf(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Colour",
+    "l": "valueOf(String)",
+    "url": "valueOf(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "direction",
+    "l": "valueOf(String)",
+    "url": "valueOf(java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "ColoursForPrinting",
+    "l": "values()"
+}, {"p": "it.polimi.ingsw.PSP48.server", "c": "EndReason", "l": "values()"}, {
+    "p": "it.polimi.ingsw.PSP48.server.model",
+    "c": "Colour",
+    "l": "values()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.model.divinities",
+    "c": "direction",
+    "l": "values()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.virtualview",
+    "c": "VirtualView",
+    "l": "VirtualView(ClientHandler, ClientHandlerListener, String)",
+    "url": "%3Cinit%3E(it.polimi.ingsw.PSP48.server.networkmanager.ClientHandler,it.polimi.ingsw.PSP48.server.networkmanager.ClientHandlerListener,java.lang.String)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.server.networkmanager",
+    "c": "ClientHandlerListener",
+    "l": "waitForMessages()"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "ColoursForPrinting",
+    "l": "white"
+}, {"p": "it.polimi.ingsw.PSP48.server.model", "c": "Colour", "l": "WHITE"}, {
+    "p": "it.polimi.ingsw.PSP48.server",
+    "c": "EndReason",
+    "l": "win"
+}, {
+    "p": "it.polimi.ingsw.PSP48.networkMessagesToServer",
+    "c": "WorkerPositionMessage",
+    "l": "WorkerPositionMessage(Position)",
+    "url": "%3Cinit%3E(it.polimi.ingsw.PSP48.server.model.Position)"
+}, {
+    "p": "it.polimi.ingsw.PSP48",
+    "c": "WorkerValidCells",
+    "l": "WorkerValidCells(ArrayList<Position>, int, int)",
+    "url": "%3Cinit%3E(java.util.ArrayList,int,int)"
+}, {
+    "p": "it.polimi.ingsw.PSP48.client.CLI",
+    "c": "ColoursForPrinting",
+    "l": "yellow"
+}, {"p": "it.polimi.ingsw.PSP48.server.model.divinities", "c": "Zeus", "l": "Zeus()", "url": "%3Cinit%3E()"}]

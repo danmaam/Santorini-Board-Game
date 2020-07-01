@@ -10,8 +10,17 @@ import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+/**
+ * Implements Atlas Divinity
+ */
 public class Atlas extends Divinity {
 
+    /**
+     * Checks if Atlas is allowed for a certain number of players
+     *
+     * @param pNum the number of players
+     * @return if the divinity is allowed for the specified number of players
+     */
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
             case 2:
@@ -23,8 +32,7 @@ public class Atlas extends Divinity {
     }
 
     /**
-     * Generates a list of valid cells where a certain worker can build
-     * Redefined method since Atlas can add a dome on each level     *
+     * Generates a list of valid cells where a certain worker can build.Atlas can add a dome on each level.
      *
      * @param workerRow        the row where the worker is
      * @param workerColumn     the column where the worker is
@@ -62,7 +70,7 @@ public class Atlas extends Divinity {
     }
 
     /**
-     * Overriden since Atlas can add a dome on each level
+     * Process the dome. Atlas can add a dome on each level
      *
      * @param workerRow    the row where the worker is
      * @param workerColumn the column where the worker is
@@ -107,11 +115,21 @@ public class Atlas extends Divinity {
     }
 
 
+    /**
+     * Getter of name
+     *
+     * @return the divinity's name
+     */
     @Override
     public String getName() {
         return "Atlas";
     }
 
+    /**
+     * Getter of divinity's description
+     *
+     * @return the description of the divinity power
+     */
     @Override
     public String getDescription() {
         return "Your Worker may build a dome at any level.";

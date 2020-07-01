@@ -10,8 +10,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of a base divinity, following the game rules for matches without divinities
+ */
 public class Divinity {
 
+    /**
+     * Checks if a divinity is allowed for a certain number of players
+     *
+     * @param pNum the number of players
+     * @return if the divinity is allowed for the specified number of players
+     */
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
             case 2:
@@ -25,14 +34,21 @@ public class Divinity {
     //Methods
 
     /**
+     * Getter of divinity's name
+     *
      * @return the name of the divinity
      */
     public String getName() {
         return "Basic";
     }
 
+    /**
+     * Getter of divinity's description
+     *
+     * @return the description of the divinity power
+     */
     public String getDescription() {
-        return "questa divinità fa cose e robe";
+        return "Base Divinity";
     }
 
 
@@ -86,6 +102,7 @@ public class Divinity {
     }
 
     /**
+     * Process the move of a worker
      * @param workerRow    the row of the cell where the worker is
      * @param workerColumn the column of the cell where the worker is
      * @param moveRow      the row of the board where the worker wants to move
@@ -145,6 +162,8 @@ public class Divinity {
 
 
     /**
+     * Calculates the valid cells where a certain worker can build
+     *
      * @param workerRow             the row where the worker is
      * @param workerColumn          the column where the worker is
      * @param otherDivinitiesInGame the other divinites in game
@@ -186,18 +205,20 @@ public class Divinity {
 
 
     /**
+     * Process a worker's build action
+     *
      * @param workerRow    the row where the worker is
      * @param workerColumn the column where the worker is
      * @param buildRow     the row where the player wants to add a level
      * @param buildColumn  the column where the player wants to add a level
      * @param gd           the actual game board state
+     * @return the next controller fsm state
      * @throws NotAdjacentCellException     if the cell where the player wants to build is not adiacent to the worker's one
      * @throws OccupiedCellException        if the destination cell is occupied by another worker
      * @throws DomedCellException           is the cell is already domed
      * @throws MaximumLevelReachedException if the cell contains a level 3 building
      * @throws DivinityPowerException       if another divinity blocks the increment of the level
      * @author Daniele Mammone
-     * @return the next controller fsm state
      */
     public GameControllerState build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws
             NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelReachedException, DivinityPowerException {
@@ -240,11 +261,12 @@ public class Divinity {
     // METHODS FOR DOME CONSTRUCTION
 
     /**
-     * Generates a list of valid cells where a certain worker can build
+     * Generates a list of valid cells where a certain worker can put a dome
      *
      * @param workerRow    the row where the worker is
      * @param workerColumn the column where the worker is
      * @param gameCells    the actual state of the board
+     * @param divinitiesInGame the other divinities in the match
      * @return true if it's possible to add the dome
      * @author Daniele Mammone
      */
@@ -276,18 +298,19 @@ public class Divinity {
     }
 
     /**
+     * Process a worker's dome putting
      * @param workerRow    the row where the worker is
      * @param workerColumn the column where the worker is
      * @param domeRow      the row where the player wants to add the dome
      * @param domeColumn   the column where the player wants to add the dome
      * @param gd           the current game board state
+     * @return the next controller fsm state
      * @throws NotAdjacentCellException        if the cell where the player wants to add the dome is not adiacent to the worker's one
      * @throws OccupiedCellException           if the destination cell is occupied by another worker
      * @throws DomedCellException              is the cell is already domed
      * @throws MaximumLevelNotReachedException if the cell doesn't contain a level 3 building
      * @throws DivinityPowerException          if another divinity blocks the adding of the dome
      * @author Daniele Mammone
-     * @return the next controller fsm state
      */
     public GameControllerState dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws
             NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
@@ -333,6 +356,7 @@ public class Divinity {
     //METHODS FOR POWER ON OTHER PLAYERS
 
     /**
+     * Checks if the divinity is blocking another player from doing a certain move in a certain cell
      * @param moveCells the cells where the player wants to move, where the player is and the difference between the two cells
      * @param gameBoard the game board
      * @return true if the divinity doesn't affect the other player's move, false if the divinity blocks the move
@@ -344,6 +368,7 @@ public class Divinity {
 
 
     /**
+     * Checks if the divinity is blocking another player from doing a build in a certain cell
      * @param buildCells the cells where the player wants to build, where the player is and the old level of the cell
      * @return true if the divinity doesn't affect the other player's move, false if the divinity blocks the move
      * @author Daniele Mammone
@@ -353,6 +378,7 @@ public class Divinity {
     }
 
     /**
+     *      Checks if the divinity is blocking another player from putting a dome in a certain cell
      * @param domeCells the cells where the player wants to add a dome, the cells where the player is and
      * @return true if the divinity doesn't affect the other player's move, false if the divinity blocks the move
      * @author Daniele Mammone
@@ -364,7 +390,7 @@ public class Divinity {
 
 
     /**
-     * don't do anything since without a divinity there isn't a modifier
+     * Process the end of a player turn
      *
      * @return the next controller fsm state
      */
@@ -373,8 +399,8 @@ public class Divinity {
     }
 
     /**
-     * don't do anything since without a divinity there isn't a modifier
-     *
+     * Checks if the player is able to complete his turn
+     * @param gd the game model
      * @return the next controller fsm state
      */
 

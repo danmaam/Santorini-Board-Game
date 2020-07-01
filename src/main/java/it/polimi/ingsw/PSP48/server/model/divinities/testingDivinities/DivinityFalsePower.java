@@ -4,12 +4,28 @@ import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
 import it.polimi.ingsw.PSP48.server.model.Cell;
 import it.polimi.ingsw.PSP48.server.model.divinities.Divinity;
 
+/**
+ * Divinity used for testing purposes
+ */
 public class DivinityFalsePower extends Divinity {
+    /**
+     * Blocks the move on certain cells (with row = 1 or column = 2)
+     *
+     * @param moveCells the cells where the player wants to move, where the player is and the difference between the two cells
+     * @param gameBoard the game board
+     * @return true if the move is allowed
+     */
     @Override
     public Boolean othersMove(ActionCoordinates moveCells, Cell[][] gameBoard) {
         return moveCells.getMoveRow() != 1 || moveCells.getMoveColumn() != 2;
     }
 
+    /**
+     * Blocks the move on certain cells (with row = 1 or column = 2)
+     *
+     * @param moveCells the cells where the player wants to build, where the player is and the difference between the two cells
+     * @return true if the move is allowed
+     */
     @Override
     public Boolean othersBuilding(ActionCoordinates moveCells) {
         return moveCells.getMoveRow() != 1 || moveCells.getMoveColumn() != 2;

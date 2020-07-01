@@ -27,6 +27,11 @@ public class LoginScreenController {
 
     private final GUI View;
 
+    /**
+     * Initializes the login screen controller
+     *
+     * @param view the player's view
+     */
     public LoginScreenController(GUI view) {
         View = view;
     }

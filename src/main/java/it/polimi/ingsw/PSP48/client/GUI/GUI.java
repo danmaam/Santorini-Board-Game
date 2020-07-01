@@ -323,6 +323,8 @@ public class GUI extends Application implements ClientNetworkObserver, ViewInter
     }
 
     /**
+     * Getter of network message sender
+     *
      * @return the network handler used to send messages over the network
      */
     public ClientNetworkOutcoming getUploader() {
@@ -413,6 +415,7 @@ public class GUI extends Application implements ClientNetworkObserver, ViewInter
     }
 
     /**
+     * Getter of the number of players in game
      *
      * @return the number of players in the game
      */

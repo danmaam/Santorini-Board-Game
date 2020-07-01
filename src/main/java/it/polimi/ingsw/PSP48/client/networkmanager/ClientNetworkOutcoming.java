@@ -28,6 +28,11 @@ public class ClientNetworkOutcoming implements Runnable, ViewObserver {
      */
     private final Queue<Object> messagesToBeSent = new LinkedList<>();
 
+    /**
+     * Initializes the message sender
+     *
+     * @param s the socket of connection to the server
+     */
     public ClientNetworkOutcoming(Socket s) {
         this.server = s;
     }

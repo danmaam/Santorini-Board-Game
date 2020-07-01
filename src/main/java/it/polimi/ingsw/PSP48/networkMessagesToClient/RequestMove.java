@@ -6,9 +6,8 @@ import it.polimi.ingsw.PSP48.WorkerValidCells;
 import java.util.ArrayList;
 
 /**
- * /**
- * * Network messages sent to client to request the player to complete a move action. It contains the coordinates of possible
- * * move action
+ * Network messages sent to client to request the player to complete a move action. It contains the coordinates of possible
+ * move action
  */
 
 public class RequestMove extends NetworkMessagesToClient {

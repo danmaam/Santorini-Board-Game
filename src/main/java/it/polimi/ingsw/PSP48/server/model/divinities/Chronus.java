@@ -2,8 +2,16 @@ package it.polimi.ingsw.PSP48.server.model.divinities;
 
 import it.polimi.ingsw.PSP48.server.model.Model;
 
-
+/**
+ * Implementation of Chronus Divinity
+ */
 public class Chronus extends Divinity {
+    /**
+     * Checks if Chronus is allowed for a certain number of players
+     *
+     * @param pNum the number of players
+     * @return if the divinity is allowed for the specified number of players
+     */
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
             case 2:
@@ -33,13 +41,23 @@ public class Chronus extends Divinity {
         return numbersOfCompleteTowers >= 5;
     }
 
+    /**
+     * Getter of name
+     *
+     * @return the divinity's name
+     */
     @Override
     public String getName() {
         return "Chronus";
     }
 
+    /**
+     * Getter of divinity's description
+     *
+     * @return the description of the divinity power
+     */
     @Override
-    public String getDescription(){
+    public String getDescription() {
         return "You also win when there are at least five Complete Towers on the board.";
     }
 }

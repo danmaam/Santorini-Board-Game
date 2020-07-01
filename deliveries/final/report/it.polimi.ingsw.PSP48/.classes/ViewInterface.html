@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: ViewInterface</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">it.polimi.ingsw.PSP48</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: ViewInterface (it.polimi.ingsw.PSP48)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+        </tr>
+        <tr>
+            <td class="name">ViewInterface</td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ModelObserver;
+        <i>4</i>&nbsp;import it.polimi.ingsw.PSP48.observers.ViewObserver;
+        <i>5</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Position;
+        <i>6</i>&nbsp;
+        <i>7</i>&nbsp;import java.util.ArrayList;
+        <i>8</i>&nbsp;import java.util.function.Consumer;
+        <i>9</i>&nbsp;
+        <i>10</i>&nbsp;/**
+        <i>11</i>&nbsp; * The interface of the view of the game.
+        <i>12</i>&nbsp; * It&#39;s also an observer of the model
+        <i>13</i>&nbsp; */
+        <i>14</i>&nbsp;public interface ViewInterface extends ModelObserver {
+        <i>15</i>&nbsp; /**
+        <i>16</i>&nbsp; * Processes the controller&#39;s request of a move action
+        <i>17</i>&nbsp; *
+        <i>18</i>&nbsp; * @param validCellsForMove the association valid workers-valid cells where the worker can move
+        <i>19</i>&nbsp; */
+        <i>20</i>&nbsp; public void requestMove(ArrayList&lt;WorkerValidCells&gt; validCellsForMove);
+        <i>21</i>&nbsp;
+        <i>22</i>&nbsp; /**
+        <i>23</i>&nbsp; * Processes the controller&#39;s request of a construction action
+        <i>24</i>&nbsp; *
+        <i>25</i>&nbsp; * @param validForBuild the association valid workers-valid cells where a worker can build
+        <i>26</i>&nbsp; * @param validForDome the association valid workers-valid cells where a worker can put a dome
+        <i>27</i>&nbsp; */
+        <i>28</i>&nbsp; public void requestDomeOrBuild(ArrayList&lt;WorkerValidCells&gt; validForBuild, ArrayList&lt;WorkerValidCells&gt;
+        validForDome);
+        <i>29</i>&nbsp;
+        <i>30</i>&nbsp; /**
+        <i>31</i>&nbsp; * Processes the controller&#39;s message of endgame
+        <i>32</i>&nbsp; *
+        <i>33</i>&nbsp; * @param messageOfEndGame the reason why the game ended
+        <i>34</i>&nbsp; */
+        <i>35</i>&nbsp; public void endgame(String messageOfEndGame);
+        <i>36</i>&nbsp;
+        <i>37</i>&nbsp; /**
+        <i>38</i>&nbsp; * Processes the controller&#39;s request to a player to choose his divinity
+        <i>39</i>&nbsp; *
+        <i>40</i>&nbsp; * @param availableDivinities the available divinities
+        <i>41</i>&nbsp; */
+        <i>42</i>&nbsp; public void requestDivinitySelection(ArrayList&lt;DivinitiesWithDescription&gt;
+        availableDivinities);
+        <i>43</i>&nbsp;
+        <i>44</i>&nbsp; /**
+        <i>45</i>&nbsp; * Processes the controller&#39;s request to the challenger for choosing the first player of the
+        game
+        <i>46</i>&nbsp; *
+        <i>47</i>&nbsp; * @param players the lists of players in the match
+        <i>48</i>&nbsp; */
+        <i>49</i>&nbsp; public void requestInitialPlayerSelection(ArrayList&lt;String&gt; players);
+        <i>50</i>&nbsp;
+        <i>51</i>&nbsp; /**
+        <i>52</i>&nbsp; * Processes the controller&#39;s request to a player to put a worker on the board
+        <i>53</i>&nbsp; *
+        <i>54</i>&nbsp; * @param validCells the positions where a worker can be put
+        <i>55</i>&nbsp; */
+        <i>56</i>&nbsp; public void requestInitialPositioning(ArrayList&lt;Position&gt; validCells);
+        <i>57</i>&nbsp;
+        <i>58</i>&nbsp; /**
+        <i>59</i>&nbsp; * Processes the controller&#39;s request to the challenger to choose the divinities available
+        for the game
+        <i>60</i>&nbsp; *
+        <i>61</i>&nbsp; * @param div the available divinities
+        <i>62</i>&nbsp; * @param playerNumber the number of players of the match
+        <i>63</i>&nbsp; */
+        <i>64</i>&nbsp; public void requestChallengerDivinitiesSelection(ArrayList&lt;DivinitiesWithDescription&gt; div,
+        int playerNumber);
+        <i>65</i>&nbsp;
+        <i>66</i>&nbsp; /**
+        <i>67</i>&nbsp; * Processes the controller&#39;s request of showing a message
+        <i>68</i>&nbsp; *
+        <i>69</i>&nbsp; * @param s the message to be shown
+        <i>70</i>&nbsp; */
+        <i>71</i>&nbsp; public void printMessage(String s);
+        <i>72</i>&nbsp;
+        <i>73</i>&nbsp; /**
+        <i>74</i>&nbsp; * Processes the controller&#39;s request of an optional move action, or to skip it
+        <i>75</i>&nbsp; *
+        <i>76</i>&nbsp; * @param validCellsForMove the association valid workers-valid cells where the worker can move
+        <i>77</i>&nbsp; */
+        <i>78</i>&nbsp; public void requestOptionalMove(ArrayList&lt;WorkerValidCells&gt; validCellsForMove);
+        <i>79</i>&nbsp;
+        <i>80</i>&nbsp; /**
+        <i>81</i>&nbsp; * Processes the controller&#39;s request of an optional construction action, or to skip it
+        <i>82</i>&nbsp; *
+        <i>83</i>&nbsp; * @param build the association valid workers-valid cells where a worker can build
+        <i>84</i>&nbsp; * @param dome the association valid workers-valid cells where a worker can put a dome
+        <i>85</i>&nbsp; */
+        <i>86</i>&nbsp; public void requestOptionalBuild(ArrayList&lt;WorkerValidCells&gt; build, ArrayList&lt;WorkerValidCells&gt;
+        dome);
+        <i>87</i>&nbsp;
+        <i>88</i>&nbsp; /**
+        <i>89</i>&nbsp; * Registers a view observer
+        <i>90</i>&nbsp; *
+        <i>91</i>&nbsp; * @param obv the new observer
+        <i>92</i>&nbsp; */
+        <i>93</i>&nbsp; public void registerObserver(ViewObserver obv);
+        <i>94</i>&nbsp;
+        <i>95</i>&nbsp; /**
+        <i>96</i>&nbsp; * Stops an observer from observing the view
+        <i>97</i>&nbsp; *
+        <i>98</i>&nbsp; * @param obv the observer to be removed
+        <i>99</i>&nbsp; */
+        <i>100</i>&nbsp; public void unregisterObserver(ViewObserver obv);
+        <i>101</i>&nbsp;
+        <i>102</i>&nbsp; /**
+        <i>103</i>&nbsp; * Notifies all observers to complete an action
+        <i>104</i>&nbsp; *
+        <i>105</i>&nbsp; * @param lambda the observer&#39;s method to be invoked
+        <i>106</i>&nbsp; */
+        <i>107</i>&nbsp; public void notifyObserver(Consumer&lt;ViewObserver&gt; lambda);
+        <i>108</i>&nbsp;
+        <i>109</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2020-07-01 19:47</div>
+</div>
+</body>
+</html>

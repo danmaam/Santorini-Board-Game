@@ -10,8 +10,17 @@ import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+/**
+ * Implements Apollo Divinity
+ */
 public class Apollo extends Divinity {
 
+    /**
+     * Checks if Apollo is allowed for a certain number of players
+     *
+     * @param pNum the number of players
+     * @return if the divinity is allowed for the specified number of players
+     */
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
             case 2:
@@ -22,6 +31,11 @@ public class Apollo extends Divinity {
         return false;
     }
 
+    /**
+     * Getter of name
+     *
+     * @return the divinity's name
+     */
     @Override
     public String getName() {
         return "Apollo";
@@ -180,6 +194,11 @@ public class Apollo extends Divinity {
         return gameBoard[mR][mC].getLevel() == 3 && gameBoard[mR][mC].getLevel() > gameBoard[wR][wC].getLevel();
     }
 
+    /**
+     * Getter of divinity's description
+     *
+     * @return the description of the divinity power
+     */
     @Override
     public String getDescription() {
         return "Your Worker may move into an opponent Worker’s space by forcing their Worker to the space yours just vacated.";

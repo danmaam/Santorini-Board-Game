@@ -112,6 +112,8 @@ public class Model {
     }
 
     /**
+     * Checks if divinities are allowed in the game
+     *
      * @return if divinities are allowed in the match
      */
     public boolean isGameWithDivinities() {
@@ -119,6 +121,8 @@ public class Model {
     }
 
     /**
+     * Getter of the maximum number of player allowed for the game
+     *
      * @return the number of player allowed for the match
      */
     public int getGamePlayerNumber() {
@@ -143,6 +147,13 @@ public class Model {
         return playersInGame;
     }
 
+    /**
+     * Adds a player in the game, and notifies all the observers of the edit
+     *
+     * @param playerName     the player's name
+     * @param playerColour   the players' colour
+     * @param playerBirthday the player's birthday
+     */
     public void addPlayer(String playerName, Colour playerColour, Calendar playerBirthday) {
         Player newP = new Player(playerName, playerBirthday, gameWithDivinities, playerColour);
         playersInGame.add(newP);
@@ -185,6 +196,8 @@ public class Model {
     }
 
     /**
+     * Getter of first player's index
+     *
      * @return the index of the first player
      */
     public int getFirstPlayerIndex() {
@@ -218,8 +231,9 @@ public class Model {
     }
 
     /**
+     * Obtains the position of all player's workers in the board
      * @param playerName the name of the player
-     * @return the cells' coordinates of player
+     * @return the coordinates of the cells where the player has a worker
      * @author Daniele Mammone
      */
     public ArrayList<Position> getPlayerPositionsInMap(String playerName) {
@@ -247,6 +261,7 @@ public class Model {
     }
 
     /**
+     * Getter of the game board
      * @return the game board
      */
     public Cell[][] getGameBoard() {
@@ -301,6 +316,7 @@ public class Model {
     }
 
     /**
+     * Getter of challenger's index
      * @return the index of the challenger
      */
     public int getChallengerIndex() {
@@ -312,6 +328,7 @@ public class Model {
      *
      * @param playerName The player name
      * @param divinity   The divinity to be associated to the player
+     * @throws IllegalArgumentException if the divinity is not allowed
      * @author Daniele Mammone
      */
     public void setPlayerDivinity(String playerName, String divinity) throws IllegalArgumentException {

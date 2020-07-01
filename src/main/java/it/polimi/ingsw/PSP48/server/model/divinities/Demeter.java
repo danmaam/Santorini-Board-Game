@@ -12,8 +12,17 @@ import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of Demeter divinity
+ */
 public class Demeter extends Divinity {
 
+    /**
+     * Checks if Divinity is allowed for a certain number of players
+     *
+     * @param pNum the number of players
+     * @return if the divinity is allowed for the specified number of players
+     */
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
             case 2:
@@ -43,7 +52,8 @@ public class Demeter extends Divinity {
     }
 
     /**
-     * Generates a list of cells where a certain worker can build
+     * Generates a list of cells where a certain worker can build. At the second build, Demeter can't build on the
+     * first cell where she built.
      *
      * @param workerRow             the row where the worker is
      * @param workerColumn          the column where the worker is
@@ -60,7 +70,7 @@ public class Demeter extends Divinity {
     }
 
     /**
-     * Generates a list of cells where a certain worker can put a dome
+     * Generates a list of cells where a certain worker can put a dome excluding the previous cell when it's invoked for the second build.
      *
      * @param workerRow        the row where the worker is
      * @param workerColumn     the column where the worker is
@@ -77,7 +87,7 @@ public class Demeter extends Divinity {
     }
 
     /**
-     * Redefined since we have to check that the player is not trying to build on the same cell
+     * Process the build checking that the player is not trying to build on the same cell
      *
      * @param workerRow    the row where the worker is
      * @param workerColumn the column where the worker is
@@ -112,12 +122,18 @@ public class Demeter extends Divinity {
         }
     }
 
+    /**
+     * Getter of name
+     *
+     * @return the divinity's name
+     */
     @Override
     public String getName() {
         return "Demeter";
     }
 
     /**
+     * Process the dome checking that the player isn't adding a dome on the build where he previously built.
      * @param workerRow    the row where the worker is
      * @param workerColumn the column where the worker is
      * @param domeRow      the row where the player wants to add the dome
@@ -150,6 +166,11 @@ public class Demeter extends Divinity {
         }
     }
 
+    /**
+     * Getter of divinity's description
+     *
+     * @return the description of the divinity power
+     */
     @Override
     public String getDescription() {
         return "Your Worker may build one additional time, but not on the same space.";
