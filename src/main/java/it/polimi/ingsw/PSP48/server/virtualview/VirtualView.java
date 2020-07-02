@@ -107,7 +107,6 @@ public class VirtualView implements ViewInterface, ServerNetworkObserver {
      */
     @Override
     public void requestChallengerDivinitiesSelection(ArrayList<DivinitiesWithDescription> div, int playerNumber) {
-        System.out.println("invoking network handler");
         playerHandler.requestChallengerDivinitiesSelection(div, playerNumber);
     }
 

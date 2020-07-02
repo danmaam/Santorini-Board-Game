@@ -285,6 +285,8 @@ public class GameBoardController {
 
         for (Position p : validCells) {
             ImageView choiceImage = new ImageView(isSelectionImage);
+            choiceImage.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEvent -> choiceImage.setOpacity(0.8));
+            choiceImage.addEventFilter(MouseEvent.MOUSE_EXITED, mouseEvent -> choiceImage.setOpacity(0.4));
             choiceImage.setOpacity(0.4);
             choiceImage.setFitWidth(95);
             choiceImage.setFitHeight(95);
@@ -334,6 +336,8 @@ public class GameBoardController {
 
                 ImageView workerImage = new ImageView(workerChoiceImage);
                 workerImage.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
+                workerImage.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEvent -> workerImage.setOpacity(1));
+                workerImage.addEventFilter(MouseEvent.MOUSE_EXITED, mouseEvent -> workerImage.setOpacity(0.9));
                 workerImage.setOpacity(0.9);
                 workerImage.setFitWidth(95);
                 workerImage.setFitHeight(95);
@@ -371,6 +375,8 @@ public class GameBoardController {
         boardPane.setVisible(true);
         for (Position p : chosenWorker.getValidPositions()) {
             ImageView highlight = new ImageView(isSelectionImage);
+            highlight.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEvent -> highlight.setOpacity(0.8));
+            highlight.addEventFilter(MouseEvent.MOUSE_EXITED, mouseEvent -> highlight.setOpacity(0.4));
             highlight.setOpacity(0.4);
             highlight.setFitWidth(95);
             highlight.setFitHeight(95);
@@ -446,6 +452,8 @@ public class GameBoardController {
                 }
                 //we assign an highlight and a mouse event to the worker
                 ImageView workerImage = new ImageView(workerChoiceImage);
+                workerImage.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEvent -> workerImage.setOpacity(1));
+                workerImage.addEventFilter(MouseEvent.MOUSE_EXITED, mouseEvent -> workerImage.setOpacity(0.9));
                 workerImage.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
                 workerImage.setOpacity(0.9);
                 workerImage.setFitWidth(95);
@@ -459,6 +467,8 @@ public class GameBoardController {
                         buildHighlighted = isAlreadyHighlighted(validForBuild, p1, w1.getwR(), w1.getwC());
                         if (!buildHighlighted) {
                             ImageView buildChoice = new ImageView(isSelectionImage);
+                            buildChoice.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEvent -> buildChoice.setOpacity(0.8));
+                            buildChoice.addEventFilter(MouseEvent.MOUSE_EXITED, mouseEvent -> buildChoice.setOpacity(0.4));
                             buildChoice.setOpacity(0.4);
                             buildChoice.setFitWidth(95);
                             buildChoice.setFitHeight(95);
@@ -523,6 +533,8 @@ public class GameBoardController {
                 {
                     //we highlight the worker first
                     ImageView workerHighlight = new ImageView(workerChoiceImage);
+                    workerHighlight.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEvent -> workerHighlight.setOpacity(1));
+                    workerHighlight.addEventFilter(MouseEvent.MOUSE_EXITED, mouseEvent -> workerHighlight.setOpacity(0.9));
                     workerHighlight.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
                     workerHighlight.setOpacity(0.9);
                     workerHighlight.setFitWidth(95);
@@ -591,6 +603,8 @@ public class GameBoardController {
                     if (!buildHighlighted) {
                         ImageView buildChoice = new ImageView(isSelectionImage);
                         buildChoice.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
+                        buildChoice.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEvent -> buildChoice.setOpacity(0.8));
+                        buildChoice.addEventFilter(MouseEvent.MOUSE_EXITED, mouseEvent -> buildChoice.setOpacity(0.4));
                         buildChoice.setOpacity(0.4);
                         buildChoice.setFitWidth(95);
                         buildChoice.setFitHeight(95);
@@ -705,6 +719,8 @@ public class GameBoardController {
         for (WorkerValidCells w : validCellsForMove)
         {
             ImageView workerImage = new ImageView(workerChoiceImage);
+            workerImage.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEvent -> workerImage.setOpacity(1));
+            workerImage.addEventFilter(MouseEvent.MOUSE_EXITED, mouseEvent -> workerImage.setOpacity(0.9));
             workerImage.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
             workerImage.setOpacity(0.9);
             workerImage.setFitWidth(95);
@@ -715,6 +731,8 @@ public class GameBoardController {
                 if (!isAlreadyHighlighted(validCellsForMove, p, w.getwR(), w.getwC()))
                 {
                     ImageView cellChoice = new ImageView(isSelectionImage);
+                    cellChoice.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEvent -> cellChoice.setOpacity(0.8));
+                    cellChoice.addEventFilter(MouseEvent.MOUSE_EXITED, mouseEvent -> cellChoice.setOpacity(0.4));
                     cellChoice.setOpacity(0.4);
                     cellChoice.setFitWidth(95);
                     cellChoice.setFitHeight(95);

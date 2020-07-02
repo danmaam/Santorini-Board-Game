@@ -240,8 +240,8 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
             String workerCoordinate;
             boolean inputSet = false;
             if (validCellsForMove.size() > 1) {
+                this.printBoard();
                 do {
-                    this.printBoard();
                     System.out.println("Choose the worker you want to move, in the format row,column");
                     workerCoordinate = s.nextLine();
                     if (workerCoordinate.split(",").length == 2) {
@@ -249,10 +249,14 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
                         workerColumn = Integer.parseInt(workerCoordinate.split(",")[1]) - 1;
                         validCellsMove = containsWorker(validCellsForMove, workerRow, workerColumn);
                         if (validCellsMove == null) {
+                            this.printBoard();
                             System.out.println("Invalid choice");
+
                         } else inputSet = true;
                     } else {
+                        this.printBoard();
                         System.out.println("Invalid input format");
+
                     }
                 } while (!inputSet);
             } else {
@@ -282,18 +286,21 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
             inputSet = false;
             String cellCoordinate;
 
+            this.printBoard();
             do {
-                this.printBoard();
                 System.out.println("Choose the cell where you want to move the worker, in the format row,column");
                 cellCoordinate = s.nextLine();
                 if (cellCoordinate.split(",").length == 2) {
                     chosenRow = Integer.parseInt(cellCoordinate.split(",")[0]) - 1;
                     chosenColumn = Integer.parseInt(cellCoordinate.split(",")[1]) - 1;
                     if (!validCellsMove.contains(chosenRow, chosenColumn)) {
+                        this.printBoard();
                         System.out.println("Invalid choice");
                     } else inputSet = true;
                 } else {
+                    this.printBoard();
                     System.out.println("Invalid input format");
+
                 }
             } while (!inputSet);
 
@@ -369,8 +376,9 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
 
 
             if (validForBuild.size() > 1 || validForDome.size() > 1 || (validForBuild.size() > 0 && validForDome.size() > 0 && !(validForBuild.get(0).getwR() == validForDome.get(0).getwR() && validForBuild.get(0).getwC() == validForDome.get(0).getwC()))) {
+                this.printBoard();
                 do {
-                    this.printBoard();
+
                     System.out.println("Red cells are for building, yellow cells can be domed, green cells can take both actions");
                     System.out.println("Choose the worker you want to do the build, in the format row,column");
                     workerCoordinate = s.nextLine();
@@ -381,9 +389,11 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
                         validCellsDome = containsWorker(validForDome, workerRow, workerColumn);
 
                         if (validCellsBuild == null && validCellsDome == null) {
+                            this.printBoard();
                             System.out.println("Invalid choice");
                         } else inputSet = true;
                     } else {
+                        this.printBoard();
                         System.out.println("Invalid input format");
                     }
                 } while (!inputSet);
@@ -453,8 +463,9 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
 
 
             inputSet = false;
+            this.printBoard();
             do {
-                this.printBoard();
+
                 System.out.println("Red cells are for building, yellow cells can be domed, green cells can take both actions");
                 System.out.println("Choose the cell where you want to do the build, in the format row,column");
                 cellCoordinate = s.nextLine();
@@ -462,9 +473,11 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
                     chosenRow = Integer.parseInt(cellCoordinate.split(",")[0]) - 1;
                     chosenColumn = Integer.parseInt(cellCoordinate.split(",")[1]) - 1;
                     if (!(validCellsBuild != null && validCellsBuild.contains(chosenRow, chosenColumn) || (validCellsDome != null && validCellsDome.contains(chosenRow, chosenColumn)))) {
+                        this.printBoard();
                         System.out.println("Invalid choice");
                     } else inputSet = true;
                 } else {
+                    this.printBoard();
                     System.out.println("Invalid input format");
                 }
             } while (!inputSet);
@@ -626,17 +639,19 @@ public class CLI implements Runnable, ViewInterface, ClientNetworkObserver {
             Scanner s = new Scanner(System.in);
             String workerCoordinate;
             boolean inputSet = false;
+            this.printBoard();
             do {
-                this.printBoard();
                 System.out.println("Choose the cell where you want to put your worker on, in the format row,column");
                 workerCoordinate = s.nextLine();
                 if (workerCoordinate.split(",").length == 2) {
                     chosenRow = Integer.parseInt(workerCoordinate.split(",")[0]) - 1;
                     chosenColumn = Integer.parseInt(workerCoordinate.split(",")[1]) - 1;
                     if (!validCells.contains(new Position(chosenRow, chosenColumn))) {
+                        this.printBoard();
                         System.out.println("Invalid choice");
                     } else inputSet = true;
                 } else {
+                    this.printBoard();
                     System.out.println("Invalid input format");
                 }
             } while (!inputSet);

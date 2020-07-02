@@ -112,7 +112,6 @@ public class ClientHandler implements Runnable {
      * @param players the list of players in game
      */
     public synchronized void requestInitialPlayerSelection(ArrayList<String> players) {
-        System.out.println("Sending request for initial player selection");
         messagesToBeSent.add(new InitialPlayerRequestMessage(players));
         notifyAll();
     }
@@ -123,7 +122,6 @@ public class ClientHandler implements Runnable {
      * @param validCells the cells where the positioning is valid
      */
     public synchronized void requestInitialPositioning(ArrayList<Position> validCells) {
-        System.out.println("Sending request for Initial Positioning");
         messagesToBeSent.add(new PositioningRequest(validCells));
         notifyAll();
     }

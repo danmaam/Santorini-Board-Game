@@ -128,7 +128,7 @@ public class Tester extends GUI {
         players.add("pluto");
         players.add("paperino");
 
-        boardController.requestChallengerDivinitiesSelection(d);
+        boardController.requestMove(move);
 
 
     }

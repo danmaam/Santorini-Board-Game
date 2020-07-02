@@ -81,7 +81,6 @@ public class GameController implements ViewObserver {
      */
     @Override
     public void move(ActionCoordinates p) {
-        System.out.println("doing move");
         //i must check if this move allows the player to end the turn
         try {
             nextAction = model.getCurrentPlayer().getDivinity().move(p.getWorkerRow(), p.getWorkerColumn(), p.getMoveRow(), p.getMoveColumn(), model);
@@ -121,7 +120,6 @@ public class GameController implements ViewObserver {
      */
     @Override
     public void build(ActionCoordinates p) {
-        System.out.println("build");
         try {
             nextAction = model.getCurrentPlayer().getDivinity().build(p.getWorkerRow(), p.getWorkerColumn(), p.getMoveRow(), p.getMoveColumn(), model);
         } catch (NotAdjacentCellException e) {
@@ -156,7 +154,6 @@ public class GameController implements ViewObserver {
      */
     @Override
     public void dome(ActionCoordinates p) {
-        System.out.println("dome");
         try {
             nextAction = model.getCurrentPlayer().getDivinity().dome(p.getWorkerRow(), p.getWorkerColumn(), p.getMoveRow(), p.getMoveColumn(), model);
         } catch (NotAdjacentCellException e) {
