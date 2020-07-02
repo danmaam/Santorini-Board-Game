@@ -772,7 +772,7 @@ public class GameBoardController {
     public void changedPlayerList(ArrayList<String> newPlayerList) {
 
         playerList = newPlayerList;
-
+        if (startedGame) view.setNumberOfPlayers(newPlayerList.size());
         System.out.println("Changed player list run later");
         System.out.println("updating players list");
         if (view.getPlayersInGame() == 2) {

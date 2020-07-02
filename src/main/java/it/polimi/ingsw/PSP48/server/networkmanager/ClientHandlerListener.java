@@ -107,8 +107,8 @@ public class ClientHandlerListener implements Runnable {
             pingExecutor.shutdownNow();
             executors.shutdownNow();
             try {
-                pingExecutor.awaitTermination(5, TimeUnit.SECONDS);
-                executors.awaitTermination(5, TimeUnit.SECONDS);
+                pingExecutor.awaitTermination(10, TimeUnit.SECONDS);
+                executors.awaitTermination(10, TimeUnit.SECONDS);
             } catch (InterruptedException exc) {
                 e.printStackTrace();
             }
@@ -140,7 +140,7 @@ public class ClientHandlerListener implements Runnable {
             } else if (nextMessage instanceof NetworkMessagesToServer) {
                 executors.submit(this::notifyObservers);
             } else if (nextMessage instanceof PingMessage)
-                pingExecutor.schedule(() -> out.replyPing(), 5, TimeUnit.SECONDS);
+                if (!pingExecutor.isTerminated() && !pingExecutor.isShutdown()) pingExecutor.schedule(() -> out.replyPing(), 5, TimeUnit.SECONDS);
         }
     }
 

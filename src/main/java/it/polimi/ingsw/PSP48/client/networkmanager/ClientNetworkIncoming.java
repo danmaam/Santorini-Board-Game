@@ -88,7 +88,7 @@ public class ClientNetworkIncoming implements Runnable {
             } else if (newMessage instanceof ClientSetupMessages) {
                 for (ClientNetworkObserver o : observers) ((ClientSetupMessages) newMessage).doAction(o);
             } else if (newMessage instanceof PingMessage) {
-                pingScheduler.schedule(() -> o.replyPing(), 5, TimeUnit.SECONDS);
+                if (!pingScheduler.isShutdown() && !pingScheduler.isTerminated()) pingScheduler.schedule(() -> o.replyPing(), 5, TimeUnit.SECONDS);
             }
         }
 
@@ -120,7 +120,7 @@ public class ClientNetworkIncoming implements Runnable {
     public void shutdown() {
         pingScheduler.shutdownNow();
         try {
-            pingScheduler.awaitTermination(3, TimeUnit.SECONDS);
+            pingScheduler.awaitTermination(10, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
