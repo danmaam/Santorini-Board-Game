@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.ExecutorService;
@@ -103,8 +104,14 @@ public class ClientHandlerListener implements Runnable {
                 }
                 if (observers.isEmpty() && playerNickname != null) Server.removeNickname(playerNickname);
             }
-            pingExecutor.shutdown();
-            executors.shutdown();
+            pingExecutor.shutdownNow();
+            executors.shutdownNow();
+            try {
+                pingExecutor.awaitTermination(5, TimeUnit.SECONDS);
+                executors.awaitTermination(5, TimeUnit.SECONDS);
+            } catch (InterruptedException exc) {
+                e.printStackTrace();
+            }
             out.handleClientDisconnection();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

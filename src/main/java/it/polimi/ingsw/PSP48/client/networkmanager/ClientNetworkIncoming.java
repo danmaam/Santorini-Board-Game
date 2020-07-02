@@ -118,7 +118,12 @@ public class ClientNetworkIncoming implements Runnable {
      * Shutdowns the message listener. Sets closed to true to avoid false connection errors.
      */
     public void shutdown() {
-        pingScheduler.shutdown();
+        pingScheduler.shutdownNow();
+        try {
+            pingScheduler.awaitTermination(3, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         closed = true;
     }
 }
