@@ -4,7 +4,6 @@ import it.polimi.ingsw.PSP48.server.model.Colour;
 import it.polimi.ingsw.PSP48.server.model.Model;
 import it.polimi.ingsw.PSP48.server.model.Player;
 import it.polimi.ingsw.PSP48.server.model.Position;
-import it.polimi.ingsw.PSP48.server.model.divinities.testingDivinities.DivFalse;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import org.junit.Before;
 import org.junit.Test;

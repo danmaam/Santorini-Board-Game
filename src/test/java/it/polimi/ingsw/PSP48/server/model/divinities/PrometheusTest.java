@@ -4,7 +4,6 @@ import it.polimi.ingsw.PSP48.networkMessagesToClient.RequestMove;
 import it.polimi.ingsw.PSP48.server.controller.ControllerState.CurrentPlayerCantEndTurn;
 import it.polimi.ingsw.PSP48.server.controller.ControllerState.GameControllerState;
 import it.polimi.ingsw.PSP48.server.model.*;
-import it.polimi.ingsw.PSP48.server.model.divinities.testingDivinities.DivinityFalsePower;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import org.junit.Before;
 import org.junit.Test;

@@ -15,8 +15,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 /**
- * the entire game controller in his magnificence
- * it's an observer f the view, invokes methods on view and model
+ * The MVC game controller.
  */
 
 public class GameController implements ViewObserver {
@@ -212,7 +211,7 @@ public class GameController implements ViewObserver {
     public void registerPlayerDivinity(String divinity) {
         for (Player p : model.getPlayersInGame()) {
             if (p != model.getCurrentPlayer())
-                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " chose " + divinity + "!. \n Wait for your turn.");
+                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " chose " + divinity + "!.\nWait for your turn.");
         }
         model.setPlayerDivinity(model.getCurrentPlayer().getName(), divinity);
         //if the current player is the chosen, all divinities has benn selected, and the game must start
@@ -260,7 +259,7 @@ public class GameController implements ViewObserver {
     public void requestBuildDome() {
         for (Player p : model.getPlayersInGame()) {
             if (p != model.getCurrentPlayer())
-                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is doing a build action. Wait for your turn!");
+                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is doing a build action.\nWait for your turn!");
         }
         ArrayList<Divinity> otherDivinities = new ArrayList<>();
         for (Player p : model.getPlayersInGame()) {
@@ -288,7 +287,7 @@ public class GameController implements ViewObserver {
     public void requestMove() {
         for (Player p : model.getPlayersInGame()) {
             if (p != model.getCurrentPlayer())
-                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is doing a move action! \n Wait for your turn.");
+                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is doing a move action!\nWait for your turn.");
         }
         ArrayList<WorkerValidCells> validCells = new ArrayList<>();
         ArrayList<Position> workersPosition = model.getPlayerPositionsInMap(model.getCurrentPlayer().getName());
@@ -385,7 +384,7 @@ public class GameController implements ViewObserver {
      */
     public void startGameWithoutDivinities() {
         for (Player p : model.getPlayersInGame()) {
-            getPlayerView(p.getName()).printMessage("Game started. Waiting for your turn \n to put your workers on the board");
+            getPlayerView(p.getName()).printMessage("Game started. Waiting for your turn \nto put your workers on the board");
         }
 
         Player firstPlayer = model.getPlayersInGame().get(0);
@@ -432,7 +431,7 @@ public class GameController implements ViewObserver {
     public void requestInitialPositioning() {
         for (Player p : model.getPlayersInGame()) {
             if (p != model.getCurrentPlayer())
-                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is putting \n his workers on the board!");
+                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is putting \nhis workers on the board!");
         }
         getPlayerView(model.getCurrentPlayer().getName()).requestInitialPositioning(model.getCurrentPlayer().getDivinity().validCellsForInitialPositioning(model.getGameBoard()));
     }
@@ -481,7 +480,7 @@ public class GameController implements ViewObserver {
     public void requestOptionalBuilding() {
         for (Player p : model.getPlayersInGame()) {
             if (p != model.getCurrentPlayer())
-                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is doing an optional build action! \n Wait for your turn.");
+                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is doing an optional build action! \nWait for your turn.");
         }
         Position lastWorker = model.getCurrentPlayer().getLastWorkerMoved();
         ArrayList<Divinity> otherDivinities = new ArrayList<>();
@@ -521,7 +520,7 @@ public class GameController implements ViewObserver {
     public void requestOptionalMove() {
         for (Player p : model.getPlayersInGame()) {
             if (p != model.getCurrentPlayer())
-                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is doing an optional move action. \n Wait for your turn!");
+                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is doing an optional move action. \nWait for your turn!");
         }
         //first, I must check if the optional move is possible
         //the player must use the already moved worker
@@ -552,7 +551,7 @@ public class GameController implements ViewObserver {
     public void PrometheusInitialOptionalBuild() {
         for (Player p : model.getPlayersInGame()) {
             if (p != model.getCurrentPlayer())
-                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is doing an optional build action! \n Wait for your turn.");
+                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is doing an optional build action! \nWait for your turn.");
         }
         ArrayList<WorkerValidCells> build = new ArrayList<>();
         ArrayList<WorkerValidCells> dome = new ArrayList<>();
@@ -580,7 +579,7 @@ public class GameController implements ViewObserver {
     public void PrometheusMovePostOptionalBuild() {
         for (Player p : model.getPlayersInGame()) {
             if (p != model.getCurrentPlayer())
-                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is doing a move action! \n Wait for your turn.");
+                getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + " is doing a move action! \nWait for your turn.");
         }
         ArrayList<Divinity> otherDivinities = new ArrayList<>();
         for (Player p : model.getPlayersInGame()) {
@@ -615,11 +614,15 @@ public class GameController implements ViewObserver {
     }
 
     /**
-     * Returns the controller's next state. Used for debugging purposes
+     * Returns the controller's next state.
      *
      * @return the next controller state
      */
     public GameControllerState nextState() {
         return nextAction;
+    }
+
+    public void gameEnd() {
+        Server.destroyGameRoom(roomID, model.getCurrentPlayer().getName(), EndReason.lose);
     }
 }

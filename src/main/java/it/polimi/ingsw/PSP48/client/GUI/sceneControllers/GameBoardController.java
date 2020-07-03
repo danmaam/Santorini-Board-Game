@@ -486,6 +486,8 @@ public class GameBoardController {
                         if (!buildHighlighted)
                         {
                             ImageView buildHighlight = new ImageView(buildAndDomeImage);
+                            buildHighlight.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEvent -> buildHighlight.setOpacity(1));
+                            buildHighlight.addEventFilter(MouseEvent.MOUSE_EXITED, mouseEvent -> buildHighlight.setOpacity(0.9));
                             buildHighlight.setOpacity(0.4);
                             buildHighlight.setFitWidth(95);
                             buildHighlight.setFitHeight(95);
@@ -505,6 +507,8 @@ public class GameBoardController {
                             if (!canDome)
                             {
                                 ImageView dome = new ImageView(domeSelectionImage);
+                                dome.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEvent -> dome.setOpacity(0.8));
+                                dome.addEventFilter(MouseEvent.MOUSE_EXITED, mouseEvent -> dome.setOpacity(0.4));
                                 dome.setOpacity(0.4);
                                 dome.setFitWidth(95);
                                 dome.setFitHeight(95);
@@ -548,6 +552,8 @@ public class GameBoardController {
                         if (!domeHighlighted)
                         {
                             ImageView domeHighlight = new ImageView(domeSelectionImage);
+                            domeHighlight.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEvent -> domeHighlight.setOpacity(0.8));
+                            domeHighlight.addEventFilter(MouseEvent.MOUSE_EXITED, mouseEvent -> domeHighlight.setOpacity(0.4));
                             domeHighlight.setOpacity(0.4);
                             domeHighlight.setFitWidth(95);
                             domeHighlight.setFitHeight(95);
@@ -622,6 +628,8 @@ public class GameBoardController {
                     if (!buildHighlighted)
                     {
                         ImageView buildHighlight = new ImageView(buildAndDomeImage);
+                        buildHighlight.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEvent -> buildHighlight.setOpacity(0.8));
+                        buildHighlight.addEventFilter(MouseEvent.MOUSE_EXITED, mouseEvent -> buildHighlight.setOpacity(0.4));
                         buildHighlight.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
                         buildHighlight.setOpacity(0.4);
                         buildHighlight.setFitWidth(95);
@@ -642,6 +650,8 @@ public class GameBoardController {
                         if (!canDome)
                         {
                             ImageView dome = new ImageView(domeSelectionImage);
+                            dome.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEvent -> dome.setOpacity(0.8));
+                            dome.addEventFilter(MouseEvent.MOUSE_EXITED, mouseEvent -> dome.setOpacity(0.4));
                             dome.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
                             dome.setOpacity(0.4);
                             dome.setFitWidth(95);
@@ -675,6 +685,8 @@ public class GameBoardController {
                     if (!domeHighlighted)
                     {
                         ImageView domeHighlight = new ImageView(domeSelectionImage);
+                        domeHighlight.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEvent -> domeHighlight.setOpacity(0.8));
+                        domeHighlight.addEventFilter(MouseEvent.MOUSE_EXITED, mouseEvent -> domeHighlight.setOpacity(0.4));
                         domeHighlight.addEventFilter(MouseEvent.MOUSE_CLICKED, handleOperation);
                         domeHighlight.setOpacity(0.4);
                         domeHighlight.setFitWidth(95);
@@ -791,8 +803,6 @@ public class GameBoardController {
 
         playerList = newPlayerList;
         if (startedGame) view.setNumberOfPlayers(newPlayerList.size());
-        System.out.println("Changed player list run later");
-        System.out.println("updating players list");
         if (view.getPlayersInGame() == 2) {
             thirdPlayerBg.setVisible(false);
             thirdPlayerCard.setVisible(false);

@@ -257,7 +257,6 @@ public class GUI extends Application implements ClientNetworkObserver, ViewInter
      */
     @Override
     public void start(Stage stage) {
-        System.out.println(this);
         FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/SantoriniGUI.fxml"));
         loginController = new LoginScreenController(this);
         loginLoader.setController(loginController);
@@ -285,7 +284,6 @@ public class GUI extends Application implements ClientNetworkObserver, ViewInter
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
-        System.out.println("Initialized stage");
     }
 
     /**
@@ -377,7 +375,6 @@ public class GUI extends Application implements ClientNetworkObserver, ViewInter
         cIThread.start();
         cAThread.start();
 
-        System.out.println("Correctly connected to the server!");
     }
 
     /**

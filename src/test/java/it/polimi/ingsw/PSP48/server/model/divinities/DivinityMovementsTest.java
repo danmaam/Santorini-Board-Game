@@ -2,7 +2,6 @@ package it.polimi.ingsw.PSP48.server.model.divinities;
 
 import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
 import it.polimi.ingsw.PSP48.server.model.*;
-import it.polimi.ingsw.PSP48.server.model.divinities.testingDivinities.DivinityFalsePower;
 import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 import org.junit.Before;
 
