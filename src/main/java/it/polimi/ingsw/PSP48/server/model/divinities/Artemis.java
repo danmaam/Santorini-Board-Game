@@ -26,6 +26,7 @@ public class Artemis extends Divinity {
      *
      * @param pNum the number of players
      * @return if the divinity is allowed for the specified number of players
+     * @author Daniele Mammone
      */
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
@@ -41,6 +42,7 @@ public class Artemis extends Divinity {
      * Resets the last move coordinate and the super method to check if the player can end his turn.
      *
      * @return the next controller FSM state
+     * @author Daniele Mammone
      */
     @Override
     public GameControllerState turnBegin(Model gd) {
@@ -57,10 +59,12 @@ public class Artemis extends Divinity {
      * @param gameCells        the actual board state
      * @param divinitiesInGame the divinities in game
      * @return a list of cells valid for the move of the worker
+     * @author Daniele Mammone
      */
     @Override
     public ArrayList<Position> getValidCellForMove(int workerRow, int workerColumn, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
         return super.getValidCellForMove(workerRow, workerColumn, gameCells, divinitiesInGame).stream()
+                //removes the cell where Artemis did the first move
                 .filter(cell -> !(cell.getColumn() == oldColumnMove && cell.getRow() == oldRowMove))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
@@ -83,15 +87,18 @@ public class Artemis extends Divinity {
     @Override
     public GameControllerState move(int workerRow, int workerColumn, int moveRow, int moveColumn, Model gd) throws NotAdjacentCellException, IncorrectLevelException, OccupiedCellException, DomedCellException, DivinityPowerException, NoTurnEndException {
         GameControllerState nextAction;
+        //if it's the first move, the next controller state is the request for a second move
         if (oldRowMove == -1 && oldColumnMove == -1) nextAction = new RequestOptionalMove();
         else {
             nextAction = new RequestBuildDome();
             //the player doesn't want to do the optional move, or the controller requests the next action since the optional move isn't possible
             if (moveColumn == -1 && moveRow == -1) return nextAction;
         }
+        //checks if the player is trying to move on the previous cell
         if (oldRowMove != -1 && oldColumnMove != -1 && oldRowMove == moveRow && oldColumnMove == moveColumn)
             throw new DivinityPowerException("Fail to move on the previous cell");
         super.move(workerRow, workerColumn, moveRow, moveColumn, gd);
+        //stores the first move coordinate
         if (oldRowMove == -1 && oldColumnMove == -1) {
             oldRowMove = workerRow;
             oldColumnMove = workerColumn;
@@ -104,6 +111,7 @@ public class Artemis extends Divinity {
      * Getter of name
      *
      * @return the divinity's name
+     * @author Daniele Mammone
      */
     @Override
     public String getName() {
@@ -114,6 +122,7 @@ public class Artemis extends Divinity {
      * Getter of divinity's description
      *
      * @return the description of the divinity power
+     * @author Annalaura Massa
      */
     @Override
     public String getDescription() {

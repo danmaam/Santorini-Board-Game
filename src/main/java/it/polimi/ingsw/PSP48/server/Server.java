@@ -90,6 +90,7 @@ public class Server {
     public static synchronized void insertPlayerInGameRoom(int playerNumber, boolean allowedDivinities, String name, Calendar Birthday, ViewInterface playerVirtualView) {
         System.out.println("Adding in the game room");
         boolean added = false;
+        //tries to found a free game room compatible with player's game mode
         for (GameRoom g : roomsOnTheServer) {
             if (g.isGameWithDivinities() == allowedDivinities && g.getRoomPlayerNumber() == playerNumber && g.getPlayersInTheRoom() < g.getRoomPlayerNumber()) {
                 g.addPlayerInRoom(name, Birthday, playerVirtualView);
@@ -98,6 +99,7 @@ public class Server {
             }
         }
 
+        //if there isn't an available game room, it's created
         if (!added) {
             GameRoom newGameRoom = new GameRoom(playerNumber, allowedDivinities, nextRoomID);
             roomsOnTheServer.add(newGameRoom);

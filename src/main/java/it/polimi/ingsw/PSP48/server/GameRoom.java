@@ -86,6 +86,7 @@ public class GameRoom {
      */
     public void notifyAllPlayersOfDisconnection(String disconnectedPlayers) {
         for (Player p : model.getPlayersInGame()) {
+            //all the players different from the one who disconnected, are notified of the player that disconnected from the game
             if (!p.getName().equals(disconnectedPlayers)) {
                 controller.getPlayerView(p.getName()).endgame(disconnectedPlayers + " disconnected. Aborting game.");
             }
@@ -94,7 +95,6 @@ public class GameRoom {
         for (Player p : model.getPlayersInGame()) {
             Server.removeNickname(p.getName());
         }
-        //at this point, the server will destroy the room
     }
 
     /**
@@ -106,13 +106,16 @@ public class GameRoom {
      */
     public void notifyAllPlayersOfWinner(String winner) {
         for (Player p : model.getPlayersInGame()) {
-
+            //all the players are notified that the winner won the game
             if (!p.getName().equals(winner)) {
+                //the losers are notified of their lose
                 controller.getPlayerView(p.getName()).endgame(winner + " won the game. You lost. Anlaki :(");
             } else {
+                //the winner is notifies of their win
                 controller.getPlayerView(p.getName()).endgame("You win the game!");
             }
         }
+        //every player's nickname are deleted from the server
         for (Player p : model.getPlayersInGame()) {
             Server.removeNickname(p.getName());
         }
@@ -129,8 +132,10 @@ public class GameRoom {
         controller.getPlayerView(loser).endgame("You lose cause you won't be able to end the turn");
         for (Player p : model.getPlayersInGame()) {
             if (!p.getName().equals(loser))
+                //all the other players are notified that the loser has lost the game
                 controller.getPlayerView(p.getName()).endgame("You win cause " + model.getCurrentPlayer().getName() + "can't end his turn");
         }
+        //all the player's nicknames are removed from the server
         for (Player p : model.getPlayersInGame()) {
             Server.removeNickname(p.getName());
         }

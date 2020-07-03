@@ -52,6 +52,7 @@ public class Hephaestus extends Divinity {
     public ArrayList<Position> getValidCellForBuilding(int workerRow, int workerColumn, ArrayList<Divinity> divinitiesInGame, Cell[][] gameCells) {
         ArrayList<Position> validCells = super.getValidCellForBuilding(workerRow, workerColumn, divinitiesInGame, gameCells);
         if (prevBuildRow != -1 && prevBuildColumn != -1) validCells = validCells.stream()
+                // deletes all the cells, expect the previous build cell if it's the second building
                 .filter(cell -> cell.getRow() == prevBuildRow && cell.getColumn() == prevBuildColumn)
                 .collect(Collectors.toCollection(ArrayList::new));
         return validCells;
@@ -77,14 +78,18 @@ public class Hephaestus extends Divinity {
      */
     @Override
     public GameControllerState build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws DivinityPowerException, MaximumLevelReachedException, OccupiedCellException, NotAdjacentCellException, DomedCellException {
+        //checks if it's the first or the second building
         if (!prevBuild) {
             super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
+            //stores the coordinates of the first building
             prevBuildRow = buildRow;
             prevBuildColumn = buildColumn;
             prevBuild = true;
+            //if the construction is a third level, stops the turn
             if (gd.getCell(buildRow, buildColumn).getLevel() < 3) return new RequestOptionalBuild();
             else return new TurnEnd();
         } else {
+            //the player skipped the optional build
             if (workerRow == -1 && workerColumn == -1) return new TurnEnd();
             else if (buildRow != prevBuildRow && buildColumn != prevBuildColumn)
                 throw new DivinityPowerException("NO!");
@@ -108,8 +113,10 @@ public class Hephaestus extends Divinity {
      */
     @Override
     public ArrayList<Position> getValidCellsToPutDome(int workerRow, int workerColumn, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
+        //if it's the first build, calls the super method
         if (prevBuildColumn == -1 && prevBuildRow == -1)
             return super.getValidCellsToPutDome(workerRow, workerColumn, gameCells, divinitiesInGame);
+        //if it's the second build, return an empty array since he can't add a dome on the second building
         else return new ArrayList<>();
     }
 
@@ -130,6 +137,7 @@ public class Hephaestus extends Divinity {
      */
     @Override
     public GameControllerState dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
+        //checks if the players is trying to do a dome as second building
         if (prevBuild) throw new DivinityPowerException("Trying to add a dome as the second build!");
         return super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
     }

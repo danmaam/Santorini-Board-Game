@@ -199,6 +199,7 @@ public class Minotaur extends Divinity {
             if (gd.getCell(moveRow, moveColumn).getPlayer().equals(gd.getCurrentPlayer().getName()))
                 throw new OccupiedCellException("Cella occupata da un tuo stesso worker");
             pushingPosition = getNextPosition(moveRow, moveColumn, nextDir);
+            //checks if the cell where the other player should be pushed isn't out of the board, or occupied
             if (!(0 <= pushingPosition.getRow() && pushingPosition.getRow() <= 4) ||
                     !(0 <= pushingPosition.getColumn() && pushingPosition.getColumn() <= 4))
                 throw new DivinityPowerException("Cella di push fuori tabellone");

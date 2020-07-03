@@ -10,6 +10,7 @@ import it.polimi.ingsw.PSP48.server.model.exceptions.*;
 
 /**
  * Implementation of Athena Divinity
+ * @author Daniele Mammone
  */
 public class Athena extends Divinity {
 
@@ -20,6 +21,7 @@ public class Athena extends Divinity {
      *
      * @param pNum the number of players
      * @return if the divinity is allowed for the specified number of players
+     * @author Daniele Mammone
      */
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
@@ -35,6 +37,7 @@ public class Athena extends Divinity {
      * Resets the flag if the player went level up on the last turn
      *
      * @return the next controller FSM state
+     * @author Daniele Mammone
      */
     @Override
     public GameControllerState turnBegin(Model gd) {
@@ -56,9 +59,11 @@ public class Athena extends Divinity {
      * @throws DomedCellException       if the destination cell has a dome on it
      * @throws DivinityPowerException   if the move isn't allowed by another divinity
      * @throws NoTurnEndException       if the move doesn't allow the player to end the turn
+     * @author Daniele Mammone
      */
     public GameControllerState move(int workerRow, int workerColumn, int moveRow, int moveColumn, Model gd) throws DivinityPowerException, IncorrectLevelException, OccupiedCellException, NotAdjacentCellException, DomedCellException, NoTurnEndException {
         super.move(workerRow, workerColumn, moveRow, moveColumn, gd);
+        //saves if athena is growing up on cells
         if (gd.getCell(moveRow, moveColumn).getLevel() > gd.getCell(workerRow, workerColumn).getLevel())
             lastTurnLevelUp = true;
         return new RequestBuildDome();
@@ -85,6 +90,7 @@ public class Athena extends Divinity {
      * Getter of name
      *
      * @return the divinity's name
+     * @author Daniele Mammone
      */
     @Override
     public String getName() {
@@ -95,6 +101,7 @@ public class Athena extends Divinity {
      * Getter of divinity's description
      *
      * @return the description of the divinity power
+     * * @author Annalaura Massa
      */
     @Override
     public String getDescription() {

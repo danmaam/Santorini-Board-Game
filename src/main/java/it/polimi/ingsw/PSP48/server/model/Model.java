@@ -373,6 +373,9 @@ public class Model {
      * Notifies all ModelObserver with the new player-divinities association
      */
     public void sendPlayerList() {
+        //for each player, generates a string with name.divinity.colour of the player;
+        //if the game is without divinities, the divinity string is Base Divinity
+        //else if the game is with divinities and the player hasn't choose the divinity, divinity string is Divinity Not Chosen
         ArrayList<String> newPlayerString = new ArrayList<>();
         for (Player p : playersInGame) {
             if (p.getDivinity() == null && gameWithDivinities) {

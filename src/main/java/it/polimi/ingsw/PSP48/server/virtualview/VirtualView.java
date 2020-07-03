@@ -18,6 +18,7 @@ import java.util.function.Consumer;
 
 /**
  * The player's remote view on the server.
+ * @author Daniele Mammone
  */
 public class VirtualView implements ViewInterface, ServerNetworkObserver {
 

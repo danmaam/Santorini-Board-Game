@@ -130,16 +130,20 @@ public class ClientHandlerListener implements Runnable {
     public synchronized void waitForMessages() throws IOException, ClassNotFoundException {
         ObjectInputStream input = new ObjectInputStream(clientSocket.getInputStream());
         while (true) {
+            //waits for a message from the client
             nextMessage = input.readObject();
             if (nextMessage instanceof String) {
+                //it's a setup message
                 if (playerNickname == null) {
                     executors.submit(() -> this.processNickname((String) nextMessage));
                 } else if (!setGameMode) {
                     executors.submit(() -> this.processGameMode((String) nextMessage));
                 }
             } else if (nextMessage instanceof NetworkMessagesToServer) {
+                //it's a game message
                 executors.submit(this::notifyObservers);
             } else if (nextMessage instanceof PingMessage)
+                //it's a ping message and schedules the reply
                 if (!pingExecutor.isTerminated() && !pingExecutor.isShutdown()) pingExecutor.schedule(() -> out.replyPing(), 5, TimeUnit.SECONDS);
         }
     }

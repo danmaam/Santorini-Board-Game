@@ -138,6 +138,7 @@ public class Prometheus extends Divinity {
     /**
      * Requests the model to register the build action by calling the super build method, and updates the status of the turn: if it's the optional build,
      * it's requested the move, while if it's the second is returned a turnEnd state
+     *
      * @param workerRow    the row where the worker is
      * @param workerColumn the column where the worker is
      * @param buildRow     the row where the player wants to add a level
@@ -165,8 +166,9 @@ public class Prometheus extends Divinity {
     }
 
     /**
-     *  Requests the model to register the dome action by calling the super build method, and updates the status of the turn: if it's the optional build,
-     *  it's requested the move, while if it's the second is returned a turnEnd state
+     * Requests the model to register the dome action by calling the super build method, and updates the status of the turn: if it's the optional build,
+     * it's requested the move, while if it's the second is returned a turnEnd state
+     *
      * @param workerRow    the row where the worker is
      * @param workerColumn the column where the worker is
      * @param domeRow      the row where the player wants to add the dome
@@ -183,12 +185,15 @@ public class Prometheus extends Divinity {
     @Override
     public GameControllerState dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
         GameControllerState nextAction;
+        //the player skipped the optional build
         if (domeRow == -1 && domeColumn == -1) return super.turnBegin(gd);
         super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
         if (!previousBuild && !doneMove) {
+            //notifies the controller that the optional build happened to follow the correct rules
             nextAction = new PrometheusMovePostOptionalBuild();
             gd.getCurrentPlayer().setLastWorkerUsed(workerRow, workerColumn);
         } else nextAction = new TurnEnd();
+        //registers that the optional build happened
         previousBuild = true;
         return nextAction;
     }
@@ -209,6 +214,7 @@ public class Prometheus extends Divinity {
         boolean isCellDomed = gameBoard[mR][mC].isDomed();
         String playerOnCell = gameBoard[mR][mC].getPlayer();
 
+        //try to add a level
         if (!dome) try {
             gameBoard[mR][mC].addLevel();
             previousBuild = true;
@@ -216,6 +222,7 @@ public class Prometheus extends Divinity {
             System.out.println("Can't add level");
         }
 
+            //try to add a dome
         else try {
             gameBoard[mR][mC].addDome();
             previousBuild = true;
@@ -223,8 +230,10 @@ public class Prometheus extends Divinity {
             System.out.println("Already domed");
         }
 
+        //checks if the player can move
         boolean can = !getValidCellForMove(wR, wC, gameBoard, otherDiv).isEmpty();
         previousBuild = false;
+        //restores the original board state
         gameBoard[mR][mC] = new Cell(mR, mC, oldLevel, playerOnCell, isCellDomed);
         return can;
     }
@@ -251,6 +260,7 @@ public class Prometheus extends Divinity {
      */
     @Override
     public ArrayList<Position> getValidCellForBuilding(int workerRow, int workerColumn, ArrayList<Divinity> otherDivinitiesInGame, Cell[][] gameCell) {
+        //deletes cell that doesn't allow the player to end the turn if it's the first build
 
         return super.getValidCellForBuilding(workerRow, workerColumn, otherDivinitiesInGame, gameCell).stream().filter(x -> previousBuild || simulateBuildingCheckIfCanMoveAfterWards(workerRow, workerColumn, x.getRow(), x.getColumn(), gameCell, false, otherDivinitiesInGame)).collect(Collectors.toCollection(ArrayList::new));
     }
@@ -267,7 +277,7 @@ public class Prometheus extends Divinity {
      */
     @Override
     public ArrayList<Position> getValidCellsToPutDome(int workerRow, int workerColumn, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
-
+        //deletes cell that doesn't allow the player to end the turn if it's the first build
         return super.getValidCellsToPutDome(workerRow, workerColumn, gameCells, divinitiesInGame).stream().filter(x -> previousBuild || simulateBuildingCheckIfCanMoveAfterWards(workerRow, workerColumn, x.getRow(), x.getColumn(), gameCells, true, divinitiesInGame)).collect(Collectors.toCollection(ArrayList::new));
     }
 }

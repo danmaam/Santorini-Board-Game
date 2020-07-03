@@ -81,17 +81,22 @@ public class ClientHandler implements Runnable {
         System.out.println("Connected to " + client.getInetAddress());
         output.writeObject(new PingMessage());
 
+        //requests the client to send the player's nickname
         setUpMessage(new NicknameRequest("Please choose a nickname without dots and press enter"));
 
         while (true) {
             while (messagesToBeSent.isEmpty()) {
+                //the message queue is empty;
+                //closes the message sender if the game have been closed
                 if (closeThread) throw new IOException("The game has ended");
                 try {
+                    //waits for messages
                     wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+            //send the first message in queue
             output.writeObject(messagesToBeSent.remove());
         }
     }

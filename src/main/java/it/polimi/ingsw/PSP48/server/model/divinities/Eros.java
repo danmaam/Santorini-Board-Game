@@ -46,11 +46,13 @@ public class Eros extends Divinity {
     @Override
     public ArrayList<Position> validCellsForInitialPositioning(Cell[][] gameCells) {
         ArrayList<Position> validCells = super.validCellsForInitialPositioning(gameCells);
+        //deletes the cells that aren't on the board's perimeter
         validCells = validCells.stream()
                 .filter(cell -> cell.getColumn() == 0 || cell.getColumn() == 4 || cell.getRow() == 0 || cell.getRow() == 4)
                 .collect(Collectors.toCollection(ArrayList::new));
         ArrayList<Position> tbr = new ArrayList<>();
         for (Position c : validCells) {
+            //if the first positioning happened, deletes cells that aren't on the board's opposide side
             if (previousRow != -1 || previousColumn != -1) {
                 if (previousRow == -1) {
                     if (c.getColumn() != 4 - previousColumn) tbr.add(c);
@@ -93,15 +95,18 @@ public class Eros extends Divinity {
         ArrayList<Position> positions = gd.getPlayerPositionsInMap(playerName);
         //check if the player has at least two workers in game, and if they are adjacent
         if (!(positions.size() <= 1 || !adjacentCellVerifier(positions.get(0).getRow(), positions.get(0).getColumn(), positions.get(1).getRow(), positions.get(1).getColumn()))) {
+            //the player ha at least two workers in game; now i have to check how many players there are in game
             if (gd.getNumberOfPlayers() == 2) {
+                //case with two players in game: eros wins with workers adjacent at the first level
                 if (gd.getCell(positions.get(0).getRow(), positions.get(0).getColumn()).getLevel() == 1 && gd.getCell(positions.get(1).getRow(), positions.get(1).getColumn()).getLevel() == 1)
                     divinityWinCondition = true;
             } else {
+                //case with three players: eros wins with workers adjacent at any level
                 if (gd.getCell(positions.get(0).getRow(), positions.get(0).getColumn()).getLevel() == gd.getCell(positions.get(1).getRow(), positions.get(1).getColumn()).getLevel())
                     divinityWinCondition = true;
             }
         }
-        //now, i have to verify the win condition depending on the number of player in game, cause they are adjacent
+
 
         return super.postMoveWinCondition(gd) || divinityWinCondition;
     }
@@ -118,10 +123,12 @@ public class Eros extends Divinity {
      */
     @Override
     public GameControllerState putWorkerOnBoard(Position p, Model gd) throws OccupiedCellException, DivinityPowerException {
+        //checks if the positioning is on perimerer cell
         if (!(p.getRow() == 0 || p.getRow() == 4 || p.getColumn() == 0 || p.getColumn() == 4)) {
             throw new DivinityPowerException("Can't put the worker on this cell due to divinity power");
         }
 
+        //checks if the second positioning is on the opposite side of the board
         if (previousRow != -1 || previousColumn != -1) {
             if (previousRow == -1) {
                 if (p.getColumn() != 4 - previousColumn) throw new DivinityPowerException("");

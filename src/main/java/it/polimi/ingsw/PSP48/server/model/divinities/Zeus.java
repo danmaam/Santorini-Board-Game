@@ -42,6 +42,7 @@ public class Zeus extends Divinity {
     @Override
     public ArrayList<Position> getValidCellForBuilding(int workerRow, int workerColumn, ArrayList<Divinity> divinitiesInGame, Cell[][] gameCells) {
         ArrayList<Position> validCells = super.getValidCellForBuilding(workerRow, workerColumn, divinitiesInGame, gameCells);
+        //if zeus isn't on a third cell level, he can built under himself
         if (gameCells[workerRow][workerColumn].getLevel() < 3) validCells.add(new Position(workerRow, workerColumn));
         return validCells;
     }
@@ -69,6 +70,7 @@ public class Zeus extends Divinity {
         if (!(adjacentCellVerifier(workerRow, workerColumn, buildRow, buildColumn))) {
             if (!(buildColumn == workerColumn && buildRow == workerRow))
                 throw new NotAdjacentCellException("Celle non adiacenti");
+            //if zeus is on a third level building, blocks him from doing another build
             else if (gd.getCell(workerRow, workerColumn).getLevel() == 3)
                 throw new MaximumLevelReachedException("Livello massimo già raggiunto");
         }

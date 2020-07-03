@@ -80,7 +80,6 @@ public class GameController implements ViewObserver {
      */
     @Override
     public void move(ActionCoordinates p) {
-        //i must check if this move allows the player to end the turn
         try {
             nextAction = model.getCurrentPlayer().getDivinity().move(p.getWorkerRow(), p.getWorkerColumn(), p.getMoveRow(), p.getMoveColumn(), model);
         } catch (IncorrectLevelException e) {
@@ -487,8 +486,10 @@ public class GameController implements ViewObserver {
         for (Player p : model.getPlayersInGame()) {
             if (!p.getName().equals(model.getCurrentPlayer().getName())) otherDivinities.add(p.getDivinity());
         }
+        //the player must use the same worker he moved
         ArrayList<Position> validForBuilding = model.getCurrentPlayer().getDivinity().getValidCellForBuilding(lastWorker.getRow(), lastWorker.getColumn(), otherDivinities, model.getGameBoard());
         ArrayList<Position> validForDoming = model.getCurrentPlayer().getDivinity().getValidCellsToPutDome(lastWorker.getRow(), lastWorker.getColumn(), model.getGameBoard(), otherDivinities);
+        //if the optional move isn't possible, the controller put itself in the next state
         if (validForBuilding.isEmpty() && validForDoming.isEmpty()) {
             try {
                 nextAction = model.getCurrentPlayer().getDivinity().build(-1, -1, -1, -1, model);
@@ -500,7 +501,7 @@ public class GameController implements ViewObserver {
             ArrayList<WorkerValidCells> build = new ArrayList<>();
             ArrayList<WorkerValidCells> dome = new ArrayList<>();
 
-
+            //adds the worker-valid cells association only if a worker is able to complete the action
             if (!validForBuilding.isEmpty())
                 build.add(new WorkerValidCells(validForBuilding, model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getCurrentPlayer().getLastWorkerMoved().getColumn()));
             if (!validForDoming.isEmpty())
@@ -530,6 +531,7 @@ public class GameController implements ViewObserver {
         }
         ArrayList<Position> validPositionsForMove = model.getCurrentPlayer().getDivinity().getValidCellForMove(model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getCurrentPlayer().getLastWorkerMoved().getColumn(), model.getGameBoard(), otherDivinities);
         if (validPositionsForMove.isEmpty()) {
+            //skips the optional move and goes in the next FSM state if the optional move isn't possible
             try {
                 nextAction = model.getCurrentPlayer().getDivinity().move(-1, -1, -1, -1, model);
                 nextAction();
@@ -563,6 +565,7 @@ public class GameController implements ViewObserver {
 
         ArrayList<Position> workersPosition = model.getPlayerPositionsInMap(model.getCurrentPlayer().getName());
 
+        //differently from normal optional build, here we can use all the workers to build
         for (Position p : workersPosition) {
             WorkerValidCells b = new WorkerValidCells(new ArrayList<>(model.getCurrentPlayer().getDivinity().getValidCellForBuilding(p.getRow(), p.getColumn(), otherDivinities, model.getGameBoard())), p.getRow(), p.getColumn());
             WorkerValidCells d = new WorkerValidCells(new ArrayList<>(model.getCurrentPlayer().getDivinity().getValidCellsToPutDome(p.getRow(), p.getColumn(), model.getGameBoard(), otherDivinities)), p.getRow(), p.getColumn());
@@ -585,6 +588,8 @@ public class GameController implements ViewObserver {
         for (Player p : model.getPlayersInGame()) {
             if (!p.getName().equals(model.getCurrentPlayer().getName())) otherDivinities.add(p.getDivinity());
         }
+
+        //generates valid cells only for the worker that completed the optional move
         ArrayList<WorkerValidCells> move = new ArrayList<>();
         move.add(new WorkerValidCells(model.getCurrentPlayer().getDivinity().getValidCellForMove(model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getCurrentPlayer().getLastWorkerMoved().getColumn(), model.getGameBoard(), otherDivinities), model.getCurrentPlayer().getLastWorkerMoved().getRow(), model.getCurrentPlayer().getLastWorkerMoved().getColumn()));
         getPlayerView(model.getCurrentPlayer().getName()).requestMove(move);
@@ -594,17 +599,23 @@ public class GameController implements ViewObserver {
      * method handling the elimination of a player when he loses the game cause he can't complete the turn
      */
     public void currentPlayerCantEndTurn() {
+        //the current player can't end the turn
         if (model.getPlayersInGame().size() == 2) {
+            //end the game notifying the lose of the current player
             nextAction = new EndGame();
             Server.destroyGameRoom(roomID, model.getCurrentPlayer().getName(), EndReason.lose);
             return;
         } else {
+            //sets the maximum allowed player at two
             model.setNumberOfPlayer(model.getGamePlayerNumber() - 1);
+            //notifies the loser that lost
             getPlayerView(model.getCurrentPlayer().getName()).endgame("You lose cause you won't be able to end the turn");
+            //notifies each other player that the loser is out of the game
             for (Player p : model.getPlayersInGame()) {
                 if (!p.getName().equals(model.getCurrentPlayer().getName()))
                     getPlayerView(p.getName()).printMessage(model.getCurrentPlayer().getName() + "lost cause he can't end his turn");
             }
+            //removes the loser's nickname from the server
             Server.removeNickname(model.getCurrentPlayer().getName());
             model.unregisterObserver(getPlayerView(model.getCurrentPlayer().getName()));
             model.removePlayer(model.getCurrentPlayer().getName());

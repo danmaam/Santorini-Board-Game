@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 /**
  * Implements Atlas Divinity
+ * @author Daniele Mammone
  */
 public class Atlas extends Divinity {
 
@@ -20,6 +21,7 @@ public class Atlas extends Divinity {
      *
      * @param pNum the number of players
      * @return if the divinity is allowed for the specified number of players
+     * @author Daniele Mammone
      */
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
@@ -54,11 +56,14 @@ public class Atlas extends Divinity {
         }
 
         validCells = validCells.stream()
+                //removes occupied cells
                 .filter(cell -> cell.getPlayer() == null)
+                //removes domed cells
                 .filter(cell -> !cell.isDomed())
                 .collect(Collectors.toCollection(ArrayList::new));
 
         for (Divinity d : divinitiesInGame) {
+            //removes cells where the action is blocked by other divinities
             validCells.removeIf(c -> !d.getName().equals(this.getName()) && !d.othersDome(new ActionCoordinates(workerRow, workerColumn, c.getRow(), c.getColumn())));
 
         }
@@ -119,6 +124,7 @@ public class Atlas extends Divinity {
      * Getter of name
      *
      * @return the divinity's name
+     * @author Daniele Mammone
      */
     @Override
     public String getName() {
@@ -129,6 +135,7 @@ public class Atlas extends Divinity {
      * Getter of divinity's description
      *
      * @return the description of the divinity power
+     * @author Annalaura Massa
      */
     @Override
     public String getDescription() {

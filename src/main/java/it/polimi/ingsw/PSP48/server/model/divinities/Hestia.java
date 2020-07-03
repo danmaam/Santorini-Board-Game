@@ -61,6 +61,7 @@ public class Hestia extends Divinity {
     @Override
     public ArrayList<Position> getValidCellForBuilding(int workerRow, int workerColumn, ArrayList<Divinity> otherDivinitiesInGame, Cell[][] gameCell) {
         return super.getValidCellForBuilding(workerRow, workerColumn, otherDivinitiesInGame, gameCell).stream()
+                //if it's the second build, deletes the perimeter cells
                 .filter(cell -> !alreadyBuilt || cell.getColumn() != 0 && cell.getColumn() != 4 && cell.getRow() != 0 && cell.getRow() != 4)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
@@ -78,6 +79,7 @@ public class Hestia extends Divinity {
     @Override
     public ArrayList<Position> getValidCellsToPutDome(int workerRow, int workerColumn, Cell[][] gameCells, ArrayList<Divinity> divinitiesInGame) {
         return super.getValidCellsToPutDome(workerRow, workerColumn, gameCells, divinitiesInGame).stream()
+                //if it's the second build, deletes the perimeter cells
                 .filter(cell -> !alreadyBuilt || cell.getColumn() != 0 && cell.getColumn() != 4 && cell.getRow() != 0 && cell.getRow() != 4)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
@@ -100,11 +102,14 @@ public class Hestia extends Divinity {
      */
     @Override
     public GameControllerState build(int workerRow, int workerColumn, int buildRow, int buildColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelReachedException, DivinityPowerException {
+        //checks if it's the first or second building
         if (!alreadyBuilt) {
+            //process the build and stores that the first build happened
             super.build(workerRow, workerColumn, buildRow, buildColumn, gd);
             alreadyBuilt = true;
             return new RequestOptionalBuild();
         } else {
+            //checks if the player isn't trying to do the optional build on a perimeter cell
             if (buildRow == 4 || buildColumn == 0 || buildColumn == 4 || buildRow == 0)
                 throw new DivinityPowerException("Trying to make the second construction on a perimetral cell");
             else if (buildRow == -1 && buildColumn == -1) return new TurnEnd();
@@ -131,11 +136,17 @@ public class Hestia extends Divinity {
      */
     @Override
     public GameControllerState dome(int workerRow, int workerColumn, int domeRow, int domeColumn, Model gd) throws NotAdjacentCellException, OccupiedCellException, DomedCellException, MaximumLevelNotReachedException, DivinityPowerException {
+        //checks if it's the first or second building
+
         if (!alreadyBuilt) {
+            //process the dome and stores that the first build happened
+
             super.dome(workerRow, workerColumn, domeRow, domeColumn, gd);
             alreadyBuilt = true;
             return new RequestOptionalBuild();
         } else {
+            //checks if the player isn't trying to do the optional build on a perimeter cell
+
             if (domeRow == 4 || domeColumn == 0 || domeColumn == 4 || domeRow == 0)
                 throw new DivinityPowerException("Trying to make the second construction on a perimetral cell");
             else if (domeRow == -1 && domeColumn == -1) return new TurnEnd();

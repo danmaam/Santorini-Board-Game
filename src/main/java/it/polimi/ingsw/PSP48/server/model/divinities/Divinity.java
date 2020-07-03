@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 /**
  * Implementation of a base divinity, following the game rules for matches without divinities
+ * @author Daniele Mammone
  */
 public class Divinity {
 

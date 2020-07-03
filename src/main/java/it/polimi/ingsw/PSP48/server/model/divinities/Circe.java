@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 /**
  * Implementation of Circe Divinity
+ * @author Daniele Mammone
  */
 public class Circe extends Divinity {
 
@@ -18,6 +19,7 @@ public class Circe extends Divinity {
      *
      * @param pNum the number of players
      * @return if the divinity is allowed for the specified number of players
+     * @author Daniele Mammone
      */
     public static Boolean supportedDivinity(int pNum) {
         switch (pNum) {
@@ -33,6 +35,7 @@ public class Circe extends Divinity {
      * Getter of name
      *
      * @return the divinity's name
+     * @author Daniele Mammone
      */
     @Override
     public String getName() {
@@ -72,7 +75,7 @@ public class Circe extends Divinity {
 
     /**
      * Getter of divinity's description
-     *
+     * @author Annalaura Massa
      * @return the description of the divinity power
      */
     @Override
@@ -82,7 +85,7 @@ public class Circe extends Divinity {
 
     /**
      * Before each Circe turn, restores all players' original divinity
-     *
+     * @author Daniele Mammone
      * @param model the model of the game
      */
     @Override
