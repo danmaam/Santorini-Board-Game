@@ -1,0 +1,133 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DivFalse</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP48.server.model.divinities</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DivFalse (it.polimi.ingsw.PSP48.server.model.divinities)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DivFalse</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83,3%
+  </span>
+  <span class="absValue">
+    (5/ 6)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.server.model.divinities;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.ActionCoordinates;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.Cell;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP48.server.model.divinities.Divinity;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;/**
+<i>8</i>&nbsp; * Divinity used for testing purposes
+<i>9</i>&nbsp; */
+<b class="fc"><i>10</i>&nbsp; class DivFalse extends Divinity {</b>
+<i>11</i>&nbsp;
+<b class="fc"><i>12</i>&nbsp;    private final String name = &quot;False&quot;;</b>
+<b class="fc"><i>13</i>&nbsp;    private final Boolean threePlayerSupported = true;</b>
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    private int oldLevel;
+<i>16</i>&nbsp;    private int newLevel;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    /**
+<i>19</i>&nbsp;     * Denies the action on a certain number of cells (with row = 1 or column = 1)
+<i>20</i>&nbsp;     *
+<i>21</i>&nbsp;     * @param moveCells the cells where the player wants to move and where the player
+<i>22</i>&nbsp;     * @param gameBoard the game board
+<i>23</i>&nbsp;     * @return if the move is allowed or not
+<i>24</i>&nbsp;     */
+<i>25</i>&nbsp;    @Override
+<i>26</i>&nbsp;    public Boolean othersMove(ActionCoordinates moveCells, Cell[][] gameBoard) {
+<b class="fc"><i>27</i>&nbsp;        return moveCells.getMoveRow() != 1 || moveCells.getMoveColumn() != 1;</b>
+<i>28</i>&nbsp;    }
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    /**
+<i>31</i>&nbsp;     * Denies the action on a certain number of cells (with row = 3 or column = 3)
+<i>32</i>&nbsp;     *
+<i>33</i>&nbsp;     * @param moveCells the cells where the player wants to move and where the player is
+<i>34</i>&nbsp;     * @return if the building is allowed or not
+<i>35</i>&nbsp;     */
+<i>36</i>&nbsp;    @Override
+<i>37</i>&nbsp;    public Boolean othersBuilding(ActionCoordinates moveCells) {
+<b class="fc"><i>38</i>&nbsp;        return moveCells.getMoveRow() != 3 || moveCells.getMoveColumn() != 3;</b>
+<i>39</i>&nbsp;    }
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    /**
+<i>42</i>&nbsp;     * @param domeCells the cells where the player wants to add a dome, the cells where the player is and
+<i>43</i>&nbsp;     * @return true if the divinity doesn&#39;t affect the other player&#39;s move, false if the divinity blocks the move
+<i>44</i>&nbsp;     * @author Daniele Mammone
+<i>45</i>&nbsp;     */
+<i>46</i>&nbsp;    @Override
+<i>47</i>&nbsp;    public Boolean othersDome(ActionCoordinates domeCells) {
+<b class="nc"><i>48</i>&nbsp;        return domeCells.getMoveRow() != 3 || domeCells.getMoveColumn() != 3;</b>
+<i>49</i>&nbsp;    }
+<i>50</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-03 10:14</div>
+</div>
+</body>
+</html>

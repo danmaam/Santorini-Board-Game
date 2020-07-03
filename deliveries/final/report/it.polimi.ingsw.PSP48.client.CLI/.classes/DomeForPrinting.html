@@ -1,0 +1,141 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DomeForPrinting</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP48.client.CLI</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DomeForPrinting (it.polimi.ingsw.PSP48.client.CLI)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DomeForPrinting</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 7)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP48.client.CLI;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP48.client.CLI.ColoursForPrinting;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;/**
+<i>6</i>&nbsp; * class used to represent the dome on the board of the game
+<i>7</i>&nbsp; * @author Rebecca Marelli
+<i>8</i>&nbsp; */
+<i>9</i>&nbsp;public class DomeForPrinting
+<i>10</i>&nbsp;{
+<b class="nc"><i>11</i>&nbsp;    private final String domeSymbol=&quot;◘&quot;; //it&#39;s the symbol used to represent the dome when we print the board, it cannot be modified (just its colour)</b>
+<i>12</i>&nbsp;    private ColoursForPrinting domeColour;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    /**
+<i>15</i>&nbsp;     * class constructor
+<i>16</i>&nbsp;     * @param initialDomeColour is the colour we assign to the dome when we are creating it
+<i>17</i>&nbsp;     */
+<i>18</i>&nbsp;    public DomeForPrinting(ColoursForPrinting initialDomeColour)
+<b class="nc"><i>19</i>&nbsp;    {</b>
+<b class="nc"><i>20</i>&nbsp;        this.domeColour=initialDomeColour;</b>
+<i>21</i>&nbsp;    }
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    /**
+<i>24</i>&nbsp;     * getter of the dome symbol, used to print a cell and its content
+<i>25</i>&nbsp;     * @return the string containing the symbol
+<i>26</i>&nbsp;     */
+<i>27</i>&nbsp;    public String getDomeSymbol()
+<i>28</i>&nbsp;    {
+<b class="nc"><i>29</i>&nbsp;        return(this.domeSymbol);</b>
+<i>30</i>&nbsp;    }
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    /**
+<i>33</i>&nbsp;     * getter of the dome colour, for printing purposes
+<i>34</i>&nbsp;     * @return the colour attribute of a dome object
+<i>35</i>&nbsp;     */
+<i>36</i>&nbsp;    public ColoursForPrinting getDomeColour()
+<i>37</i>&nbsp;    {
+<b class="nc"><i>38</i>&nbsp;        return(this.domeColour);</b>
+<i>39</i>&nbsp;    }
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    /**
+<i>42</i>&nbsp;     * method used to change the colour of a dome
+<i>43</i>&nbsp;     * @param newDomeColour is the updated colour
+<i>44</i>&nbsp;     */
+<i>45</i>&nbsp;    public void setDomeColour(ColoursForPrinting newDomeColour)
+<i>46</i>&nbsp;    {
+<b class="nc"><i>47</i>&nbsp;        this.domeColour=newDomeColour;</b>
+<i>48</i>&nbsp;    }
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    /**
+<i>51</i>&nbsp;     * method converting this object into a string for its printing
+<i>52</i>&nbsp;     */
+<i>53</i>&nbsp;    @Override
+<i>54</i>&nbsp;    public String toString()
+<i>55</i>&nbsp;    {
+<b class="nc"><i>56</i>&nbsp;        return(this.domeColour + domeSymbol + ColoursForPrinting.reset); //after we return the symbol in the right colour, we need to reset the colour of the terminal</b>
+<i>57</i>&nbsp;    }
+<i>58</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-03 10:14</div>
+</div>
+</body>
+</html>
