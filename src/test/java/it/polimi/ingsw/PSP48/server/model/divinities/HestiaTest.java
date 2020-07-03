@@ -100,10 +100,10 @@ public class HestiaTest {
     }
 
     @Test(expected = DivinityPowerException.class)
-    public void buildSecondDomeOnPerimetralCell_throwsException() throws MaximumLevelReachedException, DivinityPowerException, OccupiedCellException, NotAdjacentCellException, DomedCellException{
+    public void buildSecondDomeOnPerimetralCell_throwsException() throws MaximumLevelReachedException, DivinityPowerException, OccupiedCellException, NotAdjacentCellException, DomedCellException, MaximumLevelNotReachedException {
         game_database.getCell(4, 3).setActualLevel(3);
         assertEquals("RequestOptionalBuild{}", player1.getDivinity().build(3, 3, 3, 4, game_database).toString());
-        player1.getDivinity().build(3, 3, 4, 3, game_database);
+        player1.getDivinity().dome(3, 3, 4, 3, game_database);
 
     }
 

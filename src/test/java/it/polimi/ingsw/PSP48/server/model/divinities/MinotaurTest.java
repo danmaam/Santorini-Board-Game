@@ -100,7 +100,7 @@ public class MinotaurTest {
     }
 
     @Test(expected = DivinityPowerException.class)
-    public void move_movementBlovkedByOtherDivinity() throws DomedCellException, OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, NoTurnEndException{
+    public void move_movementBlockedByOtherDivinity() throws DomedCellException, OccupiedCellException, DivinityPowerException, IncorrectLevelException, NotAdjacentCellException, NoTurnEndException{
         gd = new Model(2, true);
         gd.getPlayersInGame().add(p1);
         gd.getPlayersInGame().add(p2);
