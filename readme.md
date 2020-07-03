@@ -49,7 +49,7 @@ If apt shouldn't find the package, follows the instructions at https://openjdk.j
 For Windows and Mac systems, it should be sufficient to download and install Oracle's JDK from the following link
 https://www.oracle.com/java/technologies/javase/jdk14-archive-downloads.html
 
-###How to build the JAR
+### How to build the JAR
 If you don't want to use the provided JAR file, you can build on your own the JAR file using Maven. In particular, the provided JAR have been built using the Maven Shade plugin, and it includes all the dependencies required to make cross-platform the GUI (e.g. the dependencies of JavaFX).
 To build the JAR, install Maven on your system following the guide at https://maven.apache.org/install.html, clone this repo and, from the terminal, in the folder where you cloned the repo, run the command
 ```
