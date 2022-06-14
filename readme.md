@@ -55,7 +55,7 @@ To build the JAR, install Maven on your system following the guide at https://ma
 ```
 mvn clean test package shade:shade
 ```
-You can found the generated JAR file in the $PATH_TO_REPO$/target folder
+You can found the generated JAR file in the $PATH_TO_REPO/target folder
 
 ### Starting Server
 Open the terminal, go folder where there is the JAR file, and execute the following command
